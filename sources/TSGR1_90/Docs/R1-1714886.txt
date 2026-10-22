@@ -1,0 +1,5 @@
+WF on CW to layer mapping Huawei, HiSilicon, Deutsche Telekom, LGE, ETRI, ZTE , Lenovo, Motorola, China Unicom 3GPP TSG RAN WG1 NR Ad Hoc Meeting R1-1714886 Prague, Czech, 21-25 August 2017 Agenda item – 6.1.2.1.1
+
+Background Working assumption : In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword , then across subcarriers (frequency) and then across OFDM symbols (time) FFS whether the resource is associated with a CW or with a CB group FFS other schemes (e.g., Layer  Time  Frequency, Time  Frequency  Layer, Frequency  Layer  Time) If so, details of configuration signalling, e.g. RRC, DCI Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Proposal At least following mapping ordering is supported within a group of symbols: Layer  time  frequency FFS on the size of the group of symbols (e.g. slot, mini-slot) 3

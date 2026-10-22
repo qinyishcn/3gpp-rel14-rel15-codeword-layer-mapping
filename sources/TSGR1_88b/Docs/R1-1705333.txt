@@ -1,0 +1,224 @@
+3GPP TSG RAN WG1 88bis R1-1705333
+
+Spokane, USA, 3rd - 7th April 2017
+
+Agenda item: 8.1.2.1.1
+
+Source: Samsung
+
+Title: Open Issues on Layer Mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#88, the following agreement on DL MIMO was made [1]:
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsWorking assumption: For 3 and 4-layer transmission: 1 CWFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersCompanies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+In this contribution, the following remaining details are addressed:
+
+Working assumption for 3- and 4-layer transmission
+
+Layer mapping
+
+DL and UL signaling supports
+
+In addition, some accompanying simulation results are presented to justify our proposals. In simulation results, two sets of resource utilization (RU) are chosen such that higher ranks can be scheduled with higher occurrences. With this setup, performance loss (if any) due to lower MCS granularity of “1-CW” (compared to “2-CW”) is fairly captured in the simulation. To demonstrate this, the rank distributions for 16- and 32-port scenarios (assuming SU-MIMO transmission) are given in Appendix C
+
+Working assumption
+
+With the maximum number of 4 transmission layers, the pros and cons of 1-CW versus 2-CW solution have been thoroughly discussed in RAN1#88. To summarize:
+
+Performance: 1-CW slightly outperforms 2-CW due to its inherent robustness against CSI impairments. Some additional results with lower RU (which increases the occurrence of higher rank transmissions, thereby slanted toward showing the benefit of 2-CW) are given in Appendix A. Still, the same observation holds.
+
+DL and UL overhead: 1-CW allows lower DCI overhead when 1 MCS + 1 HARQ-related field (or 1 set in case CB-group-level HARQ is configured) is used. CSI overhead is also reduced with 1 CQI (see section 3 for further discussion).
+
+Receiver: Since the benefit of advanced receiver comes solely from the outer-loop link adaptation at the gNB, the support of one particular advanced receiver (such as MMSE-SIC) does not offer any advantage for 2-CW – especially since other types of advanced receivers which offer similar or better performance than MMSE-SIC are available. Note that for LTE, RAN4 derived its UE demodulation requirement for advanced MIMO receivers primarily based on R-MLD, not MMSE-SIC.
+
+DL non-coherent JT support: In scenarios where NC-JT may provide measurable UTP gain (e.g. indoor), the chosen solution should be scalable to non-coherent transmission from >2 TRPs/panels. Since M-TRP/panel DL NC-JT transmissions can still be accommodated with M PDSCH assignments (hence M DCIs), the benefit from supporting 2-CW mapping (over 1-CW mapping) for this single use case is unclear as it is neither scalable nor beneficial for many other use cases (as it forces the signaling overhead of 2-CW even when 2-CW is not beneficial).
+
+Based on the above observation, we propose to confirm the working assumption.
+
+Proposal: Confirm the following working assumption as agreement
+
+For 3 and 4-layer transmission: 1 CW
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers (for, e.g. NC-JT)
+
+DL and UL signaling support
+
+To finalize the required DL and UL signaling support, the following aspects need to be considered:
+
+DL signaling (associated with UL- and DL-related DCI payload)
+
+The number of MCS fields
+
+The number of HARQ-related fields – note: NR supports CB-group-level HARQ
+
+UL overhead (only for transmission on PDSCH)
+
+The number of CQIs for RI > 1
+
+The number of DL HARQ-ACKs for RI > 1 – note: NR supports CB-group-level HARQ
+
+We first consider the case when a UE is configured for transmitting (UL) or receiving (DL) up to 4 layers per PUSCH/PDSCH assignment.
+
+With only 1 CW, the most natural solution is to support 1 MCS and 1 HARQ-related (or 1 set for CB-group-level HARQ) fields per DCI. While there seems to be a consensus on the HARQ issue, an alternative solution for the MCS issue to allow higher MCS granularity has been proposed. Since 1-CW mapping implies that a single FEC codeword (per CB) is mapped across all the layers, higher MCS granularity can only be achieved with assigning independent modulations across layers or layer-groups. This, of course, comes at the expense of DL/UL overhead (1 additional modulation field in DCI, 1 additional RI-dependent CQI if layer-group-specific modulation is used). Therefore, unless there is some substantial performance gain, employing one modulation per CW is preferred. However, as demonstrated in Appendix A (with two sets of low RU), the gain of 2-CW (with 2 MCS – which allows much higher MCS granularity compared to layer-specific or layer-group-specific modulation) over 1-CW is non-existent. Therefore, employing different modulations across different layers is not expected to bring any gain over 1 MCS per DCI. The same argument holds for 2-CQI versus 1-CQI.
+
+We now consider the case when a UE is configured for receiving (DL) up to 8 layers per PUSCH/PDSCH assignment (supporting UL transmission beyond 4 layers has not been agreed for NR).
+
+Since 2-CW mapping is supported for rank>4, supporting 2 MCS and 2 HARQ-related (or 2 sets CB-group-level HARQ) fields per DCI seems natural. At the same time, however, the UTP gain of 2-CW over 1-CW mapping is unclear in most use cases. However, since the support of 2-CW mapping has been agreed for rank>4, enabling an option to facilitate 1 MCS and 1 HARQ-related (or 1 set CB-group-level HARQ) fields per DCI is beneficial and can indeed be used as a default setting. This can be easily achieved, for instance, by performing shifting across the 2 CWs. As CW shifting emulates the effect of 1-CW mapping, spatial bundling (of MCS and HARQ) can be used without significant penalty in system performance. This is demonstrated in Appendix B (with two sets of low RU) where 2-CW with “CW shifting ON” (hence 1 MCS and 1 HARQ) still slightly outperforms 2-CW with “CW shifting OFF” (hence 2 MCS and 2 HARQ). This is expected since 2-CW with “CW shifting ON” emulates 1-CW transmission.
+
+Proposal: For DL and UL signaling support
+
+When a UE is configured for transmitting (UL) or receiving (DL) up to 4 layers per PUSCH/PDSCH assignment:
+
+1 MCS and 1 (or 1 set for CB-group HARQ) HARQ-related field per DCI
+
+1 CQI and 1 DL HARQ-ACK
+
+When a UE is configured for receiving (DL) up to 8 layers per PUSCH/PDSCH assignment, allow CW shifting across the 2 CWs for >4-layer transmissions
+
+When CW shifting is on: 1 MCS and 1 (or 1 set for CB-group HARQ) HARQ-related field per DCI, 1 CQI and 1 DL HARQ-ACK for all layers
+
+Layer mapping
+
+To choose a layer mapping scheme, the following aspects are considered:
+
+Robustness: 1-CW mapping allows better robustness against CSI impairments because one CB can be mapped across all the (or, at least, more) pertinent layers. The inherent spatial “diversity” averages out the impairments, creating the effect of layer-shifting.
+
+Decoding latency: A UE should be able to decode a CB with minimum latency. This can be achieved if a CB is mapped to the smallest number of OFDM symbols (allowed by RA as well as CB length). This can be achieved only when frequency-first (then time) RE mapping is used.
+
+The above two criteria can be fulfilled with symbol-level vertical mapping which is used for LTE when 1 CW is mapped across multiple layers, i.e. layer-first, then across sub-carriers (frequency), then across OFDM symbols (time). The mapping is illustrated in Figure 1. Note that unlike LTE where two distinct layer mappings need to be supported for 2-, 3-, and 4-layer transmission (because of retransmission, an auxiliary 1-CW layer mapping is also needed), supporting 1-CW for up to 4-layer transmission results in a more compact design, i.e. only one layer mapping is supported for any given number of layers. As discussed in section 3, CW shifting can be used for >4-layer transmission.
+
+[FIG:c4e396b16ece21a36a55]
+
+Figure 1 Layer mapping scheme
+
+Proposal: The following layer mapping scheme is supported
+
+Symbol-level vertical mapping: across layer-first, then sub-carriers (frequency), then OFDM symbols (time)
+
+Same scheme as LTE when 1 CW is mapped across multiple layers
+
+For >4-layer transmission, allow shifting across 2 CWs
+
+Conclusions
+
+In this contribution, Samsung’s view on remaining issues on layer mapping is presented. Our proposal can be summarized as follows:
+
+Confirm the following working assumption as agreement
+
+For 3 and 4-layer transmission: 1 CW
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers (for, e.g. NC-JT)
+
+For DL and UL signaling support
+
+When a UE is configured for transmitting (UL) or receiving (DL) up to 4 layers per PUSCH/PDSCH assignment:
+
+1 MCS and 1 (or 1 set for CB-group HARQ) HARQ-related field per DCI
+
+1 CQI and 1 DL HARQ-ACK
+
+When a UE is configured for receiving (DL) up to 8 layers per PUSCH/PDSCH assignment, allow CW-level shifting across the 2 CWs for >4-layer transmissions
+
+When CW-level shifting is on: 1 MCS and 1 (or 1 set for CB-group HARQ) HARQ-related field per DCI, 1 CQI and 1 DL HARQ-ACK for all layers
+
+The following layer mapping scheme is supported
+
+Symbol-level vertical mapping: across layer-first, then sub-carriers (frequency), then OFDM symbols (time)
+
+Same scheme as LTE when 1 CW is mapped across multiple layers
+
+For >4-layer transmission, allow shifting across 2 CWs
+
+Appendix A: simulation results for maximum number of layers = 4
+
+Assuming 16 and 32 antenna ports with (N1, N2) = (2, 4) and (4, 4) where N1 and N2 are number of antenna ports in first and second dimensions, respectively, the performance of the LTE layer mapping (denoted as “2 CWs”) is compared with single CW symbol-level layer mapping (denoted as “1 CW”). The results for maximum number of layers of 4 are given in Table 1 and Table 2 for arrival rate (lambda) = 4 and 2.5, respectively. The rest of the simulation assumptions are provided in Table 5 in Appendix D.
+
+Table 1: UMi-2GHz, UPT (Mbps) maximum number of layers = 4, Lambda = 4
+
+#ports | Scheme | Max# CWs | Avg. UPT | 50% UPT | 5% UPT | Avg. UPTgain | 50% UPTgain | 5% UPTgain | RU
+16 | SU | 1 | 45.58 | 42.02 | 16.59 | 100.0% | 100.0% | 100.0% | 31.1%
+ |  | 2 | 43.81 | 39.00 | 15.74 | 96.1% | 92.8% | 94.8% | 32.6%
+ | MU | 1 | 54.38 | 49.62 | 19.09 | 100.0% | 100.0% | 100.0% | 26.9%
+ |  | 2 | 52.51 | 46.65 | 17.77 | 96.6% | 94.0% | 93.1% | 28.5%
+32 | SU | 1 | 50.34 | 46.71 | 19.61 | 100.0% | 100.0% | 100.0% | 28.3%
+ |  | 2 | 48.67 | 44.31 | 18.65 | 96.7% | 94.9% | 95.1% | 29.7%
+ | MU | 1 | 59.97 | 55.79 | 23.13 | 100.0% | 100.0% | 100.0% | 24.5%
+ |  | 2 | 58.58 | 54.49 | 21.94 | 97.7% | 97.7% | 94.9% | 25.8%
+
+Table 2: UMi-2GHz, UPT (Mbps) maximum number of layers = 4, Lambda = 2.5
+
+#ports | Scheme | Max# CWs | Avg. UPT | 50% UPT | 5% UPT | Avg. UPTgain | 50% UPTgain | 5% UPTgain | RU
+16 | SU | 1 | 59.26 | 55.78 | 24.73 | 100.0% | 100.0% | 100.0% | 16.3%
+ |  | 2 | 57.92 | 54.66 | 22.50 | 97.7% | 98.0% | 91.0% | 16.9%
+ | MU | 1 | 66.60 | 64.59 | 27.67 | 100.0% | 100.0% | 100.0% | 14.7%
+ |  | 2 | 65.47 | 63.74 | 25.29 | 98.3% | 98.7% | 91.4% | 15.2%
+32 | SU | 1 | 63.44 | 64.57 | 28.80 | 100.0% | 100.0% | 100.0% | 14.9%
+ |  | 2 | 62.30 | 62.55 | 26.50 | 98.2% | 96.9% | 92.0% | 15.4%
+ | MU | 1 | 71.39 | 74.11 | 32.40 | 100.0% | 100.0% | 100.0% | 13.3%
+ |  | 2 | 70.42 | 73.08 | 29.50 | 98.6% | 98.6% | 91.1% | 13.7%
+
+Appendix B: simulation results for maximum number of layers = 8
+
+The results for maximum number of layers of 8 are given in Table 3 and Table 4 for arrival rate (lambda) = 4 and 2.5, respectively. The rest of the simulation assumptions are provided in Table 5 in Appendix D. Here, 1-CW (with 1 MCS and 1 HARQ) is used for rank ≤ 4 and 2-CW for rank>4. Two schemes are compared for rank>4:
+
+CW shifting ON: 1 MCS and 1 HARQ are used
+
+CW shifting OFF: 2 MCS and 2 HARQ are used
+
+Table 3: UMi-2GHz, UPT (Mbps) maximum number of layers = 8, Lambda = 4
+
+#ports | Scheme | CW shifting for rank>4 | Avg. UPT | 50% UPT | 5% UPT | Avg. UPTgain | 50% UPTgain | 5% UPTgain | RU
+16 | SU | ON | 90.42 | 85.74 | 39.17 | 100.0% | 100.0% | 100.0% | 13.7%
+ |  | OFF | 88.81 | 83.56 | 33.87 | 98.2% | 97.5% | 86.5% | 14.2%
+ | MU | ON | 103.67 | 99.95 | 45.09 | 100.0% | 100.0% | 100.0% | 12.4%
+ |  | OFF | 102.61 | 98.89 | 40.90 | 99.0% | 98.9% | 90.7% | 12.8%
+32 | SU | ON | 99.56 | 96.15 | 43.42 | 100.0% | 100.0% | 100.0% | 12.2%
+ |  | OFF | 97.73 | 94.92 | 38.54 | 98.2% | 98.7% | 88.8% | 12.7%
+ | MU | ON | 114.12 | 112.68 | 49.90 | 100.0% | 100.0% | 100.0% | 11.3%
+ |  | OFF | 112.77 | 113.26 | 44.36 | 98.8% | 100.5% | 88.9% | 11.5%
+
+Table 4: UMi-2GHz, UPT (Mbps) maximum number of layers = 8, Lambda = 2.5
+
+#ports | Scheme | CW shifting for rank>4 | Avg. UPT | 50% UPT | 5% UPT | Avg. UPTgain | 50% UPTgain | 5% UPTgain | RU
+16 | SU | ON | 96.04 | 91.81 | 41.48 | 100.0% | 100.0% | 100.0% | 10.8%
+ |  | OFF | 95.16 | 91.66 | 37.41 | 99.1% | 99.8% | 90.2% | 11.1%
+ | MU | ON | 107.65 | 104.01 | 45.92 | 100.0% | 100.0% | 100.0% | 9.8%
+ |  | OFF | 106.54 | 103.45 | 40.88 | 99.0% | 99.5% | 89.0% | 10.1%
+32 | SU | ON | 105.43 | 103.42 | 47.18 | 100.0% | 100.0% | 100.0% | 9.7%
+ |  | OFF | 103.99 | 102.99 | 42.33 | 98.6% | 99.6% | 89.7% | 9.9%
+ | MU | ON | 117.17 | 116.41 | 52.94 | 100.0% | 100.0% | 100.0% | 8.9%
+ |  | OFF | 116.09 | 117.72 | 48.17 | 99.1% | 101.1% | 91.0% | 9.1%
+
+Appendix C: rank distribution for maximum number of layers = 4 and 8
+
+Figure 2: Rank distribution for 16 ports, Lambda = 2.5
+
+Figure 3: Rank distribution for 32 ports, Lambda = 2.5
+
+Appendix D: simulation assumptions
+
+Table 5: Simulation Parameters
+
+Parameters | Values
+Simulation Type | Non-full-buffer (Low load 20% or 30% Target RU, Lambda = 4, 2.5)
+Channel model | UMi-2GHz
+Number of BS (H,V) antenna elements | (8,8), x-polarized, subarray partition
+(N1,N2, P) | 16, 32 ports: (2,4,2), (4,4,2)
+BS (H,V) antenna spacing | (0.5, 0.8)λ
+BS and MS antenna polarizations | BS: (+45°,-45°); MS: (0°, 90°)
+Number of UE antennas | 2 (for max rank = 2), 4 (for max rank = 4), 8 (for max rank = 8)
+SU/MU pre-coding | SLNR
+Scheduling | SU, Proportional fair MU, Proportional fair, up to 4 layers (8 for max rank = 8)
+Channel estimation | Non-ideal
+Transmission rank | 1,2,…, max rank
+Receiver | MMSE-IRC
+CSI measurement | Modeled
+
+References
+
+3GPP, RAN1#88, Chairman’s Notes

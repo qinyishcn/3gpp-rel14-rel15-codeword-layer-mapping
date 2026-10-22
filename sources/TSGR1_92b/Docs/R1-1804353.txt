@@ -1,0 +1,73 @@
+3GPP TSG RAN WG1 Meeting #92bis R1-1804353
+
+Sanya, China, March 16th – 20th, 2018
+
+Agenda item: 7.1.2.1.1
+
+Source: Samsung
+
+Title: Issues on codeword mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+The following agreement was made in RAN1#92 [1]:
+
+Agreement
+
+For NR Rel-15, DMRS port ordering is performed as follows for one-CW transmission (DL)
+
+Simple ordering with increasing index (port number)
+
+This contribution addresses two remaining open issues on codeword mapping that are relevant for the completion of the specification (cf. Table 2 of [2]):
+
+DMRS port ordering for two-CW transmission
+
+TB to CW mapping when 1 TB is disabled
+
+DMRS port ordering for two-CW transmission
+
+Since a simple DMRS port ordering has been agreed for one-CW transmission, a natural extension for the two-CW transmission is quite obvious: if L0 layers are mapped to CW0 and L1 to CW1, the assigned DMRS ports are ordered ascendingly (in terms of their indices) wherein the first L0 DMRS ports are mapped to CW0 and the remaining (L1) DMRS ports to CW1.
+
+One may argue that the DMRS port ordering should be aligned with the so-called DMRS port grouping to ensure optimal multi-TRP operation especially non-coherent JT. However, since there may be better solutions to enable better support for non-coherent JT (e.g. as >2 CWs may be involved using, e.g. scalable DCI design) and multi-TRP is not an essential feature for Rel.15, there is no strong reason to optimize the DMRS port ordering scheme in Rel.15.
+
+Proposal: When the UE is configured for a 2-CW transmission, the DMRS port ordering scheme is a simple extension of that for 1-CW transmission:
+
+If L0 layers are mapped to CW0 and L1 to CW1, the assigned DMRS ports are ordered ascendingly (in terms of their indices) wherein the first L0 DMRS ports are mapped to CW0 and the remaining (L1) DMRS ports to CW1.
+
+TB-to-CW mapping when 1 TB is disabled
+
+First, it should be noted that a transport block (a logical entity) needs to be mapped to a codeword (a physical entity). Otherwise, the link between TS 38.212 and 38.211 is missing. Therefore, a TB-to-CW mapping rule is needed.
+
+Second, with a fixed CW-to-layer mapping rule, it is natural to reuse the TB-to-CW mapping from LTE (cf. section 7.3.1.2.2 of TS38.212):
+
+A single TB (whether one of the two TBs is disabled or only one TB is available) is mapped to CW0.
+
+When two TBs are available, the first TB is mapped to CW0 and the second to CW1.
+
+Proposal: Reuse the LTE solution for mapping TB to CW
+
+When only one out of the two TBs is enabled, the TB is mapped to CW0
+
+Conclusion
+
+To resolve the open issues on codeword-to-layer mapping, the following proposals are made.
+
+Proposal
+
+When the UE is configured for a 2-CW transmission, the DMRS port ordering scheme is a simple extension of that for 1-CW transmission:
+
+If L0 layers are mapped to CW0 and L1 to CW1, the assigned DMRS ports are ordered ascendingly (in terms of their indices) wherein the first L0 DMRS ports are mapped to CW0 and the remaining (L1) DMRS ports to CW1.
+
+Reuse the LTE solution for mapping TB to CW
+
+When only one out of the two TBs is enabled, the TB is mapped to CW0
+
+References
+
+3GPP RAN1#92, Chairman Notes
+
+3GPP, Samsung, R1-1801955, Summary of issues on codeword mapping
+
+3GPP, TS38.211 V15.1.0

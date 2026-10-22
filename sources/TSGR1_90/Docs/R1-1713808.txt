@@ -1,0 +1,153 @@
+3GPP TSG RAN WG1 Meeting #90 R1- 1713808
+
+Prague, Czechia, 21th – 25th August 2017
+
+Source: ETRI
+
+Title: Discussion on codeword mapping
+
+Agenda item: 6.1.2.1.1
+
+Document for: Discussion/Decision
+
+Introduction
+
+Regarding the mapping to resource elements, the following working assumption and agreements were made in the 3GPP RAN1#89 meeting [1]:
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+In addition, the following agreements were made in the 3GPP RAN1-NR#2 meeting [2]:
+
+Agreements:
+
+Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenarios
+
+Practical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.
+
+For both CP-OFDM and DFT-S waveforms
+
+Evaluation should be done considering both slot and mini-slot.
+
+In this contribution, based on the above working assumption and agreements, we discuss considerations in mapping to resource elements, mainly focusing on mapping order and interleaving.
+
+Discussions
+
+Mapping order
+
+Mapping order for modulated OFDM symbols to resource elements can greatly affect the NR link-level performance, and its effect can be use case-specific and deployment scenario-specific. In terms of link performance, layer-first mapping is advantageous for achieving spatial diversity gain in a multi-antenna system. Frequency-first mapping is beneficial for exploiting frequency diversity of a frequency-selective channel. Lastly, time-first mapping achieves better performance for a highly time-varying channel such as high Doppler scenario by sufficiently exploiting time diversity.
+
+In this regard, in Figure 1, we provide BLER comparison of mapping orders between LayerFrequencyTime and LayerTimeFrequency in the high speed scenario with speed up to 500 km/h. The detailed simulation parameters are provided in Appendix. The high speed scenario represents high Doppler scenario with large time-domain channel fluctuations. We can see that mapping order of LayerTimeFrequency achieves lower BLER than LayerTimeFrequency.
+
+Observation 1: In high Doppler scenario, the mapping order of LayerTimeFrequency is better than mapping order LayerTimeFrequency in terms of BLER performance.
+
+[FIG:2cffdec89be39b0e14dc]
+
+Figure 1. BLER comparison of mapping orders: L F T vs. L T F (Speed = 500 km/h)
+
+In addition to the above considerations of link performance, some use case-specific requirements should be considered. For example, it would be difficult to use time-first mapping for delay-sensitive applications having a tight latency requirement because it cannot decode the data until a slot ends. In contrast, delay-tolerant applications can use time-first mapping and can sufficiently exploit time diversity. So, it would be better to support configurable mapping order at least including LayerFrequencyTime and LayerTimeFrequency.
+
+Proposal 1: NR should support configurable mapping order of LayerTimeFrequency in addition to LayerFrequencyTime.
+
+One may argue that large buffer size is needed to store all the received soft bits within an entire slot when the mapping order of LayerTimeFrequency is supported. However, the mapping order of LayerTimeFrequency will be used mostly for the high Doppler scenarios where the number of layers is not higher (e.g., up to 2 or 4) low order modulation (e.g., QPSK/16QAM) is employed. It has been already agreed in NR that at least 8 orthogonal DL DMRS ports are supported for SU-MIMO, and high order modulation schemes up to 256QAM are supported [3]. Hence, even though the mapping order of LayerTimeFrequency is not supported, very large buffer size is required for a UE. We do not see that buffer size is not a particularly significant issue for the mapping order of LayerTimeFrequency.
+
+Observation 2: Additional buffer size due to the support of the mapping order of LayerTimeFrequency is not significant.
+
+Support of frequency interleaver
+
+Employing frequency interleaver before mapping to the resource elements is helpful for maximizing frequency diversity gain especially for large bandwidth use cases where multiple code blocks can be allocated within one OFDM symbol. Additionally, time diversity gain is also achievable when interleaving is done over multiple OFDM symbols. Although multi-OFDM symbol interleaving achieves time diversity gain, it increases latency. So, it can be used for high Doppler latency-tolerant scenarios. In this regard, we provide simulation results to compare frequency interleaver performances in a high speed scenario with speed up to 500 km/h. Figure 2 shows that employing frequency interleaver improves BLER performance due to frequency diversity gain. It also shows that multi-OFDM symbol interleaver further improves BLER performance by increasing time diversity gain.
+
+Observation 3: Employing frequency interleaver is beneficial for improving BLER performance.
+
+Observation 4: Multi-OFDM symbol interleaver can further improve BLER performance for high Doppler scenario.
+
+Proposal 2: NR should support frequency interleaving including multi-OFDM symbol interleaving.
+
+[FIG:6c4a255e22547060219b]
+
+Figure 2. BLER comparison of frequency interleaving (CDL-D, Speed = 500 km/h)
+
+Conclusion
+
+In this contribution, we discussed NR codeword mapping issues including mapping order and frequency interleaver. Supports for the configurable mapping order and frequency interleaver have potential to improve link performance such as BLER in some important NR use cases and deployment scenario such as the high speed scenario. We found the followings.
+
+Observation 1: In high Doppler scenario, the mapping order of LayerTimeFrequency is better than mapping order LayerTimeFrequency in terms of BLER performance.
+
+Proposal 1: NR should support configurable mapping order of LayerTimeFrequency in addition to LayerFrequencyTime.
+
+Observation 2: Additional buffer size due to the support of the mapping order of LayerTimeFrequency is not significant.
+
+Observation 3: Employing frequency interleaver is beneficial for improving BLER performance.
+
+Observation 4: Multi-OFDM symbol interleaver can further improve BLER performance for high Doppler scenario.
+
+Proposal 2: NR should support frequency interleaving including multi-OFDM symbol interleaving.
+
+References
+
+3GPP Chairman’s notes RAN1#89, May. 2017.
+
+3GPP Chairman’s notes RAN1-NR#2, Jun. 2017.
+
+3GPP TR 38.802, “Study on New Radio Access Technology; Physical Layer Aspects,” v14.1.0, Jun. 2017.
+
+R1-163984, “Discussion on phase noise modeling,” RAN1#85, May 2016.
+
+R1-165685, “WF on Phase Noise Modeling,” RAN1#85, May 2016.
+
+Appendix
+
+Simulation parameters
+
+The parameters for mapping order simulation are summarized in Table 1, which are agreed for high speed scenario evaluation with speed up to 500 km/h. For the phase noise model, the multi-pole/zero model for 30 GHz is used [4], which was agreed in [5]. In the simulation, the common phase error is compensated. The frequency offset due to the Doppler shift occurring from the strong LOS path is also compensated.
+
+Table 1. Parameters for mapping order simulation
+
+Parameter | Value
+Carrier frequency | 30 GHz
+System bandwidth | 80 MHz
+Subcarrier spacing | 120 kHz
+Channel coding | LTE Turbo
+MCS | 16QAM 3/4
+Number of layers | 1
+Channel estimation | Ideal
+Equalizer | LMMSE
+Channel model | TDL-D (DS = 10ns, K-factor = 13.3 dB)
+Phase noise model | Multi-pole/zero model [4]
+UE speed | 500 km/h
+
+The parameters for frequency interleaver simulation are summarized in Table 2 under the high speed scenario evaluation assumption.
+
+Table 2. Parameters for frequency interleaver simulation
+
+Parameter | Value
+Carrier frequency | 30 GHz
+System bandwidth | 80 MHz
+Subcarrier spacing | 120 kHz
+Channel coding | LTE Turbo
+MCS | 16QAM 3/4
+Number of layers | 1
+Channel estimation | Ideal
+Equalizer | LMMSE
+Channel model | CDL-D (DS = 10ns, K-factor = 13.3 dB)Parameter set # 1: 5(ASD), 5(ASA), 1(ZSA), 1(ZSD)ZoD and ZoA for cluster #1 are fixed at 90 degrees
+TRP antenna configuration | (M,N,P,Mg,Ng) = (8,8,2,1,1); (dV,dH) = (0.5, 0.5)λ with directional antenna element (HPBW=65, directivity 8dB)
+UE antenna configuration | (M,N,P,Mg,Ng) = (8,8,2,1,1); (dV,dH) = (0.5, 0.5)λ with directional antenna element (HPBW=65, directivity 8dB)
+Phase noise model | Multi-pole/zero model [4]
+UE speed | 500 km/h

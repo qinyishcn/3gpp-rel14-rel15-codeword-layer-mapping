@@ -1,0 +1,131 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702597
+
+13th - 17th February 2017
+
+Athens, Greece
+
+Agenda item: 8.1.2.1.1
+
+Source: Qualcomm Incorporated
+
+Title: Frequency domain interleaving
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN1 #87 AH [1], the following agreements regarding the codeword to layer mapping were made:
+
+Agreements:
+
+For the DL/UL data channels, study whether/how the interleaving is performed in the codeword to layer mapping procedure (e.g., a per-OFDM-symbol subcarrier interleaver in the codeword to layer mapping procedure, etc.)
+
+This may or may not be connected with coding design
+
+In this contribution, we present our views on the frequency domain interleaver that NR should support. In short:
+
+We propose NR to support at least a frequency-domain interleaver for both uplink and downlink to exploit the frequency diversity and the large bandwidth allocations.
+
+Frequency Interleaving
+
+Discussion
+
+Even though it is envisioned that NR shall support large bandwidth allocations, a codeblock will span a limited frequency bandwidth, especially in regimes of high spectral efficiency. A simple frequency-based interleaving procedure can be added in the codeword-to-layer mapping step to ensure that the resource elements that carry bits of the same codeblock get additional frequency diversity by spreading them across a larger bandwidth. Note that if allocation is small, and one codeblock already spans the whole or most of the bandwidth of the OFDM symbol, as it was the case of LTE, indeed a frequency interleaving might not provide significant gains. However, in large bandwidth allocations, e.g., 100 MHz, and a 2-layer SCW MIMO, and 64 QAM, there can exist around 6 CBs per OFDM symbol. In scenarios of 4-layer SCW MIMO, or 256-QAM, or even higher modulation, there may be even more CBs per OFDM symbol.
+
+Introducing an interleaving procedure in NR may not be necessarily related to coding design, since it refers mostly to interleaving that is happening across codeblocks, after the encoding process has been completed; in which case the interleaving may occur as part of the mapping of the codeblocks into the MIMO layers and then the resources.
+
+Distributing the codeblocks of each OFDM symbol uniformly in the frequency domain in order to maximize the frequency domain diversity gains can be easily implemented, using an interleaving procedure that is happening at the resource element level (i.e., tone level). Supporting such an interleaver will also provide gains in regimes of bursty subband interference and URLLCC/eMBB dynamic multiplexing. Note also that such a method would allow pipeline decoding at the receiver since the de-interleaving is happening on the resource element level, before the demapper. The LLRs after the demapper are “in-order” and ready for decoding. If the frequency interleaving was happening at the transmitter at the bit level, then the natural choice of the de-interleaving would need to be in the LLR-level, after the demapper, in which case the codeblock decoding for each OFDM symbol would need to start after all the demapping process for that OFDM symbol has been completed.
+
+Furthermore, simple, implementation-friendly interleaving designs may be considered which do not increase the latency of decoding at the receiver; for example, if the interleaving is only performing a deterministic re-ordering of the subcarriers, then at the receiver such a procedure can be implemented using a memory re-addressing procedure in the early stages of the receive processing.
+
+In the next sections we provide some numerical evaluations which show that in many scenarios of interest, a per-OFDM symbol interleaver may provide multi-dB-level gains for the medium and high spectral efficiency scenarios.
+
+Row-Column per-OFDM symbol interleaver
+
+We now provide a proposal of a row-column interleaver that is happening at the codeword-to-layer mapping in the resource element level and simulation study that demonstrates the gains that can be expected in scenarios of large allocations compared to the case of no-frequency interleaving.
+
+In the suggested row-column interleaving procedure, after the encoded data bits are mapped into QAM symbols, the latter are mapped across layers sequentially into logical resource elements for each OFDM symbol, and then bundles of K resource elements are interleaved using a row-column procedure before the precoding step and mapping into physical resource elements. A toy example of such procedure is shown in Figure 1 where K=4, each codeblock spans 8 resource elements and there are a total number of 3 codeblocks. Note that such procedure is happening only in the logical resource elements that carry data, and that no interleaving is happening in the control or RS that could be present in an OFDM symbol.
+
+[FIG:3f563e406806ef085526] [FIG:376405c6dfdfb35973e5] [FIG:914b59bfece53453e4d7]
+
+Figure 1 Toy example of a row-column frequency interleaving procedureFigure 1 Toy example of a row-column frequency interleaving procedure
+
+Simulation results
+
+Sub-6GHz study
+
+We now provide performance results for a sub-6GHz with a SCS of 30 KHz with 170 RBs, each with 12 subcarriers, which results into a bandwidth of 61.2 MHz in a 4x4 system with link and rank adaptation with realistic channel estimation. Detailed simulation parameters are shown in Table 1.
+
+Parameter | Value
+Coding | 3GPP Turbo with 32 entries in the MCS table. Maximum code rate 0.93, and 256-QAM
+Link/Rank adaptation | 10% TBLER Link Adaptation with TTI 500 usec and rank adaptation up to 4 layers
+MIMO | 4 Tx, 4 Rx, Open Loop, SCW
+CE | MMSE Channel estimation – 4 PRB channel estimation
+BW | 61.2 MHz
+SCS | 30 KHz
+HARQ | 1 transmission with 1 bit ACK/NAK
+
+Table 1 Simulation parameters
+
+Figure 2 and 3 present the throughput performance for
+
+[FIG:cd6a94556c5db5715c61]
+
+Figure 2 Throughput performance comparison of per-tone (K=1) or per-4-tone (K=4) interleaver compared to no frequency interleaver for a system with BW of 61.2 MHz in a TDL-C 100nsec channel.
+
+[FIG:66ff25a0fefd2a430a54]
+
+Figure 3 Throughput performance comparison of per-tone (K=1) or per-4-tone (K=4) interleaver compared to no frequency interleaver for a system with BW of 61.2 MHz in a TDL-C 300nsec channel.
+
+We observe that in both scenarios significant gains can be exploited by using a frequency-domain interleaver, especially for medium and high geometries. Even higher gains are expected in allocations of larger than 60 MHz, which need to be supported by NR.
+
+In the next section, we provide a similar study for a mmW use case.
+
+mmW study
+
+We now provide performance results for a MMW 30GHz with a SCS of 120 KHz with 64 RBs, each with 12 subcarriers, which results into a bandwidth of 92.16 MHz in a 2x2 polarized MIMO system with link and rank adaptation. Detailed simulation parameters are shown in Table 2.
+
+Parameter | Value
+Coding | 3GPP Turbo with 32 entries in the MCS table. Maximum code rate 0.93, and 256-QAM; Wi-Fi LDPC 1944 CB Size and 15 entries in the MCS table. Maximum code rate 0.875, and 256-QAM
+Channel | CDL-B 3kmh 100ns DS and CDL-C 3kmh 300ns DS, no angular translation
+TRP | (M,N,P,Mg,Ng) = (4,64,1,1,2). (dV,dH) = (0.5, 0.5)λ; Orientation (0,0,0), Antenna directivity 8dBi, HPBW=65degree
+UE | (M, N, P, Mg, Ng) = (2, 4, 2, 1, 2); (dV,dH) = (0.5, 0.5)λ; Orientation (180,0,0), Antenna directivity 5dBi, HPBW=90degree
+TxRU Virtualization/ Analog Beamforming | All antennas with the same polarization on one panel is mapped to 1 port, using DFT Beam pointing towards the strongest cluster at both TRP and UE.
+Link/Rank adaptation | 10% TBLER Link Adaptation with TTI 125 usec and rank adaptation up to 2 layers
+MIMO | 2 Tx, 2 Rx, No Digital Beamforming, SCW
+CE | Genie Channel and noise estimation
+BW | 92.16 MHz
+SCS | 120 KHz
+HARQ | 1 transmission with 1 bit ACK/NAK
+
+Table 2 MMW Simulation parameters
+
+Figure 4 and Figure 5 present throughput results with post-BF SNR for:
+
+[FIG:f84eda8ab449ed22bb69]
+
+Figure 4 Throughput comparison of per-4-tone (K=4) interleaver vs. no frequency interleaver for a system with BW of 91.16 MHz, 120kHz SCS in a CDL-A 100nsec channel with Turbo code, K=2000 bits.
+
+[FIG:847c519f333af10fb4a1]
+
+Figure 5 Throughput comparison of per-4-tone (K=4) interleaver vs. no frequency interleaver for a system with BW of 91.16 MHz, 120kHz SCS in a CDL-C 300nsec channel with LDPC code, CB size 1944 bits.
+
+We observe that in both scenarios significant gains can be exploited by using a frequency-domain interleaver for MMW system as well (as long as the CB does not span more than 1 symbol), especially for medium and high geometries. Note that
+
+Observation 1: Significant performance gains are expected in regimes for medium and high spectral efficiencies if a frequency-based interleaver is supported in NR.
+
+Proposal 1: NR supports a frequency-domain per-OFDM-symbol interleaver for both uplink and downlink.
+
+Conclusions
+
+Observation 1: Significant performance gains are expected in regimes for medium and high spectral efficiencies if a frequency-based interleaver is supported in NR.
+
+Proposal 1: NR supports a frequency-domain per-OFDM-symbol interleaver for both uplink and downlink.
+
+References
+
+RAN1-87 AH Chairman’s notes
+
+R1-1613741, “Way forward on Phase 1 and Phase 2 MIMO calibration for NR”, ZTE, ZTE Microelectronics, Ericsson, LG Electronics, Spreadtrum Communications
+
+R1- 1700480 “Summary of [87-29] Simulation assumption for NR DMRS,” LG Electronics, 3GPP TSG-RAN WG1 NR Ad-Hoc, Spokane, Washington, USA

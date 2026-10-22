@@ -1,0 +1,156 @@
+3GPP TSG RAN WG1 NR-AH 1801 R1-1801018
+
+Vancouver, Canada, 22nd – 26th January 2018
+
+Agenda item: 7.2.1.1
+
+Source: Samsung
+
+Title: Summary of issues on codeword mapping
+
+Document for: Discussion and Decision
+
+Issues on codeword mapping and proposed resolutions
+
+In this contribution, a summary of issues on codeword mapping raised in the four submitted contributions for RAN1 NR-AH 1801 is given ([1]-[4]). The issues are of three kinds and outlined in Table 1, 2, and 3:
+
+Specification refinement: e.g. typo correction, clarification
+
+Resolving open issues: e.g. missing components in the specification
+
+New proposals: e.g. amending an agreement
+
+Table 1 Specification refinement
+
+| Issue | Summary of proposal | Companies
+1.1 | Scrambling sequence initialization | Add missing definition for nRNTI in 6.3.1.1 and 7.3.1.1 of TS38.211 | AT&T, Ericsson
+1.2 | UL DMRS sequence | Add missing definition for nS in 6.4.1.1 of TS38.211 | AT&T
+1.3 | Typos | “resrouce” in 6.4.1.1 | AT&T
+1.4 | Precoding on PDSCH | Describe precoding operation of DMRS for PDSCH (add W to the equation in 7.3.1.4) | AT&T
+
+The proposals for resolving issues 1.1 and 1.3 add more clarity to the specification.
+
+Issue 1.2 was resolved in an agreement for DMRS therefore there is no need for further discussion.
+
+It is unclear, however, that 1.4 is an issue since precoding for PDSCH is transparent to the UE. The UE does not require the knowledge of precoder applied to an assigned DL transmission for demodulating the received data (cf. LTE TM 7/8/9/10 where DMRS is used for demodulation). This is different for PUSCH since the UE is explicitly assigned a precoder for a granted UL transmission (via TPMI or SRI).
+
+Therefore, the following resolutions are possible.
+
+Proposal:
+
+Issues 1.1, 1.3: Refine the specification as proposed in [3]and [4]
+
+The text proposal is given below
+
+Issue 1.4: discuss further whether specification refinement is needed (if so, either in TS 38.211 as suggested in [3], or in TS 38.214 on PUSCH procedure).
+
+Table 2 Resolving open issues
+
+| Issue | Summary of proposal | Companies
+2.1 | Ordering of DMRS ports | When 2 CWs are received (DL), need to ensure that QCL-ed/CDM-ed DMRS ports are mapped to the same CW. Need new tables in 7.3.1.2.2 of TS38.212. | CATT
+2.2 | TB to CB mapping | Use the same approach as LTE in 7.3.1.2.2 of TS38.212 (always use CW0), reflect this in 5.1.3.2 of TS38.214 | Ericsson
+
+Issue 2.1 attempts to reflect a past agreement on DMRS port group. The above proposal from [1] is a good starting point for further discussion. At the same time, Huawei commented that it is too early to discuss the case of two non-QCL DMRS ports as it is primarily relevant for multi-TRP case. An alternative would be the scheme used in LTE (using a mapping rule from DMRS port index to CW).
+
+The above proposal for issue 2.2 (from [4]) seems reasonable as there is no technical reason for adopting a more complex solution (e.g. switching TB ordering).
+
+Therefore, the following resolutions are possible.
+
+Proposal:
+
+Issue 2.1: Discuss further, comparing the proposal in [1]and the scheme in LTE as a starting point
+
+Issue 2.2: Discuss the need for the TB-CW correspondence table with the proposal in [4]as a starting point
+
+If there is no other proposal, agree on the proposal, agree on the proposal in [4] (LTE approach)
+
+Note: The absence of correspondence between TB (logical entity) and CW (PHY entity) renders the spec incomplete
+
+Table 3 New proposals
+
+| Issue | Summary of proposal | Companies
+3.1 | Scrambling sequence initialization | Introduce time index (which can be enabled or disabled) | Intel
+
+Issue 3.1 is raised in light of some link-level performance comparison in [2]. It is demonstrated that some link-level (BLER) performance gain can be obtained if time-varying scrambling initialization (cf. the approach used in LTE) is used. However, there is no indication that the specification is faulty (broken) if the current scrambling sequence initialization is kept. Note that the inclusion of time index (e.g. slot index) was proposed in RAN1#91 by several companies (at least five companies: Intel, LG, Samsung, ZTE/Sanechips) yet no consensus was reached [10].
+
+Therefore, the following resolution is possible.
+
+Proposal:
+
+Issue 3.1: Keep the specification on scrambling sequence initialization as is
+
+Suggested TP for issues 1.1 and 1.3
+
+Section 6.3.1.1 of TS38.211:
+
+…
+
+where x and y are tags defined in [4, TS38.212] and where the scrambling sequence [FIG:ca7aae3976592b1ca4f1] is given by clause 5.2.1. The scrambling sequence generator shall be initialized with
+
+[FIG:e8812ab5af256bc5cb34]
+
+where
+
+- [FIG:d19abe17fe9d2e74c1b1] equals the higher-layer parameter Data-scrambling-Identity if configured,
+
+- [FIG:8d21fd04e099205b0025] otherwise
+
+and where [FIG:4906c4cbef6f27d05899]  corresponds to the RNTI associated with the PUSCH transmission as described in clause 6.1 3GPP TS 38.214 [6].
+
+…
+
+Section 6.4.1.1 of TS38.211:
+
+…
+
+where [FIG:239e87747febc1a5f545] , [FIG:49017621aec9824f141b] , and [FIG:cb1007923cf14c1dece6] are given by Tables 6.4.1.1.3-1 and 6.4.1.1.3-2 and the following conditions are fulfilled:
+
+- the resource elements are within the common resrouce resource blocks allocated for PUSCH transmission
+
+…
+
+Section 7.3.1.1 of TS38.211:
+
+…
+
+Up to two codewords can be transmitted, [FIG:35953f0289918e27f0e9] . In case of single-codeword transmission, [FIG:17cbc01c4721b1b931dc] .
+
+For each codeword [FIG:5514ad5699fd9673062d] , the UE shall assume the block of bits [FIG:91037489f896ce9fabf8] , where [FIG:64098da05adfaeebd05b] is the number of bits in codeword [FIG:9383c7d53f497add8063] transmitted on the physical channel, are scrambled prior to modulation, resulting in a block of scrambled bits [FIG:bbc268acdac3c0e0d6bc] according to
+
+[FIG:52ad3f22f6370ab18eae]
+
+where the scrambling sequence [FIG:1a39a7b44783a3e6bc5d] is given by clause 5.2.1. The scrambling sequence generator shall be initialized with
+
+[FIG:2c85247af2c72d1e6f71]
+
+where
+
+- [FIG:96e17f4e1b6a44ab8413] equals the higher-layer parameter Data-scrambling-Identity if configured and the RNTI equals the C-RNTI,
+
+- [FIG:deaf3b7345ca2462fb3e] otherwise
+
+and where [FIG:56ee053ef952c45646b6]  corresponds to the RNTI associated with the PDSCH transmission as described in clause 5.1 3GPP TS 38.214 [6].
+
+…
+
+References
+
+R1-1800236, Remaining issues on codeword mapping, CATT
+
+R1-1800305, On drawback of time invariant scrambling for PDSCH / PUSCH, Intel Corporation
+
+R1-1800565, Remaining issues and text proposal in codeword to layer mapping, AT&T
+
+R1-1800689, Correction on CW mapping and data scrambling, Ericsson
+
+3GPP, TS38.211 V15.0.0
+
+3GPP, TS38.212 V15.0.0
+
+3GPP, TS38.213 V15.0.0
+
+3GPP, TS38.214 V15.0.0
+
+3GPP, TS38.331 V15.0.0
+
+R1-1721468, Summary of open issues on layer mapping, Samsung

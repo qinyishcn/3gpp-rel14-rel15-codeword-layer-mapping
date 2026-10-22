@@ -1,0 +1,148 @@
+3GPP TSG RAN WG1 89 R1-1709261
+
+Hangzhou, China, 15th - 19th May 2017
+
+Agenda item: 7.1.2.1.1
+
+Source: Samsung, Huawei
+
+Title: Summary of Open Issues on Layer Mapping
+
+Document for: Discussion
+
+Introduction
+
+The current agreement on layer mapping is as follows:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 4-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+The following three issues need to be finalized:
+
+[CW-layer correspondence] When 2 CWs are used (L>4 layers), the correspondence between 2 CWs and L layers
+
+[Mapping order] The manner in which a CW is mapped across multiple layers, sub-carriers (within the allocated PRBs), and OFDM symbols (within a slot)
+
+[Interleaver] Whether to support frequency interleaver and, if so, under what condition and/or form
+
+CW-layer correspondence
+
+A summary of the available proposals (in [1] – [14]) is given below.
+
+Table 1
+
+Scheme | Proponents
+Fixed correspondence (“almost equal split”):The 1st [EQ:69e3af646ceb20dc963f] layers CW0Remaining layers CW1 | Ericsson, Intel, LG Electronics, Samsung
+Variable correspondence:L0 layers CW0 (where L0 is configurable) L – L0 layers CW1 | AT&T
+
+Observation:
+
+Majority prefers fixed correspondence with almost equal splitting
+
+To ensure that other specification areas can progress (e.g. CSI definition, TBS design, DCI design), this issue can be further evaluated as long as it doesn’t introduce a new mapping for each of the CWs (i.e. as long as 1 CW is mapped to at most 4 layers).
+
+Full flexibility in CW-layer correspondence results in too many possibilities.
+
+Based on the above summary, the following proposal may be feasible:
+
+For >4-layer transmission, each of the two CWs is mapped to at most 4 layers
+
+Investigate further and down select between the two following alternatives:
+
+Alt1. Fixed correspondence (“almost equal split”)
+
+Alt2. Variable correspondence with limited number of possibilities
+
+Mapping order
+
+A summary of the available proposals (in [1] – [14]) is given below.
+
+Table 2
+
+Scheme | Proponents
+Layer Frequency Time (LFT) | AT&T, CATT, Ericsson, LG Electronics, Qualcomm, Samsung, Intel, Xinwei
+Configurable, support at least LFT as one possibility | Huawei, HiSi, NTT DOCOMO, ZTE
+Frequency Layer Time (FLT) | Xinwei
+Layer set 1 Frequency Time Layer set 2 Frequency Time, where each layer set corresponds to a CB group | MediaTek
+
+Observation:
+
+Most companies see the need for supporting at least LFT mapping order
+
+Based on the above summary, the following proposal may be feasible:
+
+Support at least LFT mapping order.
+
+Other mapping orders are FFS
+
+Frequency interleaving
+
+A summary of the available proposals (in [1] – [14]) is given below.
+
+Table 3
+
+Scheme | Proponents
+No frequency interleaver | AT&T, CATT
+Per-OFDM-symbol interleaver, either used all the time or conditionally | Ericsson, NTT DOCOMO, Qualcomm, Samsung
+Multi-OFDM-symbol interleaver | Huawei, HiSi
+Configurable interleaver (to match configurable layer mapping) | ZTE
+Time-frequency interleaver | Motorola, Lenovo
+
+Observation:
+
+Among those who support frequency interleaver, divergence in design preference is observed (although the majority seems to prefer some type of per-OFDM-symbol interleaver)
+
+Based on the above summary, the following proposal may be feasible:
+
+Further discussion is needed, first to decide whether a frequency interleaver is needed or not
+
+Other issues
+
+At least one company points out that the maximum number of layers the UE can receive (DL) should be signaled by the gNB to the UE, e.g. via higher layer signaling. This information determines the DCI (MCS and HARQ-related fields) and CSI (e.g. 1 or 2 CQIs) payload.
+
+Based on the above summary, the following proposal may be feasible:
+
+The maximum number of layers [EQ:0c8f9d3b9ee1b3701cef] the UE can receive (DL) is signaled to the UE via higher-layer signaling
+
+DCI and CSI payloads depend on the value of [EQ:3037a4a9e61c155d813e]
+
+References
+
+R1-1707083, Further Evaluation and Discussion on Codeword to Layer Mapping, Beijing Xinwei Telecom Techn.
+
+R1-1707111, Codeword to layer mapping and interleaving, ZTE, ZTE Microelectronics
+
+R1-1707347, Remaining details on CW to MIMO layer mapping, Intel Corporation
+
+R1-1707468, Discussion on codeword mapping, CATT
+
+R1-1707598, Discussion on codeword mapping, LG Electronics
+
+R1-1707737, Remaining issue for CW to layer mapping, AT&T
+
+R1-1707765, Discussion of codeblock mapping for DL and UL data channel, Lenovo, Motorola Mobility
+
+R1-1707833, Codeword mapping in NR, MediaTek Inc.
+
+R1-1707942, Finalizing Layer Mapping, Samsung
+
+R1-1708128, Codeword to layer mapping in NR, Huawei, HiSilicon
+
+R1-1708448, Views on CW Mapping, NTT DOCOMO, INC.
+
+R1-1708579, CW-to-layer mapping and frequency domain interleaving, Qualcomm Incorporated
+
+R1-1708579, CW to layer mapping and frequency domain interleaving, Ericsson
+
+R1-1708045, Layer Mapping Candidates, Samsung

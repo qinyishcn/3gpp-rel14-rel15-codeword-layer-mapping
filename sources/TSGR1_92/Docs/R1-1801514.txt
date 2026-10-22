@@ -1,0 +1,80 @@
+3GPP TSG RAN WG1 #92 R1-1801514
+
+Athens, Greece, February 26th – March 2nd, 2018
+
+Source: vivo
+
+Title: Remaining Issues on codeword mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In previous meetings, there are issues raised on layer to port mapping and TB to codeword mapping. In this paper, we further discuss aspects related to these two issues.
+
+TB to codeword mapping
+
+The necessity of explicitly defining TB to codeword mapping should be viewed from the whole Tx structure. Currently, UE determines which layer each codeword maps to according to following table. From the table it could be seen that number of layers first determines number of codewords, and then determine the corresponding layer mapping. For the case “Number of codewords” equal to 1, it has already been captured that codeword 0 is used.
+
+Table 7.3.1.3-1: Codeword-to-layer mapping for spatial multiplexing.
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:15d6e0e503dc47f8c31b]
+1 | 1 | [FIG:30a8446dbddde65b02fb] | [FIG:882691dbb5d8ef85de9e]
+2 | 1 | [FIG:39266e7fec8c9731682d] | [FIG:9bafb1f06bbbaf15d994]
+3 | 1 | [FIG:6104c16ffab693fe3f05] | [FIG:310a7809125a7b143d3e]
+4 | 1 | [FIG:82f2b1a7720dacd78685] | [FIG:0e1a962c9e98116524a8]
+5 | 2 | [FIG:c4dfbf467c634ed6be28] | [FIG:5a00b41f6d0063679d3f]
+ |  | [FIG:3788d429191f24dc177c] | 
+ |  |  |
+
+Table 7.3.1.3-1: Codeword-to-layer mapping for spatial multiplexing.
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:62b5cedd2fc19d2b91bc]
+6 | 2 | [FIG:43cfb8def36cd290bbd6] | [FIG:2ee3dd8659c164a73ef2]
+ |  | [FIG:d19c64525b6832a2c1f4] | 
+7 | 2 | [FIG:4550bf44b7907ed5dfb4] | [FIG:bb1eec80fcd979b3bd04]
+ |  | [FIG:f1c77552d451d4a06f42] | 
+8 | 2 | [FIG:4470a47ebf19827076c0] | [FIG:10e2c56a57c668d3c857]
+ |  | [FIG:f1bf1ca2dcb01a242438] |
+
+Observation 1: Table 7.3.1.3-1 in 38.211 has already captured the mapping between TB and codeword when there is only one codeword and one TB transmitted.
+
+Proposal 1: It is not necessary to further specify the relationship between TB and codeword when there is only one codeword and one TB transmitted.
+
+Layer to port mapping
+
+Currently there is no explicit indication of layer to port mapping in the spec. In our understanding, the simplest way is to map each layer to each antenna port one to one in increasing order of layer index and increasing order of DMRS port index.
+
+Proposal 2: For layer to port mapping, each layer is mapped to each antenna port in increasing order of layer index and increasing order of DMRS port index.
+
+----Text Proposal for TS 38.211------------------------------------------------------------------
+
+5.1.2.3 Physical resource block (PRB) bundling
+
+< Unchanged parts are omitted >
+
+7.3.1.4 Antenna port mapping
+
+The block of vectors [FIG:6d498fd91dd0328e59b8] , [FIG:b9ef60071fa1f8789342] shall be mapped to antenna port according to
+
+[FIG:21a38fac7d5599e4dea2]
+
+where [FIG:95fba1f6583fcca4c673] , [FIG:f69a1d18497d16c2072c] . The set of antenna ports [FIG:fbff1145e8c1a6a1d4f4] shall be determined according to the procedure in [6, TS 38.214] and is in increasing order from [FIG:249c88e112cf2dbb135f] to [FIG:b7c4b6279518b8c7add4] .
+
+< Unchanged parts are omitted >
+
+Conclusion
+
+In this contribution, the following proposals are given related to layer mapping:
+
+Observation 1: Table 7.3.1.3-1 in 38.211 has already captured the mapping between TB and codeword when there is only one codeword and one TB transmitted.
+
+Proposal 1: It is not necessary to further specify the relationship between TB and codeword when there is only one codeword and one TB transmitted.
+
+Proposal 2: For layer to port mapping, each layer is mapped to each antenna port in increasing order of layer index and increasing order of DMRS port index.
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 Meeting #90b

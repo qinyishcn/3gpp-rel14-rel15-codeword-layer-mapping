@@ -1,0 +1,147 @@
+3GPP TSG RAN WG1 #90bis R1-1718384
+
+21st – 25th August 2017
+
+Prague, Czech Republic
+
+Agenda item: 7.2.1.1
+
+Source: AT&T
+
+Title: Codeword to Layer Mapping for DFTsOFDM with Frequency Hopping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. Regarding codeword to layer mapping, the following agreement were made.
+
+Agreements:
+
+For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR:
+
+First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL
+
+No frequency and/or time interleaving is supported in Rel-15 NR
+
+FFS for DFT-s-OFDM uplink with and without frequency hopping
+
+Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+For uplink data transmission with DFT-S-OFDM waveform, the following agreements were made.
+
+Agreements:
+
+Companies are encouraged to perform link-level evaluation of PUSCH CW-to-RE mapping schemes for DFT-s-OFDM with and without frequency hopping.
+
+Possible examples include
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+In the previous meeting, the following agreements were made when frequency hopping is not enabled.
+
+Agreements:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, down select between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+It can be observed that still no decision is made on the resource element mapping when frequency hopping is enabled. Hence, in this contribution, we analyze the performance between Option 1 and Option 3 with frequency hopping is enabled.
+
+Codeword to Layer Mapping Scheme for Uplink DFT-S-OFDM with Frequency Hopping
+
+For uplink data transmission using DFT-S-OFDM, the codeword to layer mapping can be done similar to CP-OFDM, i.e. the modulated symbols after the channel encoder and modulation mapper are mapped first to the subcarriers then OFDM symbols. However, it was pointed out in [1], if the layer mapping order is reversed, then gains can be achieved when the number of code block levels are high when frequency hopping is enabled. The design options are
+
+Option 1: Subcarriers then OFDM symbols: This scheme is similar to the conventional layer mapping order for CP-OFDM. As shown in Figure 1, once the transport block is segmented say into 2 codeblocks, the codeblocks are mapped sequentially, i.e. the first code block is mapped to the first frequency hop and then the second code block. The problem with this technique is that the frequency hopping gains can’t be achieved as the whole code block is carried by one frequency hop.
+
+[FIG:5e32495c9e82f5268e1c]
+
+Figure 1 An example of RE mapping for Option 1
+
+Option 2: OFDM symbols then subcarriers: In this option, the codeblocks are first mapped in time domain first and then the mapped in the frequency domain as shown in Figure 2.  This option can get the benefit when frequency hopping is enabled, however, the receiver can’t decide until the decoding of all the OFDM symbols.
+
+[FIG:8f0d3661e29a34b293b6]
+
+Figure 2 An example of RE mapping for Option 2
+
+Option 3: Subcarriers then OFDM symbols with codeblock level hopping: In this option, the codeblocks are mapping order is similar to Option 1, however, the modulated symbols belonging to a codeblock are equally mapped between the two hops as shown in Figure 3. Hence in this scheme, the codeblocks can get frequency hopping gain.
+
+[FIG:2e430213bd6d0b5ca775]
+
+Figure 3 An example of RE mapping for Option 3
+
+Simulation Results
+
+In this section, we provide our simulation results for analysing the benefits for these options. The link simulations assumptions are given in Table 1. In our simulations, we consider only option 1 and option 3.
+
+Table 1 Simulation assumptions
+
+Assumptions | Value
+Carrier frequency | 4.0 GHz
+Duplex | FDD
+System Bandwidth | 20 MHz
+Slot length | 14 OFDM symbols
+Subcarrier spacing | 15KHz
+Guard time interval | 4.7us (interval of LTE normal CP) as baseline
+FFT size | 2048
+Data transmission bandwidth | 20 RB for 15 KHZ spacing
+Antenna configuration | (1, 2)
+Number of codewords | 1
+Channel encoder | LTE turbo code
+MCS | 16-QAM 3/4 , 64 QAM 1/2
+Control Overhead | Zero
+Channel estimation | Practical
+UE speed | 3Kmph, 120 Kmph
+Channel Model | TDL-A
+
+Figure 4 shows the performance of two options with 16 QAM modulation with code rate of ¾ and with 20 RB allocation with 3 kmph channel. Note that we define the spectral efficiency as
+
+Spectral efficiency = TBS*(1-BLER)/ (T*BW)
+
+Where, TBS is the transport block size in bits, BLER is the block error rate, T is the time duration of one subframe, and BW is the actual bandwidth used for data transmission. It can be observed from figure that option 3 is better compared to option 1. This is due to additional diversity due to frequency hopping for both the codeblcoks in option 3. Similarly, we observed the same phenomena for 64 QAM modulations with a code rate of ½ as shown in Figure 5. Note that in this case, the number of RB is equal to 20 This implies two code blocks are transmitted.
+
+[FIG:96b338fe7b9df6a60475]
+
+Figure 4 Spectral efficiency comparison with 20 PRB allocation with 16 QAM modulation
+
+[FIG:c31b9b5e794c823456f2]
+
+Figure 5 Spectral efficiency comparison with 20 PRB allocation with 64 QAM modulation
+
+Figure 5-6 shows the performance with 20 RB allocation for 120 kmph channel as the frequency hopping gains are more significant at high Doppler frequencies. It can be observed that in this case too, option 3 is better compared to option 1. The performance gap between option 1 and option 3 is significant at high Doppler. Hence in our view, when frequency hopping is enabled, the mapping should be according to Option3 such that each codeblock can get the benefits of frequency hopping.
+
+[FIG:0bad6588044423195f1c]
+
+Figure 6 Spectral efficiency comparison with 20 PRB allocation with 16 QAM modulation with 120 Kmph
+
+[FIG:3bc7586d882173ab3eeb]
+
+Figure 7 Spectral efficiency comparison with 20 PRB allocation with 64 QAM modulation with 120 Kmph
+
+Proposal 1: For DFT-S-OFDM, the modulated symbols are first mapped to subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Application Scenarios for Code blocks Greater than 1
+
+One important question we need to address is do we really need another option? This is mainly because even though both CP-OFDM and DFTsOFDM are the waveforms supported for uplink data transmission, it is our common understanding is that DFTsOFDM is mainly used for coverage limited scenarios. In coverage limited scenarios, the probability of choosing modulation and code rate is very low. That is only one codeblock. Hence the option 3 is same as that of option 1 in coverage limited scenarios. However, in our view it is up to the gNB scheduler implementation when to choose CP-OFDM or DFTsOFDM and there might be cases when the gNB uses DFTsOFDM waveform is high SNRs. Moreover, 256-QAM is applicable for DFTsOFDM as well as CP-OFDM waveforms. Hence there are cases with DFTsOFDM where more than one code block is possible.
+
+Conclusions
+
+In this contribution we outlined our views on the codeword to layer mapping with simulation results for DFTsOFDM when frequency hopping is enabled. Based on our observations we recommend
+
+Proposal 1: For DFT-S-OFDM, the modulated symbols are first mapped to subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+References
+
+[1]. R1-1714598, ‘‘Details on Resource Element Mapping’’, NTT DOCOMO.

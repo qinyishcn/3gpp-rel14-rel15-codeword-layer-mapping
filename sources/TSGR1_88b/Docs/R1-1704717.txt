@@ -1,0 +1,87 @@
+3GPP TSG RAN WG1 Meeting #88bis R1-1704717
+
+Spokane, USA 3rd - 7th April 2017
+
+Source: Intel Corporation
+
+Title: Codeword to MIMO layer mapping and overhead reduction
+
+Agenda item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN#88, the following agreement was reached regarding CW to MIMO layer mapping for NR [1]:
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewords…Working assumption:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+In this contribution we provide additional evaluation results for SU-MIMO with one and two CWs for rank 3 and 4 and discuss the issue of MIMO layer adaptation as means to reduce DL and UL control signalling overhead. It is proposed to support NR signalling assistance from gNB to the UE regarding the maximum number of MIMO layers to be used for the downlink/uplink transmission. The proposed signalling assistance can be also used at the UE to reduce power consumption, by autonomous turning on/off of the RF chains.
+
+SU-MIMO performance for rank 3 and 4
+
+As discussed in [2] the number of CWs affects link adaptation accuracy on MIMO layers. More specifically, if the MIMO layers has substantial difference in the received SINR, the transmission efficiency can be improved by independent selection of the MCS per MIMO layer in case of multiple CWs. On the other hand, very high post processing SINR values (above the minimum SINR required for the maximum MCS) on some of the MIMO layers can’t be exploited at the UE to improve the overall throughput performance due independent channel coding and saturation on the SE of the MCS. In such scenario, single CW with common coding across MIMO layers may be more appropriate choice for the transmission.
+
+To understand the performance tradeoff between link adaptation flexibility and throughput saturation, a system-level simulations were carried out. Two scenarios were considered for CW to MIMO layer mapping
+
+Single CW for rank 3-4
+
+Two CWs for rank 3-4
+
+For both scenario single CW is assumed for rank 1-2 following the agreements in RAN1#88. The summary of the packet throughput results is provided in Table 1 for different traffic loading factors. From the presented results, it can be seen that for MMSE receiver single CW provides similar performance comparing to two CWs case for rank 3-4 and therefore may be also adopted for specification.
+
+Table 1: SU-MIMO performance for two CW to MIMO layer mapping scenarios (MMSE-IRC)
+
+[FIG:cb30f4bc08a035d4169c]
+
+[FIG:10468fc97c845c3d5def]
+
+[FIG:def6f1f8c75b21804214]
+
+Based on the performance results the following proposal can be made:
+
+Proposal:
+
+Confirm working assumption on support of single CW for rank 3-4
+
+Indication of the maximum number of MIMO layers
+
+CW to MIMO layer mapping scheme agreed in RAN1#88 supports different number of CWs depending on the actual number of MIMO layers. In general case to support such case two MCS/RV/NDI fields should be provisioned in DCI, where one of the MCS/RV/NDI field can be blanked in case of rank 1 and 2 due to use of SCW. At the same time support of the more than four MIMO layers is not expected to be frequently used, e.g. due to TRP or UE implementation constraints, to justify use of two MCS/RV/NDI fields in DCI.
+
+To reduce the control signalling overhead, indication for the maximum number of MIMO layers in DL and UL should be supported, where indication can be explicitly signaled to the UE or implicitly derived at the UE based on the other configurations (e.g., UE capability for number of MIMO layers, number of configured ports for SRS/CSI-RS, etc.). For example, if the maximum number of MIMO layers is limited to 2, the DCI can contain at most one combination of MCS/RV/NDI, that can help to reduce the signalling overhead. Additional overhead reduction can be seed in UCI for ACK/NACK and CSI reports. If the number of MIMO layers are above 4, the DCI can contain at most two MCS, RV and NDI – one per each CW. We also note that propose signaling can be used at the UE to reduce power consumption, by autonomous turning on/off of the RF chains [3]. Summarizing the discussion above the following proposal can be made:
+
+Proposal:
+
+NR should support signalling assistance from gNB to the UE for the maximum number of MIMO layers for PDSCH
+
+UE can use this information for autonomous turn on/off RF chains for power reduction
+
+The maximum number of MIMO layers can be indicated to the UE using MAC signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the maximum number of MIMO layers indicated by gNB
+
+Summary
+
+In this contribution we proposed assistance signalling from gNB to UE regarding maximum number of MIMO layers. The following proposals were made:
+
+Confirm working assumption on support of single CW for rank 3-4
+
+NR should support signalling assistance from gNB to the UE for the maximum number of MIMO layers for PDSCH
+
+UE can use this information for autonomous turn on/off RF chains for power reduction
+
+The maximum number of MIMO layers can be indicated to the UE using MAC signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the maximum number of MIMO layers indicated by gNB
+
+References
+
+Chairman’s notes for RAN1#87, 3GPP TSG RAN WG1 Meeting #88, Athens, Greece 13th - 17th February 2017.
+
+R1-1700339 On codeword to MIMO layer mapping for NR, Intel Corporation, 3GPP TSG RAN WG1 NR Ad-Hoc meeting, Spokane, USA, 16th - 20th January 2017.
+
+R1-1702189, MIMO layer adaptation and control signalling overhead reduction, Intel Corporation, 3GPP TSG RAN WG1 Meeting #88, Athens, Greece 13th - 17th February 2017.

@@ -1,0 +1,106 @@
+3GPP TSG RAN WG1 88bis R1-1706647
+
+Spokane, USA, 3rd - 7th April 2017
+
+Agenda item: 8.1.2.1.1
+
+Source: Samsung, [Huawei]
+
+Title: Layer Mapping Candidates
+
+Document for: Discussion
+
+Introduction
+
+The current agreement on layer mapping is as follows:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 4-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+To finalize the detailed layer mapping scheme in RAN1#89, it is beneficial to sufficiently describe the existing proposals for the purpose of cross-evaluation. In addition, a set of criteria should be given to guide the decision making process.
+
+Layer Mapping Candidates
+
+A layer mapping proposal can be characterized with the following two aspects:
+
+Aspect 1: When 2 CWs are used (L>4 layers), the correspondence between 2 CWs and L layers
+
+Aspect 2: The manner in which a CW is mapped across multiple layers, sub-carriers (within the allocated PRBs), and OFDM symbols (within a slot)
+
+The available proposals (given in [1] – [14]) are described in terms of the above two identified aspects.
+
+Table 1
+
+Scheme | Aspect 1 | Aspect 2 | Proponents
+1 | Fixed correspondence:The 1st [EQ:895154982913d8d289f6] layers CW0Remaining layers CW1 | Layer Frequency Time | CATT, Ericsson, Nokia, ASB, NTT DOCOMO, Qualcomm, Samsung, Intel
+2 | Variable correspondence:The 1st [EQ:c4b612192bf3857086f2] layers CW0 or 1Remaining layers CW1 or 0 | Configurable between: Layer Frequency TimeLayer Time Frequency | ZTE, ZTE Microelectronics
+3 | Fixed correspondence:The 1st [EQ:c1480efaf4a0ae065a60] layers CW0Remaining layers CW1With layer shifting | Frequency Layer Time | Xinwei
+4 | Fixed correspondence:The 1st [EQ:fce796c129113ad2e0f4] layers CW0Remaining layers CW1 | Time Frequency Layer | Lenovo
+5 | Fixed correspondence:The 1st [EQ:d6b70de0cb948e68f3c8] layers CW0Remaining layers CW1 | Layer set 1 Frequency Time Layer set 2 Frequency Time | MediaTek
+6 | Variable correspondence:L0 layers CW0 (where L0 is configurable) L – L0 layers CW1 | Two schemes: Layer Frequency TimeLayer Time FrequencyEither choose one or support both (configurable) | AT&T, LG Electronics
+7 | -- | Mapping scheme depends on the mapping pattern (to be chosen after further study) | Huawei, HiSilicom
+
+Frequency-domain mapping can be done with or without frequency interleaving. The issue of frequency interleaving is to be discussed separately.
+
+Design Criteria
+
+The following factors should be considered for choosing the layer mapping scheme from the candidates outlined in Section 2:
+
+System-level and/or link-level performance
+
+Low UE processing latency
+
+URLLC puncturing
+
+Limitations imposed by the agreed DMRS design (e.g. front-loaded/additional DMRS symbols)
+
+UL waveform (DFT-SOFDM vs. CP-OFDM)
+
+Dynamic TDD (cross-link interference)
+
+Proposal
+
+RAN1 is to down select from the above proposals (cf. Table 1) in RAN1#89 based on the above design criteria.
+
+References
+
+R1-1704335, Remaining issues in the codeword-to-layer mapping for NR MIMO, AT&T
+
+R1-1704390, Codeword to layer mapping and interleaving, ZTE, ZTE Microelectronics
+
+R1-1704446, Codeword mapping in NR, MediaTek Inc.
+
+R1-1704544, Discussion on codeword mapping, CATT
+
+R1-1704661, Consideration and Evaluation on Codewords to Layer Mapping, Beijing Xinwei Telecom Techn.
+
+R1-1704717, Codeword to MIMO layer mapping and overhead reduction, Intel Corporation
+
+R1-1704871, Discussion on codeword mapping, LG Electronics
+
+R1-1705073, Codeword to layer mapping in NR, Huawei, HiSilicon
+
+R1-1705333, Open Issues on Layer Mapping, Samsung
+
+R1-1705574, CW-to-layer mapping and frequency domain interleaving, Qualcomm Incorporated
+
+R1-1705649, Discussion of codeword mapping, Lenovo, Motorola Mobility
+
+R1-1705715, Discussion on Codeword Mapping, NTT DOCOMO, INC.
+
+R1-1705883, Codeword to layer mapping for DL and UL, Ericsson
+
+R1-1705952, On the number of codewords in NR, Nokia, Alcatel-Lucent Shanghai Bell
+
+R1-1706126, Summary of Issues on Codeword-to-Layer Mapping for NR, Samsung, Huawei

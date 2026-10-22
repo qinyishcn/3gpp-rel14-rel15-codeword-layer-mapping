@@ -1,0 +1,193 @@
+3GPP TSG RAN WG1 88 R1-1702915
+
+Athens, Greece, 13th - 17th February 2017
+
+Agenda item: 8.1.2.1.1
+
+Source: Samsung
+
+Title: Codeword-to-layer mapping for DL and UL NR MIMO
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 NR-AH, the following agreement on DL MIMO was made [1]:
+
+Agreements:RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layers
+
+Codeword-to-layer (CW2L) mapping includes two components: 1) the number of CWs used for SM (where 1 CW is associated with 1 transport); 2) how a CW is mapped across layers in time and/or frequency. This contribution addresses the following issues:
+
+LTE layer mapping
+
+Number of codewords (CWs) for NR
+
+Codeword-to-layer mapping (or, in shorthand, layer mapping)
+
+Some accompanying simulation results are presented to justify our proposal for the number of CWs.
+
+LTE layer mapping
+
+The layer mapping scheme employed in LTE is illustrated in Figure 1 where a maximum of 2 CWs (each associated with one TB) are transmitted per one PDSCH/PUSCH assignment. Each CW is mapped onto one or more layers (depending on the value of L) in a layer-first manner, followed by frequency (across REs) then time (across OFDM/DFT-SOFDM symbols). The primary reason for supporting a maximum of 2 CWs was to limit the excessive overhead associated with L CWs.
+
+In addition to the depicted mapping schemes, a single CW mapping scheme is also supported for L=2, 3, and 4 to facilitate retransmission of one out of two CWs. The need for supporting such auxiliary layer mapping schemes is one of the artifacts of this two-CW mapping scheme.
+
+Other than this artifact, the use of 2 CWs still incurs significant overhead and complication associated with multi-CW transmission when compared with a single CW system. The overhead can be itemized as follows:
+
+DL overhead (associated with UL- and DL-related DCI payload)
+
+2 fixed MCS fields
+
+2 fixed NDI-RV fields – note: NR may support CB-level HARQ
+
+UL overhead (only for transmission on PDSCH)
+
+2 CQIs for rank > 1
+
+2 DL HARQ-ACKs for rank > 1 – note: NR may support CB-level HARQ
+
+[FIG:95d3fc2345081575423c]
+
+Figure 1 LTE layer mapping
+
+A claimed advantage of employing multi-CW is the support for MMSE-SIC as an additional advanced receiver option. For a system with NCW CWs, MMSE-SIC performs (NCW – 1) serial/successive cancellations. It was previously claimed that the advantage of MMSE-SIC comes from simpler link modelling (abstraction) which can be used for link adaptation. However, obtaining the throughput gain from tighter link modeling of MMSE-SIC is in general infeasible due to the possibility of performing detection ordering across CWs. Since SINR can significantly vary across subframes/slots, the detection ordering assumed for CSI calculation (DL or UL) may not be the same as that for data demodulation. This can be avoided if MMSE-SIC detection ordering is fixed, yet at the expense of performance.
+
+Alternatively, the CSI can be calculated assuming LMMSE receiver while using MMSE-SIC receiver for data demodulation. In this case, the throughput gain of MMSE-SIC (over LMMSE) comes from the reduction of BLER and the outer loop link adaptation at the gNB (which allows the gNB to schedule higher MCS based on the cumulative ACK/NAK statistics). Such benefit applies to any other advanced receivers such as ML-type detectors (e.g. sphere decoder, QR-MLD). This seems to be a more reasonable operation since UE receiver implementation can vary greatly across UEs within the same cell. In this case, accurate link performance modeling for advanced receivers is not an issue. It should be noted that since outer loop link adaptation is fairly slow, the potential throughput gain coming from advanced receivers will be lessened.
+
+Therefore, the support of one particular advanced receiver (such as MMSE-SIC) should not be used as a deciding factor for choosing the number of CWs – especially when other types of advanced receivers which offer similar or better performance than MMSE-SIC are available. Note that RAN4 derived its UE demodulation requirement for advanced MIMO receivers primarily based on R-MLD, not MMSE-SIC.
+
+Observation:
+
+Compared to single CW, employing a maximum of 2 CWs results in the following complication:
+
+Additional support for single CW mapping schemes for L=2, 3, and 4 layers to accommodate retransmission of 1 out of 2 CWs
+
+2x DL overhead associated with MCS and NDI-RV in DCI
+
+2x UL CQI and HARQ-ACK overhead when RI>1 (DL data transmission)
+
+Due to variations in UE implementation, the support of one particular advanced receiver (such as MMSE-SIC) should not be used as a deciding factor for choosing the number of CWs.
+
+Number of CWs for NR
+
+Among the identified candidates in the agreement, we rule out >2 CWs per data assignment for the same reason it was ruled out in LTE: excessive DL/UL overhead and complex specification support. Therefore we only consider single CW versus maximum of 2 CWs.
+
+Our comparison between single CW and maximum of 2 CWs can be summarized in Table 1. In terms of DL and UL overhead, single CW is clearly superior. In terms of the feasibility and performance with advanced receivers, as discussed in section 2 and the table, employing a maximum of 2 CWs does not offer anything substantial over single CW since MMSE-SIC can be made applicable for single CW if CB-level mapping (discussed in section 4) is used. Therefore, both ML-type and MMSE-SIC are applicable for both single CW and maximum of 2 CWs.
+
+Regarding multi-TRP support in relation to the number of CWs (for DL data transmission), the main deciding factor is DL signaling optimization for DL non-coherent JT (NC-JT). For instance, the support for a single DCI for M-TRP DL NC-JT transmissions necessitates one DCI to carry M MCS fields and M HARQ-related (NDI-RV) fields. Note that without this signaling optimization, M-TRP DL NC-JT transmissions can still be accommodated with M PDSCH assignments (hence M DCIs). The issue is whether the potential gain offered by DL NC-JT warrants an extra DL signaling optimization. It is our view that this DL signaling optimization is unwarranted – at least for the following reasons:
+
+DL NC-JT is only one among other DL COMP schemes (C-JT, coordinated BF, DPS, etc.). Moreover, DL COMP is one among other features of DL/UL NR. Therefore, deciding a fundamental NR bit/symbol processing function (along with its DL signaling support) solely based on a minority use case at the expense of other features and use cases is unwarranted.
+
+This would be the case if the DL-related DCI is designed only in consideration of supporting, e.g. 2-TRP DL NC-JT – which amounts to supporting 2 MCS and 2 NDI-RV fields – while max. 2 CWs is inferior to 1 CW in virtually every aspect despite the increase in DL DCI payload.
+
+This is worsened for NR since the support for CB-group HARQ which requires the support of larger HARQ-related DCI field payload is quite likely.
+
+The extent to which M-TRP DL NC-JT should be accommodated in DL DCI design is still unclear. For instance, other than requiring M MCS and M NDI-RV fields, it is unclear whether the same resource allocation (RA) should always be used to demonstrate its sufficient benefit.
+
+Although it has been argued that the most common scenarios of DL NC-JT are associated with M=2, a more scalable support for DL NC-JT may become relevant for future use cases. In this sense, a single DCI solution with 2 MCS and 2 NDI-RV fields is much less scalable and forward compatible than the M-DCI solution.
+
+Therefore, designing a DL-related DCI which includes only one MCS and one NDI-RV fields offers a better trade-off.
+
+Table 1 Single CW vs. maximum of 2 CWs
+
+Factor | System impact | Single CW | Max 2 CWs
+DL overhead: DCI payload for MCS | DL control resource usage/coverage | Superior | --
+DL overhead: DCI payload for HARQ-related info (NDI-RV) – note: NR may support CB-level HARQ | DL control resource usage/coverage | Superior | 
+UL overhead: CQI overhead and DL HARQ-ACK – note: NR may support CB-level | UL control resource usage/coverage | Superior | --
+System level performance | User throughput | Similar
+Choice of advanced receivers (MMSE-SIC, ML-type) | Lower BLER with advanced receivers, throughout gain coming from outer loop link adaptation | ML-type applicable MMSE-SIC applicable if CB-level mapping is used (see section 4) | ML-type applicableMMSE-SIC across CWs applicable
+Multi-TRP: Especially for non-coherent JT (note: COMP scheme is transparent to UE) | Whether signaling optimization for NC-JT (single DCI for multi-TRP transmission) pays off | NC-JT may necessitate a single UE to receive/decode multiple CWs
+
+As demonstrated in our companion contribution [2], the performance of single CW is similar to that of utilizing a maximum of 2 CWs. In fact, single CW transmission exhibits more robustness against CSI impairments as expected.
+
+One may argue that multiple CWs can be supported in conjunction with overhead reduction techniques such as spatial bundling for ACK/NAK and/or CQI. However, such techniques have been employed in LTE not as primary, but instead peripheral solutions for special scenarios which come at the expense of performance. For example, spatial bundling is employed for TDD since reporting since 2 HARQ-ACKs cannot be supported for certain subframe configurations. But its performance is at best the same (or in general worse) than single CW.
+
+Different modulations across different layers can be used together with single CW mapping. However, this comes at the expense of DL/UL overhead (L – 1 additional modulation fields in DCI, L – 1 additional RI-dependent CQIs). Therefore, unless there is some substantial performance gain, employing one modulation per CW is preferred. Note that if it can be demonstrated that the gain of multi-CW over single-CW is marginal (using the same receiver, as demonstrated in section 3.2), employing different modulations across different layers is not expected to bring any gain.
+
+Observation:
+
+From DL/UL overhead, advanced receiver enablement, and multi-TRP support, single CW is superior to employing a maximum of 2 CWs in terms of minimizing DL/UL throughput loss, scalability, and forward compatibility.
+
+No compelling reason for favoring multiple CWs with overhead reduction techniques (such as spatial bundling) over single CW
+
+Allowing different modulation schemes across different layers increases DL/UL overhead with unclear potential gain
+
+The performance of “I CW” and “2 CWs” are similar.
+
+Based on the above finding, the following proposal is made.
+
+Proposal: NR supports single CW per PDSCH/PUSCH assignment per UE
+
+One UL- or DL-related DCI includes one MCS and one HARQ-related (NDI and RV) fields
+
+One CQI calculated for all layers regardless of RI value
+
+The number of PDSCH/PUSCH assignments a UE can receive in a scheduling time unit (slot) is a UE capability
+
+E.g. for NC-JT use case where a UE can receive multiple CWs
+
+Layer mapping
+
+Layer mapping can be performed in symbol-level (such as the one in LTE) or code block (CB)-level. CB-level mapping is illustrated in Figure 4 for vertical (V) mapping (see discussion below). One advantage of CB-level mapping is to enable the use of MMSE-SIC for single CW.
+
+[FIG:5ae3e8a90c0e4cd8a6bb]
+
+Figure 4 CB-level mapping
+
+Given the mapping unit, three mapping strategies can be conceived:
+
+Horizontal (H): mapping units are mapped first across frequency (REs, sub-carriers), then time (OFDM symbols), followed by layers
+
+Vertical (V): mapping units are mapped first across layers, then frequency (REs, sub-carriers), followed by time (OFDM symbols)
+
+Referring to Figure 1, when one CW is mapped to >1 layers, symbol-level vertical mapping is used for LTE.
+
+Diagonal (D): mapping units are first jointly mapped across layers and frequency (REs, sub-carriers), followed by time (OFDM symbols)
+
+As evident, both V and D mappings, unlike H mapping, introduce spatial diversity within one CW. With symbol-level mapping, V and D are expected to perform similarly. With CB-level mapping, H and V mappings are similar. Therefore, it may suffice to consider only V mapping. Based on this observation, we propose the following.
+
+Proposal: Down select between the following three layer mapping schemes for single CW: 1) Symbol-level V mapping, 2) CB-level V mapping, 3) CB-level D mapping
+
+Conclusions
+
+In this contribution, Samsung’s view on DL DMRS-spatial multiplexing is presented.
+
+The following observation was made:
+
+Compared to single CW, employing a maximum of 2 CWs results in the following complication:
+
+Additional support for single CW mapping schemes for L=2, 3, and 4 layers to accommodate retransmission of 1 out of 2 CWs
+
+2x DL overhead associated with MCS and NDI-RV in DCI
+
+2x UL CQI and HARQ-ACK overhead when RI>1 (DL data transmission)
+
+Due to variations in UE implementation, the support of one particular advanced receiver (such as MMSE-SIC) should not be used as a deciding factor for choosing the number of CWs.
+
+From DL/UL overhead, advanced receiver enablement, and multi-TRP support, single CW is superior to employing a maximum of 2 CWs in terms of minimizing DL/UL throughput loss, scalability, and forward compatibility.
+
+No compelling reason for favoring multiple CWs with overhead reduction techniques (such as spatial bundling) over single CW
+
+Allowing different modulation schemes across different layers increases DL/UL overhead with unclear potential gain
+
+The performance of “I CW” and “2 CWs” are similar.
+
+Our proposal can be summarized as follows:
+
+NR supports single CW per PDSCH/PUSCH assignment per UE
+
+One UL- or DL-related DCI includes one MCS and one HARQ-related (NDI and RV) fields
+
+One CQI calculated for all layers regardless of RI value
+
+The number of PDSCH/PUSCH assignments a UE can receive in a scheduling time unit (slot) is a UE capability
+
+E.g. for NC-JT use case where a UE can receive multiple CWs
+
+Down select between the following three layer mapping schemes for single CW: 1) Symbol-level V mapping, 2) CB-level V mapping, 3) CB-level D mapping
+
+References
+
+3GPP, RAN1 NR Ad-Hoc, Chairman’s Notes
+
+3GPP, R1-1702916, Samsung, Performance comparison between 1CW and 2CW

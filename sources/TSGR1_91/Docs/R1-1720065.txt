@@ -1,0 +1,95 @@
+3GPP TSG RAN WG1 Meeting 91 R1-1720065
+
+Reno, USA, November 27th – December 1st, 2017
+
+Source: Intel Corporation
+
+Title: Remaining details of CW-to-MIMO layer mapping
+
+Agenda item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN1-90b meeting the following agreement was reached regarding CW-to-MIMO layer mapping for for DFT-s-OFDM with frequency hopping [1]:
+
+Working AssumptionFor DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:The RE mapping is performed with the following order:Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+In addition, during email discussion [90b-NR-10], the following details for scrambling of PDSCH / PUSCH were agreed.
+
+The c_init for data scrambling depends at least on a “Scrambling ID” parameter configured to the UE by RRC. FFS whether one RRC parameter is used for c_init for both PUSCH and PDSCH or if two independent RRC parameters is used.Discuss further this issue and dependence on other parameters, default value etc in RAN1#91.
+
+In this contribution we provide remaining details for the above issues.
+
+Discussion
+
+RE mapping for DFT-s-OFDM with hopping with more than 1 CB
+
+According to evaluation result provided in [2], Option 3 could provide ~1.3-1.8dB gain over Option 1 for higher order modulation and large resource allocation size. On the other hand considering use case of DFT-s-OFDM as means to improve the coverage of the cell, the benefits of using such modulation scheme is not clear considering that for such scenario larger MCL values (i.e. larger power amplifier back of at the UE) typically required due to higher order modulation and IMD. Considering that observation, the following proposal can be made
+
+Proposal:
+
+Confirm and extend the working assumption form RAN1#90b for Option 1 as RE mapping scheme for DFT-s-OFDM with frequency hopping irrespective of the number of codebooks in the resource allocation
+
+Scrambling of PDSCH/PUSCH
+
+In LTE the initial value for PDSCH and PUSCH scrambling is determined from the following parameters:
+
+Subframe index in radio frame
+
+Physical cell identity
+
+RNTI
+
+CW index
+
+In principle, LTE principles should be reused for PDSCH / PUSCH scrambling in NR. However some adjustment to the parameter are required to accommodate new us cases.
+
+In particular, considering the scenario with common physical cell ID, when large number of TPs may share the same physical cell ID, it would beneficial to allow RRC re-configuration of physical cell ID value to some other value provided by the serving cell. The default value of this parameter can be set to the value derived from the physical cell ID and SS/PBCH block index. Such flexibility of configuration would be beneficial for scenarios with common cell ID, given that the set of RNTIs is typically limited and in such scenarios should be shared among all UEs of the TPs having the same physical cell ID.
+
+Considering, non-slot based operation of NR, where PDSCH / PUSCH transmission can be done multiple times in the slot, the subframe index supported by LTE should be generalized to the first OFDM symbol index for PDSCH / PUSCH transmission. As special configuration of scrambling procedure, the OFDM symbol index in radio frame can be disabled to support low latency application.
+
+Summarizing discussion above the following proposal can be made:
+
+Proposal:
+
+NR supports scrambling of PDSCH / PUSCH using PN sequence, where initial value of PN sequence is determined from
+
+1st OFDM symbol index of PDSCH / PUSCH in radio frame
+
+As special RRC configuration, time index can be disabled for delay sensitive transmissions
+
+RRC configured scrambling identity
+
+Scrambling identity by default is determined from physical cell ID and SS block index
+
+RNTI
+
+CW index
+
+Summary
+
+In this contribution we discuss the remaining issue of CW to MIMO layer mapping. The following proposals were made:
+
+Confirm and extend the working assumption form RAN1#90b for Option 1 as RE mapping scheme for DFT-s-OFDM with frequency hopping irrespective of the number of codebooks in the resource allocation
+
+NR supports scrambling of PDSCH / PUSCH using PN sequence, where initial value of PN sequence is determined from
+
+1st OFDM symbol index of PDSCH / PUSCH in radio frame
+
+As special RRC configuration, time index can be disabled for delay sensitive transmissions
+
+RRC configured scrambling identity
+
+Scrambling identity by default is determined from physical cell ID and SS block index
+
+RNTI
+
+CW index
+
+References
+
+RAN1 Chairman’s Notes, 3GPP TSG RAN WG1 Meeting 90bis, Prague, CZ, 9th – 13th, October 2017.
+
+R1-1717361, Remaining details of CW-to-MIMO layer mapping, Intel Corporation, 3GPP TSG RAN WG1 Meeting 90bis, Prague, CZ, 9th – 13th, October 2017.

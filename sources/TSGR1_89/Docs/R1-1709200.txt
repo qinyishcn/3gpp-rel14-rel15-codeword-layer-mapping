@@ -1,0 +1,185 @@
+3GPP TSG-RAN WG1 #89 R1-1709200
+
+15th – 19th May 2017
+
+Hangzhou, China
+
+Agenda item: 7.1.4.1.1.4
+
+Source: Qualcomm Incorporated
+
+Title: Frequency Domain Interleaving
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN1 #88 [1] the following agreements were made
+
+Agreements:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+Here we discuss the notion of a frequency domain interleaver implemented at the tone-level, which can provide significant gains in performance while allowing for low-latency pipelined decoding architectures. Note this also simplifies the coding chain for LDPC codes, since no knowledge of the number of coded bits per OFDM symbol would be needed as a priori information in the segmentation stage.
+
+For a more complete discussion in the context of codeword-to-layer mapping in MIMO, please see [2].
+
+Frequency diversity
+
+In order to ensure that each codeblock gets maximum frequency diversity, a codeblock would need to be mapped over a large portion of the frequency-selective channel. In LTE, this was ensured because each OFDM symbol was carrying only one codeblock, due to the narrowband nature of LTE.
+
+However, in NR, due to large bandwidth allocations, we may have many codeblocks per OFDM symbol. For example, assuming 4 layers with 64-QAM (24 bits per resource element) and an allocation of 2000 resource elements, would result to approximately 5 codeblocks in each OFDM symbol. In scenarios of maximum allocation and max spectral efficiency, e.g., 4 layers with 256-QAM and 3300 resource elements, there can be 11.5 codeblocks in each OFDM symbol (code rate of 8/9 and a codeblock information bits of 8192).
+
+[FIG:117eec0ffbc794b781ca]
+
+Figure 1. Map across layers first, across frequency second using a row-column interleaver, and then across OFDM symbols (not shown in the above figure).
+
+Note also that such a method still allows pipeline decoding at the receiver since the de-interleaving is happening on the resource-element-level, before the demapper. Then, the LLRs are “in-order” and ready for decoding, without introducing unnecessary delays in the receiver processing. Note that if the frequency interleaving is happening at the transmitter at the bit level, i.e., inter-CB interleaving, then the de-interleaving would need to be in the LLR-level, after the demapper, in which case the codeblock decoding for each OFDM symbol would need to start after all the demapping process for that OFDM symbol has been completed. In other words, bit-level inter-CB interleaving would incur a significant latency cost that does not fundamentally provide any significant gains. Note that an intra-CB interleaving, similar to what was chosen for LTE, can always be used to help the decoding of each CB, this is an independent topic that may be treated in the coding agenda items.
+
+Observation 1: Tone-level frequency interleaving allows for pipelined codeblock decoding at the receiver.
+
+Note that such an interleaving method is expected to have non-trivial gains when there are more than one or two codeblocks in one OFDM symbol. To validate how likely is such scenario in NR, and whether it is an extreme scenario or not, observe that the maximum value of codeblock size is “near” 8192 bits, so for this discussion, we assume we have 8192 information bits. Consider also a short MCS table that covers both small, medium and large spectral efficiencies with 12 entries shown in the Appendix 7.1. Then, the number of codeblocks that we expect in each OFDM symbol per codeword, assuming same modulation for all layers, is approximately:
+
+[EQ:52a08ae028235813c7b4]
+
+where [EQ:77016d3a0ed158a9b83a] is the modulation bits for all layers and [EQ:73872ce0656106d2a849] is the code rate. We now plot for different number of PRBs and number of layers in the codeword the number of codeblocks that are needed using the short MCS table.
+
+[FIG:0eec31a5359ae975c637] [FIG:fd2223bc842114882a49]
+
+[FIG:c312a833e70abe726470]
+
+Figure 2. Number of codeblocks per OFDM symbol for different MCS and rank
+
+We observe that in many of these combinations, the number of codeblocks per OFDM symbol is exceeding one or two, especially for a medium to large spectral efficiency.
+
+Performance evaluations
+
+Row-Column per-OFDM symbol interleaver
+
+We now provide a proposal of a row-column interleaver that is happening at the codeword-to-layer mapping in the resource element level and simulation study that demonstrates the gains that can be expected in scenarios of medium and high spectral efficiencies compared to the case of no-frequency interleaving.
+
+In the suggested row-column interleaving procedure, after the encoded data bits are mapped into QAM symbols, the latter are mapped across layers sequentially into logical resource elements for each OFDM symbol, and then bundles of K resource elements are interleaved using a row-column procedure before the precoding step and mapping into physical resource elements. A toy example of such procedure is shown in Figure 1 where K=4, each codeblock spans 8 resource elements and there are a total number of 3 codeblocks. Note that such procedure is happening only in the logical resource elements that carry data, and that no interleaving is happening in the control or RS that could be present in an OFDM symbol.
+
+[FIG:7fa4687b0fecee95e333] [FIG:258542a3a31c9d625360] [FIG:a4104dbf9ccddca87bc2]
+
+Figure 2 Toy example of a row-column frequency interleaving procedureFigure 2 Toy example of a row-column frequency interleaving procedure
+
+Simulation results with a 8k block-length LDPC
+
+We now provide simulation results comparing the case of:
+
+no inter-CB interleaver, only intra-CB interleaver (LTE-like procedure)
+
+4-tone-level Interleaver, and intra-CB interleaver
+
+For an LDPC encoding procedure with 8192 information bits and 9216 encoded bits (code rate: 8/9) based on the contribution [3]. Simulations assumptions are shown in the table below
+
+Simulation parameter | Value
+(SCS, FFT) | (30 KHz, 4096)
+MIMO scheme | 4 Tx – 4 Rx, random PMI, 4 layers, SCW
+Slot structure | 9 PDSCH symbols, 1 DMRS symbols, 2 PDCCH symbols
+Demapper | Advanced receiver
+Allocations | 45 PRBs, 85 PRBs, 170 PRBs, 275 PRBs
+Channels | TDL-A 30 nsec, TDL-B 100 nsec, TDL-C 300 nsec
+MCSs | (64 QAM across all layers, 8/9) (256 QAM across all layers, 8/9)
+
+The amount of gains we expect with the tone-based interleaver depends significantly on the number of codeblocks that exist in each OFDM symbol. In one extreme scenario, if there is only one codeblock, then there will not be any gain from a tone-interleaver. However, in many scenarios of medium to high spectral efficiency and medium to large allocations, multi-dB level gains can be exploited because there are multiple codeblocks in each OFDM symbol. In the next table we show, for the two MCSs and different allocations, the number of codeblocks per symbol, along with the dB gains for achieving TBLER=10% by introducing a 4-tone interleaver.
+
+|  | (64 QAM, 8/9) | (256 QAM, 8/9)
+Allocation | # CBs per OFDM symbol | dB Gain in 10% TBLER in TDLB 100 nsec | dB Gain in 10% TBLER in TDLC 300 nsec | # CBs per OFDM symbol | dB Gain in 10% TBLER in TDLB 100 nsec | dB Gain in 10% TBLER in TDLC 300 nsec
+45 PRBs | 1.4 | 0.1 dB | 0.1 dB | 1.9 | 0.8 dB | 0.7 dB
+85 PRBs | 2.7 | 0.7 dB | 0.6 dB | 3.5 | 3 dB | 1 dB
+170 PRBs | 5.3 | 1.8 dB | 0.8 dB | 7 | >5 dB | 2 dB
+275 PRBs | 8.6 | 2 dB | 1 dB | 11.5 | >5 dB | >3 dB
+
+In the above table, we show the dB gain that can be achieved using a simple row-column 4-tone interleaver during the layer mapping procedure for a 10% TBLER for different number of codeblocks per OFDM symbol for two MCSs and different allocations (Performance curves are shown in the Appendix). We observe that there are significant gains to be expected by introducing an interleaving procedure during the codeword to layer mapping procedure in scenarios that each OFDM symbol carries are two codeblocks or more.
+
+Observation 2: Introducing tone-level interleaving during the codeword to layer mapping procedure may provide dB-level gains in scenarios where more than one codeblock are mapped into one OFDM symbol.
+
+Moderate Code-Rate Results
+
+In this section, we investigate performance when the allocation is such that an OFDM symbol contains exactly 1, 2, or 3 codeblocks of rate 0.71. The following table summarizes the simulation assumptions.
+
+Simulation parameter | Value
+(SCS, FFT) | (30 KHz, 4096)
+MIMO scheme | 4 Tx – 4 Rx, random PMI, 4 layers, SCW
+Slot structure | 9 PDSCH symbols, 1 DMRS symbols, 2 PDCCH symbols
+Demapper | Advanced receiver
+Allocations | 40 PRBs, 80 PRBs, 120 PRBs
+Channels | TDL-A 30 nsec, TDL-B 100 nsec, TDL-C 300 nsec
+MCSs | (64 QAM across all layers, R = 0.71)
+
+[FIG:f082e645bf8605f83adc] [FIG:4ae332d7552a4bb71590] [FIG:d41ed5de6a69439fa528]
+
+Figure 1 Interleaver comparison for 1 CB per OFDM symbol (40 PRB allocation) for TDL-A 30ns, TDL-B 100ns, TDL-C 300ns.
+
+Observation 3: The performance intra-CB bit-level interleaving, 4-tone frequency interleaving, and no interleaving are similar when an OFDM symbol contains only one CB.
+
+Since the performance with the tone-level interleaver does not degrade performance even when the allocation contains only one CB, it can remain enabled at all times.
+
+Observation 4: The tone-level interleaver can remain enabled even when the bandwidth allocation contains only one CB.
+
+[FIG:aa883fc5590a6997274f] [FIG:444f34772bf852345dda] [FIG:3dcb1bb4620077c0ca4c]
+
+Figure 2 Interleaver comparison for 2 CBs per OFDM symbol (80 PRB allocation) for TDL-A 30ns, TDL-B 100ns, TDL-C 300ns.
+
+[FIG:e19cc3b0550195c99729] [FIG:718b4ccc271547d912bb] [FIG:e709c50cbe6360117732]
+
+Figure 3 Interleaver comparison for 3 CBs per OFDM symbol (120 PRB allocation) for TDL-A 30ns, TDL-B 100ns, TDL-C 300ns.
+
+The results for multiple-CBs per symbol in Figure 2 and Figure 3 agree with those for higher rate codes and show that there are large gains to be had by utilizing a 4-tone-level interleaver. The results, including for one CB per ODFM symbol in Figure 1, also show that intra-CB bit-level interleaving does not significantly alter the performance in the evaluated fading channels. Similar results were also observed when using MMSE receiver.
+
+Based on the large performance gains, we propose the following:
+
+Proposal 1: For the DL/UL data channels, NR supports a K-tone-level interleaver within an OFDM symbol.
+
+FFS: value of K.
+
+Conclusions
+
+Observation 1: Tone-level frequency interleaving allows for pipelined codeblock decoding at the receiver.
+
+Observation 2: Introducing tone-level interleaving during the codeword to layer mapping procedure may provide dB-level gains in scenarios where more than one codeblock are mapped into one OFDM symbol.
+
+Observation 3: The performance intra-CB bit-level interleaving, 4-tone frequency interleaving, and no interleaving are similar when an OFDM symbol contains only one CB.
+
+Observation 4: The tone-level interleaver can remain enabled even when the bandwidth allocation contains only one CB.
+
+Proposal 1: For the DL/UL data channels, NR supports a K-tone-level interleaver within an OFDM symbol.
+
+FFS: value of K.
+
+References
+
+RAN1-88 Chairman’s notes
+
+R1-1705574, “CW to layer mapping and frequency domain interleaving”, Qualcomm Incorporated, RAN1 #88b, Spokane, USA.
+
+R1-1702642 “Design of multiple family LDPC codes”, Qualcomm, 3GPP TSG-RAN WG1, RAN1 88#, Athens, Greece
+
+Appendix
+
+Simulation parameter | Value
+(SCS, FFT) | (30 KHz, 4096)
+MIMO scheme | 2 Tx – 2 Rx, random PMI, 2 layers, SCW
+Slot structure | 9 PDSCH symbols, 1 DMRS symbols, 2 PDCCH symbols
+Demapper | Advanced receiver
+Allocations | 256 PRBs
+Channels | TDL-A 30 nsec, TDL-B 100 nsec, TDL-C 300 nsec
+MCSs | (16-QAM across all layers, R = 0.33)
+
+This section presents results for the case with a large allocation and one codeblock per OFDM symbol. The information block length is 8192 and the coder rate 1/3. As in the single CB case presented in Section 3.2, we conclude that the frequency interleaver can remain enabled for single-codeblock OFDM symbols regardless of bandwidth allocation.
+
+[FIG:a12ff515d6d0c4b1e06c]
+
+[FIG:53515ea2d5a50e500685]
+
+[FIG:dee3bd0777feda51d359]
+
+Figure 4 Large allocation, single codeblock performance

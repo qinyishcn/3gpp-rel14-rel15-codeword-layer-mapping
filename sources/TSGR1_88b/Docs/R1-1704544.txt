@@ -1,0 +1,99 @@
+3GPP TSG RAN WG1 Meeting #88bis R1-1704544
+
+Spokane, USA 3rd - 7th April 2017
+
+Source: CATT
+
+Title: Discussion on codeword mapping
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and decision
+
+Introduction
+
+In 3GPP RAN1#88 meetings, the following agreements on number of codeword(s) for NR have been reached [1]:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsFFS for 3 & 4-layer transmissions – revisit today
+
+And then the following working assumption has been agreed [1]:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+For codeword to layer mapping of data channel, it’s also agreed that [1]:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluations
+
+In this contribution, we present our consideration on supported number of codeword(s) and layer mapping to physical resources w.r.t. symbols/layers/carriers in NR.
+
+Discussion on codeword-to-layer mapping for NR
+
+General consideration on the number of codeword
+
+As discussed above, multi-codeword transmission offers the flexibility of adapting MCS to the capacity of each sub-channel, and therefore maximizing the spectral efficiency. Another important motivation of using more than one codeword in transmission is to enhance receive performance through codeword-level interference cancellation. However, from perspectives of both link adaptation and SIC receiver, the existence of multiple MCS-adjustable codewords is meaningful for performance enhancement only if the MIMO sub-channels have substantial difference to each other in term of transmission qualities.
+
+However, for dual-polarization and small-spacing antenna array being assumed throughout MIMO discussion, the two layers in rank-2 transmission usually use the same long-term/wideband beam on different polarizations respectively. And therefore, they are most likely to share quite similar channel qualities. For higher order transmissions, with richer near-field scattering around transmitter and receiver, and possibly distinct long-term/wideband beam for each layer, the differences in channel quality between layers are expected to be larger. Thereby, multi-codeword transmission and SIC receiver might be capable of achieving remarkable gain.
+
+Whereas, as the number of codeword could be as many as that of layers, the overheads with MCS indication, ACK/NACK and possibly subband CQI reporting for each codeword are inevitable in multi-codeword transmission. In addition, detection delay inherent with serial interference cancellation framework also makes it unsuitable for latency-sensitive service and self-contained subframe in NR. In such case, IRC or ML-like receivers could be considered instead of SIC.
+
+Observation 1: the existence of multiple MCS-adjustable codewords is meaningful to performance enhancement only if the MIMO sub-channels have substantial difference to each other in term of transmission qualities.
+
+Observation 2: the overhead of ACK/NACK and CSI reporting as well as potential detection latency inherent with multi-CW transmission should be considered carefully.
+
+Layer mapping
+
+Depending on detailed transmission scheme design, codeword-to-layer mapping could be different.
+
+For single-layer transmission, such as single-stream beamforming, CDD, co-phasing cycling, etc., 1-to-1 mapping seems to be the only choice.
+
+For transmit diversity schemes with more than one layers, i.e., non-transparent DMRS based transmissions, the codeword-to-layer mapping similar to LTE could be re-used. That is, mapping from one codeword to v layers. Wherein, the value v is the number of DMRS antenna ports involved in transmission.
+
+For spatial multiplexing, up to 2 codewords are supported. The examples of both single-codeword and double-codeword mappings are shown in Fig. 1.
+
+For open-loop/semi-open-loop transmission, if 2 codewords can be supported, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain. Furthermore, similar to TM3 in LTE, the qualities of equivalent channel for the 2 codewords could also be balanced. Therefore, CQI feedback for single codeword only would be possible.
+
+[FIG:24c4b7d4d7094f9851f7]
+
+Figure 1. Examples of layer mapping for spatial multiplexing
+
+It’s noted that, as 2 codewords are supported for rank5-8, single-codeword retransmission with 3 to 4 layers are possible. In such case, if 2 codewords are supported for rank 3-4, there would have both single and double-codeword mapping for rank 3 to 4. Considering this, from complexity perspective, single-codeword for rank3-4 is preferred.
+
+Proposal 1: for transmit diversity schemes like SFBC or SFBC+FSTD, the codeword-to-layer mapping similar to LTE could be re-used.
+
+Proposal 2: for open-loop/semi-open-loop transmission, if 2 codewords can be supported, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Proposal 3: single-codeword for rank3-4 is preferred.
+
+In LTE, the modulated symbols of each codeword are mapped across layers first. Subsequently, data in each layer is mapped to REs in each symbol. Finally, data is mapped symbol by symbol in each PRB. Mappings other than this vertical mapping might potentially benefit from frequency/time/spatial diversity gain. However, the complexity and decoding latency with new mapping schemes should also be considered.
+
+Proposal 4: introducing new schemes of layer mapping to physical resources w.r.t. symbols/layers/carriers should be justified by clear-cut gain.
+
+Frequency interleaving
+
+In [2], frequency interleaving was proposed to obtain additional frequency diversity gain. However, as interleaving has already been done at channel encoder, the benefit of extra interleaving at resource mapping part would be questionable.
+
+Proposal 5: further analysis and evaluations are needed to justify the frequency interleaving.
+
+Conclusions
+
+In this contribution, we discussed the number of codeword(s) and codeword-to-layer mapping in NR. Based on the discussion above, we propose:
+
+Observation 1: the existence of multiple MCS-adjustable codewords is meaningful to performance enhancement only if the MIMO sub-channels have substantial difference to each other in term of transmission qualities.
+
+Observation 2: the overhead of ACK/NACK and CSI reporting as well as potential detection latency inherent with multi-CW transmission should be considered carefully.
+
+Proposal 1: for transmit diversity schemes like SFBC or SFBC+FSTD, the codeword-to-layer mapping similar to LTE could be re-used.
+
+Proposal 2: for open-loop/semi-open-loop transmission, if 2 codewords can be supported, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Proposal 3: single-codeword for rank3-4 is preferred.
+
+Proposal 4: introducing new schemes of layer mapping to physical resources w.r.t. symbols/layers/carriers should be justified by clear-cut gain.
+
+Proposal 5: further analysis and evaluations are needed to justify the frequency interleaving.
+
+References
+
+RAN1 #88 Chairman’s Notes.
+
+R1-1704098 “Frequency interleaving for NR”, Qualcomm, Ericsson, Interdigital

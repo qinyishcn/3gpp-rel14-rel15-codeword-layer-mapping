@@ -1,0 +1,237 @@
+3GPP TSG RAN WG1 Meeting #92 R1-1802662
+
+Athens, Greece, February 26th – March 2nd, 2018
+
+Source: Sharp
+
+Title: Open issues on codeword mapping
+
+Agenda Item: 7.1.2.1.1; Multi-antenna scheme; Codeword mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#AH 1801 meeting, open issues on codeword mapping topic related topics handled as summarized in [1], that are a) ordering of DMRS ports and b) TB to CW mapping, respectively.
+
+In this contribution we discuss the issues further and possible approaches to complete corresponding specifications with respect to codeword mapping.
+
+Ordering of DMRS ports
+
+In [2], additional complexity and/or performance loss are concerned for a certain scenario with multi-TRP/panel transmission while such issue is not induced for the scenario with single-TRP/panel. At this late stage of Rel-15 timeframe, we need to be careful to make that kind of optimization for particular scenario, as long as its impact is not justified by detailed analysis. Then our proposal here is:
+
+Proposal 1:
+
+Study ordering of DMRS ports for 2 codewords in Rel-16
+
+TB to CW mapping
+
+As described in [3], right now no description captured to support single codeword transmission for the UE configured with higher layer parameter Number-MCS-HARQ-DL-DCI equals 2. Basically resource allocation framework including MCS/TBS determination is same as that for LTE, therefore it is straight forward to inherit specification text from corresponding description for LTE. Without that kind of description, the specification to support single codeword transmission is incomplete. So our proposal is:
+
+Proposal 2:
+
+To apply the text proposals as below.
+
+TP for section 7.3.1.2.2 of TS38.212 (based on R1-1801292)
+
+Unaffected parts omitted…
+
+For transport block 1:
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+For transport block 2 (only present if Number-MCS-HARQ-DL-DCI equals 2):
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+- HARQ process number – 4 bits
+
+- Downlink assignment index – number of bits as defined in the following
+
+- 4 bits if more than one serving cell are configured in the DL and the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 MSB bits are the counter DAI and the 2 LSB bits are the total DAI;
+
+- 2 bits if only one serving cell is configured in the DL and the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 bits are the counter DAI;
+
+- 0 bits otherwise.
+
+- TPC command for scheduled PUCCH – 2 bits as defined in Subclause x.x of [5, TS38.213]
+
+- PUCCH resource indicator – 2 bits as defined in Subclause 9.2.3 of [5, TS38.213]
+
+- PDSCH-to-HARQ_feedback timing indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS38.213]
+
+- Antenna port(s) – 4, 5, or 6 bits as defined by Tables 7.3.1.2.2-1/2/3/4, where the number of CDM groups without data of values 1, 2, and 3 refers to CDM groups {0}, {0,1}, and {0, 1,2} respectively.
+
+- Transmission configuration indication – 0 bit if higher layer parameter tci-PresentInDCI is not enabled; otherwise 3 bits as defined in Subclause x.x of [6, TS38.214].
+
+- SRS request – 2 bits as defined by Table 7.3.1.1.2-24 for UEs not configured with SUL in the cell; 3 bits for UEs configured SUL in the cell where the first bit is the non-SUL/SUL indicator as defined in Table 7.3.1.1.1-1 and the second and third bits are defined by Table 7.3.1.1.2-24.
+
+- CBG transmission information (CBGTI) – 0, 2, 4, 6, or 8 bits as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter maxCodeBlockGroupsPerTransportBlock for the PDSCH.
+
+- CBG flushing out information (CBGFI) – 0 or 1 bit as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter codeBlockGroupFlushIndicator.
+
+- DMRS sequence initialization – 1 bit for [FIG:78913a9ca9193e880288] selection defined in Subclause 7.4.1.1.1 of [4, TS38.211].
+
+If Number-MCS-HARQ-DL-DCI equals 2 and both transport blocks are enabled, transport block 1 is mapped to codeword 0; and transport block 2 is mapped to codeword 1. In case one of the transport blocks is disabled as specified in section 5.1.3.2 of [TS38.214], the transport blocks to codeword mapping is specified according to Table X.
+
+Table X: Transport block to codeword mapping
+(one transport block enabled)
+
+transport block 1 | transport block 2 | codeword 0
+(enabled) | codeword 1
+(disabled)
+enabled | disabled | transport block 1 | -
+disabled | enabled | transport block 2 | -
+
+Unaffected parts omitted…
+
+TP for section 5.1.3.2 of TS38.214 (based on R1-1801294)
+
+For the PDSCH assigned by a PDCCH with DCI format 1_1 with CRC scrambled by C-RNTI, if Number-MCS-HARQ-DL-DCI is set to 2, a transport block is disabled if if [FIG:4a9e70ace91e59ad0739] and if rvid = 1 otherwise the transport block is enabled.
+
+For the PDSCH assigned by a PDCCH with DCI format 1_0 or format 1_1 with CRC scrambled by C-RNTI,
+
+if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' and [FIG:739256d3801ce0553cea] [EQ:2ce775079dd1da432c54] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' and [FIG:29a756a5783709943de3] [EQ:b3f641b5faf6afb297f3] , except for the disabled transport block, the UE shall first determine the TBS as specified below:
+
+Unaffected parts omitted…
+
+Conclusion
+
+In this contribution we discuss the codeword mapping related open issues and possible approaches to complete corresponding specifications.
+
+References
+
+R1-1801018, “Summary of issues on codeword mapping”, Samsung, 3GPP TSG RAN WG1 NR-AH 1801, January 2018.
+
+R1-1800236, “Remaining issues on codeword mapping”, CATT, 3GPP TSG RAN WG1 NR-AH 1801, January 2018.
+
+R1-1800689, Correction on CW mapping and data scrambling, Ericsson, 3GPP TSG RAN WG1 NR-AH 1801, January 2018.
+
+Appendix
+
+Proposed tables in [2] are indicated below for your reference:
+
+Table 2. Antenna port(s), DL-DMRS-config-type=1, DL-DMRS-max-len=2
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols | Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols
+0 | 1 | [EQ:cdfb94ed3eb61227cfa1] | 1 | 0 | 2 | [EQ:318c6bb6d30505f5cf6d] 
+ [EQ:f57e1fb2c52ccae82e59] [EQ:906eef60d891d6a5fc22] [EQ:8703059d9da49f10b9aa] [EQ:0b6a5c093bbbaab6136d] | 2
+1 | 1 | [EQ:ce950fea3861e779c4ad] | 1 | 1 | 2 | [EQ:32bb83ba62d09b488e45] [EQ:8d7a3e2e2371402e610f] [EQ:da2e13b53898daace332] [EQ:e8b945e0a0c85923b81f] [EQ:6401f63e723444c5a8e9] | 2
+2 | 1 | [EQ:e63a1501d4fdb2b5787d] [EQ:ab3fdec834c0cf7df385] | 1 | 2 | 2 | [EQ:de1b7a5a3526cd6158f3] [EQ:83f415285eb61c9ce7b3] [EQ:a35699ace4ca6da0a640] [EQ:9c0bf5dfd51ddf18dc16] [EQ:75828ad046bce9c15f9e] [EQ:a27e2c49653d5e9d2af7] | 2
+3 | 2 | [EQ:2febc7e683b6e2928aa6] | 1 | 3 | 2 | [EQ:d1dd556dbb8a8c467130] [EQ:b35583822654497aded9] [EQ:ec00cfe4f94e596f3d6a] [EQ:1fc7f3185ccc381d0248] [EQ:08f3a80599a3481713ec] [EQ:7a519f75650e1aa9a9a9] [EQ:f8bd0874427dad9ff6b8] | 2
+4 | 2 | [EQ:d6a2fc55b177a7eb47b0] | 1 | 4-31 | reserved |  | reserved
+5 | 2 | [EQ:ddcabf9da8c22459bb14] | 1 |  |  |  | 
+6 | 2 | [EQ:548df6192d66273bcb98] | 1 |  |  |  | 
+7 | 2 | [EQ:e6f3e7274b331ffb0de6] | 1 |  |  |  | 
+8 | 2 | [EQ:1acf1dc16026ca94f076] 
+ [EQ:3522b9a4dc7b3e092d5d] | 1 |  |  |  | 
+9 | 2 | [EQ:d6a1b4f6f140e647367f] 
+ [EQ:d5e89685d170d52307f7] [EQ:21cf5b053f6e82655e18] | 1 |  |  |  | 
+10 | 2 | [EQ:70548e303c697f567989] 
+ [EQ:ece3784a6969549a152b] [EQ:4612a2a6c858cd64c498] [EQ:3900ccb434a7663f2bc1] | 1 |  |  |  | 
+11 | 2 | [EQ:c5b3ce8d03b2b1b917c5] 
+ [EQ:820968d03c85c956e8c6] | 1 |  |  |  | 
+12 | 2 | [EQ:417d684ff766572cfb05] | 2 |  |  |  | 
+13 | 2 | [EQ:d84975ca2d87f91873d0] | 2 |  |  |  | 
+14 | 2 | [EQ:f2a4f3a5c2ea2b8acb17] | 2 |  |  |  | 
+15 | 2 | [EQ:d4d9ce03ddaf95afc1c3] | 2 |  |  |  | 
+16 | 2 | [EQ:2e44e69000f66c760822] | 2 |  |  |  | 
+17 | 2 | [EQ:a7d491799264c66f9bea] | 2 |  |  |  | 
+18 | 2 | [EQ:fd5ba5fa9657247ed2e1] | 2 |  |  |  | 
+19 | 2 | [EQ:e091129b146119a76454] | 2 |  |  |  | 
+20 | 2 | [EQ:ff5b72eee23252d5767f] [EQ:93abedd7cbad0f9ee2e2] | 2 |  |  |  | 
+21 | 2 | [EQ:1e8a0e426545c189aa9a] 
+ [EQ:eaebafbbf713becd7b6d] | 2 |  |  |  | 
+22 | 2 | [EQ:3d9cecc40428e6c5b505] 
+ [EQ:a6a72bc1e0dec3d08491] | 2 |  |  |  | 
+23 | 2 | [EQ:22e9e03f5168c9554ed0] 
+ [EQ:73d49a5549e44ae6f37c] | 2 |  |  |  | 
+24 | 2 | [EQ:35e8d4e0c7779bbe237c] 
+ [EQ:29f504800401c3b7ffc1] | 2 |  |  |  | 
+25 | 2 | [EQ:20bdf913e90d1a618166] | 2 |  |  |  | 
+26 | 2 | [EQ:50040bba5845b3685028] 
+ [EQ:2d059c371762bb9f0d5e] [EQ:4eaeda8ab26f5c0b9bb8] | 2 |  |  |  | 
+27 | 2 | [EQ:3ced7f5a8c91a2a56290] 
+ [EQ:5b3bf6f8f307fee6ab56] [EQ:1a27403292088c204970] | 2 |  |  |  | 
+28 | 2 | [EQ:6357cbb761ac91e18689] 
+ [EQ:ba7540069f3405c330e4] [EQ:ad8d2f6d56d0b6d1c48c] [EQ:32d9a28eab36cc21f917] | 2 |  |  |  | 
+29 | 2 | [EQ:23189853c4e645822610] 
+ [EQ:a8d1c847bee076bfc8fa] [EQ:524d2d203999df02ca58] [EQ:a6c36fa4a8aa3387d4e2] | 2 |  |  |  | 
+30 | 2 | [EQ:4845e443dfd4a5ce86cb] 
+ [EQ:a4e75c7353fb5f5ffcb6] [EQ:d361965bdd9853941357] [EQ:4e9fbdb8581846a77862] | 2 |  |  |  | 
+31 | Reserved |  | Reserved |  |  |  |
+
+Table 4. Antenna port(s), DL-DMRS-config-type=2, DL-DMRS-max-len=2
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols | Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols
+0 | 1 | [EQ:8e03c064e5f722eda4cb] | 1 | 0 | 3 | [EQ:4eb4d4d6db6e9a14fdac] [EQ:2e2fa6af9cc397112882] [EQ:51641bf8b10860bf0903] [EQ:786c437fc62b422e7cd6] [EQ:dcc03af6c856ec56633e] | 1
+1 | 1 | [EQ:80f8e9b04e68052ef2d0] | 1 | 1 | 3 | [EQ:9f4aa283c6986a418b14] [EQ:532be77b7ffddd94b3da] [EQ:9832caeb155535311884] [EQ:67fa67c326887ee982ca] [EQ:4c40b438352933131ec3] [EQ:10b21973d6bf9b0c822a] | 1
+2 | 1 | [EQ:c177de685e3fc6c7080e] [EQ:6868bafbe0ed1d0f284d] | 1 | 2 | 2 | [EQ:e3bee0003848e890e1f2] [EQ:56284cd031777e1b8383] [EQ:4715e45116de20c7e41d] [EQ:7964e3f70f706c56a743] [EQ:5d1794262e87349c9983] | 2
+3 | 2 | [EQ:91d0c09ba53e51ffd2ba] | 1 | 3 | 2 | [EQ:321783aeb3710c00ccbc] [EQ:599c9021d109cb8af908] [EQ:2e3478bb8622767b3e18] [EQ:ee2aaaee5419b6b3fa27] [EQ:81db4cac0bd59d7b3554] [EQ:a98b243659dcfb9d09a6] | 2
+4 | 2 | [EQ:efff3f98684690d304d8] | 1 | 4 | 2 | [EQ:419c5306c28fa4fd21a3] [EQ:7838025bbd96427f39c4] [EQ:c0df3d2c8c6599a05c76] [EQ:f68e476785a52b635032] [EQ:a092d2fce455df228791] [EQ:5fc13f1aa01148a3e73e] [EQ:6585d18f286d60487a90] | 2
+5 | 2 | [EQ:d9f2a082e1815b721751] | 1 | 5 | 2 | [EQ:48998d7216c401e5c88b] [EQ:d425387ab7b08a2b5c23] [EQ:91c229ae27cc59b8bb5e] [EQ:590ca35f068ac7125544] [EQ:0fe14ad95f42464705fc] [EQ:520959a8d9dc9890ee5b] [EQ:e497979f29967181922a] [EQ:d40bdb14e8eab5897490] | 2
+6 | 2 | [EQ:11ce1ad56225434fdddb] | 1 | 6-63 | Reserved |  | Reserved
+7 | 2 | [EQ:569df73b116d069fc6b7] [EQ:d99c18824edf3044c3ef] | 1 |  |  |  | 
+8 | 2 | [EQ:1f652cbbb62b554bab73] [EQ:a071b88947fb49635850] | 1 |  |  |  | 
+9 | 2 | [EQ:e1464a6b440df31ca9e9] [EQ:89e85357d87d257b4deb] [EQ:48040b388969d0b085ae] | 1 |  |  |  | 
+10 | 2 | [EQ:08523d5092f3144ea54d] 
+ [EQ:8fb77f5f198424350ddc] [EQ:28b3741918e70645499b] [EQ:cf541d3dea2315868a00] | 1 |  |  |  | 
+11 | 3 | [EQ:87746871796ee6d64573] | 1 |  |  |  | 
+12 | 3 | [EQ:7be43381d35d1d817e2f] | 1 |  |  |  | 
+13 | 3 | [EQ:39cc3e8b68faa8cf6228] | 1 |  |  |  | 
+14 | 3 | [EQ:65437e013f55ae55b710] | 1 |  |  |  | 
+15 | 3 | [EQ:7c72436070b2b0981e29] | 1 |  |  |  | 
+16 | 3 | [EQ:01a6b1539c2919dc676d] | 1 |  |  |  | 
+17 | 3 | [EQ:955e17841f52342461c5] [EQ:e5e25e140d50e99b40c0] | 1 |  |  |  | 
+18 | 3 | [EQ:076fbc67c00c3437ae71] [EQ:0531eb1b09116a4d9f07] | 1 |  |  |  | 
+19 | 3 | [EQ:24724f9ef4f3adb37c65] [EQ:322f5662adb8e108ec9d] | 1 |  |  |  | 
+20 | 3 | [EQ:f9ff9501a77ee7494284] [EQ:fdce7a731c2986d49c75] [EQ:8b58855d0b21a778c1aa] | 1 |  |  |  | 
+21 | 3 | [EQ:d44e8df76c6714ee82a8] [EQ:e49005f13c5a86e7a980] [EQ:f30b11673ec9aecd2fa9] | 1 |  |  |  | 
+22 | 3 | [EQ:8ae8a3d9a2a788072cc2] 
+ [EQ:73cc7cf4f68585baad24] [EQ:55a45bcbcd3d0e42399d] [EQ:7328abaf07332f396cbe] | 1 |  |  |  | 
+23 | 2 | [EQ:e45f2a2717502da99be7] [EQ:ccf0bd89131b5289ed38] | 1 |  |  |  | 
+24 | 3 | [EQ:2804c069893fef6e15ae] | 2 |  |  |  | 
+25 | 3 | [EQ:f785f72289b2084b9036] | 2 |  |  |  | 
+26 | 3 | [EQ:f6a1c253ac02b2713c29] | 2 |  |  |  | 
+27 | 3 | [EQ:e5ecdf01ff812f38cdc3] | 2 |  |  |  | 
+28 | 3 | [EQ:ebf415afc5a346b3ef3a] | 2 |  |  |  | 
+29 | 3 | [EQ:6ad72bb19c5057f78a01] | 2 |  |  |  | 
+30 | 3 | [EQ:90c44a87692cf3000241] | 2 |  |  |  | 
+31 | 3 | [EQ:a4c9f2e9db787eb634fa] | 2 |  |  |  | 
+32 | 3 | [EQ:fc9c71d613f925f34410] | 2 |  |  |  | 
+33 | 3 | [EQ:c4175c4b509b4dfc23e3] | 2 |  |  |  | 
+34 | 3 | [EQ:d6e8ff8115c811dd7768] | 2 |  |  |  | 
+35 | 3 | [EQ:97d7e8a7ce227756e144] | 2 |  |  |  | 
+36 | 3 | [EQ:0999469d8c44169e7c73] [EQ:23d2d6205319349cd036] | 2 |  |  |  | 
+37 | 3 | [EQ:09584abf5cfe02a2edf6] [EQ:da26a5e23fac6ea751b8] | 2 |  |  |  | 
+38 | 3 | [EQ:73a4f8041f255855ec60] [EQ:7fff5aaa0e9e48f624a4] | 2 |  |  |  | 
+39 | 3 | [EQ:010985649b03bcc62bdd] [EQ:47fab2f8ba996bfe9bcc] | 2 |  |  |  | 
+40 | 3 | [EQ:3d7e2fb94e124950b4d8] [EQ:21325efdd9e6e0aff8e5] | 2 |  |  |  | 
+41 | 3 | [EQ:39e38e7f4a6c557414f8] [EQ:39a952bed14ffdf7c58e] | 2 |  |  |  | 
+42 | 3 | [EQ:cb1c264d7ce0b8dd6344] [EQ:4a24b156d74952b680eb] [EQ:468c63e349af652586f5] | 2 |  |  |  | 
+43 | 3 | [EQ:66c8aed6fe8cb4b66c5f] [EQ:d0cb4c315d963cd8fd15] [EQ:f98ef7a05a0e899378f4] | 2 |  |  |  | 
+44 | 3 | [EQ:f3c3d4e3ae074d4b15ab] [EQ:2f01109670366c22e888] [EQ:ed0bfa48684655d7333f] | 2 |  |  |  | 
+45 | 3 | [EQ:3b2581e09cc06d9a9e0e] [EQ:26fbb3bb9a04f3d7db1a] [EQ:c9b92a53d040cec7fe99] [EQ:a075252ad1a36e8de32e] | 2 |  |  |  | 
+46 | 3 | [EQ:f2d3b0c1392f24e026e8] [EQ:d93a5e89479cce66a29e] [EQ:c4e0e385cb34a0955812] [EQ:104b42b645e62c2401bb] | 2 |  |  |  | 
+47 | 3 | [EQ:9455fc0653b164f6506f] [EQ:58ffb2d49c465e89dc2b] [EQ:21cda235d975ea505778] [EQ:7571c4042714159153cb] | 2 |  |  |  | 
+48 | 1 | [EQ:7cbef0de53e62e02297d] | 2 |  |  |  | 
+49 | 1 | [EQ:8120267643135cf0244e] | 2 |  |  |  | 
+50 | 1 | [EQ:b47564a991361a659189] | 2 |  |  |  | 
+51 | 1 | [EQ:4a334f25ad168106a931] | 2 |  |  |  | 
+52 | 1 | [EQ:aa9f885ebaf3f62260ac] [EQ:9b9ed377079e9c3aa71b] | 2 |  |  |  | 
+53 | 1 | [EQ:9b6d7051264f7c0114bf] [EQ:41d8b90c964d7439df58] | 2 |  |  |  | 
+54 | 2 | [EQ:eb3cd2a4d98d98ca9679] [EQ:d99c64b3c3dc367b5b9a] | 2 |  |  |  | 
+55 | 2 | [EQ:c4e3a5b33c8dae545efa] [EQ:b68652dbd00080d6b3e7] | 2 |  |  |  | 
+56 | 2 | [EQ:1a2f8dd600bf52062f1b] [EQ:34482a1a3a6a0515ae49] | 2 |  |  |  | 
+57 | 2 | [EQ:343c83916089296d2a77] [EQ:f0adb5f19a6abf2c4aa5] | 2 |  |  |  | 
+58-63 | Reserved |  | Reserved |  |  |  |

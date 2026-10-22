@@ -1,0 +1,83 @@
+3GPP TSG RAN WG1 Meeting AH NR#3 R1-1716858
+
+Nagoya, Japan, 18th – 21st, September 2017
+
+Agenda Item: 6.2.1.1
+
+Source: Huawei, HiSilicon
+
+Title: Summary of offline of NZP CSI-RS for interference measurement and CW to layer mapping
+
+Document for: Discussion and decision
+
+Introduction
+
+In this contribution, the views of offline results
+
+NZP CSI-RS for IM
+
+Possible agreement:
+
+Support gNB side emulation for NZP CSI-RS based IM
+
+It is up to gNB implementation to choose the precoder to apply on the NZP CSI-RS for IM
+
+FFS: Details of UE assumptions on precoder matrix
+
+(Continue offline discussion: To be coordinated by Huawei)
+
+Offline agreement:
+
+UE can be configured with a set of NZP CSI-RS ports for interference measurement
+
+Downselect in next meeting for the following schemes:
+
+Alt.1, a single CSI-RS resource for both channel and interference measurement
+
+Alt.2, separately configured CSI-RS resources for channel and interference measurement
+
+UE shall assume each port in the set corresponds to an interference layer
+
+Note: It is up to gNB implementation to choose the precoder to apply on the NZP CSI-RS for IM
+
+CW to layer mapping
+
+Possible Agreement:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1: Samsung, Qualcomm, AT&T, Intel, CATT, MediaTek, Ericsson
+
+Option 2: Huawei, HiSilicon, ZTE
+
+For RE mapping for DFT-S-OFDM with frequency hopping:
+
+Option 1: Samsung, AT&T, CATT, MediaTek, Ericsson, Intel
+
+Option 2: Huawei, HiSilicon, ZTE
+
+Option 3: Qualcomm, DCM, LGE, MediaTek, Softbank,
+
+Continue offline discussions: HW to coordinate
+
+Offline agreement:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+Offline agreement
+
+Downselect for the following alternatives:
+
+Alt.1:
+
+For RE mapping for DFT-S-OFDM with frequency hopping:
+
+Option 1
+
+Alt.2:
+
+For RE mapping for DFT-S-OFDM with frequency hopping:
+
+Option 3

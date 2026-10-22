@@ -1,0 +1,290 @@
+3GPP TSG RAN WG1 Meeting #92 R1-1801715
+
+Athens, Greece, February 26th – March 2nd, 2018
+
+Source: CATT
+
+Title: Remaining issues on codeword mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In this contribution, we discuss some remaining issues and possible approaches to complete the related parts in specifications regarding layer-to-antenna port mapping.
+
+Discussion on layer-to-antenna port mapping
+
+2.1. Incomplete description of layer-to-antenna port mapping in specification
+
+As listed below, layer-to-antenna port mapping for DL is defined in section 7.3.1.4 of 38.211[1].
+
+TS 38.2117.3.1.4 Antenna port mappingThe block of vectors [FIG:ebfcee367172b925435a] , [FIG:e633cde81c97180e8eff] shall be mapped to antenna ports according to [FIG:c0144ae6e5779d268b79] where [FIG:fc276dedda888dda02af] , [FIG:459cb74d58cfd18ca2f6] . The set of antenna ports [FIG:b2bfbdf23ccd6e6b1f27] shall be determined according to the procedure in [6, TS 38.214]. In 38.212[2], DMRS port allocation information fields for different configurations of DL-DMRS-config-type and DL-DMRS-max-len parameters are interpreted in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 respectively. Wherein the DMRS port(s) being scheduled are indicated by the antenna port allocation index in the DMRS table for each case. However, it doesn’t imply a reasonable order of DMRS ports for data transmission. What’s more, in TS 38.214[3], corresponding description on the above-mentioned procedure for determining the set of antenna ports [FIG:b098bd80614827c8d935] is not included yet.
+
+Actually, no matter for single-TRP or multi-TRP transmission, the mapping between layer and DMRS port should be specified clearly. That is, the values of [FIG:88ef90754d1921edd532] in section 7.3.1.4 of 38.211[1] should be given somewhere in specification. Without that, it is not clear which layer is mapped to which port.
+
+Compared with LTE, the main difference lies in the fact that the numbering of [FIG:d68aad022b3ba7f9c650] in the above equation is no longer necessarily to be consecutive. Consequently, even though the DMRS port(s) allocation is indicated in DCI, without specifically defined order of [FIG:36478513b44f72872997] , the mapping between layer and port is still ambiguous.
+
+As shown below, the reason is that more orthogonal ports are allowed in MU scheduling for NR. Whereas, as only 2 orthogonal ports can be scheduled in MU transmission for UE-specific RS based transmission in LTE, if more than one layers are used, the numbering of DMRS ports in precoding step is consecutive and in an increasing order. Therefore, with the indication of allocated DMRS port(s) in DCI, the mapping between layer(s) and port(s) can be determined through the following equation in section 6.3.4.4 of TS36.211[4] without any ambiguity. It’s noted that in the following mapping, the number of each DMRS port is specified clearly.
+
+[FIG:a35a2eba3c84d8e44c96]
+
+TS 36.2116.3.4.1 Precoding for transmission on a single antenna portFor transmission on a single antenna port, precoding is defined by [FIG:15af7d2e136960cb2444] where [FIG:d862dc53efd8e497cfb5] is the number of the single antenna port used for transmission of the physical channel and [FIG:d52e4c4f14e584e34bd8] , [FIG:6611327892d696063b00] .…6.3.4.4 Precoding for spatial multiplexing using antenna ports with UE-specific reference signalsPrecoding for spatial multiplexing using antenna ports with UE-specific reference signals is only used in combination with layer mapping for spatial multiplexing as described in Section 6.3.3.2. Spatial multiplexing using antenna ports with UE-specific reference signals supports up to eight antenna ports and the set of antenna ports used is [FIG:246d30d5ebcac0059581] . For transmission on [FIG:3786c7a18eb075a714a6]  antenna ports, the precoding operation is defined by [FIG:570dacb5754412562a41] where [FIG:0224a31b053256f89d8c] , [FIG:e2ffb4fbdfd6bb1f0b49] .As discussed above, to avoid any ambiguity in layer-2-port mapping operation, it is needed to specify the values of [FIG:ccb6a59c3eb547ebdace] for each combination of number of CWs, number of DMRS CDM groups, number of front-load DMRS symbols as well as transmission rank. As we already have a set of concrete tables for DMRS ports allocation, where DMRS port(s) being scheduled are given by antenna port allocation indices for each configuration of higher-layer parameters DL-DMRS-config-type and DL-DMRS-max-len, to minimize the specification impact and also the corresponding work load to the editors, instead of duplicating the descriptions and tables in TS 38.214 redundantly, we propose to indicate the set of antenna ports [FIG:0d15ee9ee1d5b590a8c0] for each case in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in TS 28.212[2]. That is, we can replace the fields of “DMRS port(s)” directly with the set of antenna ports “ [FIG:5aeb0ccb0835e20fd898] ”. Alternatively, it has to define a rule for ordering [FIG:9bd6e42dcb7f1546a22b] somewhere in specifications.
+
+Observation 1: The values of [FIG:3749ee7056b85b863bc6] should be specified clearly in specification to avoid any ambiguity in layer-2-port mapping operation.
+
+Proposal 1: Replace the label of “DMRS port(s)” with “ [FIG:2fc03038735d825bd3bd] ” in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of 38.212.
+
+Table 1. Example of modified DMRS table with single codeword enabled
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled
+Value | Number of DMRS CDM group(s) without data | DMRS port(s){P0,…,Pv-1}
+
+Table 2. Example of modified DMRS table with both codewords enabled
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | DMRS port(s){P0,…,Pv-1} | Number of front-load symbols | Value | Number of DMRS CDM group(s) without data | DMRS port(s){P0,…,Pv-1} | Number of front-load symbols
+
+2.2. Impact of DMRS port ordering on layer-to-port mapping
+
+Actually, as shown below, the ordering of DMRS ports in vector [FIG:259469ab892ec5d4b4c2] has potential impact on performance and implementation especially for 2-codeword transmission with multi-TRPs/panels. Unfortunately, it seems that we still have quite limited discussion on it.
+
+Observation 2: Ordering of DMRS port in is still an open issue.
+
+With the scheduled DMRS port(s) indicated via DCI, the potential impact of port ordering on multi-TRP/panel transmission is needed to be considered. For example, for non-coherent transmission of 2 codewords, it would be desirable to constrain each codeword in one TRP/panel, especially considering the potential difference in channel qualities of different TRPs/panels. In such case, if one codeword is mapped into more than one TRPs/panels, the link adaptation performances would be affected by more unbalanced qualities between two parts of layers from two TRPs/panels and inherent mismatch of MCS for the codeword.
+
+Based on the codeword-to-layer mapping procedure in [1], for transmission with odd number of layers, codeword 0 always has fewer layers. Therefore, keeping the above consideration in mind, it’s reasonable to keep the DMRS ports within the QCL group with fewer number of ports in the front of the ordered DMRS port vector [FIG:5f2647e72bf6ee439b51] . Even though the configuration of QCL group is still open, as stated in [1], at least the UE can assume that DMRS ports within one CDM group are QCL-ed. Therefore, for the cases where two CDM groups are allocated to the UE, we can order the allocated DMRS ports in the way that DMRS ports within the CDM group with fewer DMRS ports always located in the front of DMRS port vector for multi-TRP/panel transmission. Figure 1 illustrates an example of DMRS port ordering for rank-5 transmission.
+
+[FIG:c290b6818bb43581425c]
+
+Figure 1. DMRS port ordering for rank-5 transmission
+
+For single-TRP/panel or single-QCL group based transmission, on the other hand, no additional complexity or performance loss are induced with such ordering principle. Therefore, same rule for both cases in 2-codeword transmission can be applied.
+
+Observation 3: For single-TRP/panel or single-QCL group based transmission, no additional complexity or performance loss are induced with specific ordering principle.
+
+If DMRS configuration type2 is used, things are getting a little bit complicated for 2-codeword transmission with scheduled DMRS located in all the three CDM groups. Fortunately, based on Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in [2], only two cases fall into such situation, namely rank-5 and rank-6 transmissions with indices 0 and 1 respectively.
+
+In Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of [2], for DL-DMRS-config-type=2, value=0 corresponds to the case where DMRS ports 0-4 are being scheduled. To ensure that each codeword is mapped to only one QCL group, we can order the available ports as: 1000, 1001, 1002, 1003, 1004. Wherein ports {1000, 1001}, {1002, 1003} and {1004} are with CDM group 0,1 and 2 respectively. The two DMRS groups need to be specifically configured, such as {1000, 1001} and {1002, 1003, 1004}, to avoid splitting one codeword into two DMRS groups.
+
+In Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of [2], for DL-DMRS-config-type=2, value=1 corresponds to the case where DMRS ports 1000, 1001, 1002, 1003, 1004, 1005 are being scheduled. In such case, if two QCL groups are configured, it’s impossible to divide the 6 ports evenly among both QCL groups. That is, one of the codewords have to be mapped to more than one QCL groups. Each of the DMRS groups could have 2 or 4 DMRS ports then.
+
+Besides the above case, there is still one more issue needs to be mentioned for rank adaptation operation in multi-TRP/panel transmission. Take rank-5 transmission with 2 CDM groups being scheduled to one UE and higher-layer parameters DL-DMRS-config-type=2 and DL-DMRS-max-len=2 as an example, we can order the 5 port available as 1002, 1003, 1000, 1001, 1006 to make sure that each codeword is mapped to a group of QCL-ed ports within one CDM group. In such case, ports {1002, 1003} and {1000, 1001, 1006} are with CDM group 0 and 1 respectively.
+
+With rank adaptation, the UE might be allocated with DMRS ports 0,1,2,3,6,8 (rank=6) in the next scheduling occasion dynamically. According to the physical resources mapping of DMRS in [1], DMRS ports{1000, 1001, 1006} and {1002, 1003, 1008} belong to CDM group 0 and 1 respectively. Without any restriction, both the order 1000, 1001, 1002, 1003, 1006, 1008 or 1002, 1003, 1008, 1000, 1001, 1006 can be used for DMRS port vector [FIG:09fc22f639f7974830b1] . However, if codeword 0 and 1 were mapped to DMRS ports {1002, 1003} and {1000, 1001, 1006} respectively in previous scheduling with 5 layers, and the transmission rank is adapted to 6 in current scheduling, the order 1002, 1003, 1008, 1000, 1001, 1006 in rank-6 transmission is slightly preferred, as it keeps the correspondence between codeword and CDM group among different rank. Figure 2 shows the example of alternatives for ordering DMRS ports considering rank adaptation.
+
+[FIG:86e55934867a56b9140a]
+
+Figure 2. DMRS port ordering with rank adaptation
+
+Observation 4: The ordering of DMRS ports in vector [yP(0)(i)…y(Pv-1)(i)]T has potential impact on performance and implementation for 2-codeword transmission with multi-TRPs/panels.
+
+Proposal 2: DMRS ports should be ordered so that a codeword uses port(s) that are CDM-ed or QCL-ed (as much as possible).
+
+Proposal 3: The order keeping the correspondence between codeword and CDM group among different rank is slightly preferred.
+
+Based on the proposals above, exemplary DMRS tables are presented as below. Actually, compared with Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in TS 28.212[2], all the ordering changes are related to 2-codeword transmission only. In addition, no extra complexity is induced with such predefined order.
+
+Observation 4: Compared with the original Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in TS 38.212[2], all the ordering changes could be related to 2-codeword transmission only. In addition, no extra complexity is induced with such predefined order.
+
+Table 3. Antenna port(s), DL-DMRS-config-type=1, DL-DMRS-max-len=1
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled
+Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1}
+0 | 1 | [EQ:59ed162a899d2c9f4b2e]
+1 | 1 | [EQ:6ca9d48e0ccd6acff92d]
+2 | 1 | [EQ:2dd5ffc7bcf292cb20e4] [EQ:e18def4f32c8461b685f]
+3 | 2 | [EQ:8bea6c8753cbdd441a44]
+4 | 2 | [EQ:785026a7edd209e1752c]
+5 | 2 | [EQ:fd1630f10b7cd7c0700f]
+6 | 2 | [EQ:0e137a389f8bc9f18d5b]
+7 | 2 | [EQ:637b33de8319284ff999]
+8 | 2 | [EQ:688ac28c216c962a5b61] 
+ [EQ:cd5b60ed207416db0d65]
+9 | 2 | [EQ:c7091745a13e5393fa0c] 
+ [EQ:a60147ed943b74d72c72] [EQ:5c7539a98f53fff3e46e]
+10 | 2 | [EQ:89a43fa8c731a88c8823] 
+ [EQ:f68d3eb08fe6b43b9932] [EQ:059f437ff62f93c8af75] [EQ:8a1693aba3d83a12dc0b]
+11 | 2 | [EQ:af670a1da19cdcdf81d2] 
+ [EQ:9ac79b115d284c055832]
+12-15 | Reserved |
+
+Table 4. Antenna port(s), DL-DMRS-config-type=1, DL-DMRS-max-len=2
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols | Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols
+0 | 1 | [EQ:913ad7e99ceeed3cd4e5] | 1 | 0 | 2 | [EQ:5907f14a83591a4bcce8] 
+ [EQ:903cf87f29eadb353a33] [EQ:7413e25a551bd4e614b2] [EQ:7fc7215117fd265e9794] [EQ:f4cadff76038821229d4] | 2
+1 | 1 | [EQ:80b230f584515e9dc05e] | 1 | 1 | 2 | [EQ:d13169037123a474bcf9] [EQ:d27eb3d6c8f45c23e6bb] [EQ:75e7ab8b0c54d7e1480b] [EQ:c0ea55c8570b66001235] [EQ:15e3c64b40ae21d669c1] | 2
+2 | 1 | [EQ:eaa5356c8da73fe31e7c] [EQ:0889744af4032880a465] | 1 | 2 | 2 | [EQ:bed8ab37c4523b657fd8] [EQ:95d7a5b24869807b60e7] [EQ:eca165f8dad69b41fa88] [EQ:4ae5884f4c9d3b5c12d7] [EQ:27d16d2906c7832b8cb3] [EQ:c51663137f71f5d413c3] | 2
+3 | 2 | [EQ:74cff0f4e2f1a6a76dd2] | 1 | 3 | 2 | [EQ:99065ad45ba17f62bcd8] [EQ:c1acb450c534746ce72e] [EQ:66a5dfc7084ecc8c46d5] [EQ:357e4fca3ae9ed6975e4] [EQ:fb003c541bc826bb2bf0] [EQ:4bc12fc5d14af2e3e4c0] [EQ:97f42ab5f49655eaad22] | 2
+4 | 2 | [EQ:8ada896f889f8869e006] | 1 | 4-31 | reserved |  | reserved
+5 | 2 | [EQ:a82309ae4dd20abb138a] | 1 |  |  |  | 
+6 | 2 | [EQ:3b440bd9aaf083e4a499] | 1 |  |  |  | 
+7 | 2 | [EQ:ac810a0c972ede28f884] | 1 |  |  |  | 
+8 | 2 | [EQ:22e400f3f027e24e15bf] 
+ [EQ:4f950aaf5814eaa3085c] | 1 |  |  |  | 
+9 | 2 | [EQ:8bbe696f7be4a28f2a37] 
+ [EQ:ac3dc71e198e283fffe3] [EQ:241731515ec75a490af2] | 1 |  |  |  | 
+10 | 2 | [EQ:3390fcce2618dbb3b9a7] 
+ [EQ:860d8ad1d01667ab0dcf] [EQ:6253610f57759bf935fd] [EQ:05338c7b364e10694c63] | 1 |  |  |  | 
+11 | 2 | [EQ:187857c1b2b4d601551f] 
+ [EQ:f157749d38628160f57e] | 1 |  |  |  | 
+12 | 2 | [EQ:c1f2e28812d4312d00db] | 2 |  |  |  | 
+13 | 2 | [EQ:f9dd0593b1712cb6a252] | 2 |  |  |  | 
+14 | 2 | [EQ:e7f982a824089aa6b1d8] | 2 |  |  |  | 
+15 | 2 | [EQ:07dff36a792a3d7c58e0] | 2 |  |  |  | 
+16 | 2 | [EQ:aac8895715f8c44f9d24] | 2 |  |  |  | 
+17 | 2 | [EQ:937520eda84ed3c1fbda] | 2 |  |  |  | 
+18 | 2 | [EQ:52c1f22a89f5cdb2b50c] | 2 |  |  |  | 
+19 | 2 | [EQ:7c25e0db386dfc52e026] | 2 |  |  |  | 
+20 | 2 | [EQ:30fe6b2844f3dfd9e75b] [EQ:86c1dde7356bda25bf5a] | 2 |  |  |  | 
+21 | 2 | [EQ:20cb8cd89b478962a3c9] 
+ [EQ:784646a4d769c4eba7f1] | 2 |  |  |  | 
+22 | 2 | [EQ:6fb1d2f25790854a3ebe] 
+ [EQ:6865a3113f46d4aa643a] | 2 |  |  |  | 
+23 | 2 | [EQ:7e3b83b756bdda69a31b] 
+ [EQ:b917a8870c9527684ec8] | 2 |  |  |  | 
+24 | 2 | [EQ:5fb27e8026e8f0081359] 
+ [EQ:c3e7afbd0ed8be24ef73] | 2 |  |  |  | 
+25 | 2 | [EQ:b0b7aaa69151338a5708] | 2 |  |  |  | 
+26 | 2 | [EQ:40c26cd6f4ec6686050b] 
+ [EQ:78a5a2ef61ccd20f5c25] [EQ:79ed9efe6a007ffcf162] | 2 |  |  |  | 
+27 | 2 | [EQ:70db6b7539bffdca50d8] 
+ [EQ:40a05774507d4c721495] [EQ:80199c7bdd82f17fcbb3] | 2 |  |  |  | 
+28 | 2 | [EQ:df9d0bdb3cc91ec9fa9e] 
+ [EQ:8121e40ba366c373860c] [EQ:d6dd89d5aafdcd6799e9] [EQ:035ebb786a67628edc69] | 2 |  |  |  | 
+29 | 2 | [EQ:6aa016992a2f071f1578] 
+ [EQ:c6376045cfacdd7385a4] [EQ:6d43399f476bcaeea04a] [EQ:a10125379b017fbde406] | 2 |  |  |  | 
+30 | 2 | [EQ:871548eba84ce8181546] 
+ [EQ:83b65d89f99f416c61f1] [EQ:eb5e4214b9bac5a3aff8] [EQ:6728ce237574c20969ff] | 2 |  |  |  | 
+31 | Reserved |  | Reserved |  |  |  |
+
+Table 5. Antenna port(s), DL-DMRS-config-type=2, DL-DMRS-max-len=1
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1}
+0 | 1 | [EQ:e9d8ac460b429a391636] | 0 | 3 | [EQ:25a466a65ec0b8eeb612] [EQ:6b78effd9f9ca46326da] [EQ:4d313c9f3619b3056758] [EQ:ed1a332f05c8064067a2] [EQ:aaa360b68a78f1156832]
+1 | 1 | [EQ:3cd31a44248f7eebfb91] | 1 | 3 | [EQ:5ae71e88a46b56aa38e7] [EQ:2412efeb10ee9d2e0931] [EQ:911a806a3fa853d1240d] [EQ:c6bda110ff7deb0fd6dc] [EQ:085a7ddbb391118a3d28] [EQ:1eab8a963f00143a6314]
+2 | 1 | [EQ:be23f32f9dc6490dceb0] [EQ:4096b7d73a9faf323890] | 2-31 | Reserved | 
+3 | 2 | [EQ:052886cf254a7bef2451] |  |  | 
+4 | 2 | [EQ:985c1941c79d1c863bce] |  |  | 
+5 | 2 | [EQ:ae82af18e231fe1e1351] |  |  | 
+6 | 2 | [EQ:e3e22971e1e4a851d546] |  |  | 
+7 | 2 | [EQ:b289408860c01cdc38ff] [EQ:3b05f4f2908651922229] |  |  | 
+8 | 2 | [EQ:88aee6a438cfdfe1623c] [EQ:fd3f4e30c1e5ad28e2aa] |  |  | 
+9 | 2 | [EQ:b08f5ca5ff557c0fafda] [EQ:19030a2b13a29bffcd80] [EQ:30affe6c0338db04de24] |  |  | 
+10 | 2 | [EQ:ca7e5ece2a1f67f795d7] 
+ [EQ:c6bcc759cb2d1792fca0] [EQ:d1dc2f6a6bfe0fc0db09] [EQ:8339fdaa5c2385addeeb] |  |  | 
+11 | 3 | [EQ:58b969b115313f905f7d] |  |  | 
+12 | 3 | [EQ:e04c7c07a94c2d15f8b9] |  |  | 
+13 | 3 | [EQ:fe0b49f22b91b2e14c92] |  |  | 
+14 | 3 | [EQ:4e0302016356ca7c9d62] |  |  | 
+15 | 3 | [EQ:4a405ea328fbded64e2e] |  |  | 
+16 | 3 | [EQ:dfaa2f8fe0873da255ab] |  |  | 
+17 | 3 | [EQ:b7954baca6a9416ec33e] [EQ:d12ae963b3750b9f25dd] |  |  | 
+18 | 3 | [EQ:737a4eb897f5dffdbd37] [EQ:eee654c2248ece82a1c4] |  |  | 
+19 | 3 | [EQ:ae36a572b3d94bb7429f] [EQ:0ae673e4254f275119bc] |  |  | 
+20 | 3 | [EQ:934332315c09f3698472] [EQ:05b232564a4a9ae3fc88] [EQ:202b47f1293d68939299] |  |  | 
+21 | 3 | [EQ:2c2b6ba602b3a7035e14] [EQ:7aefdeab3af51f65008a] [EQ:d643336b85dd74d8595c] |  |  | 
+22 | 3 | [EQ:a750edbf2b91130794fe] 
+ [EQ:add80f8e701e12ce3b24] [EQ:b56448d981d47be6c490] [EQ:652b6029016a4a3cff37] |  |  | 
+23 | 2 | [EQ:25b541d47c301cf4c485] [EQ:e9a979cdc896106c9b41] |  |  | 
+24-31 | Reserved |  |  |  |
+
+Table 6. Antenna port(s), DL-DMRS-config-type=2, DL-DMRS-max-len=2
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols | Value | Number of DMRS CDM group(s) without data | {P0,…,Pv-1} | Number of front-load symbols
+0 | 1 | [EQ:af7f1be96b72efbde980] | 1 | 0 | 3 | [EQ:3e8e2b045431f5ddd432] [EQ:e99666666503f8ac1a1b] [EQ:51321ef8fd24fa099841] [EQ:3c0b6f8c5cf273332acc] [EQ:a5e38c213d82b6afc14d] | 1
+1 | 1 | [EQ:93cfa39a017387543440] | 1 | 1 | 3 | [EQ:81180e8f73a667959aa8] [EQ:323692c0471c3e5f42e3] [EQ:68b6bdba9d00f546cc62] [EQ:36eb6677ebb4b791748a] [EQ:ba62a29379da3c442481] [EQ:787365f92b9f7ff8020f] | 1
+2 | 1 | [EQ:a0f5f6df27e8ab28a6b8] [EQ:95c615965f0ddb88382e] | 1 | 2 | 2 | [EQ:506484dc5d61eb8fa12d] [EQ:99eba31d6e355c923d6d] [EQ:c77a44adbfdf4902b70b] [EQ:6c99c127310f60a636ff] [EQ:23410030fd33604f42cf] | 2
+3 | 2 | [EQ:67d0a620ab5d6badf3aa] | 1 | 3 | 2 | [EQ:9c9bcd379c23a901e4ca] [EQ:cd7b0ac3b2cfa9271313] [EQ:ecac90b43b388fb858f6] [EQ:6242ba082241fb6cd059] [EQ:58a1952d5d7b9c00344e] [EQ:9acd5130437ee2cfffed] | 2
+4 | 2 | [EQ:0accce18a69eed89e4b2] | 1 | 4 | 2 | [EQ:546e49b9cf0a0414f507] [EQ:66d7727d596e38e4c12f] [EQ:e8215455458cbf487ab6] [EQ:c7c1daaa59215ef5a283] [EQ:68c755e9a96c8f7edc2f] [EQ:2851ccf07f5515341d8d] [EQ:2649ed864fc281d397da] | 2
+5 | 2 | [EQ:eef17979873c4481b556] | 1 | 5 | 2 | [EQ:6f3ee17eb3b08dd4a455] [EQ:ac152aff94bfb6641003] [EQ:0d3fe21b39025e4cfe95] [EQ:4dcfcf811a61621a173d] [EQ:18ac6b1fc94f1b561d27] [EQ:128f4dee3f76905be0d8] [EQ:74422294398050f578fe] [EQ:9dfa6ad8c2cef32d87cd] | 2
+6 | 2 | [EQ:876185b46f597ba270fc] | 1 | 6-63 | Reserved |  | Reserved
+7 | 2 | [EQ:d9a407b6a1d6ceec62cd] [EQ:0f38ba9e6e2cd125ed1c] | 1 |  |  |  | 
+8 | 2 | [EQ:69d4e3fc162292900dcd] [EQ:935d02b8dbbfdfacc0fc] | 1 |  |  |  | 
+9 | 2 | [EQ:8de8dcd799e57507c3c4] [EQ:e125b24eb736ee5bab84] [EQ:737302fbb93c02e259ac] | 1 |  |  |  | 
+10 | 2 | [EQ:43a47f1d92c67b27bc4b] 
+ [EQ:e3d738fc05fb456a6622] [EQ:9f6297e59f377ad24ee5] [EQ:868d0c9c09164a6f63e7] | 1 |  |  |  | 
+11 | 3 | [EQ:d5460f0088fc28aa8a0d] | 1 |  |  |  | 
+12 | 3 | [EQ:cad96a79afefec27b87b] | 1 |  |  |  | 
+13 | 3 | [EQ:7d2647a33165ee5210ab] | 1 |  |  |  | 
+14 | 3 | [EQ:2b828a831a212c473f2d] | 1 |  |  |  | 
+15 | 3 | [EQ:1a75a7c688e3e91d377e] | 1 |  |  |  | 
+16 | 3 | [EQ:a6d186739e53dff2bdd0] | 1 |  |  |  | 
+17 | 3 | [EQ:7301bce2862737d53ccf] [EQ:6f6b0dfb9ccf466f0139] | 1 |  |  |  | 
+18 | 3 | [EQ:fe9340bf5896fab204bf] [EQ:a5cc2ce505ab15f98d71] | 1 |  |  |  | 
+19 | 3 | [EQ:14f2fa4baa97e5e2f8af] [EQ:c57673d34d5495e6b085] | 1 |  |  |  | 
+20 | 3 | [EQ:a7cb1df3fb54c790645f] [EQ:bcd62f9aa030478b9e7b] [EQ:b859397832ea6716af60] | 1 |  |  |  | 
+21 | 3 | [EQ:866a1bcd211b07dbd25e] [EQ:037a35efac5729997b84] [EQ:c0aaec26ff728e409f7d] | 1 |  |  |  | 
+22 | 3 | [EQ:380e6bad9303e3b04f66] 
+ [EQ:8865228ef009e901cee8] [EQ:5f73d341a790bf98c09d] [EQ:ec6a71e24d1322033a3c] | 1 |  |  |  | 
+23 | 2 | [EQ:e11d9957ebc1332cb9a6] [EQ:9ec98184e23438b9a324] | 1 |  |  |  | 
+24 | 3 | [EQ:4af38a4ed494239f79aa] | 2 |  |  |  | 
+25 | 3 | [EQ:12f50e777ec74540258e] | 2 |  |  |  | 
+26 | 3 | [EQ:05a307f0dc89b16629b5] | 2 |  |  |  | 
+27 | 3 | [EQ:df415f014f192352e897] | 2 |  |  |  | 
+28 | 3 | [EQ:c8f9e66d17c032257e60] | 2 |  |  |  | 
+29 | 3 | [EQ:d61d2f8e13a61d0c2d2a] | 2 |  |  |  | 
+30 | 3 | [EQ:746fccf085cd4c443b3f] | 2 |  |  |  | 
+31 | 3 | [EQ:c9a974afb3019778af88] | 2 |  |  |  | 
+32 | 3 | [EQ:51126d431cfd696bbc7c] | 2 |  |  |  | 
+33 | 3 | [EQ:00c2746f5801082c1e9d] | 2 |  |  |  | 
+34 | 3 | [EQ:6f874efd98e1011aadd5] | 2 |  |  |  | 
+35 | 3 | [EQ:c073af38288eac3cd915] | 2 |  |  |  | 
+36 | 3 | [EQ:e6fed4b65e74568dc6cc] [EQ:692fa53e668f524d8613] | 2 |  |  |  | 
+37 | 3 | [EQ:ab1abc0d9043dddafb53] [EQ:176c924e26551a8906d1] | 2 |  |  |  | 
+38 | 3 | [EQ:bc51361f778ca0f9d497] [EQ:8bf0fb147b70a93e36ed] | 2 |  |  |  | 
+39 | 3 | [EQ:ed695bdf29f569d364e9] [EQ:000ce010c160dffebfee] | 2 |  |  |  | 
+40 | 3 | [EQ:29952b1e1139fb3a8c25] [EQ:ef83d92b271c582f1c3c] | 2 |  |  |  | 
+41 | 3 | [EQ:fc34f51075ac2d46a385] [EQ:584ed071d39063660c93] | 2 |  |  |  | 
+42 | 3 | [EQ:2f7d4b2bdfeedaa26150] [EQ:7f875f0fedb7a6f098b5] [EQ:98a2f0cc4c0185a9ff7c] | 2 |  |  |  | 
+43 | 3 | [EQ:e92fa2fb134d39267d7a] [EQ:6191bbfa7df29fd55933] [EQ:b7a7ecb1bc738b24187b] | 2 |  |  |  | 
+44 | 3 | [EQ:95a0944a4bd3367ddac7] [EQ:2f82fd4e2aa7c9029893] [EQ:f4a59d152fe250474546] | 2 |  |  |  | 
+45 | 3 | [EQ:8f4f705fa374d3892091] [EQ:62636bcdf72511bfe590] [EQ:83411e20e4b1d2f58284] [EQ:59f60fe7240b92bda876] | 2 |  |  |  | 
+46 | 3 | [EQ:9a31c3e516cda22d634b] [EQ:3551ccd0ccaa1e858d44] [EQ:899afac5a01c727e7f35] [EQ:2c4dd744cf0ac9d175e9] | 2 |  |  |  | 
+47 | 3 | [EQ:85271432d2a1439aa181] [EQ:6fb9455da1e039257d52] [EQ:0bcf2c971e3eff49bb58] [EQ:a6eca4b7d7a29aacee5d] | 2 |  |  |  | 
+48 | 1 | [EQ:52bae9098c552db4873a] | 2 |  |  |  | 
+49 | 1 | [EQ:caf973ab737293420e99] | 2 |  |  |  | 
+50 | 1 | [EQ:8223b7654209de582c05] | 2 |  |  |  | 
+51 | 1 | [EQ:ced636036a56ae6f7215] | 2 |  |  |  | 
+52 | 1 | [EQ:6f5e2a467bc891ee4209] [EQ:1a445d4694996b599884] | 2 |  |  |  | 
+53 | 1 | [EQ:1c31b3f3b3674c59e285] [EQ:0664486d66b703e13912] | 2 |  |  |  | 
+54 | 2 | [EQ:c9a0ffee269a27cf50dc] [EQ:be271ed9e2b3f9ce4c5a] | 2 |  |  |  | 
+55 | 2 | [EQ:2ca2e653f7885ac71d5d] [EQ:1ea0d535d938669833cd] | 2 |  |  |  | 
+56 | 2 | [EQ:7babd1c9b9c8c18760bf] [EQ:3ce364d7bb14cca56617] | 2 |  |  |  | 
+57 | 2 | [EQ:440323737d4f95641e6b] [EQ:819b87a760590f68cb4d] | 2 |  |  |  | 
+58-63 | Reserved |  | Reserved |  |  |  |
+
+Conclusions
+
+In this contribution, we discuss the remaining details regarding layer-to-DMRS port mapping. In addition, exemplary DMRS tables (Table 1-4) are presented. Based on the discussion above, we have the following observations and proposals.
+
+Observation 1: The values of [FIG:263ebb903dfe4d7278e5] should be specified clearly in specification to avoid any ambiguity in layer-2-port mapping operation.
+
+Proposal 1: Replace the label of “DMRS port(s)” with “ [FIG:c36b30e1b41599962cc4] ” in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of 38.212.
+
+Observation 2: Ordering of DMRS port in is still an open issue.
+
+Observation 3: For single-TRP/panel or single-QCL group based transmission, no additional complexity or performance loss are induced with specific ordering principle.
+
+Observation 4: The ordering of DMRS ports in vector [yP(0)(i)…y(Pv-1)(i)]T has potential impact on performance and implementation for 2-codeword transmission with multi-TRPs/panels.
+
+Proposal 2: DMRS ports should be ordered so that a codeword uses port(s) that are CDM-ed or QCL-ed (as much as possible).
+
+Proposal 3: The order keeping the correspondence between codeword and CDM group among different rank is slightly preferred.
+
+Observation 4: Compared with the original Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in TS 38.212[2], all the ordering changes could be related to 2-codeword transmission only. In addition, no extra complexity is induced with such predefined order.
+
+References
+
+R1-1801291, Draft CR to 38.211, Ericsson.
+
+R1-1801292, Draft CR to 38.212, Huawei, HiSilicon.
+
+R1-1801294, Draft CR to 38.214, Nokia, Nokia Shanghai Bell.
+
+3GPP TS 36.211, Physical Channels and Modulation.

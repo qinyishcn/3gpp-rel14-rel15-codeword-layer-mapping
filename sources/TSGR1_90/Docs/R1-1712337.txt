@@ -1,0 +1,99 @@
+3GPP TSG RAN WG1 # 90 R1-1712337
+
+Prague, Czech Republic, 21st – 25th August 2017
+
+Source: Panasonic
+
+Title: On layer mapping and signaling aspects of front-loaded DMRS for CP-OFDM
+
+Agenda Item: 6.1.2.3.3
+
+Document for: Discussion and Decision
+
+Introduction
+
+Agreements:The working assumption made in RAN1#89 for DM-RS is updated and agreed as follows for CP-OFDM:A UE is configured by higher layers with DMRS pattern either from the front-loaded DMRS Configuration type 1 or from the front-loaded DMRS Configuration type 2 for DL/UL: Configuration type 1: One symbol: Comb 2 + 2 CS, up to 4 ports Two symbols: Comb 2 + 2 CS + TD-OCC ({1 1} and {1 -1}), up to 8 ports Note: It should be possible to schedule up to 4 ports without using both {1,1} and {1,-1}. Configuration type 2: One symbol: 2-FD-OCC across adjacent REs in the frequency domain, up to 6 ports Two symbols:2-FD-OCC across adjacent REs in the frequency domain + TD-OCC (both {1,1} and {1,-1}) up to 12 portsNote: It should be possible to schedule up to 6 ports without using both {1,1} and {1,-1}. From UE perspective, frequency domain CDMed DMRS ports are QCLed. FFS: Whether the front-load DMRS configuration type for a UE for UL and DL can be different or not. Note: If there are significant complexity/performance issues involved in the above agreements, down-selection can still be discussed Agreements:The working assumption made in RAN1#89 for DM-RS is updated and agreed as follows for CP-OFDM:A UE is configured by higher layers with DMRS pattern either from the front-loaded DMRS Configuration type 1 or from the front-loaded DMRS Configuration type 2 for DL/UL: Configuration type 1: One symbol: Comb 2 + 2 CS, up to 4 ports Two symbols: Comb 2 + 2 CS + TD-OCC ({1 1} and {1 -1}), up to 8 ports Note: It should be possible to schedule up to 4 ports without using both {1,1} and {1,-1}. Configuration type 2: One symbol: 2-FD-OCC across adjacent REs in the frequency domain, up to 6 ports Two symbols:2-FD-OCC across adjacent REs in the frequency domain + TD-OCC (both {1,1} and {1,-1}) up to 12 portsNote: It should be possible to schedule up to 6 ports without using both {1,1} and {1,-1}. From UE perspective, frequency domain CDMed DMRS ports are QCLed. FFS: Whether the front-load DMRS configuration type for a UE for UL and DL can be different or not. Note: If there are significant complexity/performance issues involved in the above agreements, down-selection can still be discussed In RAN1 NR Ad-Hoc#2, following agreements related to front-loaded DMRS configurations for CP-OFDM were captured in [1] and [2]:
+
+Agreements:The number of front-load DMRS symbols can be 1 or 2 when the number of DMRS ports allocated to UE is equal or less than NN is 4 for Configuration 1 and 6 for Configuration 2.FFS the details to determine 1 or 2 symbolsAgreements:The number of front-load DMRS symbols can be 1 or 2 when the number of DMRS ports allocated to UE is equal or less than NN is 4 for Configuration 1 and 6 for Configuration 2.FFS the details to determine 1 or 2 symbols
+
+In this contribution, we discuss the details of front-loaded DMRS configuration for CP-OFDM related to port indexing/numbering, layer mapping and indication of 1-symbol or 2-symbol DMRS for each configuration types.
+
+Discussion
+
+DMRS port indexing
+
+For front-loaded DMRS, configuration type 1 and configuration type 2 have been agreed to support 8 orthogonal ports for SU-MIMO and 12 orthogonal ports for MU-MIMO, respectively. For a given configuration, the orthogonal ports are multiplexed using a combination of different schemes such as comb-structure (IFDM), cyclic shifts, FD-OCC, TD-OCC and FDM. For example, figure 1 illustrates front-loaded DMRS configuration type 1 for 2-symbol DMRS, where the combination of 2 combs, 2cyclic shifts and length 2 OCC in time domain (TD-OCC) are used to accommodate 8 orthogonal ports.
+
+[FIG:a340fee35f488492e4ed]
+
+Figure 1: Example of front-loaded DMRS configuration type 1: 2-symbol DMRS
+
+As in LTE, it is required to number/index these ports for identifying and indicating the particular DMRS port to the transmitter/receiver. There are several possibilities to index these ports as shown. Each of this possibility has its own benefit when layers are mapped on to these ports as discussed below.
+
+[FIG:9f5686f33e6b20f9860d]
+
+Index sequence 1: CS -> TD-OCC -> Comb
+
+[FIG:acbeb1448853d770c611]
+
+Index sequence 2: Comb -> CS -> TD-OCC
+
+Figure 2: Example of DMRS ports indexing for front-loaded DMRS configuration type 1: 2-symbol DMRS
+
+In figure 2, two of several possibilities are shown to index the DMRS ports. As an example, when two layers are to be mapped, then with index sequence 1: CS -> TD-OCC -> Comb, two layer can be mapped on p1 (Comb1, CS1 TD-OCC1) and p2 (Comb1, CS2, TD-OCC1) using only 1 comb. Main benefit of this indexing sequence is that the DMRS overhead is less and it allows for DMRS and data multiplexing on the same symbol. On the other hand, if index sequence 2; Comb -> CS -> TD-OCC is used, then the two layers are mapped on p1 (Comb1, CS1 TD-OCC1) and p2 (Comb2, CS1, TD-OCC1) using 2 combs. Although this index sequence 2 has more DMRS resources, but the main benefit is better frequency diversity. Similar possibilities can be considered for other DMRS configurations as well. Therefore, the DMRS overhead and/or the performance could vary for the same channel conditions depending up on which DMRS port indexing sequence is supported in NR.
+
+Observation 1: The sequence of DMRS port indexing can impact the type of multiplexing scheme to be utilized for a given layer-to-port mapping and consequently the DMRS overhead and performance for a given scenario.
+
+In NR, more flexibility is desired in terms of DMRS ports and layer mapping to support wide variety of use cases and scenarios such has different carrier frequencies, low-latency, downlink, uplink, etc. Henceforth, multiple options for DMRS port indexing and/or flexible configuration of DMRS port indexing should be considered in NR.
+
+Proposal 1: Flexible or multiple DMRS port indexing sequence order should be considered to leverage the benefits of using different multiplexing scheme.
+
+DMRS layer mapping
+
+Another key aspect of DMRS is the mapping of one or more layers from single or multiple users to DMRS port indexes. Unlike LTE, more flexibility is desired in terms of mapping given layers to any of the possible layer-to-port mapping combination. For example, in LTE, if a user has 5 layers, then the only possible mapping combination for 5 layers is to use ports 7 – 11. However, in NR, more flexibility is desired. According to the agreements in [2], it will be allowed to use either of 1-symbol or 2-symbol DMRS within each configuration type. In addition, more support is desired for MU-MIMO. Therefore, the mapping table for DMRS ports in NR should be broader with multiple possibilities for a given number of layers.
+
+Observation 2: More flexibility should be considered in terms of DMRS layer mapping.
+
+In general, more flexibility would directly impact the signaling overhead. Perhaps, there needs to be trade-off between the signaling overhead and flexibility of DMRS layer mapping. The number of possibilities for DMRS layer mapping is quite high, especially for 12 orthogonal ports. Therefore, the aim should be to eliminate combinations based on a certain set of rules/principles such that there is sufficient flexibility, but with reasonable signaling overhead.
+
+Proposal 2: A set of rules/principles should be defined for providing a good trade-off between flexibility of layer-to-port mapping and signaling overhead.
+
+DMRS Signaling aspects
+
+It has been agreed in [1] to semi-statically configure front-loaded DMRS configuration type 1 or configuration type 2 via higher layer signaling. Further configuration is required to indicate the whether1-symbol or 2-symbol DMRS is configured as mentioned in [2]. One of the main reasons to include 2-symbol DMRS is to provide better support for MU-MIMO in NR. Therefore, in order to support transparent MU-MIMO and dynamic switching between SU-MIMO and MU-MIMO, dynamic configuration of 1-symbol or 2-symbol DMRS should be considered.
+
+Proposal 3: Dynamic indication of 1-symbol or 2-symbol DMRS for a given front-loaded DMRS configuration type should be considered.
+
+One possibility to dynamically indicate 1-symbol or 2-symbol DMRS is to explicitly signal a 1-bit field to be in the downlink control channel (PDCCH) for both uplink and downlink DCIs.
+
+Observation 3: Explicit signaling of 1-symbol or 2-symbol DMRS would result in one additional bit in the downlink control signaling overhead.
+
+The other possibility could be to consider implicit signaling which doesn’t require an additional bit field. In LTE, "antenna port(s), scrambling identity and number of layers" field is used to indicate the DMRS layer mapping from a pre-defined table. Basically, the 4-bit field is used to indicate 16 possible mapping combinations. For NR, a similar table would be required as well to indicate which of the layer mapping combinations is applied for a given user.
+
+Suppose N number of combinations (require “n” size bitmap) are considered for 1-symbol DMRS layer mapping and M number of combinations (require “m” size bitmap) are considered for 2-symbol DMRS, where M > N (similarly “m” > “n”) due to more combinations. A possible approach could be to select N and M combinations in such a range such their sum number of combinations can still be indicated by “m” size bitmap. This would mean that first N states of the bitmap are reserved for 1-symbol DMRS and the next M states of the bitmap are reserved for 2-symbol DMRS. Thus, it ensures that the transmitter/receiver is implicitly made aware from this single bitmap about the 1-symbol or 2-symbol DMRS and corresponding mapping combination. For example if N is 10 and M is 54, then in case of separate tables, bitmap of size 4 would be used for 1-symbol DMRS and bitmap of size 6 for 2-symbol DMRS. However, in case of one single table, total combinations would be 64 that could still be indicated by bitmap of size 6.
+
+Proposal 4: Possibility to implicitly signal the presence of either 1-symbol or 2-symbol DMRS should be considered.
+
+Conclusion
+
+Here, we summarize the observations/proposals made in this contribution:
+
+Observation 1: The sequence of DMRS port indexing can impact the type of multiplexing scheme to be utilized for a given layer-to-port mapping and consequently the DMRS overhead and performance for a given scenario.
+
+Observation 2: More flexibility should be considered in terms of DMRS layer mapping.
+
+Observation 3: Explicit signaling of 1-symbol or 2-symbol DMRS would result in one additional bit in the downlink control signaling overhead
+
+Proposal 1: Flexible or multiple DMRS port indexing sequence order should be considered to leverage the benefits of using different multiplexing scheme.
+
+Proposal 2: A set of rules/principles should be defined for providing a good trade-off between flexibility of layer-to-port mapping and signaling overhead.
+
+Proposal 3: Dynamic indication of 1-symbol or 2-symbol DMRS for a given front-loaded DMRS configuration type should be considered.
+
+Proposal 4: Possibility to implicitly signal the presence of either 1-symbol or 2-symbol DMRS should be considered.
+
+Reference
+
+[1] R1-1711784, “WF on DMRS design”, MediaTek, Huawei, HiSilicon, China Telecom, ZTE, ASUSTek, CeWiT, Spreadtrum, Tejas Networks, CATR, Deutsche Telekom, IITH, Xinwei, MTI, CHTTL, China Unicom, IITM, ITRI
+
+[2] R1-1711771, “WF on signalling DMRS configuration”, LG Electronics, ZTE

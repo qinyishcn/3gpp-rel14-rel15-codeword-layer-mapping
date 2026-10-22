@@ -1,0 +1,101 @@
+3GPP TSG RAN WG1 NR Ad-Hoc Meeting R1-1700313
+
+16th – 20th January 2017
+
+Spokane, USA
+
+Agenda item: 5.1.2.1
+
+Source: AT&T
+
+Title: Flexible Transport Block, Codeword and Layer Mapping Concepts for NR
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. In RAN1 # 87 and the following agreement was reached on the number of Codewords.
+
+Agreements:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In this contribution, we describe our views on the number of codewords and layer mapping for NR.
+
+Flexible number of Codewords for NR
+
+In a multi antenna system, to reduce the control channel overhead the number of codewords are limited to a fixed number and is less than or equal to the number of layers supported. However, fixing the number of codewords to single value is inefficient as the UE might reporting the same CQI for each codeword. In that case, the network should have the flexibility to reduce the number of codewords. Similarly, the network should have the flexibility to configure more number of codewords. Hence we propose that the network should support either dynamically or semi statically the number of codewords.
+
+Proposal 1: The network should be able to support flexible number of codewords for a given transmission rank either dynamically or by the use of RRC signaling
+
+Since the UE estimates the channel and is in a better position to determine the number of codewords, we suggest the UE should indicate the number of codewords as part of CSI transmission. Similar to the scheduling parameters such as transmission rank etc, the network can choose different number of codewords compared to the UE recommendation, see [1] for detail reporting. We believe transmitting the have the number of codewords similar to CSI have huge benefits to the MIMO system, as the number of codewords are also adapted according to the channel conditions.
+
+Proposal 2: UE should recommend the number of codewords as part of CSI transmission
+
+Another important use case is the switching between single TRP and multi-TRP transmission. Allow different TRP with different codewords can significantly reduce the amount of data to be carried by the backhaul transport. Therefore, it’s likely that the required number of codewords is different between single TRP or multi-TRP transmission. In order to support seamless switch between those two cases, UE should be able to recommend the number of codewords associated with the single TRP or multi-TRP cases.
+
+Proposal 3: The UE recommendation of number of codewords should be based on the hypothesis of single or multiple TRPs.
+
+Dynamic Layer Mapping
+
+When the number of codewords are less than the number of layers layer mapping is needed. In the existing LTE system the layer mapping table is fixed. However, it should be noted that if the number of codewords are less than the number of layers, then the CQI of each codeword is controlled by the minimum of SINR of the layers mapped to that codeword. This implies that even though some of the layers have the high SINR, the UE can’t indicate the CQI of these layers and the network can’t schedule higher modulation on these layers. To overcome this drawback, we recommend the UE should recommend the preferred layer mapping within a codeword as part of CSI. For example, the UE can choose those layers which have the same SINR and map them to a layer. Similar to the other scheduling decisions, the network may or mayn’t obey this layer mapping table recommendation.
+
+It is worthwhile to notice that the layer to codeword also correspond to single or multiple TRPs transmission. For example, in two TRP transmission case, each TRP may have only one codeword, each is mapping to one or multiple layers. UE can be configured with CSI-RS from both TRPs, then UE may recommend a CW to layer mapping based on the channel measurement. The recommended CW to layer mapping actually implies UE’s preference for single or multiple TRP transmission, as well as the ranks on each TRP. E.g. UE may recommend a total of 4 layers, but 3 layers are from CW-1/TRP-1 while 1 layer from CW-2/TRP-2. Or UE may recommend a total of 4 layers from CW-1/CW-2 in TRP-1. Note here TRP-1 or TRP-2 is represented by the CSI-RS configured to the UE.
+
+Proposal 4: UE should recommend the layer mapping within each codeword as part of rank feedback.
+
+Proposal 5: By configuring CSI-RS from different TRP for UE to measure, CW-layer mapping recommendation indicate UE’s preference on single or multiple TRP transmission as well the rank of each TRPs.
+
+Transport block to Codeword Mapping
+
+Since we expect the number of codewords are less than the number of layers supported, we need to revisit the definition of codeword. According to the current definition of codeword, each codeword is mapped to only one transport block. However, whenever the number of layers are increases, we need to define a new transport block mapping table. We propose that the codeword can have multiple transport blocks but all belonging to same HARQ-process. Hence as a future proof, we can re-use the same transport blocks when the number of layers are increased in future.
+
+Proposal 6: RAN1 should revisit the definition of codeword.
+
+Proposal 7: Multiple transport blocks should be supported within a codeword
+
+Conclusions
+
+In this contribution we outlined our views on the number of codewords, layer mapping within a codeword and the transport block to codeword mapping.
+
+We recommend
+
+Proposal 1: The network should be able to support flexible number of codewords either dynamically or by the use of RRC signaling
+
+Proposal 2: UE should recommend the number of codewords as part of CSI transmission
+
+Proposal 3: The UE recommendation of number of codewords should be based on the hypothesis of single or multiple TRPs.
+
+Proposal 4: UE should recommend the layer mapping within each codeword as part of rank feedback.
+
+Proposal 5: By configuring CSI-RS from different TRP for UE to measure, CW-layer mapping recommendation indicate UE’s preference on single or multiple TRP transmission as well the rank of each TRPs.
+
+Proposal 4: RAN1 should revisit the definition of codeword.
+
+Proposal 5: Multiple transport blocks should be supported within a codeword
+
+Proposal 6: RAN1 should revisit the definition of codeword.
+
+Proposal 7: Multiple transport blocks should be supported within a codeword
+
+Reference
+
+[1] R1-1700320 UE Assisted UCI Format Selection for NR, AT&T

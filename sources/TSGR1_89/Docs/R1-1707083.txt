@@ -1,0 +1,106 @@
+3GPP TSG-RAN WG1 #89 R1-1707083
+
+Hangzhou, China, May 15 – 19, 2017
+
+Source: Xinwei
+
+Title: Further Evaluation and Discussion on Codeword to Layer Mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 #88b meeting in Spokane, the following agreements and working assumptions are achieved for number of codewords.
+
+Agreements:Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CWConclusion: RAN1 is to down select from the proposals (cf. Table 1) in R1-1706647 in RAN1#89 based on the design criteria also in R1-1706647.Agreements:Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CWConclusion: RAN1 is to down select from the proposals (cf. Table 1) in R1-1706647 in RAN1#89 based on the design criteria also in R1-1706647.
+
+In this contribution, we discuss codeword to layer mapping based on the agreed number of codewords for NR.
+
+Discussions
+
+There are mainly three kinds of codeword to layer mapping as listed below:
+
+Alt 1: Modulated QAM symbols should be mapped to layer first, then to time/frequency RE resources;
+
+Alt 2: Modulated QAM symbols should be mapped to time/frequency RE resources first, then to different layers;
+
+Alt 3: Modulated QAM symbols should be mapped to subcarrier, then to layer, and lastly to different symbols;
+
+Combination of above alternatives:
+
+E.g. for number of layers smaller than or equal to 2, follow Alt 1; for number of layers larger than 2, follow Alt 2.
+
+Latency, performance, UE complexity and eMBB/URLLC multiplexing related aspects could be compared for the above three alternatives.
+
+Latency:
+
+For latency aspect, if modulated symbols are firstly mapped to layers then codeblocks could be received fully earlier. Alt 1 and Alt 3 are better from this perspective. However, latency of 1 layer would anyway be tolerated, the reduced latency due to Alt 1 and Alt 3 seems not necessary.
+
+Performance:
+
+For performance aspect, different layers would see different signal to noise ratios. If data symbols could be mapped to layers first, then it is possible to gain full spatial diversity. Alt 1 could achieve such diversity gain.
+
+From system-level performance perspective, the interference UE experiences would have some spatial patterns. Although scattering modulated symbols across multiple layers may bring benefits of diversity, it may also incur severe interference on every transmit block. Mapping to frequency or time first could alleviate such problem by concentrating interference in one TB or CB.
+
+Another gain is from successive interference cancellation. If data symbols are mapped to frequency/time domain first, then SIC receivers could be facilitated to achieve such gains. Alt 2 and Alt 3 could achieve such gains. However, SIC receiver may not be used in NR due to its large delay and high complexity.
+
+It is also possible for Alt 2 and Alt 3 to achieve diversity gains. For example, modulated symbols are mapped to RE resources first, but for adjacent REs, layers are mapped alternatively.
+
+UE complexity
+
+There is no large difference between the two schemes if the same receivers are used.
+
+UE may have to buffer more soft LLR value due to longer code blocks for Alt 2, but the difference seems trivial.
+
+eMBB/URLLC multiplexing
+
+URLLC may occupy scheduled resources of eMBB. Typically, the two data streams would be multiplexed in time domain. Under such conditions, Alt 1 and Alt 3 may have higher probability of eMBB demodulation due to more complete code-blocks. The alternative that UE could mapped to frequency resources first, then to different layers and lastly to time domain.
+
+From above analysis, Alt 3 and Alt 1 seem to have benefits. Thus we have the following proposal.
+
+For layers smaller than or equal to 4, codeword to layer mapping schemes should be downselected or configurable between the following:
+
+Modulated symbols are mapped across subcarriers in scheduled RBs, then to different layers and lastly to different OFDM symbols.
+
+Modulated symbols are mapped across different layers and then to different subcarriers and lastly to different OFDM symbols.
+
+Evaluation Results
+
+In this section we provide some evaluation results for above proposal.
+
+[FIG:6f1887493ffcf29d44cd]
+
+The first sets of results mainly shows that with normal linear MMSE receivers, the performance of mapping to layer is the best. The performance of mapping to frequency then to layer is only slightly worse than mapping to layer first even without layer shift between different subcarriers.
+
+[FIG:390fcf13517d894c5c0c] [FIG:956381499238bed76dbb]
+
+The second sets of results simulate the cases with advanced receivers. It could be seen that mapping across subcarriers first would enable the use of SIC receivers and thus provide some gains. With layer shift across the subcarriers would also achieve the diversity gains.
+
+[FIG:0bd4a2db7e145669d198] [FIG:e8c352e6b79eaadb668e]
+
+Conclusions
+
+Based on the discussion in this contribution we propose the following.
+
+For layers smaller than or equal to 4, codeword to layer mapping schemes should be downselected or configurable between the following:
+
+Modulated symbols are mapped across subcarriers in scheduled RBs, then to different layers and lastly to different OFDM symbols.
+
+Modulated symbols are mapped across different layers and then to different subcarriers and lastly to different OFDM symbols.
+
+Annex: Simulation Assumptions
+
+Parameters | Values
+Channel model | CDL-A 
+•        delay spread =100ns, 300ns, 1000ns 
+•        UE speed=3km/h.
+Channel estimation | Ideal
+MIMO mode | SU-MIMO
+Receiver | MMSE/SSD/MMES-SIC/SSD-SIC
+BS Antenna configurations | (M,N,P,Mg,Ng) = (2,2,2,1,1). Or (2,1,2,1,1) (dV,dH) = (0.5, 0.5)λ
+UE Antenna configurations | (M,N,P,Mg,Ng) = (1,1,2,1,1). Or (2,1,2,1,1) (dV,dH) = (0.5, 0.5)λ
+BF scheme | Based on ideal SVD
+
+References

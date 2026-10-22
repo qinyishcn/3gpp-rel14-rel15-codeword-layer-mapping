@@ -1,0 +1,43 @@
+3GPP TSG RAN WG1 Meeting #93 R1-1806038
+
+Busan, Korea, May 21st – May 25th, 2018
+
+Source: vivo
+
+Title: Remaining Issues on Layer Mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Text proposals for layer to port mapping
+
+Currently the description for layer to port mapping for DL and UL in 38.211 is still not clear. We propose to further clarify with the following text proposals.
+
+----Text Proposal for TS 38.211------------------------------------------------------------------
+
+< Unchanged parts are omitted >
+
+7.3.1.4 Antenna port mapping
+
+The block of vectors [FIG:42c05e407c5bc91166da] , [FIG:b5650665f7e543cc9d87] shall be mapped to antenna port according to
+
+[FIG:6b22413db79ad18a1e76]
+
+where [FIG:304f1777902ab3b5ab3f] , [FIG:30548773302f9282b0c2] . The set of antenna ports [FIG:ce6683a208ada60a6665] shall be determined according to the procedure in [6, TS 38.214]. The antenna ports [FIG:55f363695025458e52e6] shall be determined according to the ordering of DMRS port(s) given by Tables 7.3.1.2.2-1/2/3/4 in 38.212.
+
+< Unchanged parts are omitted >
+
+----Text Proposal for TS 38.211------------------------------------------------------------------
+
+< Unchanged parts are omitted >
+
+6.3.1.3 Layer mapping
+
+For the single codeword [FIG:242e77f9e415989b1762] , the complex-valued modulation symbols for the codeword to be transmitted shall be mapped onto up to four layers according to Table 7.3.1.3-1. Complex-valued modulation symbols [FIG:197fb1944a9a003587e2] for codeword [FIG:430d1456f86b042cef86] shall be mapped onto the layers [FIG:15619f9523318477048b] , [FIG:99c69eb6bb99335a00e4] where [FIG:989a5d2e1e0242309894] is the number of layers and [FIG:943ae5106bcee0f8b827] is the number of modulation symbols per layer. Layer [FIG:e4757898324899eb508c] is one to one mapped to a set of DMRS ports [FIG:1879657b47ad4f5c37d6] according to the ordering of DMRS port(s) given by Tables 7.3.1.2.2-6~7.3.1.2.2-24 in 38.212. [FIG:3ca5f894ce031efc1e5b]
+
+< Unchanged parts are omitted >
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 #92bis;

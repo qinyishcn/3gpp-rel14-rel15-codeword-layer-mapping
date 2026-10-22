@@ -1,0 +1,166 @@
+3GPP TSG RAN WG1#88 bis R1-1705952
+
+Spokane, WA, USA, 3rd - 7th April, 2017
+
+Agenda item: 8.1.2.1.1
+
+Source: Nokia, Alcatel-Lucent Shanghai Bell
+
+Title: On the number of codewords in NR
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+During 3GPP RAN1#88 we have agreed that 1 CW is used for up to 2 layers, 2 CWs are going to be supported in NR at least when utilizing 5-8 layers. The main open issue is if 1 or 2 CWs are going to be used for 3 and 4 layers, the working assumption being 1 CW.
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsFor 3 to 4-layer transmission: 1 codeword as working assumptionFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+In this contribution, we address the above issues from the single and multi-point perspective.
+
+2 Discussion
+
+Before starting the discussion, it is important to state the requirements the NR CW2layer design needs to meet:
+
+Single TRP
+
+1. A point can transmit from 1 to 8 layers
+
+2. A point may use two codewords for a high number of layers
+
+Multi TRP requirements
+
+1. Ideal and non-ideal backhaul should be supported
+
+2. Centralized and independent scheduler should be supported
+
+3. PDCCH decoding complexity
+
+4. UL feedback overhead
+
+First, it is important to take a look at the possible configurations enabled by the current agreements. An important point lies in the following wording: “NR supports the following number of codewords per PDSCH/PUSCH assignment per UE”. By this we understand that in multi TRP operation, for one UE we may be able to have several configurations as follows:
+
+One PDSCH with 1 CW mapped to a number of layers, for example 4.
+
+More than one PDSCHs with per PDSCH CW mapped to a number of layers.
+
+In Figure 1 we consider various cases which are currently supported by the agreement and in addition we depict the missing cases in case 2 CWs are used for 3 and 4 layers. For example, in a two TRP CoMP configuration, the network with ideal backhaul and centralized scheduler may transmit a single PDSCH with a single CW mapped to for example 4 layers (Figure 1e). In a network configuration with non-ideal backhaul, the decentralized scheduler may transmit two PDSCHs with a single CW mapped to for example 2 layers (Figure 1f). Both implementations are possible, pending the agreement of multi-connectivity devices and their operation.
+
+Figure 1a | Figure 1b | Figure 1c | Figure 1d
+[FIG:08b7523e767bc5e78f4b] | [FIG:e6b6f33f383b608850b2] | [FIG:31f8ef1f7ecbb81c5984] | [FIG:61d208eaa34d0df82132]
+1 CW to 2 layers | 1 CW to 3 layers | 1 CW to 1 layer | 2 CW to 3 layers
+1 PDSCH | 1 PDSCH | 3 PDSCHs | 1 PDSCH
+
+Figure 1e | Figure 1f | Figure 1g | 
+[FIG:5172c99442c128410d65] | [FIG:536da4ecb5ac77331ab7] | [FIG:2584eaa9b759c3019b95] | 
+1 CW to 4 layers | 1 CW to 2 layers | 2 CWs to 4 layers | 
+1 PDSCH | 2 PDSCH | 1 PDSCH | 
+ |  |  |
+
+Figure 1i | Figure 1j | Figure 1k | 
+[FIG:38d9a7c2e384b64886f4] | [FIG:f26823e55928da3632df] | [FIG:cdf2b89c70bbf16df5f1] | 
+2 CWs to 8 layers | 1 CWs to 4 layers | 1 CW to 2 layers | 
+1 PDSCH | 2 PDSCH | 4 PDSCH | 
+ |  |  |
+
+Figure 1: Multi-TRP implementation options of current agreements of CW to layer mapping.
+
+3 CW to layer mapping
+
+For spatial multiplexing, having the agreement that a maximum number of codewords equals two, one needs to design the codework to layer mapping rules for initial transmissions and retransmissions. LTE us supporting a direct mapping of codewords to layers, rules which we recap in the Appendix. The following design criteria can be considered:
+
+The first codeword is mapped to fewer layers than the second codeword when the number of layers is odd.
+
+Each codeword is mapped on an equal number of layers when the number of layers is even.
+
+In Figure 2 we present such codeword to layer mapping which is following the LTE principles and also is in line with the current working assumptions of one codeword mapped to up to four layers and two codewords mapped to 5 to 8 layers. Such split between one and two codewords provides in fact a good balance of options as retransmission of more than 5 layers are utilizing the one codeword mapping rules.
+
+[FIG:c9d396cde2acce12d6d8]
+
+Figure 2: Codeword to layer mapping rules for initial transmission and re-transmission, when 1 CW is mapped up to 4 layers and 2 codewords are mapped to 5 - 8 layers.
+
+In Figure 3 we present the codeword to layer mapping rules when one codeword is mapped up to 2 layers and 2 codewords are mapped from 3 up to 8 layers. One problem lies in the fact that two sets of CW2layer mapping rules need to be defined for ranks 3 and 4 as single codeword implementations are needed for retransmisson of the high layer configurations.
+
+[FIG:0eb1ff473a5629b3424d]
+
+Figure 3: Codeword to layer mapping rules for initial transmission and re-transmission, when 1 CW is mapped up to 2 layers and 2 codewords are mapped to 3 - 8 layers.
+
+Another options is to consider uniform layer mapping where each codeword is uniformly distributed over all available layers, such process enabling the use of SIC receivers. However, since SIC is not a receiver of choice foro NR, we do not see other benefits of such operation and hence we are not pursuing this option.
+
+Proposal 1: confirm the working assumption and adopt 1 codework for 3 and 4 layers.
+
+Proposal 2: adopt a direct mapping of codewords to layers as presented in Figure 2
+
+4 Flexible implementation of CW to layer mapping
+
+In the above discussion, we have presented options for codeword to layer mapping to be defined in the specification. In the following we detail a flexible implementation which can exploit the one codeword to layer mapping and the transmission of multiple PDSCH.
+
+In a multi TRP environment, receiving one PDSCH from one TRP, hence multiple PDSCHs from multiple TRPs, looks like a straightforward implementation. Such operation is supported by the agreed CSI framework as follows: gNB configures multiple CSI reporting settings and resources settings for each TRP, UE measures the channel for each TRP, computes and reports the necessary feedback. From a PDSCH reception perspective, the UE does not know where the data channels are coming from, as they may be coming from different or the same TRPs.
+
+Let us consider the transmission of multiple PDSCHs from the same TRP. The CSI reporting settings and the resource settings can be configured as in the multiple TRP setup, up to a point. There is however a fundamental difference: the multiple codewords/PDSCHs transmitted from the same point are experiencing the same radio channel, hence some indication to the UE is needed in order to compute the CQI corresponding to each codeword. Indeed, the CSI computation mechanisms at the UE are to some extent an implementation-specific process. The UE is computing rank and PMI, while the CQI is typically computed taking into account the codeword to layer mapping rules defined by the specification. The network can however utilise codebook subset restriction to indicate to the UE which PMIs/layers are to be utilized.
+
+The following implementation is possible based on the current CSI framework. In a first stage, the gNB needs to know the maximum rank and PMI that the UE can support. This can be obtained by traditional CSI feedback configuration. If multiple codewords need to be scheduled via different PDSCHs, the gNB can configure the following. This step is needed in order to get the full rank of the channel and hence allow the gNB the possibility to decide how many layers need to be scheduled and how they need to be grouped, this being indicated to the UE based on the next steps, by using the codebook subset restriction signalling. In a second time instant, the gNB configures one CSI reporting and indicates through codebook subset restriction that CSI feedback needs to be delivered only for a specific number of layers (codebook subset restriction being part of the CSI reporting setting). Such CSI feedback corresponds to a first codeword. The gNB also configures another CSI reporting setting and indicates through codebook subset restriction that CSI feedback needs to be delivered only for a number of layers. Such CSI feedback is corresponding to a second codeword. It remains that the UE is indicated that two PDCCH assignments are available in the same search space, this enabling the dual PDSCH reception from the same TRP.
+
+Observation: multiple PDSCH transmission from the same TRP is supported by the current CSI framework.
+
+5 System performance – SU-MIMO at 30GHz
+
+In this section, we present system level simulation results for the NR-UMa channel at 30GHz with the system parameters described in [4]. We consider the case of downlink SU-MIMO with both the TRP array and the UE array having four sub-panels, which results in 8 RF beam ports at both ends of the SU-MIMO downlink. See [4] for more details on the system assumptions. We consider the case in [4] where we restrict the maximum number of transmission layers to be 4 and leverage the “EBF-WB” transmission method at baseband (the baseband precoding over the selected RF beams is wideband and based on an eigenbeamformer computed based on reciprocity). We consider three cases:
+
+a single codeword multiplexed across all transmission layers (maximum rank per codeword = 4)
+
+maximum of two codewords to be multiplexed across all transmission layers (maximum rank per codeword = 2)
+
+a maximum of four codewords to be multiplexed across all transmission layers (maximum rank per codeword = 1).
+
+Figure 5 shows the mean and cell edge throughputs for the above three cases. As can be seen there is a slight degradation in leveraging two or four codewords for the case of maximum 4 transmission layers. These results indicate that it would be reasonable to confirm the working assumption that the maximum rank 4 case shall be single codeword only, as was already proposed above.
+
+[FIG:c8c9aa304b9b78458b5e]
+
+Figure 4: single-point system level simulation, SU-MIMO in NR-UMa at 30GHz, 8 beam ports at both TRP and UE.
+
+6 Conclusions
+
+In this contribution we have been analysing the number of codewords needed in NR operation. The following proposals are summarized:
+
+Proposal 1: confirm the working assumption and adopt 1 codework for 3 and 4 layers.
+
+Proposal 2: adopt a direct mapping of codewords to layers as presented in Figure 2
+
+References
+
+[1] R1-1611973, “On codeword to MIMO layer mapping”, Intel Corporation
+
+[2] R1-1612318, “On codewords and layer mapping”, Ericsson
+
+[3] R1-1612738, “CW to layer mapping”, Qualcomm Incorporated
+
+[4] R1-1703154, “On the utilization of multi-panel arrays at the UE in UMa 30GHz”, Nokia, Alcatel-Lucent Shanghai Bell
+
+A Appendix
+
+The CW to layer mapping rules are specified in LTE 36.211 as follows:
+
+reference signals is two or larger.
+
+Table 6.3.3.2-1: Codeword-to-layer mapping for spatial multiplexing
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:28b94a54272dbce09ed1]
+1 | 1 | [FIG:43a1fe67a0bb7f4a52f3] | [FIG:80ccd08c368c72d947c0]
+2 | 1 | [FIG:eee4312fdbc1a9173f53] | [FIG:3c74f7580f9472fdb682]
+2 | 2 | [FIG:2285df9cc2bb971af58d] | [FIG:58d8c168be90aa0ac890]
+ |  | [FIG:3177fc73fc1622e98a70] | 
+3 | 1 | [FIG:fb2a6ce7afa163a69c6e] | [FIG:27325af2884cbc6d69aa]
+3 | 2 | [FIG:2e00c6080336225f0d39] | [FIG:4815ecfb634423258a83]
+ |  | [FIG:f70a7af2206731ff74fe] | 
+4 | 1 | [FIG:8f3d7724ce0b7f7338a9] | [FIG:7a0040e84849e7af46d3]
+4 | 2 | [FIG:5235307a1300a5c79153] | [FIG:b889de2b89ae5c25fb75]
+ |  | [FIG:580b64501b389365ff91] | 
+5 | 2 | [FIG:53aaf73df48c45d1ea62] | [FIG:eda0816259ee3e07f831]
+ |  | [FIG:e90d1577e6ddc914ced6] | 
+6 | 2 | [FIG:3f6882ca1a688bd4055b] | [FIG:3dd2b6f7753c72f16735]
+ |  | [FIG:50c2466f5b361ec3c32b] | 
+7 | 2 | [FIG:b3af98ed27d49ce453b3] | [FIG:79cc45294ddbda889c7e]
+ |  | [FIG:b3ba4e491f25b23923ea] | 
+8 | 2 | [FIG:4220107c8575231f041d] | [FIG:12dcdfe9b21a1d259e21]
+ |  | [FIG:6a6138f904890203255a] |

@@ -1,0 +1,113 @@
+3GPP TSG RAN WG1 NR Ad-Hoc Meeting R1-1701071
+
+Spokane, USA, 16th - 20th January 2017
+
+Agenda item: 5.1.2.1
+
+Source: Nokia, Alcatel-Lucent Shanghai Bell
+
+Title: On the number of codewords in NR
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+During 3GPP RAN1#87 it has been agreed to investigate the amount of codewords needed to be supported in NR:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In this contribution we address the above issues from the single and multi-point perspective.
+
+2 Discussion
+
+The LTE system supports a maximum of 2 codewords and this operation comes from the perspective of aiding the UE advanced receiver interference cancelation when iterative receivers such as CWIC/SIC are used. Another motivation for two codewords was the improved link adaptation possibility when significant SINR differences is experienced between the layers. Even if the advanced iterative receiver of CWIC was a driver for two codewords, RAN4 LTE specification work of performance requirements for advanced receiver has not been considering such receivers, but rather conducted specification work based on R-ML receiver.
+
+When the number of codewords was introduced, hence in Release 8, the transmitted layers were departing from a single transmission point. In other words, due to the rich scattering characteristics of the channel, the total rank was built from a single point’s transmission. With the introduction of CoMP and considering schemes such as distributed MIMO, the channel characteristics between two transmission points may be rather different, allowing for improved link adaptation. A single transmission point can, at a minimum, transmit one beam and based on the cross-polarized antennas it implies at least 2 layers can be transmitted from a single point. With respect to the open questions of the previous meeting, we have the very first proposal:
+
+Observation: For single point transmission of 1-2 MIMO layers, 1 codeword is beneficial.
+
+2.1 Multi-point transmission
+
+For more than 2 MIMO layers transmission, the discussion needs to consider both single and multi-point transmission. It is rather probable that in single point transmission, the spatial characteristics would not require necessarily 2 codewords, even if there are link adaptation differences between the potential two codewords, the gain might be not sufficient to justify the increased signalling overhead. On the other hand, this issue might look completely different from the perspective of multi-point transmission. There are in fact few ways in which single/multiple codewords can be configured in multipoint transmission:
+
+|  | 
+1 | 1 Codeword mapped to multiple TRPs, two or more layers per TRP* single HARQ processas a particular case we consider also1 Codeword mapped to multiple TRPs, same data layers per TRP,single HARQ process (increasing SNR, etc.) coherent JT CoMP*one may see also a TRP as a beam, hence strictly speaking one TRP could consists of multiple beams, each carrying max rank 2. | [FIG:c91229490866cc2d5969]
+2 | Two codewords, one codeword per TRP, independent data, one HARQ process per TRP | [FIG:ecc41a6493a581e9c9eb]
+3 | Multiple codewords, one codeword per TRP, independent data, one HARQ process per TRP | [FIG:c29a1218a2c59868d5e5]
+
+Table 1 codeword to layer mapping options in multi-TRP operation
+
+In the examples depicted in the above table we assume multiple points connected to the gNB through a backhaul which may experience several types of latency. We also assume a maximum of two layers coming from a single TRP, even that, in principle more layers may come from a TRP. Certainly more than two layers may come from a single TRP, but such generalization is not the scope of this discussion.
+
+The first example in the above table is considering a single codeword mapped to multiple TRPs. A single HARQ process is necessary, such transmission being made to the best TRP UL. In the second example we consider two codewords, one codeword per TRP, associated to two HARQ processes. Such operation resembles somehow the dual connectivity of LTE. In the third example we consider more than two TRPs, a scenario which is likely in dMIMO operation. It looks infeasible to simply consider yet another codeword for the third TRP, factorizing the overhead with increasing the amount of TRPs not being an option. From the perspective of applying one of the two previously presented solution, one can consider using same codeword across all TRPs or mapping two codewords across the TRPs, grouping the TRPs with respect to the reported CSI. Such operation would be similar to the LTE CW2layer mapping for 3 or more layers where the strongest layers are mapped to the first codeword and the rest to the second codeword.
+
+Observations:
+
+A single codeword mapped to multiple TRPs is likely not to allow a flexible link adaptation.
+
+Per TRP codeword is scaling the overhead by a large amount and complicates the HARQ feedback.
+
+Mapping two codewords to multiple layers (8) may use the same principle as LTE.
+
+In addition to the above, a point of discussion is how transparent to the UE such CW2layer mapping need to be? As we will show in the next section, performance results are showing that there are scenarios where 2 CWs are providing some gains, however there are scenarios where a single CW is sufficient. The most flexible specification, not the simplest though, is to allow a single CW to be mapped to a maximum amount of layers and at the same time allow multiple codewords, not more than two though, to be mapped to multiple layers. The following use cases can be covered:
+
+Single CW | Single TRP transmission with full rank (up to eight as currently agreed)Multiple TRP transmission with ideal backhaul
+Multiple CWs | Multiple TRP transmission with non-ideal backhaul
+
+3 System performance
+
+In this section, we present system performance for NCJT operating in indoor and 3D Urban Micro scenarios with bursty traffic having low RU in 3D UMi and low and high in other scenarios. Assuming 2Tx APs and 4Rx UEs, the maximal transmission rank per UE is up to 4. For NCJT, the maximal transmission rank per TP per CW for CoMP UE is restricted to 2. For CSI feedback, wideband CSI per TP is assumed. The bandwidth allocation of two CWs is assumed perfectly aligned for the UE. Both MMSE-IRC and CWIC receivers are considered here. The CoMP coordination. threshold was 10 dB.
+
+We have been focusing on the designs described in Table 1. In addition, for the case of different codewords, we have consider both linear and non-linear receivers. In a first setup we have considered that same codeword is used for both TRPs and different data layers are transmitted. In a second setup we have considered per TRP codeword and that same information is transmitted, this adding to the link robustness which can be used for URLLC. The case of different streams from different points was considered with non-linear receivers (CWIC).
+
+Multiple codewords are providing mean gains in indoor and low load 3D UMi scenarios. On the other hand there are not gains in cell edge, this being explained by the fact that rank 1 is mainly utilized on this occasion, and hence multiple CWs cannot help. In the indoor scenario we observe that gains from one or two codewords are not for both mean and cell edge, hence the system could be further tunes to balance the mean/cell edge operation. If the choice would be for a system operating with 1 CW, there seems not critical gains which could be missed. Certainly there are situations where more than one codeword may be beneficial, but these could be compensated by more aggressive 1 CW link adaptation.
+
+[FIG:2b9a9bf374c29f7c6ad3] [FIG:4183875195e6cd71ccc2]
+
+Figure 1: multi-point system level simulation, indoor and 3D UMi environments.
+
+4 Conclusions
+
+In this contribution we have been analysing the number of codewords needed in NR operation. The following proposals are summarized:
+
+Proposal 1: Consider the support of maximum 2 codewords.
+
+Proposal 2: Consider the mapping of 1 and 2 codewords to maximum supported number of layers.
+
+References
+
+[1] R1-1611973, “On codeword to MIMO layer mapping”, Intel Corporation
+
+[2] R1-1612318, “On codewords and layer mapping”, Ericsson
+
+[3] R1-1612738, “CW to layer mapping”, Qualcomm Incorporated
+
+A Appendix
+
+DL MIMO Configuration | DL CoMP Configuration | FeedbackConfiguration | UE Receiver | Mean UE Tput (Mbps)Cell Edge UE Tput (Kbps)
+ |  |  |  | Indoor | load | 3D UMi | load | 3D UMi | load
+SU-MIMO BASELINE2X4 | N/A(Single Cell Scheduling) | LTE 2TX CBOOKWB CQI, PMI, RIMax rank = 2 | 4RX MMSE | 27.0 | 38%5140 | 51.4 | 14%17.5 | 25.2 | 57%4420
+Non-coherent JT(single CWs and different layers from the TRPs)2x4 or 4x4 | 1 or 2 strongest TPs per UE | Per TPLTE 2TX PMI, RIMax rank = 2WB CQI |  | 31.9 | 45%5810 | 53.2 | 17%18.2 | 28.6 | 59%5000
+Non-coherent JT(same streams from both TPs)2x4 or 4x4 | 1 or 2 strongest TPs per UE | Per TPLTE 2TX PMIJointWB CQI, RIMax rank = 2 |  | 27.0 | 45%5480 | 52.4 | 17%18.2 | 28.6 | 59%5000
+Non-coherent JT(different streams from each TP)2x4 or 4x4 | 1 or 2 strongest TPs per UE | Per TPLTE 2TX CBOOKWB CQI, PMI, RIMax rank = 2(Weaker CQI assumes cancellation of the stronger TP) |  | 34.2 | 44%5660 | 55.8 | 17%17.5 | 28.4 | 61%4700
+ |  |  | 4RX CWIC |  |  |
+
+Table 2 SLS Results for non-coherent JT Case 1 in indoor and 3D UMi scenarios

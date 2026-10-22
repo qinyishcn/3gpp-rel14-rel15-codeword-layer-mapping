@@ -1,0 +1,53 @@
+3GPP TSG RAN WG1 Meeting #94 R1-1809052
+
+Gothenburg, Sweden, August 20th – 24th, 2018
+
+Agenda item: 7.1.2.1
+
+Source: AT&T
+
+Title: Text Proposal on MIMO Codeword Mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. It was agreed to have two codewords when the transmission rank is greater than four else single codeword is used. The Release 15 technical specifications were agreed during the June RAN plenary meeting. However, we observed few issues related to two codeword mapping as captured in TS 38.214 as there is an ambiguity when MCS=26.
+
+In this contribution, we propose a text proposal to clarify the text and removes the ambiguity.
+
+Multi Codeword MIMO
+
+The current specification supports two codewords when the transmission rank is greater than 4. In addition, the codewords are enabled when the network sends an RRC signalling to enable the two codewords. Current specification supports an implicit signalling for disabling one codeword as shown in Table 1. That is when the MCSid= 26, and rvid=1, the corresponding codeword is disabled. However when the network sends the MCS1=MCS2=26 and rv1=rv2=1, then how the UE should interpret the DCI is not well understood.
+
+Table 1 Existing text in TS 38.214
+
+5.1.3.2 Transport block size determination In case the higher layer parameter maxNrofCodeWordsScheduledByDCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if IMCS = 26 and if rvid = 1 for the corresponding transport block, otherwise the transport block is enabled. If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. If only one transport block is enabled, then the enabled transport block is always mapped to the first codeword.
+
+We propose two Options for removing this ambiguity
+
+Option 1: The main motivation of using MCS=26, rvid =1 is the use of non-self-decodable LDPC combinations. However, we observed that this is valid only for initial transmissions. That is for the initial transmission the network never sends MCS= 26, rvid=1 or 2. Hence we recommend the following text proposal
+
+Table 2 Proposed text in TS 38.214
+
+5.1.3.2 Transport block size determination In case the higher layer parameter maxNrofCodeWordsScheduledByDCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if IMCS = 26 and if rvid = 1 for the corresponding transport block is scheduled for initial transmission, otherwise the transport block is enabled. If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. If only one transport block is enabled, then the enabled transport block is always mapped to the first codeword.
+
+Option 2: In this option, we can clarify that the UE should discard the DCI when MCS1=MCS=26, and rv1=rv2=1.
+
+Note that with Option 2, the network can’t schedule MCS1=MCS=26, and rv1=rv2=1 for any transmission. In our view, it reduces the flexibility at the gNB scheduler. Hence we prefer Option 1.
+
+Proposal: Adopt the following text proposal
+
+Table 2 Proposed text in TS 38.214
+
+5.1.3.2 Transport block size determination In case the higher layer parameter maxNrofCodeWordsScheduledByDCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if IMCS = 26 and if rvid = 1 for the corresponding transport block is scheduled for initial transmission, otherwise the transport block is enabled. If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. If only one transport block is enabled, then the enabled transport block is always mapped to the first codeword.
+
+Conclusions
+
+In this contribution we outlined our views on the codeword to layer mapping. Based on our observations we recommend
+
+Proposal: Adopt the following text proposal
+
+Table 2 Proposed text in TS 38.214
+
+5.1.3.2 Transport block size determination In case the higher layer parameter maxNrofCodeWordsScheduledByDCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if IMCS = 26 and if rvid = 1 for the corresponding transport block is scheduled for initial transmission, otherwise the transport block is enabled. If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. If only one transport block is enabled, then the enabled transport block is always mapped to the first codeword.

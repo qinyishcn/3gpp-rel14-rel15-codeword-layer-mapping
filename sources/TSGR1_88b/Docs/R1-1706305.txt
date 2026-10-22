@@ -1,0 +1,5 @@
+WF on Layer Mapping for NR Samsung, Ericsson, Nokia, Alcatel-Lucent Shanghai Bell, NTT DOCOMO, KT Corporation , BT, NEC, ETRI , Verizon, Softbank Corp, KDDI, CATT, Deutsche Telekom, Sharp, Panasonic, OPPO, Fujitsu, WILUS Inc. 3GPP TSG RAN WG1 88bis Spokane, USA, 3 rd - 7 th April 2017 Agenda item: 8.1.2.1.1 R1-1706305
+
+Background In RAN#88, the following working assumption was made: NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1): For 3 and 4-layer transmission: 1 CW FFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)
+
+Proposal Confirm the following working assumption as an agreement : For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UE One UL- or DL-related DCI includes one MCS per CW One CQI is calculated per CW

@@ -1,0 +1,242 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1712284
+
+Prague, Czechia, 21st – 25th August 2017
+
+Source: ZTE
+
+Title: Remaining details of codeword mapping and interleaving
+
+Agenda Item: 6.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#89 meeting, the following working assumption regarding CW to resource mapping has been reached [1]:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+In NR Ad-hoc#2 meeting, considering the online discussion about simulation results, the following agreements was achieved [2]:
+
+Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenarios
+
+Practical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.
+
+For both CP-OFDM and DFT-S waveforms
+
+Evaluation should be done considering both slot and mini-slot.
+
+NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCH
+
+FFS HARQ ID
+
+Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layers
+
+NR supports higher layer signalling for the maximum number of CQIs in UCI
+
+Unless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI report
+
+FFS subband CQI
+
+FFS Whether or not the actual number of CQIs is also RI dependent
+
+Note: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)
+
+FFS applicability on single/multi TRP
+
+Considering the above progress, more details on CW to resource mapping and interleaving are discussed as well as design of signalling for MCS/RV/NDI and CQI. Both system and link level simulation results are provided for analysis.
+
+Resource Mapping in a codeword
+
+In order to satisfy various use cases in NR, the factors including performance, processing latency, URLLC puncturing, UL waveform, cross-link interference, and characteristics of transmission scheme, e.g., CoMP, should be considered for choosing the resource mapping scheme. In addition to the agreed resource mapping order: layer--> frequency-->time, the following two additional schemes are proposed in [3].
+
+Scheme-1: Layer set 1 FrequencyTimeLayer set2Frequency Time;
+
+Scheme-2: Layer Time Frequency
+
+More specifically, w.r.t these two schemes, further analysis is conducted in this contribution.
+
+Scheme-1 : Layer set 1 FrequencyTimeLayer set2Frequency Time;
+
+According to the agreement [1], in case of multiple TRP transmission, the following transmission scheme is supported:
+
+Single N R-PDCCH schedules single NR-PDSCH where separate layers are transmitted from separate TRPs
+
+In this case, especially with lower rank (e.g., rank <= 4), a CW is mapped across multiple TRPs (e.g., 2). However, due to different channel properties between each TRP to UE, different ranks and reception conditions per link can be expected. Another case is different interference levels are experienced in different layer sets depending on how beamforming is done in interfering cells in interference limited scenarios. For enhancing the transmission under these situations, the following mapping scheme can be considered:
+
+Layer set 1 FrequencyTimeLayer set2Frequency Time
+
+More specifically, the first and second part of CW (e.g., two CBGs) will be mapped to layer set 1 and layer set 2, respectively. In this way, ACK/NACK feedback can be assigned per layer set. It can be expected to minimize the re-transmission of whole CW since independent error probability can be achieved in per layer set manner based on different channel condition. In addition, ACK/NACK based outer loop link adaptation can be done per layer set.
+
+In order to verify the above analysis, the corresponding system simulation has been conducted in indoor scenario. In this simulation, the baseline scheme refers to the agreed mapping order. More detailed configuration about the simulation can be found in Table 5. Performance comparison between the proposed scheme and baseline scheme are shown in Table 1. It can be observed that the proposed scheme outperforms the baseline scheme in the case with varying interference. More specifically, more than 10% gain is achieved for cell-edge UE since the transmission to these UEs is more sensitive to varying interference. Similar performance is obtained for both schemes for 95%-tile UE.
+
+Table 1 Comparison of simulation results with FTP traffic (RU=80%)
+
+Simulation scheme | Mean UPT | 5% UPT | 50% UPT | 95% UPT | RU
+Baseline scheme | 13.2834 | 0.6889 | 5.3763 | 54.7945 | 0.7728
+Scheme-1 | 13.4752 | 0.765 | 5.7061 | 54.6316 | 0.7716
+Gain | 1.44% | 11.05% | 6.13% | -0.3% | 0.16%
+
+In Table 2, we further evaluate the cases with interference varying scenario where half of slots have 3 dB higher level of interference than another half of slots. This is usual in scenarios like dynamic TDD with cross link interference where interference can vary within a slot. In case of scheme-1 allows mapping of data to one layer set only in some resources and mapping of data to two layer sets in some other resources, number of layers can be different in different CBGs which can effectively adapt to the varying interference. With such scheme, cell edge performance can be improved by 14%.
+
+Table 2 Comparison of simulation results with full buffer traffic in varying interference scenario
+
+Simulation scheme | Mean Cell SE | 5%-tile SE
+Baseline scheme | 1.420 | 0.0184
+Scheme-1 | 1.442 | 0.021
+Gain | 1.55% | 14.13%
+
+Observation 1: The proposed mapping scheme-1 (i.e. Layer set 1 FrequencyTimeLayer set2Frequency Time) allows mapping of data to one layer set only in some resources and mapping of data to two layer sets in some other resources. It outperforms the agreed baseline in the case with varying interference.
+
+Scheme-2: Layer Time Frequency
+
+With the introduction of dynamic TDD in NR, the quality of received data will be different per symbol as the example as shown in Figure 1.In this case, the last few symbols of downlink data transmitted from TRP 1 to UE1 are interfered by uplink data from UE2 to TRP2. Since different types of frame structure are used at different time in dynamic TDD scenarios, varying interference is expected to be experienced by different symbol within PDSCH received by UE1. More specifically, due to the lack of prior information about the scheduling of dynamic TDD, the influence cannot be well alleviated by adoption of CBG-based methods, e.g., CBG-based HARQ.
+
+UE1UE2TRP1TRP2 [FIG:31c46c135528dc35bf4d]
+
+Figure 1 Illustration of cross link interference
+
+Moreover, in the application case with high speed, e.g., high speed train scenario, the decoding of data within one symbol (e.g., one or multiple CBs) will be affected by fast fading in time domain.
+
+In the above cases, for achieving better performance with time diversity, the data should be mapped to time domain as much as possible, and the following mapping scheme can be considered:
+
+Layer Time Frequency
+
+In order to verify the above analysis, the corresponding link level simulation has been conducted with CDL-A model in following high speed and interference-varying scenarios.
+
+Interference-varying scenario:
+
+In this simulation, the last symbol of PDSCH is assumed to experience additional interference, and the strength of this interference is denoted as SIR. More detailed simulation assumption can be found in Table 6. Moreover, the baseline scheme refers to the agreed mapping order. Performance comparison between the proposed scheme and baseline scheme are shown in Figure 2. It can be found that significant performance gain can be observed for the proposed mapping scheme (scheme-2) due to time diversity. More specifically, due to the additional inference in last symbol, the UE fails to decode the bits within this symbol since the contiguous bits are mapped in this symbol in case of the usage of baseline scheme, the whole CB fails naturally.
+
+[FIG:3bc41ef3bbeaf5d62bba] 
+Figure 2 Performance comparison between two mapping schemes with SIR = 6 dB and V = 3km/h
+
+High speed scenario:
+
+In this simulation, performance comparison between two mapping schemes is conducted with high UE speeds of 300 and 500 km/h. DM-RS pattern located at the four symbols (4th, 7th, 10th, and 13th) is used. Frequency interleaving is also adopted for exploiting the frequency diversity. More detailed simulation assumption can be found in Table 6. Based on the results shown in Figure 3, it can be found that in both cases (v = 300 and 500 km/h), significant performance gain (e.g., maximum performance gain is higher than 10%) can be observed for the proposed mapping scheme (Scheme-2) due to time diversity.
+
+[FIG:d5f7ff0233eea47c0506]
+
+Figure 3 Performance comparison between two mapping schemes with different UE velocity
+
+Observation 2: The proposed mapping scheme-2 (i.e. Layer Time Frequency) outperforms in both cases with varying interference and high speed.
+
+According to the analysis above, it can be found that single resource mapping scheme cannot fully satisfy various applications in NR under different conditions. However, it should be highlighted that all these requirements may not exist in one scenario simultaneously. For example, cross link interference may not exist in all scenarios. Significant diversity gain can be achieved for lower code rate case but only limited gain is expected for high-code rate. Meanwhile, the tight requirement on processing latency is only critical in the case with self-contained case, but it can be loosen for other applications. Consequently, for achieving promising performance in different cases, configurable mapping scheme should be considered for NR based on case-specific requirements.
+
+Proposal 1：Configurability among multiple mapping schemes should be supported in NR. Additional scheme-1(i.e. Layer set 1->Frequency->Time->Layer set2->Frequency->Time) and scheme-2 (i.e. layer->frequency->time) are supported in configurable multiple mapping schemes.
+
+Discussion on interleaving
+
+During the implementation of data to resource mapping based on proposed scheme above, if one CB cannot fully occupy the allocated resources in certain domain and various channel/interference condition/puncturing probability is observed in that domain, interleaving in that domain can provide extra diversity gain for transmission. Moreover, introduction of interleaving can be adopted to minimize the difference of BER among CBs within one CBG. Although more diversity gain could be introduced if joint interleaving in two domains is supported, a lot of standardization work is required. Considering the factors, e.g., size of CB, code rate and MCS, which have impacts on the resource occupation in certain domain, configurable interleaving schemes should be supported in NR for achieving the interleaving gain under different mapping schemes. For example, with agreed mapping scheme (i.e., Layer->frequency->time), it makes sense to support at least interleaving in frequency domain considering the usual case that larger bandwidth will be assigned to each UE in NR. Therefore, we have the following proposal:
+
+Proposal 2：Configurability among multiple interleaving schemes should be supported in NR. At least frequency domain interleaving is supported in NR.
+
+Note that other interleaving schemes can be selected together with the mapping scheme.
+
+Discussion on signaling on CQI and MCS
+
+According to the previous agreement below, the number of MCS/CQI required for the UL/DL transmission is determined by the total rank supported per PDSCH/PUSCH. In this situation, the implicit configuration from higher layer can be considered to indicate the maximum number of CQIs in UCI.
+
+Confirm the following working assumption as an agreement:
+
+For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UE
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+More specifically, it can be easily indicated via the configuration of maximum rank or codebook restriction for the CSI calculation. For example, if calculation of CSI is limited with assumption that rank > 4, two CQIs will be always transmitted in UCI.
+
+For the indication of MCS/RV/NDI, some combination of MCS and RV are not useful since lower MCS requires less number of RV. Therefore, information of at least MCS and RV should be indicated jointly. In addition, number of MCS fields depends on the number of layers and hence the number of DMRS ports. In order to reduce DCI overhead, joint encoding of DM-RS information and MCS/RV can be considered. Dynamic changing in full range of number of layers and MCS is often not needed. It is beneficial to configure the necessary range of MCS and number of layers more flexibly according to the need. This can be configured under transmission setting as described in our companion contribution [4].
+
+Proposal 3: Joint indication of MCS and RV is supported.
+
+Proposal 4: Selective combination of MCS/RV and DMRS information can be configured jointly in transmission setting.
+
+Conclusion
+
+In this contribution, the details related codeword to resource mapping, interleaving and signaling on MCS/RV and maximum number of CQI are discussed. Based on the analysis, the following observations and proposals are reached:
+
+Observation 1: The proposed mapping scheme-1 (i.e. Layer set 1 FrequencyTimeLayer set2Frequency Time) allows mapping of data to one layer set only in some resources and mapping of data to two layer sets in some other resources. It outperforms the agreed baseline in the case with varying interference.
+
+Observation 2: The proposed mapping scheme-2 (i.e. Layer Time Frequency) outperforms in both cases with varying interference and high speed.
+
+Proposal 1：Configurability among multiple mapping schemes should be supported in NR. Additional scheme-1(i.e. Layer set 1->Frequency->Time->Layer set2->Frequency->Time) and scheme-2 (i.e. layer->frequency->time) are supported in configurable multiple mapping schemes.
+
+Proposal 2：Configurability among multiple interleaving schemes should be supported in NR. At least frequency domain interleaving is supported in NR.
+
+Proposal 3: Joint indication of MCS and RV is supported.
+
+Proposal 4: Selective combination of MCS/RV and DMRS information can be configured jointly in transmission setting.
+
+References
+
+RAN1#89 Chairman’s Notes
+
+RAN1 NR Ad-hoc#2 Chairman’s Notes
+
+R1-1711935, “Summary of Open Issues on Layer Mapping”, Samsung
+
+R1-1712291, “On Transmission Setting”, ZTE
+
+Appendix
+
+Table 5 Configurations for system level simulation
+
+Parameter | Values used for evaluation
+Carrier Frequency | 3.5 GHz
+Duplex Mode | FDD
+System Band | 10 MHz
+Carrier Number | 1
+Network Synchronization | Synchronized
+Antenna Configuration | Transmitter: 2Tx cross-polarized antennaReceiver: 2Rx and 4Rx at UE(cross-polarized antenna with 0.5λ antenna spacing)
+Tx Power | 24 dBm
+eNB antenna height | 6m
+UE antenna height | 1.5m
+Number of small cells | 8
+Minimum distance (2D distance) | Small cell-small cell: 20m
+ | Small cell-UE: 3m
+Traffic model | FTP Model 1 with packet size 0.5 Mbytes, RU = 80% /full buffer
+Handover margin | 3dB
+UE attachment | Based on RSRP (formula) from CRS port 0
+Metrics | Mean, 5%, 50%,95% UPT
+UE Speed | 3km/h
+CQI/PMI reporting interval and frequency granularity | 5ms for CQI/PMI, 6RB
+Feedback scheme | Rel-12 enhanced CSI feedback, PUSCH mode 3-22Tx codebook, 16Tx FD-MIMO codebookCQI, PMI and RI reporting triggered per 5msFeedback delay is 5 ms
+Transmission scheme | Non-coherent JT with single PDCCH/PDSCH
+Scheduler | Proportional Fair
+Overhead | 3 symbols for DL CCHs, 2 CRS ports and DM-RS with 12 REs per PRB
+Backhual | Ideal backhaul
+Receiver | MMSE-IRC and SIC
+HARQ Scheme | Chase Combining
+Maximum number of retransmissions | 3
+Channel estimation | Non-ideal modeling of channel estimation error modeling [FIG:407f9707956bc903761a] is used,based on CSI-RS for channel measurements, based on DMRS for data demodulation, based on IMR for interference measurement
+
+Table 6 Configurations for link level simulation
+
+Configurations | Value
+Number of PRB | 100 with frequency interleaving (both baseline and enhanced schemes)
+Channel Model | CDL-A
+Antenna configuration | 4Tx, 2Rx
+Carrier frequency | 4 GHz
+Subcarrier space | 15 kHz
+Scenario | interference varying (dynamic TDD) | High speed
+MCS | (1/2, 64QAM) + OLLA | (1/2, 16QAM) + OLLA
+Number of symbol for Control | 2 | 2
+Number of Layer | Rank adaption | Rank adaption
+DM-RS pattern | [FIG:67f5f2dd132436689369] | [FIG:ec3386d7e6c5ea8cdff3]
+UE velocity | 3km | 300km/500km

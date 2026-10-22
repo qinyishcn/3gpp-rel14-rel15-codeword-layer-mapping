@@ -1,0 +1,3 @@
+WF on CW to resource mapping 3GPP TSG RAN WG1 Meeting #89 R1-1709313 Hangzhou, China, 15th – 19th May, 2017 Agenda Item: 7.1.2.1.1 ZTE, Huawei , HiSilicon , NTT DOCOMO, Xinwei , ASTRI
+
+Proposal 1 Support configurable mapping order for modulated symbol stream to the allocated resource associated with a CW At least the following schemes can be considered as the candidates Layer Frequency Time Layer Time Frequency Time Frequency  Layer Frequency  Layer  Time FFS: Configuration signaling e.g. RRC, DCI

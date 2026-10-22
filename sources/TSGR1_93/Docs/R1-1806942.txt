@@ -1,0 +1,134 @@
+3GPP TSG RAN WG1 Meeting #93 R1-1806942
+
+Busan, Korea, May 21th – 25th, 2018
+
+Source: Sharp
+
+Title: Open issue on codeword mapping
+
+Agenda Item: 7.1.2.1.1; Multi-antenna scheme; Codeword mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In the last meeting, RAN1 made progress on remaining issues corresponding to transport block (TB) to codeword (CW) mapping. Sufficient agreement obtained to clarify mapping of logical channel entity to physical channel. The agreement reflected to 38.214 already but that for 38.212 is yet to capture. In this contribution we discuss preferable approach to complete corresponding specification.
+
+TB to CW mapping
+
+At RAN1#92bis, the following agreement was made for TB to CW mapping [1].
+
+AgreementFor TB to CW mapping:2-TB: TB1 CW0, TB2 CW11-TB: always mapped to CW0Section 5.1.3.2 of TS38.214In case the higher layer parameter Number-MCS-HARQ-DL-DCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if IMCS=26 and if [EQ:aa1667528165318c36b5] for the corresponding transport block, otherwise the transport block is enabled.For the PDSCH assigned by a PDCCH with DCI format 1_0/1_1 with CRC scrambled by C-RNTI, if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' is configured and [FIG:a0776501877326bae23b] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' configured and [FIG:12e5235a6c6304f171b2] , the UE shall, except if the transport block is disabled in DCI format 1_1, first determine the TBS as specified below:AgreementFor TB to CW mapping:2-TB: TB1 CW0, TB2 CW11-TB: always mapped to CW0Section 5.1.3.2 of TS38.214In case the higher layer parameter Number-MCS-HARQ-DL-DCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if IMCS=26 and if [EQ:2f9f2bc951833eb187e4] for the corresponding transport block, otherwise the transport block is enabled.For the PDSCH assigned by a PDCCH with DCI format 1_0/1_1 with CRC scrambled by C-RNTI, if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' is configured and [FIG:d334f17e96d8af9f2662] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' configured and [FIG:808ab7a1c394d97ea4d0] , the UE shall, except if the transport block is disabled in DCI format 1_1, first determine the TBS as specified below:
+
+Captured text for TS38.214 indicates CW disabling scheme to use particular combination of IMCS and rvid. On the other hand, so far no text in TS38.212 represents TB to CW mapping. The mapping rule is same as the one in LTE using DCI format 2C, therefore it is straight forward to inherit specification text from corresponding description. Our proposed modification on TS38.212 is as following:
+
+Text Proposal for section 7.3.1.2.2 of TS38.212 (based on R1-1805794):
+
+Unaffected parts omitted…
+
+The following information is transmitted by means of the DCI format 1_1 with CRC scrambled by C-RNTI:
+
+- Identifier for DCI formats – 1 bits
+
+- The value of this bit field is always set to 1, indicating a DL DCI format
+
+- Carrier indicator – 0 or 3 bits as defined in Subclause x.x of [5, TS 38.213].
+
+- Bandwidth part indicator – 0, 1 or 2 bits as determined by the number of DL BWPs [FIG:c51159da2bd17ec8db54] configured by higher layers. The bitwidth for this field is determined as [FIG:dcaa22a776e7aec5b1a8] bits, where
+
+- [FIG:cd421e1175fe00b74a32] if [FIG:cf08db66bcac3f33f449] , in which case the bandwidth part indicator is equivalent to the higher layer parameter BWP-Id;
+
+- otherwise [FIG:941ea90a7a6441a9ecbd] , in which case the bandwidth part indicator is defined in Table 7.3.1.1.2-1.
+
+- Frequency domain resource assignment – number of bits determined by the following, where [FIG:649951daa9a56a216e9f] is the size of the active DL bandwidth part:
+
+- [FIG:1fefe8189e8edf68d52c] bits if only resource allocation type 0 is configured, where [FIG:d889dbd06564bf73fcfe] is defined in Subclause 5.1.2.2.1 of [6, TS38.214],
+
+- [FIG:58c489c7616196793231] bits if only resource allocation type 1 is configured, or
+
+- [FIG:23dea8bf97c4873d64bf] bits if both resource allocation type 0 and 1 are configured.
+
+- If both resource allocation type 0 and 1 are configured, the MSB bit is used to indicate resource allocation type 0 or resource allocation type 1, where the bit value of 0 indicates resource allocation type 0 and the bit value of 1 indicates resource allocation type 1.
+
+- For resource allocation type 0, the [FIG:c0820893f611b79d68fb] LSBs provide the resource allocation as defined in Subclause 5.1.2.2.1 of [6, TS 38.214].
+
+- For resource allocation type 1, the [FIG:0796558f78c4af0feede] LSBs provide the resource allocation as defined in Subclause 5.1.2.2.2 of [6, TS 38.214]
+
+- Time domain resource assignment – 0, 1, 2, 3, or 4 bits as defined in Subclause 5.1.2.1 of [6, TS 38.214]. The bitwidth for this field is determined as [FIG:0b9cfacc7ec12ea5d7aa] bits, where I is the number of entries in the higher layer parameter pdsch-AllocationList.
+
+- VRB-to-PRB mapping – 0 or 1 bit:
+
+- 0 bit if only resource allocation type 0 is configured;
+
+- 1 bit according to Table 7.3.1.1.2-33 otherwise, only applicable to resource allocation type 1, as defined in Subclause 7.3.1.6 of [4, TS 38.211].
+
+- PRB bundling size indicator – 0 bit if the higher layer parameter prb-BundlingType is not configured or is set to 'static', or 1 bit if the higher layer parameter prb-BundlingType is set to 'dynamic' according to Subclause 5.1.2.3 of [6, TS 38.214].
+
+- Rate matching indicator – 0, 1, or 2 bits according to higher layer parameter rateMatchPattern.
+
+- ZP CSI-RS trigger – 0, 1, or 2 bits as defined in Subclause 5.1.4.2 of [6, TS 38.214]. The bitwidth for this field is determined as [FIG:013c4409d961ef475a79] bits, where [FIG:982939fe11e602c5a08f] is the number of ZP CSI-RS resource sets in the higher layer parameter zp-CSI-RS-Resource.
+
+For transport block 1:
+
+- Modulation and coding scheme – 5 bits as defined in Subclause 5.1.3.1 of [6, TS 38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+For transport block 2 (only present if Number-MCS-HARQ-DL-DCI equals 2):
+
+- Modulation and coding scheme – 5 bits as defined in Subclause 5.1.3.1 of [6, TS 38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+- HARQ process number – 4 bits
+
+- Downlink assignment index – number of bits as defined in the following
+
+- 4 bits if more than one serving cell are configured in the DL and the higher layer parameter pdsch-HARQ-ACK-Codebook=dynamic, where the 2 MSB bits are the counter DAI and the 2 LSB bits are the total DAI;
+
+- 2 bits if only one serving cell is configured in the DL and the higher layer parameter pdsch-HARQ-ACK-Codebook=dynamic, where the 2 bits are the counter DAI;
+
+- 0 bits otherwise.
+
+- TPC command for scheduled PUCCH – 2 bits as defined in Subclause 7.2.1 of [5, TS 38.213]
+
+- PUCCH resource indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS 38.213]
+
+- PDSCH-to-HARQ_feedback timing indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS 38.213]
+
+- Antenna port(s) – 4, 5, or 6 bits as defined by Tables 7.3.1.2.2-1/2/3/4, where the number of CDM groups without data of values 1, 2, and 3 refers to CDM groups {0}, {0,1}, and {0, 1,2} respectively. The antenna ports [FIG:6987177bdfcd1d87135c] shall be determined according to the ordering of DMRS port(s) given by Tables 7.3.1.2.2-1/2/3/4.
+
+- Transmission configuration indication – 0 bit if higher layer parameter tci-PresentInDCI is not enabled; otherwise 3 bits as defined in Subclause 5.1.5 of [6, TS38.214].
+
+- SRS request – 2 bits as defined by Table 7.3.1.1.2-24 for UEs not configured with SUL in the cell; 3 bits for UEs configured SUL in the cell where the first bit is the non-SUL/SUL indicator as defined in Table 7.3.1.1.1-1 and the second and third bits are defined by Table 7.3.1.1.2-24. This bit field may also indicate the associated CSI-RS according to Subclause 6.1.1.2 of [6, TS 38.214].
+
+- CBG transmission information (CBGTI) – 0, 2, 4, 6, or 8 bits as defined in Subclause 5.1.7 of [6, TS38.214], determined by the higher layer parameters maxCodeBlockGroupsPerTransportBlock and Number-MCS-HARQ-DL-DCI for the PDSCH.
+
+- CBG flushing out information (CBGFI) – 0 or 1 bit as defined in Subclause 5.1.7 of [6, TS38.214], determined by higher layer parameter codeBlockGroupFlushIndicator.
+
+- DMRS sequence initialization – 0 or 1 bit for [FIG:501a86f59593b5b325d1] selection defined in Subclause 7.4.1.1.1 of [4, TS 38.211].
+
+If Number-MCS-HARQ-DL-DCI equals 2 and both transport blocks are enabled, transport block 1 is mapped to codeword 0; and transport block 2 is mapped to codeword 1. In case one of the transport blocks is disabled as specified in section 5.1.3.2 of [TS38.214], the transport blocks to codeword mapping is specified according to Table X.
+
+Table X: Transport block to codeword mapping
+(one transport block enabled)
+
+transport block 1 | transport block 2 | codeword 0
+(enabled) | codeword 1
+(disabled)
+enabled | disabled | transport block 1 | -
+disabled | enabled | transport block 2 | -
+
+Unaffected parts omitted…
+
+Conclusion
+
+In this contribution we discuss the codeword mapping related open issue and preferable approaches to complete corresponding specifications.
+
+References
+
+“RAN1 Chairman’s Notes”, RAN1#92bis

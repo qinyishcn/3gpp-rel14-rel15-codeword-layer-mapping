@@ -1,0 +1,110 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702187
+
+Athens, Greece 13th - 17th February 2017
+
+Source: Intel Corporation
+
+Title: Further study on the number of codewords for NR
+
+Agenda item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN#87, it was agreed to study the number of codewords (CWs) and codeword-to-MIMO layer mapping issue for NR [1]:
+
+Agreements:The number of codeword(s) per one scheduled physical data channel in NR both for DL and ULFor 1-2 MIMO layers – FFS between 1 codeword and 2 codewordsFor 3-8 MIMO layers FFS among Alt 1: 1 codeword Alt 2: 2 codewords Alt 3: >= 3 codewordsStudy the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.Study possible use of different modulations in single codewordStudy the possibility of configurable number of codewords per UE by NW
+
+In this contribution we provide our study results for the number of CWs in NR mainly focusing on the SU-MIMO and NC-JT scenarios with 2 MIMO layers. We include additional evaluations results for NC-JT for UE with 2Rx antennas.
+
+Discussion
+
+SU-MIMO performance
+
+As discussed in [2] the number of CWs affect link adaptation accuracy on MIMO layers. More specifically, if the MIMO layers has substantial difference in the received SINR, the transmission efficiency can be improved by independent selection of the MCS per MIMO layer in case of multiple CWs. On the other hand considering beam based operation for data transmission in NR, two MIMO layers in most of the cases will be transmitted using the same beam from the same TRP using orthogonal polarizations. In this case the for the 2 MIMO layer transmission the expected SINR difference on MIMO layers may not be significant to justify multiple CWs and single CW for 2 MIMO layer may be already sufficient.
+
+LTE 2 layers | Proposed NR 2 layers
+[FIG:52dbd3aa2e0dda1d416b] | [FIG:83fee7496fe0bb92c978]
+
+Figure 1: CW-to-MIMO layer mapping options for 2 MIMO layers
+
+To evaluate the performance difference between single CW and multiple CW options a system-level simulation were carried out for SU-MIMO transmission scheme with maximum of two MIMO layers. MMSE receiver was used for demodulation of the signal received from two MIMO layers. The summary of the packet throughput results is provided in Table 1 for different traffic loading factors.
+
+From the presented results, it can be seen that for MMSE receiver single CW provides slightly better performance comparing to two CWs case, mainly due similar SNR after MIMO equalization and due to more robust link adaptation. It should be also noted that a similar performance difference should be also observed for the R-ML/SLIC receivers where the effective SINR difference on MIMO layers is similar to MMSE for spatially uncorrelated channels.
+
+Table 1: SU-MIMO performance with SCW and MCW for maximum of 2 MIMO layers (MMSE-IRC)
+
+lambda, 1/s | 5%-tile UPT, Mbps | 50%-tile UPT, Mbps | 95%-tile UPT, Mbps | Average UPT, Mbps | RU
+ | 2 CWs | 1 CW | 2 CWs | 1 CW | 2 CWs | 1 CW | 2 CWs | 1 CW | 2 CWs | 1 CW
+60/54 | 9.61 | 10.07 (5%) | 24.99 | 25.8 (3%) | 55.24 | 55.44 (0%) | 27.55 | 28.67 (4%) | 16% | 15%
+80/54 | 7.29 | 7.81 (7%) | 20.95 | 22.06 (5%) | 50.08 | 54.26 (8%) | 23.26 | 24.5 (5%) | 25% | 24%
+100/54 | 5.37 | 5.79 (8%) | 16.99 | 18.06 (6%) | 43 | 46.02 (7%) | 19.41 | 20.58 (6%) | 35% | 33%
+120/54 | 3.61 | 3.96 (10%) | 13 | 13.98 (8%) | 35.74 | 38.84 (9%) | 15.49 | 16.59 (7%) | 47% | 44%
+
+NC-JT performance
+
+In this section we study support of NC-JT for two MIMO layers. For evaluation the indoor deployment scenario was considered that showed the promising gains. According to this scenario, the UEs are dropped uniformly within a single floor building with eight small cells located at the ceiling of the floor. The floor plan of the evaluated scenario is depicted in Figure 2, where the black points correspond to the deployed indoor small cells. The UE may receive DM-RS antenna ports not only from the serving TRP but also from the neighbouring TRP without joint pre-coding.
+
+In the simulations, each small cell was equipped with two antennas (CSI-RS antenna ports) arranged into one cross-polarized (X-Pol) antenna groups with ±45° polarization slants in each group. Each UE was equipped with two and four receive antennas arranged into one and two X-Pol configurations respectively with 0° and 90° polarization slants in each group.
+
+[FIG:4765fb7e7d1447277ebd]
+
+Figure 2: Illustration of deployment scenario used in the evaluations
+
+Non-full buffer traffic model was considered for the evaluation with file size of 0.5Mbytes. The packet arrival rate was selected in such way to achieve different RU. The remaining simulation assumptions can be found in [3], except both 2 and 4 Rx antenna UEs are now considered for NC-JT evaluations.
+
+Table 2 shows probability NC-JT mode selection with different number of MIMO layers. The packet arrival rates used for collection of the statistics are 5, 10, 15 and 20 packets per second and corresponds to the cases where most of the NC-JT performance gains are observed [3]. It can be seen from Table 2 that for two antenna port case for all considered traffic loading factors the transmission of total two DM-RS antenna ports (2 MIMO layers) with NC-JT is not frequently used. In this case the NC-JT optimization, such as support of two CWs, is not required for two MIMO layers and should be considered only for the three and four MIMO layers.
+
+Table 2: Number of MIMO layers for NC-JT
+
+lambda, 1/s | RU | NC-JT ratio with 2 MIMO layers | NC-JT ratio with 3,4 MIMO layers
+5 | 6% | 1% | 99%
+10 | 15% | 2% | 98%
+15 | 23% | 4% | 96%
+20 | 38% | 8% | 92%
+
+Table 3 shows probability NC-JT mode selection with different number of MIMO layers. The packet arrival rates used for collection of the statistics are 5 and 10 packets per second. It can be seen from Table 3 that for two antenna port case for all considered traffic loading factors the transmission of total two DM-RS antenna ports (2 MIMO layers) with NC-JT is not frequently used. In this case the NC-JT optimization, such as support of two CWs, is not required for two MIMO layers.
+
+Table 3: Number of MIMO layers for NC-JT
+
+lambda, 1/s | RU | NC-JT ratio with 1 MIMO layer | Other cases
+5 | 6% | 7% | 93%
+10 | 25% | 14% | 86%
+
+Summarizing the discussion above the following proposal can be made:
+
+Proposal:
+
+Two MIMO layers are supported with single CW
+
+Summary
+
+In this contribution we provide our study results for the number of CWs focusing on the SU-MIMO and NC-JT scenarios with maximum of two MIMO layers. We include the evaluation results for NC-JT for UE with h2 Rx antennas. Based on the performance results it has been observed that two MIMO layers should be supported with single CW.
+
+References
+
+Chairman’s notes for RAN1#87, 3GPP TSG RAN WG1 Meeting #87, Reno, USA 14th - 18th November 2016.
+
+R1-1609524, Study on QCL for DM-RS antenna ports, Intel Corporation 3GPP TSG RAN WG1 Meeting #86bis, Lisbon, Portugal 10th - 14th October 2016.
+
+Appendix
+
+Parameter for SLS | Value
+Scenario | Urban macro
+Layout | Single layer: Macro layer: Hex. Grid
+Channel model | 3D UMa, ISD = 500 m
+Carrier frequency | 4 GHz
+Simulation bandwidth | 10 MHz per CC
+Tx power | BS: 44 dBm PA scaled down with simulation BW when system BW is higher than simulation BW.
+UE distribution | 80% Indoor / 20% Outdoor Uniform
+BS antenna configuration | 8x2x2 URA X-pol, slants -45/+45 degree, 1x1x2 TXRU layout0.5-wavelength horizontal spacing0.8-wavelength vertical spacing
+UE antenna configuration | 2 Rx, slant 0/90 degrees
+Traffic model | FTP 1
+TRP association | RSRP basedHandover margin = 3dB
+CSI feedback | 2 port codebook
+Transmission mode | DM-RS based SU-MIMO
+Scheduling | Proportional Fair
+OLLA | 10% BLER target
+UE receiver | MMSE-IRC
+Max HARQ transmissions | 4

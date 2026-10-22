@@ -1,0 +1,168 @@
+3GPP TSG RAN WG1 Meeting #90bis R1-1717295
+
+Prague, Czech Republic, 9 -13 October 2017
+
+Agenda Item: 7.2.1.1
+
+Source: Huawei, HiSilicon
+
+Title: Remaining details of codeword mapping in NR
+
+Document for: Discussion and decision
+
+Introduction
+
+The agreements on codeword to layer mapping are as below:
+
+In the meeting of RAN1 NR#3 [1]:
+
+Agreements:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+According to the latest agreements, for DL/UL CP-OFDM waveform transmission, the mapping order follows the scheme used in LTE, and for DFT-s-OFDM waveform transmission without frequency hopping, the REs are mapped along subcarriers then OFDM symbols. In addition, no symbol-level interleaving is supported in Rel-15 NR. In this contribution, the analysis is given on the remaining issues of codeword to layer mapping.
+
+Mapping scheme for uplink DFT-s-OFDM
+
+There are three options for mapping ordering in the case of DFT-S-OFDM case as follows:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Although Option-2 is observed with best performance (also shown the performance comparison in the appendix) due to the gain of frequency hopping and time diversity gain, in AH_NR#3 meeting, Option-1 and Option-3 are left for further down-selection.For illustrative purpose, the above 2 options with frequency hopping is shown in figure 1 & 2.
+
+[FIG:39682dd0c472a7a7a4fa]
+
+Figure 1. Three possible examples of PUSCH CW-to-RE mapping schemes with frequency hopping
+
+[FIG:87adb7197d0c79e4602f]
+
+Figure 2. Possible example of PUSCH CW-to-RE mapping schemes with different length of 2 hops
+
+In option 1, the modulated symbols from the same code block (CB) are concentrated in one or several OFDM symbols. However, it may not be able to obtain neither frequency hopping nor diversity gain because one CB is highly possible mapped into only one of the hops.
+
+In option 3, each code block is distributed in different hops which can obtain frequency hopping and time diversity gain (since the CB is distributed in time domain in different hops). However, one issue of Option-3 is that the different hops may correspond to different length. So, some CBs will be mapped into the different hops, but some CBs will be only mapped in one hop if the other hop is full. An example is illustrated in figure 2 that CB 3 of option 3 is only mapped into 2nd hop. That means only some CBs have the hopping gain but some CBs have not. Then, the corresponding CQI will be mismatched for different CBs. Another problem is the different mapping scheme for different CB will increase the complexity for decoding at UE side.
+
+Through the above analysis, the pros and cos of 2 possible mapping schemes can be summarized in table I. In the table, “√” means positive and “×” means negative.
+
+Table I. Summary of 3 possible examples of PUSCH CW-to-RE mapping schemes
+
+Scheme | Time diversity gain | Frequency hopping gain | Implementation | A little less delay for decoding
+Option 1 | × | × | √ | √
+Option 3 | √ | √ | × | ×
+
+In this contribution, we also provide the simulation results for the comparison between Option-1 and Option-3, where performance of Option-2 is also provided for reference. In the simulation, the gap between the two hops is set to 100PRBs, where the DMRS pattern in each hop is given in Fig.3 in appendix. The slot structure and DMRS locations used under 3km/h and 240km/h are listed in figure 3 respectively. Other parameters can be referred to the table I in appendix.
+
+The detailed simulation results are given in Fig.4 and Fig.5 in the appendix for 3km/h and 240km/h, respectively. In the simulations, we can see Option-2 is the beast performance due to the frequency hopping gain and time diversity gain. Then, from the comparison between Option-1 and Option-3, Option-3 is better performance than Option-1, since part of frequency hopping gain and part of time diversity gain can be obtained in Option-3.
+
+Based on the above analysis and simulation, we have the following observations on the above options.
+
+Observation 1: Option1 is advantageous in implementation and decoding latency.
+
+Observation 2: Option3 could obtain better performance than Option 1.
+
+Number of codewords for NCJT
+
+In earlier meetings, the codeword to layer correspondence is agreed to use at least a default scheme that when the layer number L > 4, the 1st [FIG:609e2b143e33322f5d0f] layers are mapped to the CW0, and the remaining layers are mapped to the CW1. Moreover, whether NR supports 2 codewords when the layer number is 3 or 4 is for further studied.
+
+The default layer correspondence scheme is a very simple and stable mechanism that both TRP and UE know exactly how to map or de-map between CWs and layers, without relying on additional signaling. The default scheme tries to equally split multiple layers as much as possible onto 2 CWs when L>4. One may argue that such a scheme may not achieve the best performance all the time. For example in a high-rank SU-MIMO transmission case, the channel quality for each spatially multiplexed data layer can be different from each other. When there are two CWs available, those layers with better channel quality are mapped to one CW, and the rest layers are mapped to the other CW. Then the first CW can have higher MCS and coding rate for much better spectrum efficiency. And the second CW can have a relatively low MCS and coding rate to guarantee a low error rate. If the number of layers with better channel quality are very different from the layers with poor channel quality, the performance can be optimized if the number of layers mapped to each codeword can be dynamically configured.
+
+However, the necessity of configurable layer split scheme may be challenged by the following three issues in general:
+
+Issue 1: The possibility of the transmission cases in practice, which at least satisfies the following three conditions at the same time:
+
+SU-MIMO with high rank (L>4)
+
+Most probably in low frequency band (low rank expectation in HF band)
+
+The channel quality for some data layers are very different from the rest
+
+Issue 2: The difficulty and complexity for gNB to obtain the accurate channel quality information layer-by-layer, because:
+
+The CQI is reported CW-by-CW
+
+The PMI is codebook based without ordering.
+
+Issue 3: The performance gain of dynamic split scheme may be still limited compared to the default scheme
+
+A mapping corresponding scheme proposed in [2] has following two main difference compared to the agreed mapping correspondence scheme:
+
+For the layer number 6 and 5, the 2 CWs mapping can be [4, 2] and [4, 1] respectively.
+
+For the layer number L > 4, the mapping of layer numbers to 2 CWs can be flexible with an index indication.
+
+However, such a mapping scheme still have some problems. First, the extra signaling/reporting overhead. In [4], the extra mapping options proposed for [8, 7, 6, 5] – layers are [35, 35 15, 5] respectively. Assuming they share a common indication field for different data layer cases, at least 6 bits for 35 options is needed. Second, a complex handshake mechanism may be needed. After UE taking the measurements on each data layer, it may have a recommendation to gNB with at least 6 bits index indication. Once the gNB received the recommendation, it may or may not override it, so an ‘Ack/Nack’ may be needed. Then if gNB does override the UE’s recommended mapping option, the gNB still needs to use 6 bits to notify UE the option chosen by the gNB. Otherwise, the UE has no idea what mapping option the gNB used with the reception of ‘Nack’. Thirdly, the risk of jam UE. A jam UE may report a completely wrong option, and it is actually difficult for gNB to tell the difference. If the gNB follows the UE’s recommendation, the network resources may be wasted.
+
+Therefore, for the single TRP transmission, the above mapping scheme has many problems and limited use cases which can receive the benefit. As for multi-TRPs transmission, it is even unlikely to schedule more than 4 layers as the UE location is usually around the cell edge. Considering the limited use cases and the significantly increased complexity, the additional layer correspondence scheme seems not necessary for codeword to layer mapping.
+
+Observation 3: It is not necessary to support the configurable layer correspondence scheme for codeword to layer mapping for layer number L >4.
+
+On the other hand, under the use cases of NCJT (non-coherent joint transmission), the UE is normally not in the cell center, so the total data layers L are usually less than 4. According to already agreed layer mapping scheme, only 1 codeword can be scheduled when data layer L ≤4. But different layers of the UE may be from different TRPs, in which case the antenna ports (DMRS ports) of different TRPs are considered as non-QCLed, and the channel quality can be very different for the links from different TRPs.
+
+In such cases, a common CQI and MCS are not sufficient to tell the difference of these non-QCLed transmission links. If an average MCS and coding rate is configured, the link with better quality cannot reach its full spectrum efficiency, and the link with poor quality may have a high probability of decoding error. With the adaptive algorithm, the MCS and coding rate may eventually be adjusted to meet the channel condition of the link with poor quality. Then the overall system performance is far from expectation. Thus, it is desirable that the system performance will be significantly enhanced by two separate CQIs feedback and two separate MCSs.
+
+Since both single-PDCCH and multi-PDCCH are agreed as options for multi-TRP transmission, some UEs may only support single PDCCH. In such cases with single PDCCH in multi-TRPs transmission, different link from different TRP, i.e., DMRS port group, requires separate CWs for CQI feedback and MCS indication. Therefore, separate CW to different DMRS port group, i.e., from different TRPs, should be supported.
+
+Proposal 1: NR should support separate CW for different DMRS port group for the data layer L≤4 with single PDCCH.
+
+Conclusion
+
+In this contribution, we have the following observations and proposals:
+
+Observation 1: Option1 is advantageous in implementation and decoding latency.
+
+Observation 2: Option3 could obtain better performance than Option 1.
+
+Observation 3: It is not necessary to support the configurable layer correspondence scheme for codeword to layer mapping for layer number L >4.
+
+Proposal 1: NR should support separate CW for different DMRS port group for the data layer L≤4 with single PDCCH.
+
+References
+
+3GPP RAN1 NR#3, Nagoya, Japan, September 18-21, 2017.
+
+R1-1716147, AT&T, Codeword to Layer Mapping for DL and UL data channels, 3GPP RAN1 AH_NR#3, Nagoya, Japan, September 18 - 21, 2017.
+
+Appendix
+
+Table-I Link-level simulation parameters
+
+Parameter | Value
+Carrier Frequency | 4 GHz
+Sub-carrier spacing | 15 KHz
+Channel Model | CDL-A with 1000ns delay
+Velocity | 3km/h, 240km/h
+gNB Antenna Configuration | 4Rx cross polarized array with 0.5λ antenna spacing
+UE Antenna Configuration | 2Tx non- cross polarized with 0.5λ antenna spacing
+Waveform | DFT-s-OFDM
+Modulation order | 16QAM,64QAM
+Coding Rate | 0.75, 0.53
+Signal Bandwidth | 50RBs
+Channel Estimation | Non-Ideal
+Receiver | MMSE receiver
+CW number | 1
+Layer number | 1
+Rank Adaption | No
+
+[FIG:7406bcaf63a2ba3e3495]
+
+Figure 3. The slot structure and DMRS location in the simulation with frequency hopping
+
+[FIG:42a463ccb78f0d7451d7] [FIG:e3af7fc5b4f1f0c98733]
+
+Figure 4. Performance comparison between 3 options with frequency hopping under 3km/h
+
+[FIG:0446574fc755e47c3372] [FIG:27ce3abdd1ae50661469]
+
+Figure 5. Performance comparison between 3 options with frequency hopping under 240km/h

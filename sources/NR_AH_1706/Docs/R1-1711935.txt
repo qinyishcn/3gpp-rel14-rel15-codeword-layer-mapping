@@ -1,0 +1,219 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1711935
+
+Qingdao, China, 27th – 30th June 2017
+
+Agenda item: 5.1.2.1.1
+
+Source: Samsung
+
+Title: Summary of Open Issues on Layer Mapping
+
+Document for: Discussion
+
+Introduction
+
+The current agreement on layer mapping can be summarized as follows:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 4-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:cd00d55928a65a80ab02] layers CW0 and remaining layers CW1
+
+FFS: other correspondence schemes
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+Signaling (DCI and UCI) design related issues:
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UE
+
+FFS details
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme
+
+In addition, the following working assumption was made:
+
+Support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes
+
+This contribution summarizes the views of different companies (inferred from the submitted contributions) on the following open issues.
+
+CW-layer correspondence
+
+Mapping order
+
+Support for frequency interleaving
+
+Signaling design
+
+CW-layer correspondence
+
+Based on the available proposals (in [1] –[15]), AT&T, Intel, CATT, and LG propose to support at least one additional CW-layer correspondence. The current status can be summarized as follows:
+
+Some companies argue that the main reason for introducing at least one additional CW-layer correspondence is to address multi-TRP scenarios. In addition, AT&T argues that allowing some flexibility in configuring CW-layer correspondence based on some UE feedback increases system throughput.
+
+Among companies that propose such, there is not yet a single unified proposal. For instance, some propose a limited number of supported schemes while others propose a fully flexible correspondence wherein a UE can be configured with a restricted subset of possible correspondence schemes.
+
+Qualcomm, Huawei, Ericsson expressed opposition against introducing additional CW-layer correspondence
+
+Mapping order
+
+Based on the available proposals (in [1] –[15]), three main proposals can be identified and summarized in Table 1.
+
+Table 1
+
+Proposal | Proponents
+Confirm working assumption of Layer Frequency Time (LFT) order without any additional mapping order | AT&T, Ericsson, Qualcomm, Samsung
+In addition to LFT, support (at least) LT F | Huawei, HiSi, NTT DOCOMO, ETRI, ZTE
+In addition to LFT, support Layer group 1 Frequency Time Layer group 2 Frequency Time, where each layer set corresponds to a CB group | MediaTek, Motorola/Lenovo, Xinwei, ZTE
+
+Observation:
+
+All companies seem to agree on confirming the working assumption of LFT mapping order
+
+No consensus on adding another mapping order (some companies are against)
+
+Among the companies that propose an additional mapping order, no clear majority on the scheme
+
+Frequency interleaving
+
+Based on the available proposals (in [1] –[15]), a summary is given in Table 2.
+
+Table 2
+
+Scheme | Proponents
+No frequency interleaver | AT&T, CATT
+Per-OFDM-symbol interleaver only for special cases (conditional, e.g. small CB size with large allocation) | Samsung
+Per-OFDM-symbol interleaver, either used all the time or conditionally | Ericsson, NTT DOCOMO, Qualcomm, Xinwei
+Multi-OFDM-symbol interleaver | Huawei, HiSi, ETRI, Motorola, Lenovo
+Configurable interleaver (to match configurable layer mapping) | ZTE
+
+Observation:
+
+Company positions haven’t changed much from the last meeting
+
+No clear majority among different positions
+
+Among those that propose the support of frequency interleaver, there is no consensus
+
+DCI design
+
+At least one company points out that the maximum number of layers the UE can receive (DL) should be signaled by the gNB to the UE, e.g. via higher layer signaling. This information determines the DCI (MCS and HARQ-related fields) and CSI (e.g. 1 or 2 CQIs) payload.
+
+Based on the above summary, the following proposal may be feasible:
+
+The maximum number of layers [EQ:d550624847085432ada1] the UE can receive (DL) is signaled to the UE via higher-layer signaling
+
+When [EQ:0595b4782c877db18ca9] ≤ 4, the associated DL-related DCI includes 1 MCS field and UCI includes 1 CQI
+
+Else, the associated DL-related DCI includes 2 MCS fields and UCI includes 2 CQIs
+
+Current list of way forwards
+
+The following list of codeword mapping way forwards has been circulated:
+
+R1-1711777 WF on CW to layer mapping scheme for data channels
+
+Qualcomm, ATT, Ericsson, Samsung, Nokia, ASB, CATT, Interdigital, Intel, Sharp, Verizon, BT, CHTTL, Panasonic, NEC, KDDI
+
+Proposals
+
+For DL data channel, confirm the working assumption where the modulated symbol stream associated with a codeword (CW) is mapped to the allocated resource using only the following order:
+
+first across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL.
+
+R1-1711662 WF on CW to layer mapping Huawei, HiSilicon, ZTE, Xinwei, China Unicom, ETRI, Softbank, DOCOMO, LGE, Deutsche Telekom, CATR
+
+Also supported by Lenovo, MotMob
+
+Proposals
+
+At least following mapping ordering is supported within a group of symbols:
+
+Layer timefrequency
+
+FFS on the size of the group of symbols (e.g. slot, mini-slot)
+
+Offine agreements
+
+Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenarios
+
+Practical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.
+
+For both CP-OFDM and DFT-S waveforms
+
+Evaluation should be done considering both slot and mini-slot.
+
+R1-1711664 WF on number of MCS and CQI configuration Intel, Samsung
+
+Offline agreements
+
+NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCH
+
+FFS HARQ ID
+
+Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layers
+
+NR supports higher layer signalling for the maximum number of CQIs in UCI
+
+Unless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI report
+
+FFS subband CQI
+
+FFS Whether or not the actual number of CQIs is also RI dependent
+
+Note: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)
+
+FFS applicability on single/multi TRP
+
+R1-1711665 WF on MIMO layer to CW correspondence Intel
+
+R1-1711793 WF on codeword mapping MediaTek
+
+References
+
+R1-1709904, Discussion on Remaining Details of Codeword to Layer Mapping, Beijing Xinwei Telecom Techn.
+
+R1-1710050, On codeword mapping, CATT
+
+R1-1710175, Codeword mapping and interleaving, ZTE, ZTE Microelectronics
+
+R1-1710255, Remaining details on DMRS ports and number of layers indication, NEC Corporation
+
+R1-1710275, Discussion on codeword mapping, LG Electronics
+
+R1-1710426, Remaining details of codeword mapping for NR MIMO, AT&T
+
+R1-1710446, Codeword to layer mapping in NR, Huawei, HiSilicon
+
+R1-1710517, Remaining details on CW to MIMO layer mapping, Intel Corporation
+
+R1-1710594, On codeword to RE mapping scheme, Lenovo, Motorola Mobility
+
+R1-1710611, Discussion on codeword to mapping, Lenovo, ETRI
+
+R1-1710642, Finalizing Layer Mapping, Samsung
+
+R1-1710815, Codeword mapping in NR, MediaTek Inc.
+
+R1-1711007, CW to layer mapping for DL and UL, Ericsson
+
+R1-1711072, Discussion on codeword mapping, NTT DOCOMO, INC.
+
+R1-1711152, CW-to-layer mapping and frequency domain interleaving, Qualcomm Incorporated

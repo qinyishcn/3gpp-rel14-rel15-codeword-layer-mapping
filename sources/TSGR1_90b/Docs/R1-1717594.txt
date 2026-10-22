@@ -1,0 +1,55 @@
+3GPP TSG RAN WG1 90bis R1-1717594
+
+Prague, CZ, 9th – 13th, October 2017
+
+Agenda item: 7.2.1.1
+
+Source: Samsung
+
+Title: Finalizing Layer Mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 NR-AH3, it was decided that frequency-first RE mapping used for DFT-SOFDM without intra-slot frequency hopping [1]. The only open issue on layer mapping is the RE mapping for DFT-SOFDM with intra-slot frequency hopping where one of the two following alternatives will be chosen:
+
+[Option 1] FTSS: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+[Option3] FSST: the modulated symbols are first mapped across sub-carriers, the across sub-slots (occupying different sets of PRBs), then across DFT-SOFDM symbols within a sub-slot
+
+This contribution addresses this issue.
+
+RE mapping for DFT-SOFDM with frequency hopping
+
+When intra-slot frequency hopping (across two sub-slots) is used, the number of alternatives increases since an additional dimension is available for RE mapping: sub-slot. Compared to Option 1 (which seems more natural), Option 2 offers some additional time-frequency diversity gain in scenarios such as:
+
+High UE speed
+
+Very small number of CBs per TB (especially one CB), and/or small CB size
+
+That is, for small CB size and high UE speed, each CB can benefit from the time-frequency diversity offered by frequency hopping especially for smaller resource allocation (RA) size and/or frequency non-selective channels.
+
+Upon a closer look, however, the additional time-frequency diversity may not translate to any substantial gain in typical system deployment at least for the following reasons:
+
+For the cases where DFT-SOFDM is envisioned to apply, SINR is low and the gains from frequency diversity (if any) from frequency hopping are expected to be offset by the loss in channel estimation as DMRS interpolation is not possible. A similar argument can be made for high UE speed scenarios.
+
+In case of a single CB (likely for coverage limited UEs using DFT-SOFDM), there is no difference between time-first or frequency-first mapping since the set of REs used for PUSCH symbols remains the same irrespective of the RE mapping order.
+
+Therefore, option 1 (FTSS) seems sufficient and preferred for its simplicity and natural extension of option 1 (FT).
+
+Proposal: The RE mapping order scheme for DFT-SOFDM with intra-slot frequency hopping can be defined as follows:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+Conclusions
+
+In this contribution, Samsung’s view on remaining issue on layer mapping is presented. Our proposal can be summarized as follows:
+
+The RE mapping order scheme for DFT-SOFDM with intra-slot frequency hopping can be defined as follows:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+References
+
+3GPP, RAN1 NR-AH3, Chairman’s Notes

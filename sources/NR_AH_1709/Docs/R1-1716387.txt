@@ -1,0 +1,151 @@
+3GPP TSG RAN WG1 Meeting NR#3 R1-1716387
+
+Nagoya, Japan, 18th – 21st, September 2017
+
+Agenda item: 6.2.1.1
+
+Source: Qualcomm Incorporated
+
+Title: Remaining Issues on CW to layer mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+This contribution is a revision of R1-1713386 submitted in RAN1 #90. In RAN1 #90 [1] the following agreements regarding the codeword to layer mapping were made:
+
+Agreements:
+
+For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR:
+
+First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL
+
+No frequency and/or time interleaving is supported in Rel-15 NR
+
+FFS for DFT-s-OFDM uplink with and without frequency hopping
+
+Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+R1-1715161 WF on RE mapping for DFT-s-OFDM NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm
+
+In RAN1 #89, the following agreement was made to provide frequency diversity on PUSCH.
+
+Agreements:
+
+For DFT-s-OFDM based NR-PUSCH transmission, contiguous RB allocation with/without frequency hopping are supported
+
+At least intra-slot frequency hopping is supported for 14 symbol slot case
+
+FFS on detailed resource allocation
+
+FFS on detailed frequency hopping for PUSCH
+
+In this contribution, we summarize our views on the remaining issues on layer mapping procedure.
+
+CW-layer correspondence for > 4 layers
+
+It was agreed in the previous meeting to support the LTE-style of layer mapping correspondence for more than rank 4 PDSCH transmission. There is an FFS on whether a configurable layer mapping should be supported in NR for scenarios of rank 5,6,7,8 and allow a few limited possibilities. The main motivation of allowing higher configurability for more than rank 4 is to group layers in one CW which do not have a large span in their gains. However, if a large span between the channel quality of the layers in a very high rank scenario (rank >4) is observed, then it may just be best to decrease the rank without introducing additional complexity and signalling which may result to unnecessary specification and implementation effort.
+
+Proposal 1: NR supports only one fixed CW-layer correspondence.
+
+Layer mapping for DFT-S-OFDM with Hopping
+
+When it comes to UL DFT-S-OFDM, an additional aspect to be examined is the gain (if any) from introducing Time first mapping for scenarios with hopping especially for coverage cases. It has been agreed that up to one hop may occur in the UL long burst. We simulate the three examples agreed to be studied in the previous meeting:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:402bbbb9783cd0bbadcd]
+
+In the Appendix, we present simulation results for a 2 Tx, 2 Rx system up to 64-QAM, rank 1, with DFTS-OFDM for the following slot structure with hop: There are total 10 symbols carrying PUSCH with an overhead of total 1 DMRS symbol per hop as follows:
+
+[FIG:097805c6c902456c7f9e] [FIG:be53b97fe091594f3fd3]
+
+We simulate the case that each hop has a bandwidth of X={10,40,60} PRBs, with a gap of 80 PRBs between the two hops, for 3 kmh, and 120 kmh speeds (11 Hz and 444 Hz Doppler spread respectively) in a TDL-C 300 nsec channel with 4 PRB-based MMSE channel estimation with noise covariance estimation, and 3GPP Turbo code with 1 bit ACK/NAK and inner loop and outer loop link adaptation with 10 % TBLER targer error rate.
+
+Based on this simulation study, we make the following observation
+
+Observation 1: For the case of PUSCH with two non-overlapping hops and DFT-S-OFDM waveform,
+
+“Option 2: OFDM symbols then subcarriers” and
+
+“Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop”
+
+demonstrate similar performance which is superior compared to “Option 1: Subcarriers then OFDM symbols” when more than 1 codeblock is transmitted.
+
+Using Option 2 however for PUSCH with or without hopping would result to higher memory cost at the UE side which will not be needed for the CP-OFDM waveform (based on the agreements). Also, it would make self-contained-grant UL slot not possible to be supported due to the fact that the UE requires to have finished with the encoding process of all codeblocks before the first symbol of the transmitted data.
+
+Observation 2: Supporting time-first mapping (Option 2) for DFT-S-OFDM, would result to significantly higher Tx buffer memory requirements for the UE.
+
+Scrambling for data channels
+
+An issue that has not been discussed yet and is related to the data channel is the scrambling code generation method.
+
+We propose to use the LTE PN sequence, similarly to our proposal for PBCH and DMRS channels. On the number of bits used for initialization, we do not currently see a clear need to use more than 31 bits (similar to LTE) for the following reasons. If cell ID, RNTI, and codeword index are used for PN sequence generation (assuming no change with respect to LTE), it would require a total of 27 bits in NR. The remaining 4 bits could be used for slot index indication (using some modulo operation) if the slot index is needed to be agreed for NR. However, whether the slot index should be part of the scrambling or not could be debatable for NR; one use case of not including the slot index in the data channel scrambling generation could be when we want to hold on the transmission due to various reasons: unlicensed operation is one example. More specifically, when there is a LBT failure, the transmitter could hold on the packet and transmit later.
+
+Proposal 2: Data channel scrambling sequence is based on the length-31 Gold sequence (same as LTE).
+
+Conclusions
+
+We make the following observations:
+
+Observation 1: For the case of PUSCH with two non-overlapping hops and DFT-S-OFDM waveform,
+
+“Option 2: OFDM symbols then subcarriers” and
+
+“Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop”
+
+demonstrate similar performance which is superior compared to “Option 1: Subcarriers then OFDM symbols” when more than 1 codeblock is transmitted.
+
+Observation 2: Supporting time-first mapping (Option 2) for DFT-S-OFDM, would result to significantly higher Tx buffer memory requirements for the UE.
+
+We make the following proposals:
+
+Proposal 1: NR supports only one fixed CW-layer correspondence.
+
+Proposal 2: Data channel scrambling sequence is based on the length-31 Gold sequence (same as LTE).
+
+References
+
+3GPP RAN1 #90 Chairman’s notes
+
+Appendix
+
+We present simulation results for a 2 Tx, 2 Rx system up to 64-QAM, rank 1, with DFTS-OFDM for the following slot structure with hop: There are total 10 symbols carrying PUSCH with an overhead of total 1 DMRS symbol per hop as follows:
+
+[FIG:bef2c49b21723cb7f8ee] [FIG:d9fa82fdfe71a51eb871]
+
+We simulate the case that each hop has a bandwidth of X={10,40,60} PRBs, with a gap of 80 PRBs between the two hops, for 3 kmh, and 120 kmh speeds (11 Hz and 444 Hz Doppler spread respectively) in a TDL-C 300 nsec channel with 4 PRB-based MMSE channel estimation with noise covariance estimation, and 3GPP Turbo code with 1 bit ACK/NAK and inner loop and outer loop link adaptation with 10 % TBLER target error rate.
+
+Low mobility (3 Kmh)
+
+10 PRBs each hop
+
+[FIG:1e7a9d091a66d0c99680]
+
+40 PRBs each hop
+
+[FIG:d5b1bb101fa6832e0a46]
+
+60 PRBs each hop
+
+[FIG:2fd02c47fe71f68b25f8]
+
+High mobility (120 Kmh)
+
+10 PRBs each hop
+
+[FIG:ef163d7de46079721dba]
+
+40 PRBs each hop
+
+[FIG:092aeaa89f03f5150bb1]
+
+60 PRBs each hop
+
+[FIG:d4c1d0e8a9869cfc97bd]

@@ -1,0 +1,39 @@
+3GPP TSG RAN WG1 Meeting 90bis R1-1718424
+
+Prague, CZ, 9th – 13th, October 2017
+
+Source: Ericsson
+
+Title: Remaining details on CW mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#90AH, the following agreements were made:
+
+Agreement:For RE mapping for DFT-S-OFDM without frequency hopping: Option 1For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis: Option 1 Option 3Agreement:For RE mapping for DFT-S-OFDM without frequency hopping: Option 1For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis: Option 1 Option 3
+
+We will in this contribution, which is a resubmission of [1], provide our view regarding the mapping of data to RE for PDSCH and PUSCH.
+
+On PUSCH to RE Mapping for DFT-s-OFDM
+
+For DL it has been agreed to map codewords according to the order layer first, then subcarriers and then symbol. For DFT-S-OFDM one aspect to consider in the choice of CW to layer mapping is the presence of frequency hopping. In the case that one would apply the same mapping as in DL this may imply that when two codeblocks are transmitted, using frequency hopping, the first codeblock may mainly (or fully) be mapped using one frequency hop whereas the second codeblock is mapped using a second frequency hop. This would hence lead to a very limited frequency diversity gain within the codeblocks despite the use of frequency hopping. It has therefore been proposed to consider other mappings like for instance layer first, then symbol and then subcarrier which would increase decoding latency. Alternatively, one could consider a mapping procedure where layer first, then subcarriers and then time is utilized but only on every other symbol. This would imply that one codeword is mapped to odd symbols whereas the other codeword is mapped to even symbols. Although these kind of alternative mappings will increase the frequency diversity gain, at the cost of a higher decoding latency, we are not convinced that this effect will be that visible in typical use cases; slot hopping is typically used for small resource allocation bandwidths and the single code block will then anyway be mapped to all the hops/the whole slot. In the case that a large code block is scheduled there may be small performance gains with this approach but this is likely not the most typical use case. Hence, the benefits of these alternative mappings orders are not clear. Therefore we propose
+
+For DFT-s-OFDM uplink with frequency hopping the mapping order for modulated symbol stream to the allocated resource for UL data channel is first across layers, then across subcarriers (frequency) and then across OFDM symbols (time) as given by Option 1.
+
+CW to layer correspondence
+
+At RAN1#89 it was agreed to support that in in the case of L>4 layer, map the 1st [EQ:22e9e716168fb226814c] layers to the first CW and the remaining layers to the second CW. We see not need in supporting additional configurations than this.
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 For DFT-s-OFDM uplink with frequency hopping the mapping order for modulated symbol stream to the allocated resource for UL data channel is first across layers, then across subcarriers (frequency) and then across OFDM symbols (time) as given by Option 1.
+
+References
+
+[1] R1-1716340, “Further details on CW mapping”, 3GPP TSG-RAN WG1 NR Ad Hoc #3, Nagoya, Japan, 18th – 21st, September 2017

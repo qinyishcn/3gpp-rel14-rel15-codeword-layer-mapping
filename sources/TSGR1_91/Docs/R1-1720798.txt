@@ -1,0 +1,119 @@
+3GPP TSG RAN WG1 Meeting 91 R1-1720798
+
+Reno, USA, November 27th – December 1st, 2017
+
+Source: NTT DOCOMO
+
+Title: Remaining details on CW mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+At the RAN1 #90bis meeting, there were discussions on details of codeword (CW) mapping including resource element mapping, symbol interleaving, etc. Agreements were reached as follows [1].
+
+Agreement: No additional CW-layer correspondence is supported, at least in Rel-15, for >4 layersWorking AssumptionFor DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:The RE mapping is performed with the following order:Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping Possible Agreement:For each of the following channels, c_init used for data scrambling will at least depend on UE specifically configured scrambling ID (scrambling ID is C-RNTI by default)PDSCHPUSCH
+
+In addition, it is noted that following agreements were made in Email discussions.
+
+[90b-NR-10]Agreements:The c_init for data scrambling depends at least on a “Scrambling ID” parameter configured to the UE by RRC. FFS whether one RRC parameter is used for c_init for both PUSCH and PDSCH or if two independent RRC parameters is used.Discuss further this issue and dependence on other parameters, default value etc in RAN1#91.[90b-NR-33]Agreements:Support PUSCH frequency-hopping for DFT-s-OFDM and CP-OFDM waveform with RA Type 1. At least support intra-slot FH for Msg.3.   FFS: details including hopping pattern/configurations, signaling designs, etc.FFS whether applicable to all PUSCH durations within a slot FFS: whether to support repetition of Msg.3Support UE-specific RRC configuration of the following: Mode 1: intra-slot FH only FFS whether applicable to all PUSCH durations within a slotNote: Mode 1 is applicable to single slot and repetition caseMode 2: inter-slot only Note:  Mode 2 is applicable to repetition caseFH across mini-slots for repetitions FFS: whether it can be enabled by which mode and details, including alignment with slot boundary, pattern etc. Target to have a common FH design between slot and mini-slot.FFS: details including the number of configurations, hopping pattern/configurations, signaling designs, etc.Support RAR/UL grant indication for PUSCH frequency-hopping FFS: details including how to indicate enable/disable and pattern/mode of FH.
+
+In this contribution, we present our views on details on resource element mapping for NR.
+
+Discussion
+
+Resource element mapping for DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping
+
+At the RAN1 #90bis meeting, it was agreed that option 1 is supported for DFT-s-OFDM for single codeblock (CB) with intra-slot frequency hopping, since significant performance difference was not observed between options 1 and 3 for single CB case. One of the remaining issues is RE mapping option for DFT-s-OFDM for multiple CBs. Furthermore, we need to determine RE mapping for CP-OFDM with intra-slot frequency hopping, according to agreements in the email discussion [2] to support intra-slot frequency hopping also for CP-OFDM uplink. It is very important that NR potentially achieves the same or better coverage compared to LTE/LTE-A, thus the RE mapping option is expected to obtain sufficient frequency hopping gain.
+
+Observation 1: RE mapping that exploits frequency hopping gain for multiple CBs should be supported for DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping.
+
+Figure 1 shows the mapping orders of option 1 and option 3, in which options 1 and 3 are identical to the previous agreement [3] as following.
+
+Option 1: Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-S-OFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+Option 3: Subcarriers in the 1st hop, then subcarriers in the 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Option 1 performes frequency first mapping and thus is advantageous in terms pipe-line decoding and low UE-complexity. Disadvantage of this option is no frequency hopping gain in multiple CBs case, since a CB is localized in a either of the hopping resource (To be more precise, one CB may be mapped across hopping resouces, but other CBs don’t). Based on the NR work scope reduction, RAN4 prioritizes contiguous scheduling for CP-OFDM. Enough frequency diversity gain cannot be achieved without frequency hopping regardless of the waveform, i.e. DFT-s-OFDM or CP-OFDM. Frequency hopping gain is expected to improve performance for high SINR case as well as low SINR, thereby intra-slot frequency hopping is also used to increase throughput for high MCS situation, i.e. multiple CBs. On the other hand, option 3 achieves frequency diversity gain, since a CB is distributed to both of the hopping resources. Decoding timing in option 3 is delayed compared to option 1 but is faster than time first mapping which is applied in LTE/LTE-A. Option 3 is a well-balanced mapping scheme in terms of both frequency-hopping gain and latency performance.
+
+[FIG:a0e58a3988a30e2f879f] [FIG:76887cbcb2966c9afb83]
+
+(a) Option 1 (b) Option 3
+
+Figure 1: RE mapping for DFT-s-OFDM and CP-OFDM with frequency hopping (Example for 2 CBs)
+
+We present link-level simulation results to clarify the performance for different RE mapping options for uplink DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping. Detailed simulation parameters are given in Table A. Carrier frequency is set to 4 GHz. The system bandwidth is set to 150 RBs with the data allocated bandwidth of 10 and 50 RBs. We apply three different MCS sets of QPSK (R=1/2), 16QAM (R=1/2) and 64QAM (R=5/6).
+
+Figure 2 shows link-level simulation results for the different RE mapping options for frequency hopping, where DM-RS is mapped at the 1st and the 8th symbols. From the results, options 1 and 3 achieve approximately the same performance for the case of the number of CB of 1. This is because, for all options, a CB is mapped to both of the hopping resources and achieves frequency hopping gain. On the other hand, for the number of CBs of two or larger, we can observe frequency diversity gain for option 3 compared to option 1 (frequency first mapping). More specifically, the frequency diversity gain of approx. 1.5-2 dB is observed at the average BLER of 0.1.
+
+Figure 3 shows link-level simulation results for CP-OFDM. Form the results, option 3 provides better performance than option 1 for the number of CBs of two or larger. The gain of approx. 1.5-2 dB is observed at the average BLER of 0.1, which is almost the same as for DFT-s-OFDM. It is noted that we can see larger gain in the case of 10 RBs and R = 5/6. This difference is caused by lack of frequency diversity gain at each hop.
+
+We can persist from the above results that option 3 is feasible as RE mapping option for DFT-s-OFDM and CP-OFDM for frequency hopping. If the switching of options based on the number of CBs is complexed, it is reasonable that multiple CBs with frequency hopping supports both of the options with option 1 as a mandatory and option 3 as a optional feature, in consideration of option 1 supported for DFT-s-OFDM for single CB with intra-slot frequency hopping.
+
+Observation 2: For DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping, performance for option 3 is sperior to frequency first mapping (as in option 1) for multiple CBs.
+
+Proposal 1: For multiple CB, Option 3 is supported for DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping.
+
+[FIG:fece55c9fa513733ee2c] [FIG:542b952ba35ec65e0fb8]
+
+(a) Resource allocation = 10 RBs
+
+[FIG:86dd81f3d99ba56b18a2] [FIG:836dc42e353a9c9fb0ed] [FIG:5931394b5fbf17e84859]
+
+(b) Resource allocation = 50 RBs
+
+Figure 2: BLER performance for RE mapping options 1 and 3 with DFT-s-OFDM with frequency hopping
+
+[FIG:ae2ea6b1181b2a37a792] [FIG:b6ad4f1083b1b596aec2]
+
+(a) Resource allocation = 10 RBs
+
+[FIG:4641fffcf64f7385712b] [FIG:f47157855ad105b7fc26] [FIG:a9d37ab776edad86b99f]
+
+(b) Resource allocation = 50 RBs
+
+Figure 3: BLER performance for RE mapping options 1 and 3 with CP-OFDM with frequency hopping
+
+Data scrambling
+
+In the RAN1 #90bis meeting, there was a discussion of data scrambling. In LTE, a length-31 Gold sequence is used for data scrambling to avoid error detection caused by mutual interference between sequences. Using the sequence implies to be able to have an order of 231 different seeds, and this length is enough for the aim in LTE. Considering no strong motivation has been indentified to enhance the number of data scrambling, it is feasible to reuse length-31 Gold sequence for data scrambling.
+
+Observation 3: No strong motivation has been identified to enhance NR data scrambling from LTE design.
+
+Proposal 2: NR can support a length-31 Gold sequence for data scrambling.
+
+In the RAN1 #90bis meeting, furthermore, we had possible agreement that c_init used for data scrambling will at least depend on UE-specifically configured scrambling ID for PDSCH and PUSCH. In LTE, c_init depends on RNTI, slot number, CW index, and cell ID. NR also can determine c_init from RNTI and CW index, as well as UE specifically configured scrambling ID. However, c_init should be independent of slot number considering LAA-like application, in which, time index as slot number can be determined just before data transmission and transmission data can’t be buffered. Default values for the scrambling ID should be PCID.
+
+Proposal 3: c_init should be independent from time index such as slot number considering LAA-like application.
+
+Summary
+
+In this contribution, we presented our views on CW mapping. Observations and proposals were reached as follows.
+
+Observation 1: RE mapping that exploits frequency hopping gain for multiple CBs should be supported for DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping.
+
+Observation 2: For DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping, performance for option 3 is sperior to frequency first mapping (as in option 1) for multiple CBs.
+
+Observation 3: An order of 231 different seeds is enough for NR data scrambling.
+
+Proposal 1: For multiple CB, Option 3 is supported for DFT-s-OFDM and CP-OFDM with intra-slot frequency hopping.
+
+Proposal 2: NR can support a length-31 Gold sequence for data scrambling.
+
+Proposal 3: c_init should be independent from time index such as slot number considering LAA-like application.
+
+References
+
+3GPP, “Draft_Minutes_report_RAN1#90b_v010,” Oct. 2017.
+
+[90b-NR-33] Email discussion on frequency hopping.
+
+3GPP, R1-1715161, “WF on RE mapping for DFT-s-OFDM,” NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm, Aug. 2017.
+
+Appendix
+
+Table A: Link simulation parameters
+
+[FIG:ce6ed5216c6192751253]

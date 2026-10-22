@@ -1,0 +1,135 @@
+3GPP TSG RAN WG1 Meeting 90bis R1-1718535
+
+Prague, CZ, 9th – 13th, October 2017
+
+Agenda item: 7.2.1.1
+
+Source: Qualcomm Incorporated
+
+Title: Remaining Issues on CW to layer mapping & Data Scrambling
+
+Document for: Discussion/Decision
+
+Introduction
+
+This contribution is a revision of R1-1713386 submitted in RAN1 #90. The following agreements regarding the codeword to layer mapping were made:
+
+R1-1715161 WF on RE mapping for DFT-s-OFDM NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm
+
+Agreement:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+In RAN1 #89, the following agreement was made to provide frequency diversity on PUSCH.
+
+Agreements:
+
+For DFT-s-OFDM based NR-PUSCH transmission, contiguous RB allocation with/without frequency hopping are supported
+
+At least intra-slot frequency hopping is supported for 14 symbol slot case
+
+FFS on detailed resource allocation
+
+FFS on detailed frequency hopping for PUSCH
+
+In this contribution, we summarize our views on the remaining issues on layer mapping procedure for DFT-S-OFDM.
+
+Layer mapping for DFT-S-OFDM with Hopping
+
+It has been agreed that up to one hop may occur in the UL long burst. The use-case of introducing a different mapping for PUSCH with a hop is motivated by the additional frequency diversity that can be provided when a UE is served few resources. We simulate the three examples agreed to be studied in the previous meeting:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:104dfd8b1ad59c0e66b2]
+
+In the Appendix, we present simulation results for a 2 Tx, 2 Rx system up to 64-QAM, rank 1, with DFTS-OFDM for the following slot structure with hop: There are total 10 symbols carrying PUSCH with an overhead of total 1 DMRS symbol per hop as follows:
+
+[FIG:1592f7243761be067dae] [FIG:c8efb725970c70bf3970]
+
+We simulate the case that each hop has a bandwidth of X={10,40,60} PRBs, with a gap of 80 PRBs between the two hops, for 3 kmh, and 120 kmh speeds (11 Hz and 444 Hz Doppler spread respectively) in a TDL-C 300 nsec channel with 4 PRB-based MMSE channel estimation with noise covariance estimation, and 3GPP Turbo code with 1 bit ACK/NAK and inner loop and outer loop link adaptation with 10 % TBLER targer error rate.
+
+Based on this simulation study, we make the following observation
+
+Observation 1: For the case of PUSCH with a frequency-domain non-overlapping hop and DFT-S-OFDM waveform, Option 3 may demonstrate superior performance compared to Option 1” when more than 1 codeblock is transmitted.
+
+Using Option 2 however for PUSCH with or without hopping would result to higher memory cost at the UE side which will not be needed for the CP-OFDM waveform (based on the agreements). Also, it would make self-contained-grant UL slot not possible to be supported due to the fact that the UE requires to have finished with the encoding process of all codeblocks before the first symbol of the transmitted data.
+
+Observation 2: Supporting Option 3 for DFT-S-OFDM in scenarios of frequency-domain-overlapping hops, would result to higher Tx buffer memory requirements for the UE, without additional performance gains.
+
+Proposal 1: For the case of PUSCH with DFT-S-OFDM and a frequency-domain non-overlapping hop support Option 3; in all other PUSCH with DFT-S-OFDM scenarios support Option 1.
+
+Scrambling for data channels
+
+An issue that has not been discussed yet and is related to the data channel is the scrambling code generation method.
+
+We propose to use the LTE PN sequence, similarly to our proposal for PBCH and DMRS channels. On the number of bits used for initialization, we do not currently see a clear need to use more than 31 bits (similar to LTE) for the following reasons. If cell ID, RNTI, and codeword index are used for PN sequence generation (assuming no change with respect to LTE), it would require a total of 27 bits in NR. The remaining 4 bits could be used for slot index indication (using some modulo operation) if the slot index is needed to be agreed for NR. However, whether the slot index should be part of the scrambling or not could be debatable for NR; one use case of not including the slot index in the data channel scrambling generation could be when we want to hold on the transmission due to various reasons: unlicensed operation is one example. More specifically, when there is a LBT failure, the transmitter could hold on the packet and transmit later.
+
+Proposal 2: Data channel scrambling sequence is based on the length-31 Gold sequence (same as LTE).
+
+Conclusions
+
+We make the following observations:
+
+Observation 1: For the case of PUSCH with a frequency-domain non-overlapping hop and DFT-S-OFDM waveform, Option 3 may demonstrate superior performance compared to Option 1” when more than 1 codeblock is transmitted.
+
+Observation 2: Supporting Option 3 for DFT-S-OFDM in scenarios of frequency-domain overlapping hop, would result to higher Tx buffer memory requirements for the UE, without additional performance gains.
+
+We make the following proposals:
+
+Proposal 1: For the case of PUSCH with DFT-S-OFDM and a frequency-domain non-overlapping hop support Option 3; in all other PUSCH with DFT-S-OFDM scenarios support Option 1.
+
+Proposal 2: Data channel scrambling sequence is based on the length-31 Gold sequence (same as LTE).
+
+References
+
+3GPP RAN1 #90 Chairman’s notes
+
+3GPP RAN1 #90 AH3 Chairman’s notes
+
+Appendix
+
+We present simulation results for a 2 Tx, 2 Rx system up to 64-QAM, rank 1, with DFTS-OFDM for the following slot structure with hop: There are total 10 symbols carrying PUSCH with an overhead of total 1 DMRS symbol per hop as follows:
+
+[FIG:5522267589402035cfd3] [FIG:08b63dfde4e7bfb3fce2]
+
+We simulate the case that each hop has a bandwidth of X={10,40,60} PRBs, with a gap of 80 PRBs between the two hops, for 3 kmh, and 120 kmh speeds (11 Hz and 444 Hz Doppler spread respectively) in a TDL-C 300 nsec channel with 4 PRB-based MMSE channel estimation with noise covariance estimation, and 3GPP Turbo code with 1 bit ACK/NAK and inner loop and outer loop link adaptation with 10 % TBLER target error rate.
+
+Low mobility (3 Kmh)
+
+10 PRBs each hop
+
+[FIG:cca36dceb295456420df]
+
+40 PRBs each hop
+
+[FIG:fcdb1cc5b9bf4f219fb7]
+
+60 PRBs each hop
+
+[FIG:b9e6e904334a0455ddfe]
+
+High mobility (120 Kmh)
+
+10 PRBs each hop
+
+[FIG:273b6cea015a2c7d2e05]
+
+40 PRBs each hop
+
+[FIG:72b2a98e08b61aad89c8]
+
+60 PRBs each hop
+
+[FIG:40fcfa403689f13f9547]

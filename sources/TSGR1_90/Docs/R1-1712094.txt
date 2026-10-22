@@ -1,0 +1,179 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1712094
+
+Prague, Czech Republic, 21-25 August 2017
+
+Agenda Item: 5.2.4.3
+
+Source: Huawei, HiSilicon
+
+Title: DMRS port to layer mapping and resource allocation for non-coherent JT
+
+Document for: Discussion and decision
+
+Introduction
+
+In RAN1 #89 meeting, it was agreed for resource allocation that
+
+Fully overlapping RA from different CWs is supported
+
+FFS additional support of non overlapping RA from different CWs taking into account the following issues:
+
+Performance of non overlapping RA comparing to the existing CoMP schemes
+
+DCI payload
+
+In addition, the following possible agreement for DMRS port to layer mapping was also discussed:
+
+When non-coherent JT transmission is indicated in PQI, the following DMRS port to layer mapping is used
+
+Note: This implies that layers corresponding to different CWs are mapped to FDMed DMRS ports for rank 3-8. Rank-2 port mapping is the same as legacy to maintain DMRS overhead.
+
+RANK | DMRS-to-layer mapping
+ | DMRS group 1 (CW1) | DMRS group 2 (CW2)
+1 | N/A
+2 | 7 | 8
+3 | 7 | 9,10
+4 | 7,8 | 9,10
+5 | 7,8 | 9,10,12
+6 | 7,8,11 | 9,10,12
+7 | 7,8,11 | 9,10,12,14
+8 | 7,8,11,13 | 9,10,12,14
+
+In this contribution, we discuss detailed designs of DMRS port to layer mapping and resource allocation for non-coherent JT.
+
+Discussion
+
+DMRS port to layer mapping
+
+For non-coherent JT, to achieve good demodulation performance by DMRS, DMRS antenna ports of each TP should be grouped as FDMed to avoid OCC between different TPs. And such DMRS grouping approach could be used for rank 3-8. However, for rank=2, since port 7 and 8 take up the same RE positions (i.e., the same pattern), in order to reduce the DMRS overhead, DMRS ports to layer mapping could be the same as legacy. The above DMRS grouping approach is summarized as in Table 1. Such DMRS grouping could be regarded as implicitly grouping per CW basis. In addition, considering that it has been already agreed that QCL is signalled per CW, and each DMRS group should be corresponding to one QCL assumption, such implicitly grouping could also be well matched with QCL indication.
+
+Table 1. DMRS ports grouping
+
+RANK | DMRS-to-layer mapping
+ | DMRS group 1 (CW1) | DMRS group 2 (CW2)
+1 | N/A
+2 | 7 | 8
+3 | 7 | 9,10
+4 | 7,8 | 9,10
+5 | 7,8 | 9,10,12
+6 | 7,8,11 | 9,10,12
+7 | 7,8,11 | 9,10,12,14
+8 | 7,8,11,13 | 9,10,12,14
+
+Proposal 1: Support DMRS ports grouping implicitly per CW:
+
+for rank 3-8, layers corresponding to different CWs are mapped to FDMed DMRS ports
+
+for rank 2, port mapping is the same as legacy to maintain DMRS overhead
+
+With such DMRS ports grouping, Table 5.3.3.1.5C-1 and 5.3.3.1.5C-2: ‘Antenna port(s), scrambling identity and number of layers indication’ in TS 36.212 for DCI format 2D should be enhanced to support DMRS grouping. In addition, note that dynamic switching between NC-JT and single point transmission was also supported in the last meeting. Thus, the ‘Antenna port(s), scrambling identity and number of layers indication’ table should be able to support both legacy and DMRS grouping CW to layer mapping and dynamic switching between NCJT and single point transmission.
+
+In order to satisfy such requirement, we provide the enhanced ‘Antenna port(s), scrambling identity and number of layers indication’ table as shown in Table 2-1 and Table 2-2. Two possible approaches are proposed to support the switching between NCJT and single point transmission as follows (Note that we just take Approach 1 as an example to show our designs in Table 2-1 and Table 2-2):
+
+Table 2-1: Enhanced Antenna port(s), scrambling identity and number of layers indication
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Message | Value | Message
+0 | 1 layer, port 7, nSCID=0 | 0 | 2 layers, ports 7-8, nSCID=0
+1 | 1 layer, port 7, nSCID=1 | 1 | 2 layers, ports 7-8, nSCID=1
+2 | 1 layer, port 8, nSCID=0 | 2 | 3 layers, ports 7-9;ports 7, 9,10 if QCL type is configured as new QCL type by RRC
+3 | 1 layer, port 8, nSCID=1 | 3 | 4 layers, ports 7-10
+4 | 2 layers, ports 7-8 | 4 | 5 layers, ports 7-11;ports 7, 8, 9,10,12 if QCL type is configured as new QCL type by RRC
+5 | 3 layers, ports 7-9 | 5 | 6 layers, ports 7-12;ports 7, 8, 11,9, 10,12 if QCL type is configured as new QCL type by RRC
+6 | 4 layers, ports 7-10 | 6 | 7 layers, ports 7-13;ports 7, 8, 11, 9, 10,12,14 if QCL type is configured as new QCL type by RRC
+7 | Reserved | 7 | 8 layers, ports 7-14ports 7, 8, 11, 13, 9, 10,12,14 if QCL type is configured as new QCL type by RRC
+
+Approach 1: QCL Type
+
+Note that in the last meeting, it was agreed that a new QCL type that has the same QCL assumption as QCL type B except for DM-RS antenna ports is introduced for NCJT. Therefore, if the QCL type of a UE is configured as the new introduced QCL type, DMRS ports to layer mapping and indication (i.e., rank 3, and rank 5-8) should follow the DMRS grouping results as shown in Table 2-1 and Table 2-2. Otherwise (i.e., QCL type A or type B is configured for a UE), legacy DMRS to layer mapping table is used.
+
+It is noteworthy that even if a UE is configured as the new QCL type, two same sets of QCL parameters could still be configured to support dynamic switching between single point transmission and NCJT. Detailed configurations can be referred to as in [1]. In this case, single point transmission for two enabled CWs should also follow the DMRS grouping based layer mapping and indication.
+
+Approach 2: QCL assumptions in PQI
+
+Approach 2 means that if two sets of QCL parameters (of course under the case of QCL type C) are configured as two different QCL assumptions[1], DMRS ports to layer mapping for rank 3 and rank 5-8 should follow the principle with DMRS grouping. Otherwise, legacy DMRS to layer mapping table is used.
+
+In summary, a UE could identify the DMRS-to-layer mapping relationship for rank 3 and rank 5-8 according to the QCL type or the QCL assumptions in PQI without increasing the additional bits in DCI. Comparing to Approach 1 and Approach 2, we slightly prefer Approach 1 since Approach 2 needs to identify whether two set of parameters are completely equal or not.
+
+Proposal 2: DMRS ports to layer mapping with DMRS grouping should be determined by the QCL type configured by RRC signaling.
+
+Table 2-2: Antenna port(s), scrambling identity and number of layers indication
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Message | Value | Message
+0 | 1 layer, port 7, nSCID=0 (OCC=2) | 0 | 2 layer, port 7-8, nSCID=0 (OCC=2)
+1 | 1 layer, port 7, nSCID=1 (OCC=2) | 1 | 2 layer, port 7-8, nSCID=1 (OCC=2)
+2 | 1 layer, port 8, nSCID=0 (OCC=2) | 2 | 2 layer, port 7-8, nSCID=0 (OCC=4)
+3 | 1 layer, port 8, nSCID=1 (OCC=2) | 3 | 2 layer, port 7-8, nSCID=1 (OCC=4)
+4 | 1 layer, port 7, nSCID=0 (OCC=4) | 4 | 2 layer, port 11,13, nSCID=0 (OCC=4)
+5 | 1 layer, port 7, nSCID=1 (OCC=4) | 5 | 2 layer, port 11,13, nSCID=1 (OCC=4)
+6 | 1 layer, port 8, nSCID=0 (OCC=4) | 6 | 3 layer, port 7-9;ports 7, 9,10 if QCL type is configured as new QCL type by RRC
+7 | 1 layer, port 8, nSCID=1 (OCC=4) | 7 | 4 layer, port 7-10
+8 | 1 layer, port 11, nSCID=0 (OCC=4) | 8 | 5 layer, port 7-11;ports 7, 8, 9,10,12 if QCL type is configured as new QCL type by RRC
+9 | 1 layer, port 11, nSCID=1 (OCC=4) | 9 | 6 layer, port 7-12;ports 7, 8, 11,9, 10,12 if QCL type is configured as new QCL type by RRC
+10 | 1 layer, port 13, nSCID=0 (OCC=4) | 10 | 7 layers, ports 7-13;ports 7, 8, 11, 9, 10,12,14 if QCL type is configured as new QCL type by RRC
+11 | 1 layer, port 13, nSCID=1 (OCC=4) | 11 | 8 layers, ports 7-14;ports 7, 8, 11, 13, 9, 10,12,14 if QCL type is configured as new QCL type by RRC
+12 | 2 layers, ports 7-8 | 12 | Reserved
+13 | 3 layers, ports 7-9 | 13 | Reserved
+14 | 4 layers, ports 7-10 | 14 | Reserved
+15 | Reserved | 15 | Reserved
+
+Resource allocation
+
+For resource allocation, fully overlapping RA from different CWs is supported in RAN1 #89 meeting and FFS additional support of non-overlapping RA from different CWs. The non-overlapping RA could achieve frequency selective gain and have less requirements of UE receiver since it has no MIMO layer interference between two TPs. Therefore, non-overlapping RA should be supported for non-coherent JT without increasing the overhead of DCI design as much as possible. We propose the following two options that the number of bits in DCI for RA remains the same but can be interpreted differently according to different QCL indications as follows.
+
+Option 1: Independent resource allocation
+
+In this option, the RA can be performed for each TP independently by configuring the resource scheduling unit. For example, the scheduling unit RBG size [FIG:5caf0e080eb5822416c8] can be configured to be [FIG:6da976a40e08c34fc151] when non-coherent JT is performed. In this way, the total bits of existing RA field [FIG:40d59abf3542a886032f] can be divided into two independent fields: the first field with bits [FIG:47d1c89d7791b95d98e0] is the resource allocation signalling for TP1 while the rest of bits are the other field for TP2. By such configuration, both fully overlapping and non-overlapping schemes can be supported with the scheduling unit of RBG size of [FIG:e775571c3e8e25eafa47] as follows.
+
+[FIG:09e73315d3d1a8ad8d97]
+
+In addition, in order to support legacy DPS/DPB, RA field interpretation and RBG configuration could be activated according to different QCL assumptions[1] indicated by PQI.
+
+Option 2: Integrated resource allocation
+
+For fully overlapped schemes, the existing RA field interpretation is enough. While for non-overlapped schemes, one integrated resource block assignment field can be interoperated as two sub-fields with each sub-field corresponding to one coordinated TP. No matter the resource type is 0 or 1 (DCI format 2D supports type 0 and type 1), the RB/RBG represented by each bit of the resource block assignment field can only be used in one of the two sub-fields.
+
+[FIG:83f221300e99db3c4608]
+
+Figure 1 Available resource for each TP
+
+For example, as is shown in Figure 1, the total bits in the bitmap of RA field is [FIG:28491948a3d4c943484b] , where N is the length of the bitmap. [FIG:24ca2264002a359429f8] (N is even) is one sub-field which denotes the RA for one TP while [FIG:0f012dfaa36f21ca1596] is the other sub-field which denotes the RA for another TP. In this way, non-overlapped scheme can be supported by re- interpretation. The half-half pattern can be pre-defined to save extra signalling.
+
+In addition, in order to support non-overlapped and fully-overlapped resource allocation, an indication is required to pick one so as to determine the allocated resource for each coordinated TP. PQI field for multiple QCL case can be used to indicate whether fully-overlapped or non-overlapped is applied.
+
+Proposal 3: Support non-overlapping RA from different CWs and down-select one from the following two options:
+
+Option 1: Independent resource allocation
+
+RA interpretation and/or RBG configuration is determined by QCL assumptions in PQI
+
+Option 2: Integrated resource allocation
+
+RA field could be interpreted to two sub-fields and each corresponding to one TP by either predefined or signalling approach
+
+Conclusions
+
+In this contribution, we present our views on the detailed enhancements for non-coherent JT. The following are our proposals:
+
+Proposal 1: Support DMRS ports grouping implicitly per CW:
+
+for rank 3-8, layers corresponding to different CWs are mapped to FDMed DMRS ports
+
+for rank 2, port mapping is the same as legacy to maintain DMRS overhead
+
+Proposal 2: DMRS ports to layer mapping with DMRS grouping should be determined by the QCL type configured by RRC signaling.
+
+Proposal 3: Support non-overlapping RA from different CWs and down-select one from the following two options:
+
+Option 1: Independent resource allocation
+
+RA interpretation and/or RBG configuration is determined by QCL assumptions in PQI
+
+Option 2: Integrated resource allocation
+
+RA field could be interpreted to two sub-fields and each corresponding to one TP by either predefined or signalling approach
+
+References
+
+R1-1712123, Remaining details on QCL assumptions and PDSCH RE mapping, Huawei, HiSilicon.

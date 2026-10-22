@@ -1,0 +1,147 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1710517
+
+Qingdao, P.R. China 27th – 30th June 2017
+
+Source: Intel Corporation
+
+Title: Remaining details on CW-to-MIMO layer mapping
+
+Agenda item: 5.1.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN1#89 meeting, the following agreements were reached regarding CW-to-MIMO layer mapping for NR [1]:
+
+Agreements:For >4-layer transmission, each of the two CWs is mapped to at most 4 layersAgreements:At least support the following layer split for L >4 layer transmission: the 1st [FIG:add72c955211df4703d9] [FIG:8f96e02a9819ec6377b8] layers CW0 and remaining layers CW1For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities The mapping is configured by gNB to the UEFFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNBFFS  whether the UE report the preferred layer mappingAgreements:Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)Aim to make a decision in the next RAN1 meetingAgreements:NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UEFFS details
+
+In this contribution we address the following remaining issues of CW-to-MIMO layer mapping schemes:
+
+Support of the additional correspondence between MIMO layers and CWs
+
+Support of maximum number of MIMO layers for overhead reduction in DCI and UCI
+
+Support of frequency domain interleaving for NR
+
+Discussion
+
+Support of additional correspondence between MIMO layers and CWs
+
+Similar to LTE, NR for than four MIMO layers supports almost equal split of MIMO layers between two CWs. However, in some scenarios, it would be useful to additionally support unequal MIMO layer split among CWs. In order to avoid introduction of the new CW-to-MIMO layer mapping schemes, we propose to reuse already agreed multiple DCIs based for PDSCH scheduling for NC-JT for that purpose. In particular, simultaneous transmission of one or more DCIs from the same TRP can be used to achieve new MIMO layer mapping schemes to CWs. For example, for two DCIs with maximum of four MIMO layers in each PDSCH, the following combinations can be supported by NR (see Table 1). It can be seen that for four, five and six MIMO layers, the addition mapping of {1,3}, {1,4} and {2,4} can be provided.
+
+Table 1: Supported number of MIMO layers combination for two DCI transmissions
+
+Total number of MIMO layers | Number of MIMO layers indicated in DCIs (1st DCI, 2nd DCI)
+2 | {2}, {1,1}
+3 | {3}, {1,2}
+4 | {4}, {1,3}, {2,2}
+5 | {1,4}, {2,3}
+6 | {2,4}, {3,3}
+7 | {3,4}
+8 | {4,4}
+
+Proposal:
+
+NR supports additional CW-to-MIMO layer correspondence schemes in addition to almost equal split by using multiple DCIs framework adopted for NC-JT operation
+
+Indication of the maximum number of MIMO layers
+
+CW-to-MIMO layer mapping scheme agreed for NR supports different number of CWs depending on the actual number of MIMO layers. To support such case two MCS/RV/NDI fields should be provisioned in DCI, where one of the MCS/RV/NDI field can be blanked in case of rank 1-4 due to use of single CW for PDSCH transmission. At the same time support of the more than four MIMO layers is not expected to be frequently used, e.g. due to TRP or UE implementation constraints, to justify usage of two MCS/RV/NDI fields in DCI.
+
+To reduce the control signalling overhead, indication for the maximum number of MIMO layers in DL should be supported, where indication can be explicitly signaled to the UE or implicitly derived at the UE based on the other configurations (e.g., UE capability for number of MIMO layers, number of configured ports for CSI-RS, etc.). For example, if the maximum number of MIMO layers is limited to four, the DCI can contain at most one combination of MCS/RV/NDI fields, that can help to reduce the signalling overhead. Similar overhead reduction can be achieved in UCI for ACK/NACK and CSI reports. If the maximum number of MIMO layers are above four, the DCI can contain two MCS, RV and NDI – one per each CW.
+
+We note that implicit indication for the number of MIMO layer, based on the UE capability and/or number of CSI-RS antenna ports, is not preferable approach due to the several reasons. For example, UE capability of supporting different number of MIMO layers may be different depending on other features. For example, for CA scenario, UE may be capable of supporting different number of MIMO layers depending on the CA configuration, that may introduce some ambiguity at the UE and gNB on the assumed number of MIMO layers for PDSCH transmission and reception. Such issue is already exists in LTE for RI report and resolved by explicit indication of the assumed number of MIMO layers. Similarly, the number of CSI-RS antenna ports could not be used to derive the maximum number of MIMO layer. In particular, for TDD systems with reciprocity based operation the typical configuration of CSI-RS resource is one port. However, one port CSI-RS configuration doesn’t imply single MIMO layer support and, therefore, can’t be used to derive the number of MIMO layers.
+
+Proposal:
+
+NR should support explicit signalling assistance from gNB to the UE for the maximum number of MIMO layers for PDSCH
+
+The maximum number of MIMO layers can be indicated to the UE using higher layer signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the maximum number of MIMO layers indicated by gNB
+
+Frequency interleaving
+
+In NR, due to large bandwidth allocations, several codeblocks can be mapped on the same OFDM symbol. To full achieve frequency diversity, symbol level frequency domain interleaving within OFDM symbol can be considered for NR. To evaluate the performance benefits link level evaluations of NR system with and without frequency interleaving were performed. The evaluation assumption are provided in Table 2.
+
+Table 2: Link level simulation assumptions
+
+Simulation Parameter | Value
+SCS, FFT | 15kHz, 4096
+MIMO | 2 Tx – 2 Rx, random PMI, low correlation
+Slot Structure | 11 PDSCH symbols
+MCS | 64 QAM ( Rate= 2/3, 3 /4, 5/6)
+Channels | TDL-A 30ns, TDL-B 100ns TDL-C 300ns
+Carrier Freq, Speed | 4GHz, 30km/hr
+HARQ | 1 transmission
+
+The interleaving function tested split the total number of RE in each OFDM symbol in to 3 blocks and interleaved them over the whole frequency range. The number of blocks was selected to closely match with the simulation test case which consists of 2.9, 3.2, and 3.5 code blocks per OFDM symbol.
+
+N = number RE in the OFDM symbol
+
+RE_interleave(k) = RE( mod((N/3)*mod(k,3) + floor(k/3), N) )
+
+A sample illustration is given below.
+
+Original | RE # | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+ |  |  |  |  |  |  |  |  |  | 
+Interleaved | RE # | 0 | 3 | 6 | 1 | 4 | 7 | 2 | 5 | 8
+
+The evaluation results are provided in Figures 1-3 and summarized in in Table 3.
+
+[FIG:933b380d65aeda4b0377]
+
+Figure 1: BLER and Throughput for TDL-A 30ns channel
+
+[FIG:2d8b20bd2357962f64f9]
+
+Figure 2: BLER and Throughput for TDL-B 100ns Channel
+
+[FIG:ee2a0ea2bc9e81097175]
+
+Figure 3: BLER and Throughput for TDL-C 300ns Channel
+
+Table 3: Summary of link level simulation assumptions
+
+Interleave dB gain in 10% BLER
+Rate | CB per OFDM Symbol | TDL-A 30ns | TDL-B 100ns | TDL-C 300ns
+2/3 | 2.9 | 0.81 | 0.58 | 0.3
+3/4 | 3.2 | 0.84 | 0.69 | 0.3
+5/6 | 3.5 | 0.7 | 0.65 | 0.3
+
+The following observations can be made.
+
+Observations:
+
+The interleaved always performed better than the original.
+
+The gain is dependent on the channel with more gain in order of TDL-A, TDL-B, and TDL-C.
+
+It should be noted that for multiple MIMO layers scenario and the same interleaving function for all MIMO layer, symbols corresponding to the same codeblock will be transmitted over the same set of the physical subcarriers irrespective of the frequency interleaving function. For the spatially correlated channel such interleaving approach is not desirable as the symbols of the same codeblock will experience similar fading patterns. To provide the maximum diversity order, the frequency interleaving function is preferably to be different across different MIMO layers.
+
+Proposal:
+
+If frequency interleaving is supported for NR, the interleaving function should be different across different MIMO layers to provide the maximum diversity gains
+
+Summary
+
+In this contribution we discuss remaining details of supporting multiple CWs. The following proposals were made:
+
+NR supports additional CW-to-MIMO layer correspondence schemes in addition to almost equal split by using multiple DCIs framework adopted for NC-JT operation
+
+NR should support explicit signalling assistance from gNB to the UE for the maximum number of MIMO layers for PDSCH
+
+The maximum number of MIMO layers can be indicated to the UE using higher layer signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the maximum number of MIMO layers indicated by gNB
+
+If frequency interleaving is supported for NR, the interleaving function should be different across different MIMO layers to provide the maximum diversity gains
+
+References
+
+Chairman’s notes for RAN1#89, 3GPP TSG RAN WG1 Meeting #89, Hangzhou, P.R. China 15th – 19th May 2017.

@@ -1,0 +1,85 @@
+3GPP TSG RAN WG1 Meeting #88bis R1-1705715
+
+Spokane, USA 3rd - 7th April 2017
+
+Source: NTT DOCOMO
+
+Title: Discussion on Codeword Mapping
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+At the last meeting, there were intensive discussions on codeword mapping including codeword-to-layer mapping for PDSCH/PUSCH, physical resource mapping and frequency interleaving. Agreements were reached as follows [1].
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsFFS for 3 & 4-layer transmissions – revisit today Working assumption:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenariosAgreements:For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluations
+
+In this contribution, we present our views on details on codeword mapping for NR.
+
+Discussion
+
+Fig. 1 shows overview of channel processing for LTE-Advanced. In this contribution, we discuss on design of codeword (CW)-to-layer mapping, RE mapping and frequency interleaving for NR.
+
+[FIG:8a205bd6f571939e8a6f]
+
+Fig. 1: Overview of channel processing for LTE-A
+
+CW-to-layer mapping
+
+One of the remaining issues for CW mapping is whether to confirm the working assumption to apply single CW for the PDSCH/PUSCH transmission with rank 3 and 4. In the last meeting, there was an argument that separate MCS should be applied for data streams from different panels/TRPs, since link quality from different panels/TRPs is rarely correlated [2]. Fig. 2 shows two DCI design options to apply separate MCS for multi-TRP operation (same discussion is applicable for the case with multi-panel transmission). The first method is to trigger transmissions from multiple TRPs with a single DCI as in Fig. 2(a). The other method is that independent DCI is transmitted per TRP as in Fig. 2(b). This option enables multi-TRP transmission even for the network which doesn’t exchange scheduling information between TRPs. In addition, considering multi-panel/TRP transmission with rank 2, which was agreed to apply single CW, it is straightforward that separate DCIs are used, if multi-panel/TRP transmission if applied with rank 2 and above.
+
+Proposal 1: Confirm the working assumption on the number of CW per PDSCH/PUSCH assignment per UE for rank 3 and 4.
+
+[FIG:a6324c8523ec15c6dcaf]
+
+(a) Single DCI (b) Separate DCIs
+
+Fig. 2: DCI design options for multi-TRP transmission
+
+Table I shows DCI and UCI overhead of LTE-A for PDSCH and PUSCH transmission, respectively. It is observed that the DCI and UCI overheads are doubled, if the number of CW is 2. The impact to the overhead is relatively larger for MCS compared to the case for HARQ.
+
+Table I: DCI and UCI bits for different number of CWs for LTE-A
+
+[FIG:99cfb808c4d048283dd3]
+
+Considering the performance benefit presented in the SI, it is straightforward to signal MCS information and report CQI per CW. On the other hand, concerning the HARQ, communication performance highly depends on relationship between selected MCS and the channel and interference condition. For this reason, the unit of HARQ is better to be reported at least with the unit of MCS selection, i.e., the unit of HARQ reporting should not be larger than that of MCS selection. In the last meeting, there were some discussions of HARQ feedback with higher granularity than the CW, i.e., code block group (CBG)-based HARQ [3]. Considering that RAN1 agreed to support puncturing of eMBB downlink data by a short URLLC downlink data, which is likely resulting in decoding failure of a subset of CBs for a given TB, it may be reasonable to support more than one HARQ bits for one CW.
+
+Proposal 2: MCS information signaling and CQI reporting are performed per CW.
+
+Proposal 3: HARQ is performed with the unit of CBG together with CW.
+
+Resource element mapping
+
+After the modulation mapping, data symbols are to be mapped into resource elements (REs) across layer, time (OFDM symbol) and frequency (subcarrier) dimensions. We think it should be performed in the order of layer, subcarrier and OFDM symbol with the following two reasons. Firstly, the order allows pipe-line decoding at the receiver and achieves reduced delay in data demodulation. In addition, it achieves diversity gain by distributing a single code block to multiple MIMO layers.
+
+Proposal 4: Modulated data symbols are mapped into REs in the order of MIMO layer, subcarrier and OFDM symbol.
+
+Frequency domain interleaving
+
+In the last meeting, there was a discussion on necessity of frequency domain interleaving. The interleaving can achieve frequency diversity gain in frequency selective channel and interference. The gain becomes relatively large when LDPC CB-length (after modulation mapping) is sufficiently shorter than the number of scheduled subcarriers. For instance, assuming maximum CB-length of 8192 with additional 24-bit CRC, 4 MIMO layers, 256QAM (R=8/9) and 100 RBs, more than 4 CBs are accommodated within single OFDM symbol. Although the gain of frequency domain interleaving is limited to high SINR region, it should not be harmful even for low to intermediate SINR at least when CW based HARQ is applied (non-CBG-based HARQ).
+
+Proposal 5: Frequency domain interleaving is supported for NR.
+
+Summary
+
+In this contribution, we presented our views on CW mapping. Proposals were reached as follows.
+
+Proposal 1: Confirm the working assumption on the number of CW per PDSCH/PUSCH assignment per UE for rank 3 and 4.
+
+Proposal 2: MCS information signaling and CQI reporting are performed per CW.
+
+Proposal 3: HARQ is performed with the unit of CBG together with CW.
+
+Proposal 4: Modulated data symbols are mapped into REs in the order of MIMO layer, subcarrier and OFDM symbol.
+
+Proposal 5: Frequency domain interleaving is supported for NR.
+
+References
+
+3GPP, “Draft report of 3GPP TSG RAN WG1 #88 v0.2.0,” Feb. 2017.
+
+3GPP, R1-1701790, ZTE, ZTE Microelectronics, “On number of codewords for NR,” Feb. 2017.
+
+3GPP, R1-1703740, Samsung, “WF on CB or CB-group based retransmission,” Feb. 2017.

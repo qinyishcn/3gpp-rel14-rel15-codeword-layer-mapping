@@ -1,0 +1,166 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702263
+
+13th – 17th February 2017
+
+Athens, Greece
+
+Agenda item: 8.1.2.1.1
+
+Source: AT&T
+
+Title: A Scalable Transport Block to Codeword Mapping Scheme for NR
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. In RAN1 # 87 and the following agreement was reached on the number of Codewords.
+
+Agreements:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In RAN1# the following agreements were made
+
+Agreements:
+
+RAN1 will down select among the followings and select one alternative in the next meeting
+
+Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers
+
+One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields
+
+FFS: the number of CQIs and MCS fields in DCI
+
+FFS: number of CWs for 3 and more layers
+
+Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers
+
+Alt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution, we describe our views on the transport block to codeword mapping for NR.
+
+Flexible number of Codewords for NR
+
+Since in NR, we expect the number of codewords are less than the number of layers supported, we need to revisit the definition of codeword. According to the current definition of codeword, each codeword is mapped to only one transport block as shown in Figure 1.
+
+Channel coding ScramblingModulation mapperLayer MapperChannel coding   Scrambling Modulation mapper Precoding  RE mapper  RE mapper OFDM Signal Generation OFDM Signal GenerationCodeword 1Antenna ports MIMO layers Codeword 2d1d0x0TB 1TB 2Channel coding ScramblingModulation mapperLayer MapperChannel coding   Scrambling Modulation mapper Precoding  RE mapper  RE mapper OFDM Signal Generation OFDM Signal GenerationCodeword 1Antenna ports MIMO layers Codeword 2d1d0x0TB 1TB 2
+
+Figure 1 LTE MIMO Transmission structure with two codeword with one transport block per codeword
+
+However, with the existing structure, whenever the number of layers are increased, we need to define a new transport block mapping table. In addition, this structure is not hardware friendly (for accelerators) for higher rank transmission as the transport block size becomes larger as the rank increases. To overcome, these problems, we propose a scalable transport block to codeword mapping where a codeword can have multiple transport blocks but all belonging to same HARQ-process. Figure 2 shows the proposed structure for where the first codeword is mapped to 2 transport blocks and second codeword is mapped to only one transport block (rank 3 transmission). The same structure can be extended for remaining ranks. Table 1 shows an example mapping table between the transport blocks and codewords.
+
+Channel coding ScramblingModulation mapperLayer MapperChannel coding   Scrambling Modulation mapper Precoding  RE mapper  RE mapper OFDM Signal Generation OFDM Signal GenerationCodeword 1Antenna ports MIMO layers Codeword 2d2d1x0TB 1TB 3Channel coding TB 2x1xMChannel coding ScramblingModulation mapperLayer MapperChannel coding   Scrambling Modulation mapper Precoding  RE mapper  RE mapper OFDM Signal Generation OFDM Signal GenerationCodeword 1Antenna ports MIMO layers Codeword 2d2d1x0TB 1TB 3Channel coding TB 2x1xM
+
+Figure 1 NR MIMO Transmission structure with two codewords with multiple transport blocks in a codeword
+
+Table 1 Example mapping between transport block to codeword mapping for the proposed structure
+
+Number of layers | Number of code words | Transport block -to –Codeword mapping
+1 | 1 | TB1 CW 1
+2 | 2 | TB1 CW 1TB2 CW 2
+ |  | 
+3 | 2 | TB1 CW 1TB2 CW 1TB3 CW 2
+ |  | 
+4 | 2 | TB1 CW 1TB2 CW 1TB3 CW 2TB4 CW 2
+ |  |
+
+Table 2 shows the mapping table between the codewords and layer mapping. Hence as a future proof, we can re-use the same transport blocks when the number of layers are increased in future. Note that exact mapping between the transport block to codeword and codeword to layer mapping can be studied further.
+
+Table 2 Example mapping between codeword to layer mapping for the proposed structure.
+
+Number of layers | Number of code words | Codeword-to-layer mapping [FIG:bcd4cda200eb0413c565]
+1 | 1 | [FIG:0db2a5c26a9b7528bb4d] | 
+2 | 2 | [FIG:3183353e1be42b008af2] | 
+ |  | [FIG:4fd5e939b30f1802ccd9] | 
+3 | 2 | [FIG:a329fca2c90250536584] | 
+ |  | [FIG:b3dc20ec3dbd7c100f4a] | 
+4 | 2 | [FIG:d7ea25d0f1cba0a7aad4] | 
+ |  | [FIG:d4f0cd0c48be3a05dcb2] |
+
+In the next section, we show this scalable structure performance is equal to that of existing two codeword MIMO structure through simulations.
+
+Proposal 1:  In NR MIMO multiple transport blocks should be supported within a single code word. The mapping between the transport block and code word can be determined based on at least one or more of the following option:
+
+Option 1: The number of transport block within a code word is fixed in specs based on the number of MIMO Layers a given code word is mapped on to.
+
+Option 2: The number of transport block within a code word is semi statically configured/negotiated between the gNB and UE and signaled via an RRC configuration
+
+Option 3: Other methods FFS.
+
+Simulation Model
+
+In this contribution, we evaluate the performance of multi codeword MIMO systems with link level simulations. We consider 4 port and 2 port closed loop MIMO configurations are considered with link adaptation, where the rank information, precoding information, modulation, coding rate/transport block size are dynamically updated for each TTI. In our simulations we assume perfect channel estimation. For link adaptation, UE chooses the PMI, RI and MCS based on maximization of Mutual information. The feedback is assumed to have 4 TTI delays and is assumed to be error free. Simulations are run for a UE with different SNRs and the wireless channel assumed is TDL-A channel. The velocity of the mobile is assumed to be 3 Kmph. The main simulation parameters are tabulated in Table 1.
+
+Table 2 Detailed link level simulation assumptions
+
+Assumptions | Value
+Carrier frequency | 4.0 GHz
+Duplex | FDD
+System Bandwidth | 10 MHz
+TTI length | 1 ms
+Subcarrier spacing | 15KHz
+Guard time interval | 4.7us (interval of LTE normal CP) as baseline
+FFT size | 1024
+Data transmission bandwidth | 48 subcarriers for 15 KHZ spacing
+Antenna configuration | (4,4,2,1,1), (2,2,2,1,1)
+Number of codewords | 4,3,,2,1
+Precoding codebook | LTE-Release 8
+Channel encoder | LTE turbo code
+MCS | For link adaptation: QPSK, 16-QAM and 64-QAM are considered with variable code rate
+Control Overhead | Zero
+Channel estimation | Ideal
+ACK/NACK feedback error rate | Baseline: 0%
+PMI / rank feedback error rate | Baseline: 0%
+CQI feedback error rate | Baseline: 0%
+Feedback delay | 4 TTI
+
+Simulation Results with 4 Antenna Ports
+
+In this section, we present our simulation results with 4 Antenna ports. Figure 1 shows the spectral efficiency as a function of SNR for single codeword and 4 codeword. Note that in this case, the spectral efficiency is computed by
+
+Spectrum efficiency = TBS*(1-BLER)/(T*BW)
+
+Where, TBS is the transport block size in bits, BLER is the block error rate, T is the time duration of one subframe, BW is the actual bandwidth. It can be observed that the proposed structure performance is identical with that of LTE two codeword MIMO, however the structure is attractive for future proof at the transmission side and applicability of advanced receivers within a codeword at the receiver.
+
+[FIG:f3e2faa63e93674422f5]
+
+Figure 1 Spectral efficiency comparison with the proposed two codeword MIMO structure with the LTE two codeword MIMO structure
+
+Advanced Receivers within a Codeword
+
+It is well known that one of the salient features of multi codeword MIMO is the applicability of codeword serial interference cancellation when once codeword is pass the other is failure. However, with the existing LTE codeword MIMO when the rank is more than 2, the UE can’t use codeword SIC as the layers are mapped within a codeword. However, with the proposed structure a UE can use a SIC type of receiver within a codeword as each transport block has CRC and the UE can remove the interference within a codeword. Figure 2 shows the link throughput of the proposed detection scheme.
+
+[FIG:d581efd354fd4a68fcbc]
+
+Figure 2 Link throughput with advanced receiver with the proposed scalable transport block to codeword structure
+
+Conclusions
+
+In this contribution we outlined our views on scalable transport block to codeword mapping. We recommend
+
+Proposal 1:  In NR MIMO multiple transport blocks should be supported within a single code word. The mapping between the transport block and code word can be determined based on at least one or more of the following option:
+
+Option 1: The number of transport block within a code word is fixed in specs based on the number of MIMO Layers a given code word is mapped on to.
+
+Option 2: The number of transport block within a code word is semi statically configured/negotiated between the gNB and UE and signaled via an RRC configuration
+
+Option 3: Other methods FFS.

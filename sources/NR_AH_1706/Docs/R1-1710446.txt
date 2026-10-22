@@ -1,0 +1,256 @@
+3GPP TSG RAN WG1 NR Ad Hoc Meeting R1-1710446
+
+Qingdao, China, 27 – 30 June 2017
+
+Agenda Item: 5.1.2.1.1
+
+Source: Huawei, HiSilicon
+
+Title: Codeword to layer mapping in NR
+
+Document for: Discussion and decision
+
+Introduction
+
+At the previous meeting (RAN1 #89), the agreements on codeword to layer mapping were made [1]:
+
+At least support the following layer split for L>4 layer transmission: the 1st [FIG:d4659679e02ab1b8519e] layers -> CW0 and remaining layers -> CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS whether the UE report the preferred layer mappings
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+In addition, one working assumption was given [1]:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer->Time ->Frequency, Time-> Frequency->Layer, Frequency-> Layer-> Time)
+
+If so, details of configuration signaling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios.
+
+In this contribution, we keep discussing on codeword to layer mapping in terms of layer split scheme for L>4 layer transmission, mapping orders and the symbol-level interleaving. The relevant simulation results and analysis are provided.
+
+New requirements in NR
+
+The following new features should be considered for codeword-to-layer mapping design in NR.
+
+Large bandwidth and High speed
+
+With the larger bandwidth, one OFDM symbol can accommodate more code blocks (CBs) in the frequency domain. In this case, it is possible that the entire codeword can be mapped to one OFDM symbol. However, it may also have problem in high speed scenario (e.g. up to 500km/h), as there is no time diversity benefits.
+
+Codeword to layer mapping design
+
+Discussion of layer split scheme
+
+At the last meeting, the default layer split scheme is agreed to be at least supported in NR. Based on the latest agreements, when the layer number L > 4, the 1st [FIG:eba48f841e5be033a6d6] layers are mapped to the CW0, and the remaining layers are mapped to the CW1. On the other hand, the additional layer mapping scheme with some sort of signaling indication can be further investigated.
+
+The default split scheme is a very simple and stable mechanism that both TRP and UE know exactly how to map or de-map between CWs and layers, without relying on additional signaling. The default scheme tries to equally split multiple layers as much as possible onto 2 CWs when L>4. One may argue that such a scheme may not achieve the best performance all the time. For example in a high-rank SU-MIMO transmission case, the channel quality for each spatially multiplexed data layer can be different from each other. When there are two CWs available, those layers with better channel quality are mapped to one CW, and the rest layers are mapped to the other CW. Then the first CW can have higher MCS and coding rate for much better spectrum efficiency. And the second CW can have a relatively low MCS and coding rate to guarantee a low error rate. If the number of layers with better channel quality are very different from the layers with poor channel quality, the performance can be optimized if the number of layers mapped to each codeword can be dynamically configured.
+
+However, the necessity of configurable layer split scheme may be challenged by the following three issues:
+
+Issue 1: The possibility of the transmission cases in practice, which at least satisfies the following three conditions at the same time:
+
+SU-MIMO with high rank (L>4)
+
+Most probably in low frequency band
+
+The channel quality for some data layers are very different from the rest
+
+Issue 2: The difficulty and complexity for gNB to obtain the accurate channel quality information layer-by-layer, because:
+
+The CQI is reported CW-by-CW
+
+The PMI is codebook based without ordering.
+
+Issue 3: The performance gain of dynamic split scheme may be still limited compared to the default scheme
+
+Considering the limited use cases and the increased complexity, the configurable layer split scheme seems not necessary for codeword to layer mapping.
+
+Proposal 1: It is not necessary to support the configurable layer split scheme for codeword to layer mapping.
+
+Discussion of mapping order
+
+At the last meeting, a working assumption about the mapping order has been made. The mapping order follows the sequence of “layer-frequency-time”, which is exactly the way LTE does. Moreover, according to the working assumption, other mapping orders can also be further studied. In NR, it could be a challenge for one default mapping order to satisfy various transmission requirements. For example, NR supports transmission in high speed scenario. In this case, the time domain channel selectivity is the dominant factor. It is desirable that a mapping order of layer-time-frequency should obtain time domain diversity and outperform than the LTE mapping order.
+
+To properly evaluate the performance, we setup the link-level simulations for the transmission cases under 60km/h and 120km/h respectively as an illustration. Some differential parameters are summarized in table I. The modulation orders and the coding rates are set to 64-QAM (5/9) and 16-QAM (3/4) respectively. The selection of above parameter configurations is to ensure a relatively low SNR, which are reasonable under the high speed cases. Other parameters can be referred to the table I in appendix A. In the simulation, the performance comparison is provided between the following two mapping orders:
+
+Mapping order 1: layer-frequency-time
+
+Mapping order 2: layer-time (per slot)-frequency
+
+The simulation result is shown in Figure 1. The order 2 shows more than 2 dB gain over the order 1 at the BLER of 10-1, under the aforementioned high speed transmission cases. At the SNR of 11.5dB, the SE of config.2 is about 21% and 29% higher than the order 1 respectively. It implies that the time-domain diversity gain is important and has a significant contribution on the performance under the high speed cases.
+
+Table-I. Some parameters in the link-level simulation assumption
+
+Speed | Modulation order | Coding rate | Rank | CB number per OFDM symbol
+60km/h | 64 QAM | 5/9 | 1 | 1
+120km/h | 16 QAM | 3/4 | 1 | 1
+
+[FIG:729a88ae068d0e6bedaa] [FIG:b3f0359fafe4b2e1a85c]
+
+Figure 1. Performance comparison between two different configurations of mapping orders under different speeds
+
+According to the simulation results, the mapping order of “layer-time-frequency” provides an excellent performance enhancement under the high speed scenarios. Thus, besides the LTE mapping order, it is reasonable to have a second mapping order in NR.
+
+Proposal 2: The mapping order of “layertimefrequency” should also be supported in NR for high speed transmission cases.
+
+Discussion of interleaving
+
+Interleave design, simulation results and observations
+
+In NR, at least two different interleaving design has been discussed that the symbol-level interleaving can be implemented either
+
+Alt.1: within one OFDM symbol [2]
+
+Alt.2: or across multiple OFDM symbols [3][4].
+
+In Alt.1, the interleaving is only allowed among CBs within an OFDM symbol. It aims to obtain the frequency diversity gain. In Alt.2, the interleaving is across multiple OFDM symbols. It aims to jointly obtain the diversity gain from both frequency and time domain.
+
+In an earlier paper [4], detailed pattern design (Figure B1 in appendix B) and analysis have been presented. The relevant figures and tables can be referred to appendix B, and the observations and conclusions based on the link-level simulation results can be summarized as below:
+
+The per-OFDM symbol interleaving is scheduling bandwidth sensitive, and the corresponding use cases are limited.
+
+In a general case, with considering scheduling bandwidth, modulation orders and coding rate, the available CBs within a OFDM symbol is limited, which results in a very limited diversity gain.
+
+E.g. may not obtain any gain under the modulation orders of QPSK and 16 QAM.
+
+E.g. according to simulation results (Figure B2 in appendix B), the performance gain is limited in various use cases (Table B1 in appendix B) even under the modulation orders of 64 QAM.
+
+The multi-OFDM symbols interleaving provides significant performance gain in the high speed scenarios.
+
+It allows more CB segments for interleaving (Pattern 3 of Figure B1 in appendix B), resulting in a more sufficient diversity gain from both frequency and time domain.
+
+E.g. the performance gain is significant under the mobility of 60km/h and 120km/h (Figure B3 in appendix B).
+
+E.g. At a super high speed case (e.g. 380km/h), it is possible that the BLER cannot converge to 10-1 for the design of per-OFDM symbol interleaving. While the BLER of the design of multi-OFDM symbols interleaving easily converges to 10-1 at about 14dB under the same transmission configuration. (Figure B4 in appendix B)
+
+Analysis
+
+According to section 3.3.1, we can have the following conclusions:
+
+The per-OFDM symbol interleaving (Alt.1) has quite limited use cases which can obtain sufficient frequency diversity gain in terms of scheduling bandwidth, modulation orders and coding rate in practice.
+
+The multi-OFDM symbol interleaving (Alt.2) is more adaptive to have much wider use cases, and shows its superiority in high speed scenarios.
+
+Obviously, the scheme of multi-OFDM symbol interleaving (Alt.2) is quite necessary in high speed scenario. With the increase of the mobility, the system may suffer from the severe time selectivity. The LTE scheme (without interleaving) and the Alt.1 have no contribution to the performance in terms of the time-domain diversity gain. However, the time domain interleaving in Alt.2 can provide time diversity gain in such cases.
+
+One may argue that the DMRS patterns with more additional columns may alleviate the performance degradation caused by time selectivity. Please refer to figure B4 in appendix B, the DMRS pattern with 4 columns (2+5+8+11/0-13) has been employed. But the BLER of LTE scheme and Alt.1 under the speed of 380km/h still cannot converge to 10-1. The problem may be resolved by keeping adding additional columns in the DMRS pattern, but it is easily understood that the RS overhead could be very large to support 500km/h in NR and in this case the efficiency is far too low. Therefore, in the high speed scenarios, at the same level of decoding performance, the DMRS overhead can be significantly reduced with Alt.2.
+
+Moreover, the decoding latency is not a barrier to the Alt.2 under the high speed scenarios. In high speed cases, the additional DMRS pattern will be used. In this case, the UE needs to buffer data until the reception of the additional column DMRS for accurate channel estimation. To be noted, it is unreasonable to have the channel estimation solely based on the first column DMRS when additional DMRS pattern is applied. Once the additional pattern is employed, it means that the time selectivity is severe and the additional column is necessary to promote the estimation accuracy. If the system sacrifices the performance to pursue the low decoding latency at the same time, the behavior is logically paradoxical. Therefore, the decoding latency caused by additional DMRS pattern leaves enough space for the interleaving across multiple OFDM symbols.
+
+Observation 1: The fast decoding cannot be guaranteed the high speed scenarios where the additional DMRS pattern is employed.
+
+Observation 2: The multi-OFDM symbol interleaving can sufficiently utilize both the frequency and time domain diversity gain to significantly boost the system performance under the high speed scenarios.
+
+Proposal 3: The multi-OFDM symbol interleaving should be supported in NR, especially under the high speed scenarios.
+
+On the other, the scheme of per-OFDM symbol interleaving (Alt.1) may be challenged by its limited use cases and increased complexity in the detailed implementation. In [4], a detailed analysis and evaluation of the Alt.1 has been given. The Alt. 1 requires larger scheduling bandwidth, higher modulation orders and coding rate. For example, the Alt.1 can hardly obtain diversity gain when the modulation orders of QPSK and 16 QAM are applied as the requirement to the scheduling bandwidth is unreasonable (several hundreds of PRBs) in the practice. The frequency diversity gain may be obtained under 64 QAM or 256 QAM, but it may also require a sufficiently high working SNR (e.g. >25dB). Thus the Alt.1 is suffered from its limited use cases, otherwise the diversity gain cannot be guaranteed.
+
+Besides, the implementation of the Alt.1 can be very complicated. The system cannot guarantee the OFDM symbol with a scheduled bandwidth contains the integer number of CBs. For example one OFDM symbol under a certain scheduled bandwidth may accommodate all the REs of CB0 and only partial REs of CB1, i.e. the RE occupation ratio of CB0 and CB1 is not 1:1. It can be expected that the ratio changes per OFDM symbol, so the interleaving implementation may change every OFDM symbol too. Therefore, with the restriction of per-OFDM symbol interleaving, the implementation can be very complicated. One may argue an alternative way that the implementation within each OFDM symbol follows one fixed rule irrespective to various RE occupation ratios. Even though, the implementation within those OFDM symbols with RS are still be different from others. And the system performance, to a certain extent, will be further degraded due to the in-sufficient interleaving.
+
+Jointly considering the limited use cases and the potential implementation complexity of the Alt.1, it seems that the LTE method (no interleaving) is a better option in the low speed cases.
+
+Observation 3: The per-OFDM symbol interleaving may be not necessary under the low speed scenarios.
+
+Interleaving configuration
+
+From the discussion above, the design of multi-OFDM symbols interleaving shows superiority in high speed scenario. For the multi-OFDM symbols interleaving, there is an open question need to be resolved: what is a suitable number of OFDM symbols for interleaving, where the following aspects at least should be considered:
+
+The relationship between diversity gain and coherent time
+
+The decoding latency
+
+Proposal 4: The number of OFDM symbols for symbol-level interleaving can be for further studied.
+
+Conclusion
+
+In this contribution, we have the following observations and proposals:
+
+Observation 1: The fast decoding cannot be guaranteed in the high speed scenarios where the additional DMRS pattern is employed.
+
+Observation 2: The multi-OFDM symbol interleaving can sufficiently utilize both the frequency and time domain diversity gain to significantly boost the system performance under the high speed scenarios.
+
+Observation 3: The per-OFDM symbol interleaving may be not necessary under the low speed scenarios.
+
+Proposal 1: It is not necessary to support the configurable layer split scheme for codeword to layer mapping.
+
+Proposal 2: The mapping order of “layertimefrequency” should also be supported in NR for high speed transmission cases.
+
+Proposal 3: The multi-OFDM symbol interleaving should be supported in NR, especially under the high speed scenarios.
+
+Proposal 4: The number of OFDM symbols for symbol-level interleaving can be for further studied.
+
+References
+
+3GPP RAN1#89, Chairman’s note, Hangzhou, P.R. China, May 15 – 19, 2017.
+
+R1-1702597, Qualcomm, Frequency domain interleaving, 3GPP RAN1#88, Athens, Greece, February 13 - 17, 2017.
+
+R1-1705073, Huawei, HiSilicon, Codeword to layer mapping in NR, 3GPP RAN1#88bis, Spokane, USA, April 3 – 7, 2017.
+
+R1-1708128, Huawei, HiSilicon, Codeword to layer mapping in NR, 3GPP RAN1#89, Hangzhou, P.R. China, May 15 – 19, 2017.
+
+Appendix A
+
+Table-I Link-level simulation parameters in high speed scenario
+
+Parameter | Value
+Carrier Frequency | 4 GHz
+Channel Model | CDL-A with 1000ns delay
+Velocity | 60km/h, 120km/h
+gNB Antenna Configuration | 4Tx cross polarized array with 0.5λ antenna spacing
+UE Antenna Configuration | 2 Rx non- cross polarized with 0.5λ antenna spacing
+CP | Normal
+Waveform | CP-OFDM
+Modulation order | 16QAM,64QAM
+Coding Rate | 3/4, 5/9
+Signal Bandwidth | 30MHz
+Channel Estimation | Non-Ideal
+Receiver | MMSE receiver
+CW number | 1
+Layer number | 1
+Rank Adaption | No
+
+Appendix B
+
+Figures and tables presented in R1-1708128 in #89
+
+[FIG:a89cc978a20eea632180]
+
+Figure B1. An example of mapping patterns for: pattern 1 -- no interleaving, pattern 2 -- per-OFDM symbol interleaving, pattern 3 – multi-OFDM symbol interleaving
+
+Table B1. The parameter combinations of three transmission cases evaluated in the simulation
+
+3km/h | Scheduled bandwidth | Antenna configuration | Modulation order | Coding rate | Rank | CB number per OFDM symbol
+Case 1 | 60MHz (300PRBs) | 4T2R | 64 QAM | 5/6 | 1 | 3
+Case 2 | 60MHz (300PRBs) | 4T4R | 64 QAM | 5/9 | 2 | 4
+Case 3 | 20MHz (100PRBs) | 4T4R | 64 QAM | 5/6 | 2 | 2
+Case 4 | 20MHz (100 PRBs) | 8T8R | 64 QAM | 5/8 | 4 | 3
+
+[FIG:a06014cafd6b0a4820c9]
+
+Figure B2. Performance comparison between the designs of no interleaving and per-OFDM symbol interleaving in terms of BLER and SE under various transmission parameter combinations （Based on the front-load DMRS pattern）
+
+[FIG:7ef4823d66a0bda41428]
+
+Figure B3. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interleaving in terms of BLER and SE under various transmission parameter combinations (Based on the additional DMRS pattern with two columns “2+8”)
+
+[FIG:01d637a9d9875aad8898]
+
+Figure B4. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interleaving in terms of BLER and SE under super high speed scenario (Based on the additional DMRS pattern with four columns “2+5+8+11”)

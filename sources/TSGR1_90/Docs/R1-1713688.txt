@@ -1,0 +1,377 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1713688
+
+Prague, Czech, August 21st – 25th 2017
+
+Source: MediaTek Inc.
+
+Title: Codeword mapping in NR
+
+Agenda Item: 6.1.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+In RAN1 #89, the following working assumption was reached:
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+In this contribution, we provide our views on codeword mapping in NR.
+
+Discussion
+
+Design choices for MIMO with CLI
+
+In RAN1 #88bis, some design considerations for codeword mapping were raised. From low UE processing latency point of view, as has been argued by some companies, it is beneficial to take a spatial layer first, frequency second, time third mapping. While we understand low latency processing is important for system design and implementation, it is prudent not to let it dictate all design decisions solely.
+
+In NR, eMBB and URLLC multiplexing has been an active topic under discussion. As URLLC transmissions can come as bursty interference over eMBB traffic, bursty interference handling should be an important aspect in the codeword mapping design.
+
+In NR, as has been disused in [2], there can be a big overlap between the scenarios of using MIMO and using dynamic TDD. In NR, dynamic TDD (or flexible duplexing) introduces a new type of interference, i.e. cross link interference, which makes the interference scenarios in NR more complicated (actually with the introduction of eIMTA, cross-link interference also exists in LTE).
+
+As there is a higher chance to obtain a high spatial rank in an environment with rich local scatters, and such an environment is often encountered in a small cell deployment scenario, e.g. indoor hotspot, there can be overlap between the target scenarios for SU-MIMO and dynamic TDD.
+
+When many antennas are exploited at base station, and highly directional beams can be formed simultaneously towards multiple UEs, then can be overlap between the target scenarios for MU-MIMO and dynamic TDD as well.
+
+With dynamic TDD, a receiver at either the UE side or the base station side may experience Cross-Link-Interference (CLI) in addition to intracell/intercell interference in a conventional radio network. Hence it is important to consider dynamic TDD when designing codeword-to-layer mapping in NR.
+
+We note CLI may be relatively new in the licensed spectrum, but it is quite mundane in unlicensed spectrum. In recent years, unlicensed spectrum access technologies such as LAA, eLAA, etc. have been developed within 3GPP. Outside of 3GPP, notably Multefire has developed a standalone unlicensed spectrum access technology leveraging much of the LAA/eLAA design. Also even in Rel-14, there are ongoing work on further improvement on LAA/eLAA and future work in unlicensed spectrum in the pipeline. Also many people have been using Wi-Fi technologies on a daily basis, e.g. IEEE 802.11ac in the 5 GHz. When an NR radio is used in unlicensed spectrum, either in the form of standalone access or licensed assisted access, it will experience CLI. Hence it is imperative we have the foresight into the near future, and design a radio system which is robust to CLI.
+
+We have
+
+Observation: At both licensed and unlicensed spectra, dynamic TDD and MIMO have strongly overlapping use scenarios. It is important to design codeword mapping so NR transmission is robust to cross-link-interference.
+
+To handle the situation of MIMO with CLI, we can consider a few options:
+
+Option 1: Using the mapping order: Layer frequency time, a codeblock is mapped to all spatial layers under one codeword.
+
+Option 2: Using the mapping order: Layer frequency time, a codeblock is mapped to a subset of spatial layers under one codeword.
+
+We have proposed spatial layer subset based codeblock mapping for multiple meeting and also included for completeness, On the transmission scheme side, a spatial-layer subset based codeblock mapping can be used. Its advantage over codeblock mapped to all spatial layers for one transport block is discussed in the Appendix.
+
+Option 3: using the multi-TRP transmission design, the transmission from a single TRP is signalled with multi-TRP transmission signaling.
+
+Under option 3, there are
+
+Option 3.1 with a single PDCCH which schedules a PDSCH with layers from two or multiple TRPs, different codeblocks are put on different subsets of spatial layers. In this case, rate-matching and QCL need to be handled separately for subsets of spatial layers.
+
+Option 3.2 a UE monitors two CORESETs (CORESET 1 and CORESET 2) associated with two TRPs, and two PDCCHs with those two CORESETs schedule two PDSCHs. As in reality there is only one TRP instead of two transmitting to the UE, and each PDSCH is mapped to a subset of spatial layers from that TRP to the UE. Note also in this case rate-matching and QCL need to be handled separately for subsets of spatial layers. Also in this case, there can be two MAC entities associated with those two TRPs residing on the UE side, it is not clear how to aggregate the data flows from those two TRPs.
+
+From the examination, we can see that Option 2 is more attractive to handle MIMO with CLI. We have
+
+Proposal 1: Each codeblock is mapped to a spatial layer group when possible, which may not include all utilized spatial layers in a PDSCH transmission.
+
+Design considerations for URLLC and high speed train scenarios
+
+In NR Ad Hoc #2, the following were reached:
+
+Agreements:
+
+Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenarios
+
+Practical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.
+
+For both CP-OFDM and DFT-S waveforms
+
+Evaluation should be done considering both slot and mini-slot.
+
+In this part, we provide our views on handling URLCC and high speed train scenarios.
+
+Handling of URLLC pre-emption and channel interleaver design considering URLLC
+
+There can be two strategies associated with codeblock mapping and interleaver design, in the face of URLLC pre-emption and channel fading:
+
+• concentrate the errors in a limited number of codeblocks, and then rely on the multiple bit HARQ feedback (e.g. one HARQ bit for each codeblock group) to recover from the damage;
+
+• spread out the errors due to URLLC pre-emption and/or channel fading, rely on the network to select a low enough MCS level, so successful transmission can be still achieved in the face of URLLC pre-emption and channel fading.
+
+Taking the second strategy, in general, it may be beneficial to spread out a codeblock over multiple non-contiguous PRBs. In the following, we will see that we need to consider processing latency and PRB bundle size in the codeblock mapping.
+
+In NR, PRB bundling can be enabled, and the bundle size can be [1], 2, 4, 8, 16. We assume when a codeword in a PDSCH spans over multiple bundles, with a single channel estimation processor, the channel estimator at the receiver be performed in an arbitrary order over those bundles, e.g. in the natural order with bundle 1, bundle 2, bundle 3, ...; or with a schedule like bundle 1, bundle 3, bundle 5, bundle 2, etc without impacting processing latency.
+
+We can use a few examples to illustrate the interaction between bundle size, processing latency. Assume for a PDSCH with 40 codeblocks, QAM256 and 11/20 coding rate, and 4 spatial layers are used. There are 15360 coded bits for a codeblock with 384x22 information bits. Assume there are 120 REs available in one PRB (12 tones over 10 OFDM symbols, ignoring the DMRS overhead), then 160 PRBs are needed to transmit all 40 codeblocks. By using the spacefrequencytime mapping order, 4 codeblocks can be mapped on each OFDM symbol. Assume the PDSCH PRB bundle size is 8.
+
+In the first case no channel interleaver is used, then after performing channel estimator on PRBs in the first 6 bundles (e.g. PRBs 1-48), then all the LLRs for the codeblock become available (actually all the relevant LLRs become available when PRB 44 is processed).
+
+In the second case, if the coded bits are equally spread over all bundles, then the LLRs becomes available after channel estimation for the last bundle. If a single channel estimation engine is used, obviously the processing latency is more compared with the first case. Of course, spreading one codeblock over two or more bundles may lead to a robust transmission as frequency diversity is achieved. We see there is no-obvious choice for the number of bundles over which a codeblock is spread; yet if a single channel estimation engine is used then the processing latency is roughly proportional to the number of bundles over which a codeblock is spread (in another word the degree of frequency diversity).
+
+We can consider the following PRB interleaving scheme to obtain frequency diversity and at the same time keep processing latency low:
+
+A codeblock is mapped in the order layer frequency time over assigned PRBs.
+
+The PRB interleaver or virtual PRB to physical PRB mapper is used next.
+
+Let the number of PRBs in a PDSCH allocation be [FIG:e32c1b5eb7df48288474] ,
+
+Let the PRB bundle size be [FIG:b2bc8b841c35b5b0d7ce] ,
+
+Let the desired degree of frequency diversity be [FIG:645824d728fc3fc32f93] ,
+
+Then we use the following procedue to determine the PRB mapping order (block interleaver with a PRB bundle as the basic unit):
+
+Let [FIG:a786a7bd4654e953d028] (roughly the number of bundles in the PDSCH),
+
+[FIG:d14676428376a8d5ae41] (roughly the number of bundles for each frequency segment).
+
+Then for PRB mapping, then virtual PRB k, [FIG:38c0430a7c8ead83dca7] is mapped to physical PRB [FIG:3595d82edd4cf8b86639] and
+
+[FIG:a0504eb69ecd78bb4246]
+
+where [EQ:7f831aa224b88db27115] .
+
+One example is provided below:
+
+For A=32, B=4, D=4, f(k)= 0,1,2,3,8,9,10,11,16,17,18,19,24,25,26,27,4,5,6,7,12,13,14,15,20,21,22,23,28,29,30,31.
+
+For A=32, B=4, D=2, f(k)= 0,1,2,3,16,17,18,19,4,5,6,7,20,21,22,23,8,9,10,11,24,25,26,27,12,13,14,15,28,29,30,31.
+
+We have
+
+Proposal 2: PRB bundle size is considered in the PRB interleaver design.
+
+The high speed train scenario
+
+Some companies have shown that time-first RE mapping or time domain interleaver may improve BLER of data channels (both DL and UL) in high mobility scenario. However, such design will introduce much larger implementation cost (buffers at gNB and UE) and much larger processing latency.
+
+Multi-bit HARQ feedback
+
+By using the layer-frequency-time order, if a large transport block is transmitted, due to time-selective fading, codeblocks in error can be concentrated in time, in another word they tend to be concentrated in the same codeblock group(s). In this case, the multi-bit HARQ feedback with codeblock groups can be put to good use, it remains to be seen whether that is sufficient to deal with the high speed train scenario.
+
+Besides multi-bit HARQ feedback, we can also consider a scheme where a PDCCH can schedule data transmissions over multiple slots or mini-slots. On each slot/mini-slot, the layer-frequency-time order is retained.
+
+Slot aggregation/HARQ-less retransmissions
+
+If treated as multiple PDSCHs over multiple slots/mini-slots, identical information (e.g. using the same redundancy version of PDSCH/PUSCH over multiple slots) or different information (different redundancy versions over multiple slots, e.g. following a predefined redundancy version schedule (0,2,1,3), (0,1,2,3), etc.) can be transmitted over multiple slots. If treated as a single PDSCH transmitted over aggregated slots, then rate-matching with cyclic repetition of all the coded bits under one reference PDSCH (e.g. based on transmission over one slot or two slots) can be used. In any case, the UE combines the LLRs obtained from multiple slots/mini-slots for the same data.
+
+At the UE side, as the codeblock mapping order is retained, no special handling different from other scenarios is necessary. Actually there may be some possibility for power saving on the UE side: the UE understands that multiple transmissions for the same data are coming from the PDCCH scheduling, the UE can wait until the last slot/mini-slot to start channel decoding, and before that the UE just updates its soft buffer with incoming LLRs. Note frequency hopping across slots/mini-slots can be also supported, e.g. through a derived hopping pattern. With that, both time diversity and frequency diversity can be harvested.
+
+Multi-TRP transmission/reception
+
+Multi-TRP transmission is supported in Phase I from the following agreements:
+
+Agreements:
+
+Adopt the following for NR reception:
+
+Single NR-PDCCH schedules single NR-PDSCH where separate layers are transmitted from separate TRPs
+
+Multiple NR-PDCCHs each scheduling a respective NR-PDSCH where each NR-PDSCH is transmitted from a separate TRP
+
+Note: the case of single NR-PDCCH schedules single NR-PDSCH where each layer is transmitted from all TRPs jointly can be done in a spec-transparent manner
+
+Note: CSI feedback details for the above case can be discussed separately
+
+For the most part, multi-TRP reception is a network implementation issue.
+
+With multi-TRP transmission (e.g. from multi-TRP transmission along a railroad), there are multiple links to the UE, transmitting the same or different data. In any case, the chance that all links fail at the same time is small. The same goes for multi-TRP reception in the uplink.
+
+Conclusion
+
+In this contribution, we discuss codeword mapping in NR. We have
+
+Proposal 1: Each codeblock is mapped to a spatial layer group when possible, which may not include all utilized spatial layers in a PDSCH transmission.
+
+Proposal 2: PRB bundle size is considered in the PRB interleaver design.
+
+References
+
+R1-1704446, Codeword mapping in NR, MediaTek, RAN1 #88bis, April, 2017.
+
+R1-1704450, Interference management in NR, MediaTek, RAN1 #88bis, April, 2017
+
+Appendix Analysis on MIMO with CLI
+
+A.1 Effect of CLI on MIMO transmission
+
+As discussed in [3], interference in NR can be more dynamic than in LTE for a variety of reasons. The network does not have the prior knowledge of the CLI interference a UE would experience especially when it operates with single cell scheduling. In the following, we analyze the effect of CLI on MIMO transmission.
+
+In the following, we consider MIMO transmission over 2 spatial layers. Let the receiver model be
+
+[FIG:2f2e81a121e88630659e]
+
+where [FIG:3dc489d6e832dac14f2a] is the channel response between a base station and a UE; [FIG:4ac45268ddd44345aa7b] is the effective channel response including precoder [FIG:edd573883f62c4029713] for [FIG:23ad8fca251cf39a8827] , and [FIG:ab1718aca330ad3c3a8a] is the channel response including possible precoder for interfering signal [FIG:7fc447db393efd8cd0a1] , [FIG:72493851e013f1a74576] is a spatially white noise with standard deviation at 1.
+
+In the setup of dynamic TDD, [FIG:810206506080600124c8] is often an uplink signal from a UE near the UE of interest rather than a downlink signal from another cell as found in conventional interference scnearios. In another word, [FIG:2726454da30db62c6485] is due to cross-link interference.
+
+With the MMSE-IRC receiver, we first derive the SINR for [FIG:0b1dcf3e6865bea2129d] :
+
+[FIG:e24a69e569d910bb9b3d]
+
+the signal level of cross link intererence [FIG:1045769167511d70e840] can be much higher than that for [FIG:1588ed807dabf3ce8a63] .
+
+Let
+
+• [FIG:6cb06453baf5c714a43a] , where [FIG:343a23d60552fcf9f351] , [FIG:f7682fa2601e4d31b59d] is a vector of unit norm,
+
+• [FIG:2a84c2ec67b937219e56] , where [FIG:0ce6ec9e289f5de8181f] a properly chosen [FIG:460cef5dfc2bba93dab1] , [FIG:11be5812f4d2224b2edd] is a vector of unit norm and [FIG:32c9c8e3ab04d624318b] ;
+
+• [FIG:b7749d82262f55de8be5] , where [FIG:b18fc9dd78c8b9c78c70] for a properly chosen unit vector [FIG:9420f63f82995d5fc2a3] , [FIG:2fa0f2627f7889e8831e] , and [FIG:f5ffa0b344ab79967cf3] for more than 2 Rx. When 2 Rx is used at the UE, [FIG:da6cd73f8dc4f62953f9] does not exist; and for the formulas below we can assume [FIG:624d176b55e729004e78] .
+
+With the factorization above, we express the channel responses for different layers as a sum of projections along the interferer’s channel response and vectors orthogonal to that channel response.
+
+[FIG:5fa6d33f97c1aafd7ffc]
+
+With 2 Rx, then
+
+[FIG:d1ab42298b5efa982d7e]
+
+Simiarly we have, in general
+
+[FIG:6b3b6b36297bca77a061]
+
+With 2 Rx, then
+
+[FIG:8d3e2b159a7000056f54]
+
+From the above derivation, one can see that with the presence of a strong interfering signal, the effect of of the MMSE-IRC weight is to project the received signals to a direction perpendicular to the interfering signal’s channel response [FIG:29afb06a403f53a09982] . One can also see for higher ranks, a similar behavior can be observed, i.e. the received signals are projected into a subspace orthogonal to the subspace spanned by the channel responses of the interfering signals .
+
+As [FIG:a0e80093c42be5e82b5c] is a composite of [FIG:c5dd92c1dfeafe6d7aa1] and [FIG:71b19e8206d562004bd3] , one can control what the projections at the receiver will be, in another word one can control [FIG:f62f1a5c20c816c662ce] and [FIG:ead0f10afdd50b0e0c35] will be through the choice of [FIG:d113e90f3280336d20e8] .
+
+A.2 Transmission strategy robust to bursty CLI
+
+To identify the optimal transmission strategy, a reasonable metric is the sum rate for two layers. The sum rate for two layers is given by
+
+[FIG:e55b4a2b1d7c977b7d5e]
+
+Assume [FIG:7fc5d1de6d2d59e069dc] is a [FIG:c025ba4a82d89feda9d8] unitary matrix. In general, a [FIG:c11462125091e7375612] unitary matrix can be parameterized as
+
+[FIG:9fcd30ae7b1eab240859] .
+
+For [FIG:db758b99b13b8c8bda23] , as a precoder, it is enough to use the following parameterization
+
+[FIG:9c7364ad7f566b853c8b]
+
+We further assume that
+
+[FIG:fb548fb8773640df452b]
+
+where [FIG:741cc78af9fe96e1caab] are complex numbers.
+
+Then it can be checked that
+
+[FIG:9df2baf0238b1b5cba9f]
+
+We can also verify that
+
+[FIG:74bf3fb9ca2759df49cc]
+
+The sum rate can be maximized with:
+
+[FIG:d166d1778b1685c7dded]
+
+and in this case one solution is given by
+
+[FIG:4df0395be7367d4180c4]
+
+From the analysis, we can see the best transmission strategy is to map a codeblock to some but not all spatial layers (a spatial layer group); and align a spatial layer group with the possible interfering signal, and have (an)other spatial layer groups orthogonal to the possible interfering signal. The benefits of such a scheme include
+
+Due to the bursty nature of CLI, typically a scheduler does not have the foresight to decide whether a UE would experience CLI in a specific slot or not. Yet from CSI feedback, the scheduler may acquire information about the CLI, which can be put to good use, e.g. in choosing the precoder which leads to robustness in PDSCH transmission to CLI and corresponding spatial layer groups for codeblock mapping. Such a mapping scheme provides inherent robustness to CLI:
+
+If the possible interfering signal does materialize in a certain slot, then the un-affected spatial layers still carry codeblocks which can be correctly decoded.
+
+In the case the possible interfering signal is not present in a slot, then codeblocks carried over all spatial layers can be correctly decoded with a high probability.
+
+In RAN1 #89, much progress was made in CSI feedback. For example, linear combination codebooks supporting rank 1-2 are supported. One possible way to realize the above feedback can be:
+
+A UE is configured with two IMRs associated with one NZP CSI-RS;
+
+IMR 1 is for CSI with the presence of cross-link interference. From IMR 1, the UE generates a feedback with PMI (PMI_1) and RI (RI_1). A linear combination codebook or Type I codebook can be used.
+
+IMR is for CSI in the absence of cross-link interference. From IMR 2, the UE generates a feedback with PMI (PMI_2) and RI (RI_2). A linear combination codebook or Type I codebook can be used.
+
+The network can deduce the dominant interference from PMI_1 and PMI_2 and make necessary adjustment for the precoder of PMI_2, e.g. to align a precoder for a certain layer with the dominant CLI and come up with PMI’_2. Then the network can utilize PMI’_2 for its transmission for various slots, irrespective whether it is CLI-free or CLI-present nominally.
+
+We can also consider another approach by using two codewords:
+
+In a first alternative, a UE is configured with two CSI processes. Each CSI process is configured with one NZP CSI-RS and IMR, e.g. {NZP CSI-RS, IMR1} for process 1, {NZP CSI-RS, IMR2} for process 2. And IMR1 is for the heavy interference case, and IMR2 is for the light inteference case. From process 1, the UE requires a split of spatial layers according to Set 1 = {1:N1} for codeword 1, and set 2 = {N1+1:N1+N2} for codeword 2 (Matlab like notations are used). Then for process 2, the UE is constrained to report a split of spatial layers according to codeword 1 with {set 1} U {possible additional spatial layer(s) not from set 2}, and codeword 2 with {set 2} U {possible additional spatial layer(s) not from set 1}.
+
+In a second alternative, a single CSI process is configured with two subsets of slots, and the reported CSI is referred to the subset of slots by using IMR(s) residing on each subset of slots, which effectively achieves the same as the first alternative.
+
+A.3 Multiple bit HARQ feedback
+
+In NR, a codeword consists of one or multiple codeblocks. And codeblocks are divided into codeblock group(s). And HARQ feedback with multiple bits can be used to indicate to the base station some codeblocks/codeblock group(s) are received correctly, consequently retransmission can be conducted for other codeblocks/codeblock gorup(s) which are not received correctly.
+
+In Figures 1 and 2 below, we use transmission over 2 OFDM symbols at 4 spatial layers and 32 tones to illustrate a codeblock mapping which can be used with the above transmission strategy, As discussed above, with the above transmission strategy, codeblock (group) mapping can lead to half of the codeblocks (or codeblock groups) are received correctly (e.g. over spatial layers 1 & 2), and the other half are in error. In contrast, when codeblock mapping is through all spatial layers, then it can happen all codeblocks are received in error.
+
+Motivated by that, we further propose HARQ feedback states should include error cases often encountered in dynamic TDD. For example, the later half of codeblocks in a codeword can be impacted by CLI, hence we can include it as a code state in multiple bit feedback; and it is assumed all codeblocks on a spatial layer/specific spatial layers are in error.
+
+[FIG:f6ceb41f2bfcce6c5a9d]
+
+Figure 1 codeblock mapping over OFDM symbol 0
+
+[FIG:befc5ecef7bf27bd110a]
+
+Figure 2 Codeblock mapping over symbol 1
+
+In Figures 1 and 2, one example is provided for codeblock mapping over spatial layer, frequency and time.
+
+In the example, 4 spatial layers are used for transmission. And they are divided into two groups: {layer 1, layer 2} in Group 1 with P1, {layer 3, layer 4} in Group 2 with P2 . In the example, one CQI is fed back from UE for all spatial layers. And the base station assumes each spatial layer supports the same spectral efficiency. One transport block is encoded into one codeword, e.g. with CRC attachment for the codeword, and CRC attachment for codeblocks or codeblock groups, channel encoding, rate matching etc. In the example, one codeword consists of 32 codeblocks. Codeblocks 0-15 are mapped to Group 1, and Codeblocks 16-31 are mapped to Group 2.
+
+For HARQ feedback, codeblocks are aggregated into codeblock groups. For example, Codeblocks 0-3 go to Codeblock group 1, Codeblocks 4-7 go to Codeblock group 2, Codeblocks 8-11 go to Codeblock group 3, Codeblocks 12-15 go to Codeblock group 4, Codeblocks 16-19 go to Codeblock group 5, Codeblocks 20-23 go to Codeblock group 6, Codeblocks 24-27 go to Codeblock group 7, Codeblocks 28-31 go to Codeblock group 8. With severe CLI, it can happen all the codeblocks on some spatial layers are received in error. For example Codeblocks 16-31.
+
+In addition, it can also happen a few codeblocks from Codeblocks 0-15 are received in error.
+
+In this case, some code states in the multiple bit HARQ feedback can be defined to indicate block error(s) on one or more spatial layer and random error in other codeblock group(s). With that, un-necessary retransmission can be avoided.
+
+A.4 Simulation results
+
+In this section, we provide simulation results to evaluate different codeword layer mapping schemes and also different CSI feedback alternatives.
+
+[FIG:466fbfe5008ab1e0657d]
+
+Figure 3 MIMO transmission with the presence of cross-link interference
+
+The setup is given in Figure 3. We assume that TRP 1 transmits to UE 1, and UE 2 which is associated with TRP 2, transmits to TRP 2 simultaneously. The dashed line from UE 2 to UE 1 indicates the UE-UE interference that UE 2 generates to UE 1.
+
+For layer mapping, we evaluate two schemes:
+
+Mapping Scheme 1: Spatial layer group based mapping as described above. Briefly, a code block group is mapped to some but not all spatial layers to provide robustness to CLI. Within a spatial layer group, RE mapping is with layer first, frequency second, time third.
+
+Mapping Scheme 2: Layer first (over all spatial layers), frequency second, and time third.
+
+For CSI feedback, we have consider two alternatives:
+
+“CSI-A”: CSI feedback with the legacy LTE codebook is used.
+
+“CSI-B”: the PMI feedback as given Section 2.2 is used.
+
+UE 1 is the UE of interest in the evaluation. As the CLI depends on the coupling loss between UE 1 and UE 2, we provide results by assume a variety of interference-to-noise ratios due to UE 2’s transmission at UE 1, to account for possible difference in the coupling loss due to separation, shadowing, etc.
+
+In total, for every given INR, we have 3 evaluations:
+
+“Mapping 1, CSI-A” for Mapping Scheme 1 and CSI feedback Alternative A
+
+“Mapping 1, CSI-B” for Mapping Scheme 1 and CSI feedback Alternative B
+
+“Mapping 2, CSI-A” for Mapping Scheme 2 and CSI feedback Alternative A
+
+UE 2’s uplink transmission to TRP 2 is assumed to be of one layer, and the number of transmission layers from TRP 1 to UE 1 can be flexibly adjusted according to CSI feedback from UE 1 to TRP 1.
+
+[FIG:a16a0f85bbafaa1db9da]
+
+Figure 4 Performance comparison with IINR at 25 dB
+
+[FIG:afcdd24726afdd08e4be]
+
+Figure 5 Performance comparison with INR at 20 dB
+
+[FIG:d7fb71de66e772ffdcff]
+
+Figure 6 Performance comparison with INR at 15 dB
+
+It can be seen that “Mapping 2 with CSI-A” also under-performs “Mapping 1 with CSI-A”. In another word, with the CSI feedback with legacy LTE codebook, codeword mapping over a subset of spatial layers outperforms codeword mapping over all spatial layers. The difference in SNR to achieve the same spectrum efficiency can be several dBs.
+
+The difference between “Mapping 2 with CSI-A” and “Mapping 1 with CSI-B” is even larger; which suggests a substantial improvement in downlink transmission throughput can be achieved if CSI feedback as proposed in Section 2.2 can be used. We note here in general to mitigate CLI, using high-resolution CSI is beneficial, e.g. interference aligned PMI feedback.
+
+In summary, with either a CSI feedback scheme similar to the legacy LTE design, or an improved CSI scheme with interference aligned PMI feedback, the spatial layer group based mapping scheme out-performs the scheme with codeword mapping over all spatial layers.

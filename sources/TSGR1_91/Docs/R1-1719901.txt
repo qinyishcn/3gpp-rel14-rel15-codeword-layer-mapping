@@ -1,0 +1,57 @@
+3GPP TSG RAN WG1 Meeting 91 R1-1719901
+
+Reno, USA, November 27th – December 1st, 2017
+
+_____________________________________________________________
+
+Agenda Item: 7.2.1.1
+
+Source: LG Electronics
+
+Title: Discussion on codeword mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In the last RAN1 meeting, the following agreement regarding CW to layer mapping were made:
+
+Working Assumption
+
+For DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:
+
+The RE mapping is performed with the following order:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+In this contribution, we have discussed data RE mapping order for DFT-s-OFDM and data scrambling.
+
+Discussion
+
+In DFT-S-OFDM case, each data symbol is spreaded over scheduled RBs because of DFT spreading, Option 1 does not seem to have strong motivation. On the other hand, in Option 3, each code block can achieve not only frequency diversity coming from DFT spreading but also time domain channel diversity and frequency hopping gain. As a result, Option 3 achieves at least the same performance as Option 1. Specifically, in case of high frequency selectivity, time varying channel or time varying interference, Option 3 outperforms Option 1 because of time domain channel diversity and frequency hopping gain. The only advantage of Option 1 is pipeline decoding and required small buffer size but Option 3 provides good trade-off between performance and implementation complexity.
+
+Proposal 1: Option 3, which is in the order of sub-carriers, sub-slots (hopping) and then DFT-SOFDM symbols, should be supported in UL DFT-S-OFDM with frequency hopping case.
+
+Regarding PDSCH/PUSCH data scrambling, 31-Gold sequence and LTE like c_init generation method can be used based on nRNTI (16bits), CW index (1bits only for PDSCH), slot index (4bits) and scrambling ID (10bits). Physical cell ID is used as a default value of Scrambling ID. In our view, slot index is essential for performance by randomizing interference between codewords slot by slot. Given that 1 radio frame contains up to 320 slots, modular operation for slot index is needed. As a result, c_init is expressed as shown below:
+
+c_init = nRNTI * 215 + q * 214 + (slot index%24) * 210 + Scrambling ID
+
+Proposal 2: Support 31-Gold sequence and the following seed generation method for PDSCH and PUSCH, respectively:
+
+c_init for PDSCH= nRNTI * 215 + q * 214 + (slot index%24) * 210 + Scrambling ID
+
+c_init for PUSCH= nRNTI * 215 + 0 * 214 + (slot index%24) * 210 + Scrambling ID
+
+Conclusion
+
+In this contribution, we have discussed flexible codeword to layer mapping and resource mapping order, and proposed as following:
+
+Proposal 1: Option 3, which is in the order of sub-carriers, sub-slots (hopping) and then DFT-SOFDM symbols, should be supported in UL DFT-S-OFDM with frequency hopping case.
+
+Proposal 2: Support 31-Gold sequence and the following seed generation method for PDSCH and PUSCH, respectively:
+
+c_init for PDSCH= nRNTI * 215 + q * 214 + (slot index%24) * 210 + Scrambling ID
+
+c_init for PUSCH= nRNTI * 215 + 0 * 214 + (slot index%24) * 210 + Scrambling ID

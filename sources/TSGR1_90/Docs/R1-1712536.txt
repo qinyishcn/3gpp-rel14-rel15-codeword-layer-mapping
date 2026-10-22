@@ -1,0 +1,181 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1712536
+
+Prague, P.R. Czech 21th – 25th August 2017
+
+Source: Intel Corporation
+
+Title: Remaining details of CW-to-MIMO layer mapping
+
+Agenda item: 6.1.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN1 NR Ad-Hoc#2 meeting, the following agreements were reached regarding CW-to-MIMO layer mapping for NR [1]:
+
+Agreements:Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenariosPractical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.For both CP-OFDM and DFT-S waveformsEvaluation should be done considering both slot and mini-slot.Agreements:NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCHFFS HARQ ID Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layersNR supports higher layer signalling for the maximum number of CQIs in UCIUnless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI reportFFS subband CQIFFS Whether or not the actual number of CQIs is also RI dependentNote: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)FFS applicability on single/multi TRP
+
+In this contribution we address the following remaining issues of CW-to-MIMO layer mapping schemes:
+
+Support of frequency domain interleaving for NR
+
+Support of the time first symbol level mapping
+
+Support of the additional correspondence between MIMO layers and CWs
+
+Discussion
+
+Support of the time first symbol level mapping
+
+It is expected that in the channel models with low frequency diversity and high time diversity, time first mapping should provide better performance than frequency first mapping. The gains should be more pronounced when TBS is consisting of multiple CBs. It is, therefore, proposed in [1] to adopt two symbol mapping functions with frequency and time first mapping approaches with indication from the TRP on the specific scheme used for PDSCH transmission.
+
+In order to estimate the benefits offered by different mapping schemes a link level evaluations were carried out according to simulation assumptions presented in Table 1.
+
+Table 1: Link level evaluation assumptions
+
+Simulation Parameter | Value
+SCS, FFT | 15kHz, 4096
+MIMO | 2 Tx – 2 Rx, random PMI, low correlation
+Layers | 1
+Slot Structure | 11 PDSCH symbols
+MCS, Allocation | 16 QAM (Rate=5/9, 400 PRB)4 QAM (Rate=2/3, 120 PRB)
+Channels | TDL-A 30ns
+Carrier Freq | 4GHz
+HARQ | 1 transmission
+Time first mapping | Slot
+Freq Interleaver | See Frequency Interleaving below
+
+Figure 1 shows the case where many codeblocks are mapped into a subframe. There was gain from the frequency interleaving however little gain from the time first mapping except at high speed and large SNR. Figure 2 shows the case where very few codeblocks are mapped into a slot. The frequency interleaving has no improvement and time first mapping has gain at high speed. However in both cases the time first mapping performs worse than frequency first mapping at low speeds.
+
+[FIG:4221cddcf5e7bf1b079d] [FIG:dbfb87a86f920aadd2bc]
+
+Figure 1: 400 PRB, 16 QAM, 18 CBs per slot
+
+[FIG:3cd2ab4ecd00e216f523] [FIG:70a1b7983dcfd0af3d21]
+
+Figure 2: 100 PRB, QPSK, 4 CBs per slot
+
+One of the issue of supporting two symbol level mapping functions is switching between them. Ideally the selection should be made by the UE based on the downlink channel measurements. On the other due to localized transmission of CSI-RS in time domain, it is practically impossible for the UE to estimate the possible channel variation in time domain to provide such recommendation. Comparison of the channel measurements on CSI-RS in different time instances may not be useful as the channel on CSI-RS may change due to phase drifts, precoder changes on the beam formed CSI-RS resource, etc. It is, therefore, not clear whether the potential gains due to different mapping orders can be harvested in realistic scenarios.
+
+Observations:
+
+Due to localized (in time domain) structure of CSI-RS, there is no means to estimate the most preferred symbol level mapping option for NR to make optimal decision for the symbol mapping order
+
+Frequency Interleaving
+
+In NR, due to large bandwidth allocations, several codeblocks can be mapped on the same OFDM symbol. To full achieve frequency diversity, symbol level frequency domain interleaving within OFDM symbol can be considered for NR. To evaluate the performance benefits link level evaluations of NR system with and without frequency interleaving were performed. The evaluation assumption are provided in Table 2.
+
+Table 2: Link level simulation assumptions
+
+Simulation Parameter | Value
+SCS, FFT | 15kHz, 4096
+MIMO | 2 Tx – 2 Rx, random PMI, low correlation
+Layers | 1
+Slot Structure | 11 PDSCH symbols
+MCS | 64 QAM ( Rate= 2/3, 3 /4, 5/6)
+Channels | TDL-A 30ns, TDL-B 100ns TDL-C 300ns
+Carrier Freq, Speed | 4GHz, 30km/hr
+HARQ | 1 transmission
+
+The interleaving function tested split the total number of RE in each OFDM symbol in to 3 blocks and interleaved them over the whole frequency range. The number of blocks was selected to closely match with the simulation test case which consists of 2.9, 3.2, and 3.5 code blocks per OFDM symbol.
+
+N = number RE in the OFDM symbol
+
+LayerOffInc = Layer Offset Increment
+
+RE_interleave(k, Layer) = RE( mod((N/3)*mod(k,3) + floor(k/3) + 3*LayerOffInc*Layer, N) )
+
+A sample illustration is given below for two layers, with N=9, LayerOffInc=1.
+
+Original | RE # | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+ |  |  |  |  |  |  |  |  |  | 
+Interleaved Layer 0 | RE # | 0 | 3 | 6 | 1 | 4 | 7 | 2 | 5 | 8
+Interleaved Layer 1 | RE # | 1 | 4 | 7 | 2 | 5 | 8 | 0 | 3 | 6
+
+The evaluation results are provided in Figures 3-5 and summarized in Table 3.
+
+[FIG:86f50adf9a6eb4b77da5]
+
+Figure 3: BLER and Throughput for TDL-A 30ns channel
+
+[FIG:522d7bce49585c8254f7]
+
+Figure 4: BLER and Throughput for TDL-B 100ns channel
+
+[FIG:02222601b34886e7a345]
+
+Figure 5: BLER and Throughput for TDL-C 300ns channel
+
+Table 3: Summary of link level simulation assumptions
+
+Interleave dB gain in 10% BLER
+Rate | CB per OFDM Symbol | TDL-A 30ns | TDL-B 100ns | TDL-C 300ns
+2/3 | 2.9 | 0.81 | 0.58 | 0.3
+3/4 | 3.2 | 0.84 | 0.69 | 0.3
+5/6 | 3.5 | 0.7 | 0.65 | 0.3
+
+The following observations can be made.
+
+Observations:
+
+The interleaved always performed better than the original
+
+The gain is dependent on the channel with more gain in order of TDL-A, TDL-B, and TDL-C.
+
+It should be noted that for multiple MIMO layers scenario and the same interleaving function for all MIMO layer, symbols corresponding to the same codeblock will be transmitted over the same set of the physical subcarriers irrespective of the frequency interleaving function. For the spatially correlated channel such interleaving approach is not desirable as the symbols of the same codeblock will experience similar fading patterns. To provide the maximum diversity order, the frequency interleaving function is preferably to be different across different MIMO layers.
+
+To illustrate the additional gain from different frequency interleaver for different MIMO layers a 2 layer simulation is shown below to illustrate the gain. Table 1 shows the changes in the simulation setup. Figure 3 shows the gain from having different interleaving function for different MIMO layers is approximately 0.8dB at BLER=0.1.
+
+Table 2: Simulation Assumption Changes
+
+Simulation Parameter | Value
+Layers | 2
+LayerOffInc | 1600
+MCS | 64 QAM (Rate=8/9)
+Channels | TDL-A 30ns
+
+[FIG:d3d622642cfee4ac71a4]
+
+Figure 6: BLER and Throughput for 2 Layer same vs different frequency interleaver in MIMO layers.
+
+Proposal:
+
+If frequency interleaving is supported for NR, the interleaving function should be different across different MIMO layers to provide the maximum frequency diversity gains
+
+Support of additional correspondence between MIMO layers and CWs
+
+Similar to LTE, NR for than four MIMO layers supports almost equal split of MIMO layers between two CWs. However, in some scenarios, it would be useful to additionally support unequal MIMO layer split among CWs. In order to avoid introduction of the new CW-to-MIMO layer mapping schemes, we propose to reuse already agreed multiple DCIs based for PDSCH scheduling for NC-JT for that purpose. In particular, simultaneous transmission of one or more DCIs from the same TRP can be used to achieve new MIMO layer mapping schemes to CWs. For example, for two DCIs with maximum of four MIMO layers in each PDSCH, the following combinations can be supported by NR (see Table 1). It can be seen that for four, five and six MIMO layers, the addition mapping of {1,3}, {1,4} and {2,4} can be provided. In this approach, two RI reporting for the two PDSCH can be used to indicate the preferred MIMO layer splitting across two CWs.
+
+Table 1: Supported number of MIMO layers combination for two DCI transmissions
+
+Total number of MIMO layers | Number of MIMO layers indicated in DCIs (1st DCI, 2nd DCI)
+2 | {2}, {1,1}
+3 | {3}, {1,2}
+4 | {4}, {1,3}, {2,2}
+5 | {1,4}, {2,3}
+6 | {2,4}, {3,3}
+7 | {3,4}
+8 | {4,4}
+
+Proposal:
+
+NR supports additional CW-to-MIMO layer correspondence schemes in addition to almost equal split by using multiple DCIs framework adopted for NC-JT operation
+
+Reporting of two RIs can be used to indicate the preferred MIMO layer splitting across two CWs
+
+Summary
+
+In this contribution we discuss the remaining details of codeword to MIMO layer mapping. The following proposals were made:
+
+If frequency interleaving is supported for NR, the interleaving function should be different across different MIMO layers to provide the maximum frequency diversity gains
+
+NR supports additional CW-to-MIMO layer correspondence schemes in addition to almost equal split by using multiple DCIs framework adopted for NC-JT operation
+
+Reporting of two RIs can be used to indicate the preferred MIMO layer splitting across two CWs
+
+It was also observed that selection of the most appropriate symbol mapping is challenging task that could question the potential gain due to additional support of the time first mapping. Therefore, it was recommended to further discuss whether to support the configurable mapping option.
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 NR Ad-Hoc#2, Qingdao, P.R. China, 27th – 30th June 2017.

@@ -1,0 +1,214 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1710594
+
+Qingdao, P.R. China 27th – 30th June 2017
+
+Agenda Item: 5.1.2.1.1
+
+Source: Lenovo, Motorola Mobility
+
+Title: On codeword to RE mapping scheme
+
+Document for: Discussion
+
+Introduction
+
+In the January RAN1 ad hoc meeting, it was determined that study of interleaving in the codeword to layer mapping procedure is needed for 5G NR [1]. In the previous RAN1 meeting, the following agreements and working assumptions were reached regarding NR codeword to layer mapping [2][3]:
+
+RAN1#88 [2]:
+
+Agreements:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+RAN1#89 [3]:
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+The RE mapping schemes concerning interleaving as proposed in RAN1#89 are summarized in the following table [4]:
+
+Table 1. Interleaving scheme proposed in RAN1#89.
+
+Scheme | Proponents
+No frequency interleaver | AT&T, CATT
+Per-OFDM-symbol interleaver, either used all the time or conditionally | Ericsson, NTT DOCOMO, Qualcomm, Samsungf5M
+Multi-OFDM-symbol interleaver | Huawei, HiSi
+Configurable interleaver (to match configurable layer mapping) | ZTE
+Time-frequency interleaver | Motorola, Lenovo
+
+In this contribution, we discuss different considerations of the RE mapping schemes. We end up with a simulation study to compare their performance in the context of eMBB/URLLC multiplexing.
+
+Considerations of codeword to RE mapping scheme
+
+Spatial dimension vs time-and-frequency dimension
+
+Most companies support using the spatial layer as the first dimension for codeword mapping. This is the same as in LTE. Mapping in the spatial layers first guarantees that all codewords experience the spatial diversity across all the layers. This is also in line with the working assumption:
+
+“In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel: first across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)”.
+
+L spatial layers are divided into two “almost equal” groups, where the first group with stronger singular values is used to map the first codeword, and the remaining group with weaker singular values is used to map the second codeword. Because the modulation symbols mapped to (L/2) layers come from a same codeword, the benefit of additional permutation across the layers is marginal. Because the (L/2) layers have different qualities and are ordered in descending order, mapping the modulation symbols layer first naturally achieves interleaving and diversity in the spatial domain. So there is no need to perform layer permutation at the per-RE level. Mapping to the spatial domain in a given RE can be done before moving to the next RE in the time-and-frequency domain. Therefore we have the following proposal:
+
+Proposal 1: Codeword modulation symbols are mapped sequentially to the spatial layers before being mapped to the time and frequency dimensions.
+
+In the remaining part of this contribution, we will mainly investigate the codeword mapping issue in the time-frequency domain.
+
+Interleaving granularity: intra-CB, inter-CB or inter-CBG?
+
+The potential gain of intra-CB interleaving depends on the size of the CB as well as the channel and interference variation at the mapped REs. It also depends on the LDPC coding scheme. More gain can be achieved by inter-CB interleaving. Interleaving between different CBs spans the modulation symbols of a given CB into a larger frequency and/or time range and has the benefit of increased frequency and/or time diversity. This enhances the performance in the presence of fast fading and frequency selective fading, as well as robustness against potential uneven interference such as URLLC transmissions. This can be achieved by interleaving in the frequency and/or time domain across multiple CBs.
+
+For the sake of achieving maximal diversity, it is better to interleave more CBs so each CB will span wider in the frequency and/or time domain. From this perspective, it is beneficial to interleave CBs from different CB groups all belonging to a same TB. However, as more CBs are multiplexed, it is inevitable that each CB spans more OFDM symbols. This causes additional delay before the decoder can receive and start processing all the softbits of a CB. To enable pipeline decoding at the receiver side, the modulation symbols of a CB should not span too much in the time domain. Because the unit of ACK/NACK bundling is CBG, it is better that the decoder does not have to wait till the last symbol of the PUSCH/PDSCH before it can start processing some of the CBGs. As a compromise, only CBs from the same CBG, instead of from different CBGs, should be interleaved. A resource region can be defined for mapping of a CBG. Preferably the resource region allocated to a CBG is defined by symbol boundary.
+
+Proposal 2: Only allow interleaving between CBs belonging to a same CBG.
+
+Proposal 3: Define CBG resource region by OFDM symbol boundary.
+
+In LTE, a TB is constructed as a codeword with multiple CBs concatenated sequentially together. Similarly in NR, a TB can be constructed as multiple concatenated CBs, where several adjacent CBs constitute a CBG. As explained previously, the modulation symbols of the CBs in a same CBG in their natural order is the modulation symbols stream used for RE mapping in the designated resource region.
+
+Proposal 4: CBs of a same CBG are concatenated sequentially before applying the RE mapping/interleaving scheme in the corresponding CBG resource region.
+
+Comparison of candidate schemes
+
+Frequency diversity vs frequency-time diversity
+
+The candidate schemes in Table 1 can be classified into 3 categories depending on the RE mapping/interleaving method. We focus our discussion on the mapping/interleaving scheme in the frequency and time domain, with the understanding that for all these schemes, modulation symbols are first mapped to the corresponding layers at the same RE (Proposal 1).
+
+Sequential (FT) mapping scheme: The modulation symbols of the CBs are mapped sequentially first in the frequency domain. After spanning the entire frequency range allocated to the data channel, the mapping pattern is repeated in the following OFDM symbols. A CB is mapped to adjacent subcarriers in the same OFDM symbol. When a CB cannot fit into an OFDM symbol, it continues in the next OFDM symbol restarting from the end of the allocated frequency range. In the example of Fig.1a, every CB is within an OFDM symbol. This is similar to the RE mapping scheme of LTE PDSCH. The proposals of [5][6] fall into this category;
+
+Frequency domain interleaver: The modulation symbols are interleaved in the frequency domain on a symbol by symbol basis with a 1D interleaver. When enough PRBs are allocated, multiple CBs can be interleaved in an OFDM symbol. In the time domain a CB still occupies a single OFDM symbol. In the example in Fig.1b, modulation symbols from 2 CBs are interleaved in the frequency domain of a single symbol. Note for the same allocated bandwidth and CB size and MCS, in order to interleave 2 CBs in the same symbol, the required bandwidth is doubled compared with the sequential (FT) mapping scheme. The proposals of [7][8][9] fall into this category;
+
+Joint frequency-time interleaver: The modulation symbols are interleaved in the frequency and time domain in a pre-defined resource region with a 2D interleaver. 2D interleaving can be implemented by jointly applying two 1D interleavers, one in the time domain and the other in the frequency domain. Multiple CBs belonging to a CBG are interleaved in the CBG resource region. The modulation symbols of a CB span the entire time and frequency in the region. In the example in Fig.1c, 4 CBs are interleaved over 4 OFDM symbols. The modulation symbols of a CB are evenly spaced in the frequency and time domain to achieve maximal diversity afforded by the allocated region. The proposals of [10][11] fall into this category;
+
+Figure 1 shows toy examples of the 3 candidate RE mapping schemes in the frequency-time domain. Different colors represent different CBs. The numbers indicate the indices of modulation symbols of a CB mapped to the REs.
+
+Figure 1. Candidate RE mapping schemes: (a) Sequential (FT) mapping scheme; (b) frequency domain interleaver; (c) joint frequency-time interleaver. The x-axis is the time domain in the unit of OFDM symbols, and the y-axis is subcarrier in the allocated PRBs. The numbers indicate the sequence of modulation symbols of a CB mapped to the REs. Different colors represent different CBs.
+
+By spanning over multiple OFDM symbols, scheme (c) is expected to outperform scheme (a) and (b) in fast fading channel. Spanning a CB in the frequency-time 2D domain also makes the scheme applicable to wide bandwidth as well as narrow bandwidth case.
+
+The sequential (FT) mapping scheme (a) provides little diversity in the frequency or time domain and is expected to have the poorest performance in terms of error. Its benefit lies in its simplicity. The limit of the frequency domain interleaver is that the used bandwidth may not be wide enough to support much diversity, even with interleaving. NR is designed to accommodate wide range of scenarios, applications and deployments. Although NR supports bandwidth up to 400MHz per CC, the deployed bandwidth may be only 5MHz. The bandwidth allocated for transmission to/from a UE may be even less, depending on the application. In the UL case, the allocated bandwidth to a UE also depends on the link budget and UE UL transmission power. It is unlikely that interleaving in the frequency domain alone, on a per-OFDM symbol basis, can satisfy the diversity requirements for all possible cases. It is very likely that for a narrow band PDSCH or PUSCH transmission, only one or two CBs could fit into an OFDM symbol, especially for the lower MCS cases. It is unlikely that interleaving in the frequency domain alone, on a per-OFDM symbol basis, can satisfy the diversity requirements of all the possible cases.
+
+Performing interleaving jointly in the frequency-time 2-dimensional domain provides more room for multiplexing multiple CBs and leads to more flexibility regarding allocated bandwidth. This also leads to maximal frequency and time diversity to each CB, so it should outperform the frequency domain interleaver in a fast fading channel. Interleaving in the frequency-time 2D domain will be most beneficial when eMBB traffic is punctured by bursty URLLC traffic. An URLLC minislot may occupy a single OFDM symbol in the time domain but span many PRBs in the frequency domain. When an eMBB CB is hit by an URLLC transmission, it is highly desirable that the CB has time diversity so it does not suffer severely just because of one affected OFDM symbol. In Figure 2, a URLLC minislot occupyiesa single OFDM symbol but contiguous subcarriers. With sequential mapping scheme (a), all the punctured REs belong to the same CB, causing severe interference and likely decoding failure of the CB. With frequency domain interleaver (b), the punctured REs fall evenly on two CBs, while the other CBs are unaffected. With frequency-time 2D interleaving (c), all 4 CBs share the burden of the punctured REs on equal basis. With the other conditions (SINR and channel fading) remain the same, all the CBs decoding are highly correlated. They are likely to be either all decoded successfully or unsuccessfully. When these CBs belong to the same CBG, the probability for all the CBs to be decoded successfully can be approximated by the probability that one of the CBs can be decoded successfully. Because this one CB has the fewer number of punctured REs than the worst hit CB in the other two scheme (a and b), this CB has the higher decoding probability. With ACK/NACK bundling at the CBG level, an ACK is feedback to the transmitter only if all the CBs in a CBG are decoded successfully. The probability that not all CBs in a CBG are successfully decoded is dominated by the worst hit CB. So joint frequency-time 2D interleaving scheme provides not only the best performance at the CB level, but also at the CBG level.
+
+Figure 2. CB puncturing due to URLLC in the 3 interleaving schemes. In the sequential (FT) mapping scheme (a), the yellow CB is heavily punctured; with frequency domain interleaver (b), two CBs are affected, leading to unbalanced decoding performance; with the joint frequency-time interleaver (c), all 4 CBs are evenly affected, leading to balanced performance and higher probability of CBG success.
+
+Simulation results
+
+We conducted simulation to compare the performance of the three schemes when punctured by URLLC. LTE Turbo code is used. We simulated two different slot structures. In Slot Type 1, 9 data symbols are used to carry data. Among the other 5 symbols, 2 are used DMRS (2 symbols), and the rest are reserved for control channel, other RS and guard time. There is 1 CBG in the slot. In Slot Type 2, 12 data symbols are partitioned into 2 resource regions, where each group is allocated to a CBG. Interfering URLLC transmission occupies a single OFDM symbol, which is randomly selected from the data-carrying symbols of a CBG. Therefore for Slot Type 1, every subframe is punctured by 1 URLLC minislot; for Slot Type 2, every subframe is punctured by 2 URLLC minislots, one in each CBG group. The eMBB data channel is allocated 50 or 100 contiguous PRBs. The number of CBs in a CBG depends on the MCS level and assigned resources. The URLLC transmission occupies X contiguous PRBs randomly positioned in the allocated bandwidth of the eMBB transmission. The simulation assumptions are summarized in Table 2. We have experimented with different MCS levels, both Slot Types, and different URLLC bandwidth. We use CBG error rate (CBGER) as performance measure. A CBG is considered transmitted successfully only if all the CBs are decoded successfully. This is inline with the ACK/NACK bundling at the CBG level, where a CBG is the unit of (re)transmission and acknowledgment. The case without URLLC puncturing is included as the baseline The CBG error rates of different simulation cases are presented in Figures 3-9. The configurations of the simulated cases, and the SNR loss of the interleaving schemes with puncturing relative to the unpunctured case at CBGER=10-1 are summarized in Table 3.
+
+Table 2. Simulation assumptions
+
+Simulation parameter | Value
+Channel | AWGN
+Channel coding | 3GPP Turbo code
+Slot Type 1 | 9 data symbols for 1 CBG per slot
+Slot Type 2 | 12 data symbols partitioned as 2 groups for 2 CBGs per slot
+MCS (as in LTE) | 13,12,9,7,5
+eMBB data channel allocations (PRB) | 50, 100
+URLLC puncturing | 1 random data symbol per CBG, X contiguous PRBs starting at random location
+Number of CBGs in a TB | 1 (Slot Type 1) or 2 (Slot Type 2)
+Number of CBs in a CBG | Depending on the resource size and MCS
+Performance measure | CBGER (CBG error rate)
+
+Table 3. Summary of simulation results
+
+Figures | MCS(modulation, code rate) | Slot Type | eMBB BW (PRB) | URLLC BW (PRB) | TB (bits) | Number of CBs per CBG | SNR loss (dB) relative to baseline (unpunctured) at CBGER=10-1
+ |  |  |  |  |  |  | Joint freq-time interleaving | Frequency domain interleaving | Sequential (FT) mapping
+3 | 13 (QAM64, 0.76) | 1 | 50 | 13 | 24390 | 4 | 0.51 | 2.35 | 2.45
+4 | 13 (QAM64, 0.76) | 2 | 100 | 12 | 32568 | 6 | 0.27 | 2.44 | 2.74
+5 | 12 (QAM64, 0.69) | 1 | 100 | 26 | 42114 | 7 | 0.40 | 2.5 | 5.6
+6 | 9 (QAM16, 0.56) | 1 | 100 | 26 | 25968 | 5 | 0.35 | 1.65 | 1.95
+7 | 9 (QAM16, 0.56) | 2 | 100 | 30 | 17325 | 3 | 0.45 | 1.82 | 2.0
+8 | 5 (QPSK, 0.44) | 1 | 100 | 72 | 9464 | 2 | 1.2 | 3.0 | 3.1
+9 | 5 (QPSK, 0.44) | 2 | 100 | 60 | 6312 | 2 | 0.67 | 1.57 | 1.63
+
+[FIG:19d5b490127c2f27f290]
+
+Figure 3. MCS=13, Slot Type 1, eMBB BW=50 PRBs, URLLC BW=13 PRBs. 1 CBG = 4CBs.
+
+[FIG:064409f4f26e254b0ad2]
+
+Figure 4. MCS=13, Slot Type 2, eMBB BW=100 PRBs, URLLC BW=12 PRBs. 1 CBG = 6CBs.
+
+[FIG:265b69927a3770753bb3]
+
+Figure 5. MCS=12, Slot Type 1, eMBB BW=100 PRBs, URLLC BW=26 PRBs. 1 CBG = 7CBs.
+
+[FIG:c0fc86ce3ec236fc7cbe]
+
+Figure 6. MCS=9, Slot Type 1, eMBB BW=100 PRBs, URLLC BW=26 PRBs. 1 CBG = 5 CBs.
+
+[FIG:587fccc9460728cc7317]
+
+Figure 7. MCS=9, Slot Type 2, eMBB BW=100 PRBs, URLLC BW=30 PRBs. 1 CBG = 3 CBs.
+
+[FIG:ec88f99f795c189b18c7]
+
+Figure 8. MCS=5, Slot Type 1, eMBB BW=100 PRBs, URLLC BW=72 PRBs. 1 CBG = 2 CBs.
+
+[FIG:0ef83a1568016100f4bf]
+
+Figure 9. MCS=5, Slot Type 2, eMBB BW=100 PRBs, URLLC BW=60 PRBs. 1 CBG = 2 CBs.
+
+From the simulation results, the joint frequency-time interleaver clearly outperforms the other two schemes. The sequential (FT) mapping scheme performs the worst as expected. The frequency domain interleaver performs better than the sequential (FT) mapping scheme, but is inferior to the joint frequency-time interleaver. The gain of the joint frequency-time interleaver over frequency only interleaver ranges between 0.9 to 2.1 dB, depending on the simulation setups. The joint frequency-time interleaver performs consistently well over all the scenarios. Therefore we propose to adopt it as the CW-to-RE mapping scheme for 5G NR UL and DL data channel.
+
+Proposal 5: Adopt joint frequency-time interleaving as the codeword to RE mapping scheme for NR data channel.
+
+Conclusion
+
+We have analyzed and compared the three classes of CW-to-RE mapping schemes proposed in the last RAN1 eeting with simulation. As a summary, our proposals are repeated here:
+
+Proposal 1: Codeword modulation symbols are mapped sequentially to the spatial layers before being mapped to the time and frequency dimensions.
+
+Proposal 2: Only allow interleaving between CBs belonging to a same CBG.
+
+Proposal 3: Define CBG resource region by OFDM symbol boundary.
+
+Proposal 4: CBs of a same CBG are concatenated sequentially before applying the RE mapping/interleaving scheme in the corresponding CBG resource region.
+
+Proposal 5: Adopt joint frequency-time interleaving as the codeword to RE mapping scheme for NR data channel.
+
+References
+
+3GPP TR38.802, “Study on new radio (NR) access technology: physical layer aspects”.
+
+Chairman’s notes, RAN1#88.
+
+Chairman’s notes, RAN1#89.
+
+R1-1709261, “Summary of open issues on layer mapping”, Samsung.
+
+R1-1707468, “Discussion on codeword mapping”, CATT.
+
+R1-1707737, “Remaining issue for CW to layer mapping”, AT&T.
+
+R1-1708579, “CW-to-layer mapping and frequency domain interleaving”, Qualcomm Incorporated.
+
+R1-1708667, “Codeword to layer mapping for DL and UL”, Ericsson.
+
+R1-1708045, “Layer Mapping Candidates”, Samsung.
+
+R1-1707765, “Discussion of codeblock mapping for DL and UL data channel”, Lenovo, Motorola Mobility.
+
+R1-1708128, “Codeword to layer mapping in NR”, Huawei, HiSilicon.

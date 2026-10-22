@@ -1,0 +1,3 @@
+WF on configurable codeword to layer mapping LG Electronics , AT&T, ZTE [CATT] 1 3GPP TSG RAN WG1 Meeting #89	        				R1-170 9356 Hangzhou, China, 15 th - 19 th May 2017 Agenda item: 7.1.2.1.1
+
+Proposal Support configurable codeword to layer mapping for more than rank 4 The mapping is configured by gNB  to the UE FFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNB FFS  whether the UE report the preferred layer mapping 2

@@ -1,0 +1,293 @@
+3GPP TSG RAN WG1 Meeting AH 1801 R1-1801007
+
+Vancouver, Canada, January 22nd-26th 2018
+
+Source: MediaTek Inc.
+
+Title: Remaining issues in codeword mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+A number of issues are identified in TS 38.211 and TS 38.214 concerning transmit chain. We provide proposals to address the identified issues.
+
+Issues in specifications concerning the NR transmit chain
+
+In TS 38.211 and TS 38.214, the following Tx chain is specified for DL CP-OFDM, UL DFT-S-OFDM and CP-OFDM:
+
+[FIG:8fa4a9114d7f1b117882]
+
+Figure 1 The current Tx chain as in NR specifications
+
+In NR, two resource allocation types are defined:
+
+Resource allocation type 0 (RAT 0): PRBs are divided into groups of contiguous PRBs (RBG), the addressable unit is a RBG from resource allocation’s point of view;
+
+Resource allocation type 1 (RAT 1): there are two flavours of RAT 1:
+
+Non-interleaved: VRB to PRB mapping is in order;
+
+Interleaved: a block interleaver is used to shuffle PRB bundles to create frequency diversity for a codeblock’s transmission.
+
+Issue 1a: PAPR due to non-contiguous RBGs
+
+This issue can be first explained by one example: with a RBG size at 2 RBs, a bitmap [1000…0001] for resource allocation type 0 requires a UE to transmit over 4 PRBs at the edge of a BWP, the resulted waveform’s PAPR can be high and the intermodulation issue can be severe, hence non-contiguous RBGs allocation is not suitable for DFT-S-OFDM in NR.
+
+From Rel-10 LTE, and Rel-14 LTE, 2-cluster PUSCH and interlaced PUSCH have been supported, one might be tempted to cite that as a precedence. Note the DCI design for both cases allows efficient signaling of resource allocation for PUSCH, RAT 0’s signaling design in NR has not been optimized for that. Considering NR unlicensed most likely will be specified, it is advantageous to leave a clean slate for optimized NR unlicensed design rather than require the forthcoming NR unlicensed to accommodate an inefficient precedence.
+
+When contiguous RBGs are used for DFT-S-OFDM, the length of PRBs in the allocation should have factors from {2,3,5} only to retain the same complexity for DFT spread.
+
+We have
+
+Proposal 1: DFT-S-OFDM is not supported with non-contiguous RBGs with RAT 0 in Rel-15. When contiguous RBGs are used for DFT-O-OFDM, the total number of PRBs in the allocation has factor(s) from {2,3,5} only.
+
+Proposal 2: non-contiguous RBG allocation is an optional feature for CP-OFDM uplink in Rel-15.
+
+Issue 1b: PAPR due to interleaved VRB-PRB mapping
+
+When DFT-S-OFDM is used in uplink, as step 6 comes after step 4, when interleaved VRB-PRB mapping for RAT 1 or non-contiguous RBGs with RAT 0 is used, the PAPR of the resulted signal’s waveform can be large.
+
+We have
+
+Proposal 3: DFT-S-OFDM is not supported with interleaved VRB-PRB mapping with RAT 1 in Rel-15.
+
+Proposal 4: interleaved VRB-PRB allocation with RAT 1 is an optional feature for CP-OFDM uplink in Rel-15.
+
+Issue 2: the order of spatial precoding and VRB-PRB mapping
+
+In step 5, to apply the appropriate precoders, which can be different for different PRBs, to the incoming signal, the PRB indices correspond to those precoders must already be known, and the precoding operation is best conducted over subbands with physical meaning. Yet in step 6, the operation of VRB-PRB mapping suggests that is not the case, actually the incoming signal for Step 6 is in a logical domain. Such an examination suggests Step 6 as in the current NR specification needs to be moved to somewhere prior to the current Step 5.The following Tx chain is suggested.
+
+[FIG:7d7df29c821cad303ba0]
+
+Figure 2 Proposed Tx chain
+
+In the suggested Tx chain, frequency hopping can be handled in Step G (mapper 2), and VRB-PRB mapping is moved to Step D.
+
+We have
+
+Proposal 5: The Tx chain specification in TS 38.211 is adjusted according to Figure 2, i.e. the VRB-PRB mapping is performed after codeword layer mapping.
+
+Issues in resource allocation and layer mapping
+
+Issue 3: misalignment between PRG and resource allocation
+
+In NR, there are several definitions of aggregation of resource blocks relevant for UE receiver design and CSI feedback:
+
+RBG (Resource Block Group) in RAT 0 (Resource allocation type 0), its definition is referenced to the lowest PRB in a bandwidth part (BWP);
+
+PRB bundle (PRBD) in RAT 1, its definition is referenced to the size of a BWP (the number of PRBs in the BWP);
+
+PRG (Precoding Resource Block Group) for both RATs, its definition is referenced to the so-called Reference Point A
+
+In CSI acquisition, subbands, which are aggregated PRBs for subband-CSI reporting, are used. So far it is not clear what reference is used in the definition of subbands for CSI acquisition.
+
+From relevant agreements for BWP, the configuration of BWP is flexible: the starting PRB and bandwidth of the BWP has a granularity of 1 PRB:
+
+From RAN1 #90bis
+
+Under 7.3.4.1 (other aspects on bandwidth parts)
+
+Agreements:
+
+A DL (or UL) BWP is configured to a UE by resource allocation Type 1 with granularity as follows
+
+Granularity of starting frequency location: 1 PRB
+
+Granularity of bandwidth size: 1 PRB
+
+Note: The above granularity doesn’t imply that a UE shall adapt its RF channel bandwidth accordingly
+
+Agreements:
+
+A UE is RRC signaled an offset between PRB 0 for common PRB indexing and a reference location
+
+For DL in Pcell, the reference location is the lowest PRB of the cell-defining SSB
+
+For UL in Pcell of paired spectrum, the reference location is the frequency location of the UL indicated in the RMSI
+
+For Scell, the reference location is the frequency location indicated in the SCell configuration
+
+For SUL, the reference location is the frequency location indicated in the SUL configuration
+
+Note: For UL of unpaired spectrum, the reference location is the same with the DL of the unpaired spectrum.
+
+Note: the PRB 0 is intended for scrambling initialization, reference point for BWP configuration, etc.
+
+The range of offset values should be >276*4, with the detailed values FFS
+
+It may happen under some configuration of a BWP, PRG and RBG/PRB bundle in RAT 1 are misaligned, which prevents a UE receiver to exploit correlated channel conditions on adjacent PRBs (i.e. utilizing PRB bundles in channel estimation), and inferior channel estimation performance is resulted consequently. Some examples provided in Figure 10.
+
+Observation: misalignment between PRG and resource allocation can occur in both RAT 0 and RAT 1.
+
+Alignment of PRG resource allocation with RAT 0
+
+We propose to address the misalignment issue with RAT 0 through modifying the reference point for RBG definition from the lowest PRB in a BWP to the common PRB 0 reference as used by PRG.
+
+And we have the following proposal for RAT 0:
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Let [FIG:d5017a7179e6626d3f93] .
+
+The total number of RBGs ( [FIG:4e89fb1382346f4e0ff8] ) for a downlink carrier bandwidth part of size [FIG:0a1bfd7ff6b853300079] PRBs is given by [FIG:235fb3c9cc92a135135f] where the first RBG is of size [FIG:a29a033a502dd7ed5479] .
+
+if [FIG:06e7eb82e548dd66396e] then the last RBG is of size [FIG:9e506691d4f2b7f0d1c3] and the [FIG:e49ae2a7f07e64f6067a] RBGs between the first RBG and the last RBG is of size P; otherwise the [FIG:61527b54a4022394472c] RBGs after the first RBG is of size P.
+
+The bitmap is of size [FIG:8a5af8742bb5f256882e] bits with one bitmap bit per RBG such that each RBG is addressable. The RBGs shall be indexed in the order of increasing frequency starting at the lowest frequency of the carrier bandwidth part. The order of RBG bitmap is such that RBG 0 to RBG [FIG:d612157553873bea5c77] are mapped from MSB to LSB. The RBG is allocated to the UE if the corresponding bit value in the bitmap is 1, the RBG is not allocated to the UE otherwise.
+
+Alignment of PRG resource allocation with RAT 1
+
+The description on VRB-PRB mapping is given in TS 38.211 and is copied below:
+
+For non-interleaved VRB-to-PRB mapping, virtual resource block [FIG:4f5e173d0789400dc608] is mapped to physical resource block [FIG:3c6bc792a86a6e374efc] .
+
+For interleaved VRB-to-PRB mapping, the mapping process is defined in terms of resource block bundles:
+
+- Resource block bundle [FIG:a2a27f0047731f7d0d94] is defined as resource blocks [FIG:d0dfbd9bd62cadc0b2be] where [FIG:d6f0ce3df865c6e76be7] is the bundle size provided by the higher-layer parameter VRB-to-PRB-interleaver
+
+- Virtual resource block bundle [FIG:03d10e8101ecd7ccb56d] is mapped to physical resource block bundle [FIG:ca1dac6589ce2e13df08] where
+
+[FIG:b7bc672ba7b976e299fe]
+
+with [FIG:b2e93d7efb65d4dec496] representing the size of the carrier bandwidth part in which the PDSCH is transmitted.
+
+The UE may assume that the same precoding in the frequency domain is used across a bundle of common resource blocks numbered [FIG:19c1cd46b1aec45268c5] where [FIG:fa514b44a8dff0e0808b] and the bundle size [FIG:386944cbb52b3f5bec49] is given by the higher-layer parameter PDSCH-bundle-size if configured, otherwise by the DCI scheduling the transmission. The UE shall not make any assumption that the same precoding is used for different bundles of common resource blocks.
+
+With the block interleaver in TS 38.214, VRB-PRB interleaving is handled correctly for the case where the PRB-VRB bundle size divides the number of PRBs in a BWP.
+
+[FIG:b0f3f1afd62326b6fd4f]
+
+Figure 4 VRB-PRB interleaving over BWP at 24 PRBs with a PRB-VRB bundle size at 2.
+
+However, when the PRB-VRB bundle size does not divide the number PRBs in a BWP evenly, the current block intereleaver does not provide a valid interleaver. One example for this case is illustrated below.
+
+[FIG:6cc8ccbe5f0cce3dd6cc]
+
+Figure 5 BWP at 21 PRBs, VRB-PRB bundle size = 2.
+
+We propose to retain the overall current block interleaver design and modify it properly so it can handle any BWP size.
+
+[FIG:435ca55d0f091f207cb8]
+
+Figure 6 Block interleaver for BWP=21 PRBs and VRB-PRB bundle size = 2.
+
+[FIG:d5cc1c3c5798b0c9a977]
+
+Figure 7 Block interleaver for BWP=23 PRBs and VRB-PRB bundle size = 2.
+
+When the starting PRB in a BWP is not aligned with a PRG, a block interleaver as follows is used.
+
+[FIG:213f15e6bcd543fdbd6a]
+
+Figure 8 The starting PRB in a BWP with 20 PRBs is not aligned with a PRG, VRB-PRB bundle size = 2.
+
+[FIG:5b138643037d080a08f8]
+
+Figure 9 The starting PRB in a BWP with 22 PRBs is not aligned with a PRG, VRB-PRB bundle size = 2.
+
+We have the following text proposal for VRB-PRB mapping for RAT 1:
+
+/************************ Start of Text Proposal **************************/
+
+Let [FIG:bae95a028ba982aa64bd] , [FIG:48066c320ebf34c65844] .
+
+If alignment between PRB bundle and PRG is not used, then set the value of [FIG:2b2bc9385b73d65be385] to 0: i.e. [FIG:1e2f0bc32bf667ddfe75] .
+
+Let [FIG:0d42def1ae2db561774a] ,
+
+[FIG:33af123b45d3f475f2e8] ,
+
+[FIG:7e26d279c0fffea291d6] ,
+
+[FIG:ed4559dece1c988a6ee1] .
+
+Virtual resource block [FIG:aa696cd1a624a538e014] , [FIG:282809ebd734057781d9] is mapped to physical resource block [FIG:77a10ab62009f5ea568f] where
+
+[FIG:2188af9de50958cac2b9] ,
+
+[FIG:a6d6a202d736bb4643b3] [FIG:584f6e6d786f4b8cfc85] and [FIG:e416f969e4fae4580792] ,
+
+[FIG:cae59953e44b9ee93d7f] .
+
+Virtual resource block [FIG:642a0a213e3e812a33ba] for [FIG:257e82ce2b3db9590a23] if any, is mapped to physical resource block [FIG:725d52ef78431fb8de3e] .
+
+/************************ End of Text Proposal **************************/
+
+If description with VRB bundle and PRB bundle is still preferred for VRB-PRB mapping, we also have the following text proposal:
+
+/************************ Start of Text Proposal **************************/
+
+Let [FIG:e70c04f084565d024e44] , [FIG:ed2ae6d7f460ae9ed192] .
+
+If alignment between PRB bundle and PRG is not used (i.e. for PUSCH), then set the value of [FIG:6fea548359cad2d0565a] to 0: i.e. [FIG:2f6c39b779618472ba0f] .
+
+Let [FIG:54ebd4b05c544bca17c3]
+
+[FIG:809f16126b54f592e723] ,
+
+[FIG:38cd9774fad28c39879c] ,
+
+[FIG:e80577b9b3676329f77c] .
+
+VRB bundle 0 consists of VRBs 0 to [EQ:1f316b3665a7346552af] [EQ:1965509ddf93e9de63cc] ,
+
+PRB bundle 0 consists of PRBs 0 to [EQ:e8ac7bf2dad48e4ed160] [EQ:931b1aaa4bf81b9d1adb] .
+
+For [EQ:91b47de590131f30a19b]
+
+VRB bundle [EQ:a20f9343a9126bf0ce88] consists of VRBs [EQ:8046a50e93b02d2f97a9] to [EQ:707cf4c13650e336701b] : [EQ:3ae91d03de38cf5eacae] ,
+
+PRB bundle [EQ:fdf8d2013ffd3ac9434f] consists of PRBs [EQ:3e70d6aa4b81026f241d] to [EQ:d86e3897a86b5dce90fa] : [EQ:d6fcfa9a78fff4be3bcc] .
+
+end
+
+Virtual resource block bundle [FIG:9af8469cdbf0b668a950] , [EQ:3d562e3fbb7898927baa] is mapped to physical resource block bundle [FIG:be430babaa2548fa83ca] where
+
+[FIG:9118aa7142e5ad638595]
+
+If [EQ:ac4bcfbf0b9aed8e27a0] , [EQ:f24ee46f212e20fb505a]
+
+VRB bundle [EQ:3fd88e81ad23ca54e771] consists of VRBs [EQ:d372158c50a3c3e07621] to [EQ:38e8c85b21a5a871cc37] : [EQ:0f3925aa540cfd040afa] ,
+
+PRB bundle [EQ:b3c05baf1d2c9e428627] consists of PRBs [EQ:59de1633e787b8a51c02] to [EQ:96cd3e696312ab2bf935] : [EQ:0caa11a41f2e7adf781e]
+
+VRB bundle [EQ:f284f66cda25fd76b4e2] is mapped to PRB bundle [EQ:180638364f37809e3490]
+
+end
+
+/************************ End of Text Proposal **************************/
+
+In Figure 10, we provide examples for proposed changes in Sections 3.1 and 3.2.
+
+[FIG:759cf3e257493b335e0a]
+
+Figure 10 Example of proposed changes
+
+From the above, we have
+
+Proposal 6: RBG and PRB bundle for VRB-PRB mapping are defined according to reference point A.
+
+Proposal 7: VRB-PRB mapping is modified according to the text proposal provided above.
+
+Conclusion
+
+In this contribution, we examine a few issues identified on the Tx chain captured in the current NR specifications. We have
+
+Proposal 1: DFT-S-OFDM is not supported with non-contiguous RBGs with RAT 0 in Rel-15. When contiguous RBGs are used for DFT-O-OFDM, the total number of PRBs in the allocation has factor(s) from {2,3,5} only.
+
+Proposal 2: non-contiguous RBG allocation is an optional feature for CP-OFDM uplink in Rel-15.
+
+Proposal 3: DFT-S-OFDM is not supported with interleaved VRB-PRB mapping with RAT 1 in Rel-15.
+
+Proposal 4: interleaved VRB-PRB allocation with RAT 1 is an optional feature for CP-OFDM uplink in Rel-15.
+
+Proposal 5: The Tx chain specification in TS 38.211 is adjusted according to Figure 2, i.e. the VRB-PRB mapping is performed after codeword layer mapping.
+
+Observation: misalignment between PRG and resource allocation can occur in both RAT 0 and RAT 1.
+
+Proposal 6: RBG and PRB bundle for VRB-PRB mapping are defined according to reference point A.
+
+Proposal 7: VRB-PRB mapping is modified according to the text proposal provided above.

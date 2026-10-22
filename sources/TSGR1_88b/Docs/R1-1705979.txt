@@ -1,0 +1,51 @@
+3GPP TSG RAN WG1#88 bis R1-1705979
+
+Spokane, WA, USA, 3rd - 7th April, 2017
+
+Agenda item: 8.1.2.6
+
+Source: Nokia, Alcatel-Lucent Shanghai Bell
+
+Title: On frequency domain interleaving
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+Frequency domain interleaving was discussed in the previous RAN1#88 meeting, the following agreement being noted:.
+
+For the DL/UL data channels, study whether/how the interleaving is performed in the codeword to layer mapping procedure (e.g., a per-OFDM-symbol subcarrier interleaver in the codeword to layer mapping procedure, etc.)This may or may not be connected with coding design
+
+In this contribution we address the above issues.
+
+2 Discussion
+
+Frequency domain interleaving could be an attractive way to improve the performance of a UE that has larger bandwidth allocation, higher modulation and coding rate, and lower sub-carrier spacing. However, benefits of frequency domain interleaving compared to the associated complexity should be carefully evaluated prior agreeing that to be supported in NR. We have following concerns on previous contributions that discuss frequency domain interleaving.
+
+Most of the time, larger bandwidths do not provide extra resources to get benefits of frequency domain interleaving. For example, 100 MHz 64QAM with 15 kHz can allocate the maximum of 36000 coded bits within a symbol duration. For 30 kHz sub-carrier spacing, it will be around 18000 coded bits. It will be much lower for higher sub-carrier spacing. Moreover, higher bandwidths mostly available above 6 GHz which use higher sub-carrier spacing. Therefore, we may not find any practical use case that provides a significant number of resources to get benefits of frequency interleaving compared to the hardware complexity and latency associated with such frequency domain mapping.
+
+It would also good to check the agreements in coding which are related to this kind of interleaving discussion. For example, RAN1 #88 made following agreement on the maximum code block size (CBS),
+
+Agreement:
+
+The largest info block size supported by LDPC encoder Kmax and the largest shift size Zmax defined for a H matrix are selected from the following set of {Kmax, Zmax} pairs:
+
+{8192, 256}, {8192, 512}, {FFS near 8192, 320}
+
+It is evident that CBS will be around 8192 bits and which might also be used in the code segmentation. Assuming 8192 bits as the CBS, the coded block sizes will be around 10000 bits for peak code rate. For 100 MHz, 64 QAM, and 15 kHz sub-carrier spacing, we can do the frequency domain interleaving for 3 CBs. In practice, we operate mostly on moderate to lower code rates, and may have lower than 2 CBs when assuming the same bandwidth, modulation scheme, and sub-carrier spacing. Some analysis provided in past few meetings assumed 1944 coded block size (Wi-Fi) to show gains over non-interleaved scenario, which obviously not reflecting the realistic situation when using NR channel codes.
+
+Prior focusing on inter-CB interleaving, the discussion on intra-CB interleaving should be discussed, which may happen under channel coding. The gains should be compared between inter-CB versus intra-CB, rather than comparing it with a situation we do not have interleaving. Therefore, interleaving procedure in NR is related to the coding design, since the gains can significantly go down when inter-CB is compared to the optimized intra-CB.
+
+Overall, interleaving has certain benefits and costs, but it should be first investigated within CB-level prior identifying extra benefits at inter-CB level. Even with that, the evaluations should be done considering the concerns we highlighted above.
+
+Proposal: Study further the benefits of introducing frequency domain interleaving.
+
+3 Conclusions
+
+In this contribution we have been discussing aspects related to the introduction of frequency interleaving in NR. The following proposals is made
+
+Proposal: Study further the benefits of introducing frequency domain interleaving.
+
+References
+
+[1] R1-1702597, “Frequency domain interleaving”, Qualcomm Incorporated

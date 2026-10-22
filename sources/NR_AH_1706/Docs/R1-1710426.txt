@@ -1,0 +1,281 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1710426
+
+27th – 30th June 2017
+
+Qingdao, P. R. China
+
+Agenda item: 5.1.2.1.1
+
+Source: AT&T
+
+Title: Remaining Details of Codeword Mapping for NR MIMO
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. In RAN1 # 89 the following agreement was reached on the number of Codewords.
+
+Agreements:
+
+For >4-layer transmission, each of the two CWs is mapped to at most 4 layers
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:3beca511f9aecc7e28bf] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS  whether the UE report the preferred layer mapping
+
+Regarding the codeword to layer mapping with a codeword the following working assumption was made.
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Regarding symbol level interleaving in the coding the following agreements were made.
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+In this contribution, we analyze the following aspects on layer mapping options and provide our views on layer mapping for with simulation results.
+
+Codeword to Layer Mapping within a Codeword i.e. the mapping order
+
+Dynamic Layer mapping with Multiple codewords
+
+Impact of Symbol Interleaving in NR MIMO
+
+Codeword to Layer Mapping Within a Codeword
+
+For data channel, once the information bits belonging to one codeword are encoded using FEC and passed through modulation mapper, they need to be mapped to the layers, then passed through IFFT. Currently, in LTE systems, they modulation symbols are mapped to layers first, then they are mapped to the resource elements in the frequency domain, once they are mapped to the frequency they are mapped to the time domain. In our view, the existing mapping scheme is sufficient to achieve MIMO gains, as the other schemes such as mapping to frequency to layer to time or time ->Frequency->Layer or Layer ->Time->Frequency didn’t provide any gains. Moreover, the current LTE mapping scheme provides fast decoding of layers. Hence we prefer the following mapping scheme within a codeword should be agreed
+
+Information bits -> Codeword -> Modulation Mapper-> Layer Mapper -> Precoder->RE mapping (Frequency domain) ->RE mapping (time domain) - > Antenna ports
+
+Note that for DL and UL with CP-OFDM, the same mappings scheme as described should be used. However, for UL data transmission with DFT-S-OFDM, we don’t envision MIMO schemes as DFT-S-OFDM is a complimentary feature on top of CP-OFDM for coverage improvements. We expect the UEs, which uses DFT-S-OFDM mostly uses rank-1 transmission.
+
+Regarding the FFS aspect of working assumption about the mapping, i.e. whether it is codeword or code block group. In our view, code block group is a logical aspect where the JUE recommends which group of code block groups are in NAK, and it does not impact the coding chain. Hence we recommend that mapping should be done at the codeword level.
+
+Proposal 1: Confirm the working assumption, i.e. the modulated symbols within a codeword are mapped to layers then resource elements in frequency domain and them resource elements in time domain
+
+Dynamic Layer Mapping With Multiple Codewords
+
+The second aspect is how the layer mapping should work with multiple codeword. In MIMO systems, layer mapping is needed, when the number of codewords are less than the number of layers. In this contribution, we consider two design options for layer mapping with two codewords.
+
+Option 1: Use fixed layer mapping as in LTE
+
+Option 2: Use dynamic layer mapping
+
+In the existing LTE system the layer mapping table is fixed. However, it should be noted that if the number of codewords are less than the number of layers, then the CQI of each codeword is controlled by the minimum of SINR of the layers mapped to that codeword. This implies that even though some of the layers have the high SINR, the UE can’t indicate the CQI of these layers and the network can’t schedule higher modulation on these layers. To overcome this drawback, we recommend the UE should recommend the preferred layer mapping within a codeword as part of CSI. For example, the UE can choose those layers which have the same SINR and map them to a layer. Similar to the other scheduling decisions, the network may or mayn’t obey this layer mapping table recommendation. The design options are
+
+Fixed layer mapping: In this option, the coded symbols are mapped from a pre-defined fixed mapping table similar to LTE. i.e. as shown in Table 1. Hence in this option, the transmitter and receiver knows which layers needs to be mapped to the codword apriori. For example, take the case of 8 layer transmission, in this case, the coded symbols from layers 1-4 are mapped to the first codeword and coded symbols from layers 5-8 are mapped to the second codeword.
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:f5bb58941107e23c21f0]
+1 | 1 | [FIG:3c4d9734423f17f1b1f2] | 
+2 | 1 | [FIG:a940db76732e06b11b85] | 
+ |  | [FIG:2078fce3d4cba24dacf7] | 
+3 | 1 | [FIG:795717a2f5038b9209a1] | 
+ |  | [FIG:003334f1a3de94e14b6e] | 
+4 | 1 | [FIG:452f53e384a363847d15] | 
+ |  | [FIG:e79cae7141a292ffbcff] | 
+5 | 2 | [FIG:48aa3c3eee219c0a71cd] [FIG:c6b55d644cf1a98441f3] | 
+ |  | [FIG:b87e440a16b64d1150b5] | 
+6 | 2 | [FIG:a7b9a3c4cfde85e7043e] | 
+ |  | [FIG:e3ead76627802dab3951] [FIG:3389f9d3e8ab17164ac7] | 
+7 | 2 | [FIG:ab1b553a1176de439639] [FIG:1a62f3783e4d9e263d61] | 
+ |  | [FIG:b584f3df8b4d8621d84a] [FIG:271c7228c796bec439e7] | 
+8 | 2 | [FIG:f5d9c93e3aa377c59cd6] | 
+ |  | [FIG:56a651b85a8599634dfc] [FIG:2ecc9c228be1a9f3f4f0] [FIG:9c27684a17a3e6bf349e] |
+
+Table 1 Fixed layer mapping
+
+Dynamic layer mapping: In this option, the mapping of codeword to layers is dynamic for a given rank. As shown in Table 2a-2d for 5-8 layer transmission.
+
+Table 2a Layer mapping combinations for 8 layer transmission
+
+Index | 8 layer transmission
+ | Codeword 1 | Codeword 2
+1234567891011121314151617181920212223242526272829303132333435 | 12341235123612371238124512461247124812561257125812671268127813451346134713481356135713581367136813781456145714581467146814781567156815781678 | 56784678457845684567367835783568356734783468346734583457345626782578256825672478246824672458245724562378236823672358235723562348234723462345
+ |  |
+
+Table 2b Layer mapping combinations for 7 layer transmission
+
+Index | 7 layer transmission
+ | Codeword 1 | Codeword 2
+1234567891011121314151617181920212223242526272829303132333435 | 12341235123612371245124612471256125712671345134613471356135713671456145714671567234523462347235623572367245624572467256734563457346735674567 | 567467457456345346347356357367234235236237245246247256257267167157156147146145137136135134127126125124123
+
+Table 2C Layer mapping combinations for 6 layer transmission
+
+Index | 6 layer transmission
+ | Codeword 1 | Codeword 2
+123456789101112131415 | 123412351236124512461256134513461356145623452346235624563456 | 5646453635342625242316151413125646
+
+Table 2d Layer mapping combinations for 5 layer transmission
+
+Index | 5 layer transmission
+ | Codeword 1 | Codeword 2
+12345 | 12341235124513452345 | 54321
+
+It is worthwhile to notice that the layer to codeword also correspond to single or multiple TRPs transmission. For example, in two TRP transmission case, each TRP may have only one codeword, each is mapping to one or multiple layers. UE can be configured with CSI-RS from both TRPs, then UE may recommend a CW to layer mapping based on the channel measurement. The recommended CW to layer mapping actually implies UE’s preference for single or multiple TRP transmission, as well as the ranks on each TRP.
+
+[FIG:4d7e027b465cab46923a]
+
+Figure 1 Spectral efficiency comparison with dynamic layer mapping and fixed layer mapping
+
+Figure 1 shows the spectral efficiency as a function of SNR for fixed layer mapping vs dynamic layer mapping for rank 8 transmission. Note that in this case, the spectral efficiency is computed by
+
+Spectrum efficiency = TBS*(1-BLER)/(T*BW)
+
+Where, TBS is the transport block size in bits, BLER is the block error rate, T is the time duration of one subframe, and BW is the actual bandwidth. The link level simulation assumptions are shown in Table 1.
+
+We consider 8 port MIMO configurations with 2 codewords are considered with link adaptation with fixed rate and precoding information. However the modulation and coding rate/transport block size are dynamically updated for each TTI. In our simulations we assume perfect channel estimation. The feedback is assumed to have 4 TTI delays and is assumed to be error free. Simulations are run for a UE with different SNRs and the wireless channel assumed is TDL-A channel. The velocity of the mobile is assumed to be 3 Kmph. The main simulation parameters are tabulated in Table 1.
+
+Table 2 Detailed link level simulation assumptions
+
+Assumptions | Value
+Carrier frequency | 4.0 GHz
+Duplex | FDD
+System Bandwidth | 10 MHz
+TTI length | 1 ms
+Subcarrier spacing | 15KHz
+Guard time interval | 4.7us (interval of LTE normal CP) as baseline
+FFT size | 1024
+Data transmission bandwidth | 48 subcarriers for 15 KHZ spacing
+Antenna configuration | (8,8,2,1,1)
+Number of codewords | 2
+Precoding codebook | LTE-Release 10
+Channel encoder | LTE turbo code
+MCS | For link adaptation: QPSK, 16-QAM and 64-QAM are considered with variable code rate
+Control Overhead | Zero
+Channel estimation | Ideal
+ACK/NACK feedback error rate | Baseline: 0%
+PMI / rank feedback error rate | Baseline: 0%
+CQI feedback error rate | Baseline: 0%
+Feedback delay | 4 TTI
+
+For analysis purposes, we used rank 8 transmission for all SNRs. It can be observed that with dynamic layer mapping, we can significant gain compared to the fixe layer mapping, The percentage of gains are around 18 % for SNR = 20 dB and 15 % at SNR = 25 dB as shown in Figure 2.
+
+[FIG:130fe5bfe004c4118ce6]
+
+Figure 2 Percentage of gains of dynamic layer mapping compared to fixed layer mapping with two codewords
+
+For comparison purposes, we plotted the results with 2 codeword MIMO for rank = 4 transmission in Figures 3 and 4.
+
+[FIG:6591de1bab04ede51a7c]
+
+Figure 3 Spectral efficiency comparison with dynamic layer mapping and fixed layer mapping with rank = 4 with two codewords
+
+[FIG:07c2a1e79913b7d86938]
+
+Figure 4 Percentage of gains compared to fixed layer mapping for two codeword MIMO
+
+Note that with dynamic layer mapping, the additional overhead is very less per each codeword compared to the case, if we use 8 codeword MIMO.
+
+Based on these observations we recommend
+
+Proposal 2: Dynamic layer mapping should be supported in NR for 5-8 layer transmission
+
+System Level Simulation Results for Dynamic Layer Mapping
+
+In this section, we analyse the benefits of dynamic layer mapping at system level. Note that we used 4x4 MIMO system with fixed rank = 4 for all the UEs with two codewords. . [FIG:3adf9fcfaff1bf75db14]
+
+Figure 5 System level gains compared to fixed layer mapping for two codeword MIMO
+
+The system level simulation assumptions are shown in Table 3. The gains are around 11% in average sector throughout and 10 % for the 90% throughput.
+
+Table-3 System-level simulation assumptions
+
+Parameters | FDD / 57TRPs /10 UEs
+Scenario | Dense urban
+Layout | Single layer: Macro layer: Hex. Grid
+Inter-BS distance | 500m
+Carrier frequency | 2GHz
+Simulation bandwidth | 5MHz
+Channel model | 3D UMa
+BS Tx power | 46dBm
+BS antenna height | 25m
+BS antenna number | (M,N,P,Mg,Ng) = (4,4,2,1,1)
+UE antenna number | (M,N,P,Mg,Ng) = (4,4,2,1,1)
+UE receiver | MMSE-IRC
+MIMO mode | SU-MIMO
+Traffic model | Full Buffer
+
+Layer Mapping Subset Restriction
+
+With dynamic layer mapping, the total number of combinations (L) for layers 5-8 is equal to
+
+[EQ:4cd93cf296704d04eb0c]
+
+Hence in total 90 combinations in fixed layer mapping. For choosing the best combination, we recommend the UE can search all these combinations and chose the one which gives maximum capacity similar to the CSI computation. Since the UE is in better position to measure the SINR per each layer, we prefer UE to recommend the best layer mapping index.
+
+In addition, we don’t expect the best layer mapping index does not change, hence the best layer mapping index can be feedback less frequently similar to the rank feedback.
+
+Proposal 2: UE should recommend the layer mapping within each codeword as part of rank feedback.
+
+Other option of reducing the number of combinations is to introduce layer mapping subset restriction similar to codebook subset restriction in LTE. With layer mapping subset restriction the network informs the UE which combinations it should consider in choosing the best layer mapping combination for reporting CQI of each codeword. For example, the network sends a bit map of length equal to 90 bits where the first 5 elements corresponds to the layer mapping combinations for rank 5 transmission, next 15 entries corresponds to the rank 6 transmission, next 35 entries corresponds to the rank 7 transmission and the last 35 entries corresponds to the rank 8 transmission.
+
+1 | 2 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 90
+
+Figure 6 An example of layer mapping subset restriction bit map
+
+For reducing the computations at the UE side, the network sets only few combinations in the layer mapping subset restriction bit map. Note that with layer mapping subset restriction, the network can use fixed layer mapping by setting only the first indices of each layer combination. Hence in our view this feature is very beneficial for multi codeword MIMO.
+
+Proposal 3: RAN1 should agree to standardize the layer mapping subset restriction bit map
+
+Impact of Symbol Interleaving in the Coding Chain for NR MIMO
+
+Once the layers are mapped to the resource elements in the frequency domain, it was proposed to use symbol interleaver to improve frequency diversity. In our view, the adding symbol interleaving is not needed as shown in this section, the gains achieved with symbol interleaving is very minimal. Note that we used random interleaving in our simulations. Where the random interleaver pattern is different for every OFDM symbol and for every layer.
+
+Figure 6 shows the performance of 4x4 MIMO system with single codeword with and without interleaver when the UE is moving with a speed of 3 Kmph, which is typical scenario for eMBB data. It can be observed that there is no gain with the introduction of symbol interleaver in frequency domain. The gain is around 2% at high SNR. The gains are low because, the probability of the packet pass is around 95% for slow speed channels, and the frequency diversity may not provide significant gains at slow speeds. Note that the conventional link adaptation is used in this case, i.e. the symbol interleaver is transparent to the UE for link adaptation.
+
+[FIG:f91dbca73015bc7d06bd]
+
+Figure 6 Spectral efficiency comparison with 50 PRB allocation with 3 Kmph channel
+
+Figure 7 shows the spectral efficiency vs SNR at UE speed equal to 120 Kmph. In this case, since the channel is outdated at the gNB due to high Doppler, we expect some gains. As shown in Figure 7, the gains are improved compared to 3 Kmph channel, however we observe the gains only at high SNR.
+
+[FIG:d56fa9b0000a20bde238]
+
+Figure 7 Spectral efficiency comparison with 50 PRB allocation with 120 Kmph channel
+
+Note that in the above simulations we used 50 PRBs for data transmission. To check the performance improvement with frequency domain interleaver, we plotted the spectral efficiency as a function of SNR with 2 PRB and 1 PRB allocation in Figure 8 and 9 respectively. Note that we used 120 Kmph channel in these simulations. It can be observed that the gains are almost negligible with less number of PRB allocation.
+
+[FIG:7a1db0cdb18b3b0227fe]
+
+Figure 8 Spectral efficiency comparison with 2 PRB allocation with 120 Kmph channel
+
+[FIG:caca5333ba7f9350ae3a]
+
+Figure 9 Spectral efficiency comparison with 1 PRB allocation with 120 Kmph channel
+
+Proposal 4: No symbol level interleaving should be used
+
+Conclusions
+
+In this contribution we outlined our views on the codeword to layer mapping with simulation results. Based on our observations we recommend
+
+Proposal 1: Confirm the working assumption, i.e. the modulated symbols within a codeword are mapped to layers then resource elements in frequency domain and them resource elements in time domain
+
+Proposal 2: Dynamic layer mapping should be supported in NR for 5-8 layer transmission
+
+Proposal 3: RAN1 should agree to standardize the layer mapping subset restriction bit map
+
+Proposal 4: No symbol level interleaving should be used

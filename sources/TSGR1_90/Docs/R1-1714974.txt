@@ -1,0 +1,405 @@
+3GPP TSG RAN WG1 Meeting # 90 R1-1714974
+
+Prague, Czech Republic, 21 – 25 August 2017
+
+Agenda Item: 6.1.2.1.8
+
+Source: Huawei, HiSilicon
+
+Title: Evaluation results of codeword to layer mapping in NR
+
+Document for: Discussion and decision
+
+Introduction
+
+At the previous meeting, the agreements on codeword to layer mapping were made [1]:
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Agreements:
+
+Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenarios
+
+Practical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.
+
+For both CP-OFDM and DFT-S waveforms
+
+Evaluation should be done considering both slot and mini-slot.
+
+In this contribution, we provide simulation results of different mapping order and different interleaving schemes.
+
+Evaluation results of mapping order
+
+Since NR supports transmission in high speed scenario, in this case, the time domain channel selectivity is the dominant factor. It is desirable that a mapping order of layer-time-frequency should obtain time domain diversity and outperform than the LTE mapping order.
+
+To properly evaluate the performance, we setup the link-level simulations for the transmission cases under 60km/h, 120km/h, 200km/h and 350km/h with 15 KHz sub-carrier spacing respectively as an illustration. Some simulation assumptions are provided in table I, table II, table III, and table IV. And under 60km/h and 120 km/h, the DMRS assumptions here is with 1 additional OFDM symbol as shown in figure 1, under 200km/h, the DMRS assumptions here is with 1 additional OFDM symbol as shown in figure 4 and with 3 additional OFDM symbols under 350km/h as shown in figure 6. Other detailed simulation assumptions can be found in Table I in appendix. In the simulation, the performance comparison is provided between the following two mapping orders:
+
+Mapping order 1: layer-frequency-time
+
+Mapping order 2: layer-time (per slot)-frequency
+
+The simulation results of different mapping orders under 60km/h are shown in figure 2. Different modulation order, coding rate and channel model are simulated. In the simulations, the Mapping order-2 always shows more than 1.6 dB gain over the order 1 at the BLER of 10-1. Regardless of modulation order, coding rate and channel model, the SE of config.2 is at least 10% higher than the Mapping order-1 at the SNR of 10dB.
+
+[FIG:de0753fb09d7bab02920]
+
+Figure 1. The DMRS assumption that used in 60km/h and 120 km/h cases
+
+Table I. Some parameters under 60km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+60km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+Case 2 | 16 QAM&(3/4) | 1 | CDL-A-1000 | 1
+Case 3 | 64 QAM&(5/9) | 1 | CDL-A-100 | 1
+Case 4 | 16 QAM&(3/4) | 1 | CDL-A-100 | 1
+
+[FIG:cc2a63778a2e1ef1abee] [FIG:33e4f77521f979f89ae5]
+
+Case1 & Case 2 : 60km/h-Rank 1-CDL-A-1000
+
+[FIG:6335157ee1828e109808] [FIG:136d90e1f35cd14c51f3]
+
+Case3 & Case4 : 60km/h-Rank 1-CDL-A-100
+
+Figure 2. Performance comparison between two different configurations of mapping orders under 60km/h
+
+Observation 1: In 60km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where about 2 dB gain can be observed.
+
+The simulation results of different mapping orders under 120km/h are shown in figure 3. In the simulations, the Mapping order-2 shows more than 2.4 dB gain over the order 1 at the BLER of 10-1. The SE of config.2 is at least 23% higher than the Mapping order-1 at the SNR of 10dB and 18 dB of rank 2.
+
+Table II. Some parameters under 120km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+120km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+Case 2 | 16 QAM&(3/4) | 1 | CDL-A-1000 | 1
+Case 3 | 64 QAM&(5/9) | 1 | CDL-A-100 | 1
+Case 4 | 16 QAM&(3/4) | 1 | CDL-A-100 | 1
+Case 5 | 64 QAM&(4/9) | 2 | CDL-A-1000 | 1
+Case 6 | 64 QAM&(4/9) | 2 | CDL-A-100 | 1
+
+[FIG:837f6c0143c272d4cd6d] [FIG:853ee28f643cf1aa8d71]
+
+Case1 & Case 2: 120km/h-Rank 1-CDL-A-1000
+
+[FIG:cc58d3af27df9c32e0f0] [FIG:31434b52b8bfde62b450]
+
+Case3 & Case4 : 120km/h-Rank 1-CDL-A-100
+
+[FIG:2746c742802e6c3cc155] [FIG:f22368c73e969f398da7]
+
+Case5 : 120km/h-Rank 2-CDL-A-1000
+
+[FIG:04fe05a87d19cb0f7e79] [FIG:90668a9b9ff2c00a2d6c]
+
+Case6 : 120km/h-Rank 2-CDL-A-100
+
+Figure 3. Performance comparison between two different configurations of mapping orders under 120km/h
+
+Observation 2: In 120km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where more than 2.4 dB can be observed.
+
+The simulation results of different mapping orders under 200km/h are shown in figure 5. In the simulations, the Mapping order-2 shows more than 4 dB gain over the order 1 at the BLER of 10-1. The SE of config.2 is at least 30% higher than the Mapping order-1 at the SNR of 15dB.
+
+[FIG:49e0d73543c8e1c03228]
+
+Figure 4. The DMRS assumption that used in 200km/h, 400 km/h cases
+
+Table III. Some parameters under 200km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+200km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+
+[FIG:e1662130babc9bc4c6d0] [FIG:c7bebeb656d6c8ec71fe]
+
+Figure 5. Performance comparison between two different configurations of mapping orders under 200km/h
+
+Observation 3: In 200km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where more than 4 dB can be observed.
+
+The simulation results of different mapping orders under 350km/h are shown in figure 7. In the simulations, the Mapping order-2 shows more than 3.3 dB gain over the order 1 at the BLER of 10-1. The SE of config.2 is at least 23% higher than the Mapping order-1 at the SNR of 15dB.
+
+[FIG:37797df51f0bfd2fb98f]
+
+Figure 6. The DMRS assumption that used in 300km/h, 350km/h and 380 km/h cases
+
+Table IV. Some parameters under 350km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+350km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 16 QAM&(3/4) | 1 | CDL-A-1000 | 1
+Case 2 | 16 QAM&(3/4) | 1 | CDL-A-100 | 1
+
+[FIG:b97ef5adbb9362b8bd12] [FIG:a7c156f2265f7704d522]
+
+Case1 : 16QAM(3/4)-CDL-A-1000
+
+[FIG:5c882431b2283c413cf6] [FIG:60f0864d6781c34a8647]
+
+Case2 : 16QAM(3/4)-CDL-A-100
+
+Figure 7. Performance comparison between two different configurations of mapping orders under 350km/h
+
+Observation 4: In 350km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where more than 3.3 dB can be observed.
+
+According to the simulation results, the mapping order of “layer-time-frequency” provides an excellent performance enhancement under the high speed scenarios. It is because the channel changes rapidly on each OFDM symbol in high speed scenario, easy to create excessive channel estimation error at some OFDM symbols (e.g. the 10th OFDM symbol has excessive error) which leads to poor demodulation performance and results a high false positive rate on the 10th OFDM symbol. The modulation symbols from the same CB are concentrated distribution on the OFDM symbols under the mapping order-1 scheme. So the misjudged modulation symbols on the 10th OFDM symbol will centers on some CB which is beyond the error correction ability of channel coding.
+
+However under the mapping order-2 scheme the modulation symbols from the same CB are decentralized distribution on different OFDM symbols. So the misjudged modulation symbols on the 10th OFDM symbol come from different CBs which can be easier to correct by the channel coding. Therefore the mapping order of “layertimefrequency” has better performance than “layerfrequencytime” in high speed scenario.
+
+It implies that the time-domain diversity gain is important and has a significant contribution on the performance under the high speed cases. Thus, layertimefrequency should be supported.
+
+Now the OFDM symbols number and location of additional DMRS will be discussed. Based on last meeting discussion, one opinion from a company is to optimize the additional DMRS before introducing “layertimefrequency” mapping order. Although optimizing the additional DMRS can improve the quality of channel estimation, the “layertimefrequency” mapping order can greatly improve the performance on the basis of the optimized additional DMRS. For example, in 200km/h case, 4dB gain can be observed on the basis of “2+11” DMRS pattern which is shown in figure 5 and in 350km/h case, 3.3dB gain can be got on the basis of “2+5+8+11” DMRS pattern which may be is the optimal pattern discussed in NR.
+
+In addition, the optimization of additional DMRS should be based on the UE state, while in the real system the UE status obtained by the BS has great error. So it is difficult to configure the optimal additional DMRS. The “layertimefrequency” mapping order improves the system performance and reduces the influence of additional DMRS mismatch.
+
+In brief, although optimizing the additional DMRS can improve the quality of channel estimation, it is not enough to guarantee the performance in high speed scenes and the performance can be greatly improved by using “layertimefrequency” mapping order.
+
+The simulation results of different mapping orders under 400km/h with 30 KHz sub-carrier spacing are shown in figure 8. The DMRS assumption here is shown in figure 4. In the simulations, the Mapping order-2 shows about 4 dB gain over the order 1 at the BLER of 10-1. The SE of config.2 is at least 40% higher than the Mapping order-1 at the SNR of 14dB.
+
+Though using larger sub-carrier spacing can improve the performance in high speed scenarios, the “layertimefrequency” mapping order can still significantly improve the performance. Such as, in figure 8, about 4 dB gain ban be observed. In addition, the “layertimefrequency” mapping order can expand the using range of smaller sub-carrier spacing in high speed case. Therefore, larger sub-carrier spacing can improve the performance, but it is not enough to guarantee the performance in high speed scenes and the performance can be greatly improved by using “layertimefrequency” mapping order.
+
+Table V. Some parameters under 400km/h with 30 KHz sub-carrier spacing in the link-level simulation
+
+400km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+
+[FIG:260765f58c82e11b7c18] [FIG:54666ab01dd2f719579b]
+
+Figure 8. Performance comparison between two different configurations of mapping orders with 30KHz
+
+Observation 5: In 400km/h scenario with 30 KHz sub-carrier spacing, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where about 4 dB can be observed.
+
+CBG based HARQ is agreed in the NR, so different mapping orders with the assumption of CBG based HARQ retransmission are also evaluated. The simulation results of different mapping orders considering the CBG based HARQ are shown in figure 9. And detailed simulation assumptions can be found in Table I in appendix.
+
+Table VI. Some parameters under CBG based HARQ in the link-level simulation assumption
+
+120km/h | Modulation orderCoding rate | Rank | Channel Model | CBG number
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 2
+Case 2 | 64 QAM&(5/9) | 2 | CDL-A-100 | 4
+
+[FIG:2b1c4c1840400dbea457] [FIG:355ac399688f42e4c959]
+
+Figure 9. Performance of SE comparison between two different configurations of mapping orders considering CBG based HARQ
+
+In the simulation, the information block size of retransmission can be as smaller as a CBG. The retransmission keeps the layer mapping, MCS and coding rate the same as the initial transmission, but schedule the part of bandwidth to accommodate the CBG. As analyzed in the contribution [2], in above configuration, the CBG-based retransmission has no influence to the BLER curve (as shown in figure 12), but can improve the spectrum efficiency (SE). We set up two transmission cases with the CBG number of 2 and 4 respectively. As shown in figure 6, in both cases, the SE of config.2 still is at least 10% higher than the Mapping order-1 at the SNR of 15dB.
+
+Observation 6: In high speed scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime” with considering the CBG based HARQ, where about 2 dB gain can be observed.
+
+Proposal 1: The mapping order of “layertimefrequency” should also be supported in NR for high speed transmission cases.
+
+Evaluation results of interleaving
+
+In figure 10, three typical mapping pattern examples are provided. Assume there are altoghther M CBs, and N OFDM symbols are involved in the interleaving. The first pattern has no interleaving, so the CBs are sequentially distributed. In the second pattern, every P CBs within a OFDM symbol are interleaved along the frequency domain, i.e. per-OFDM symbol interleaving. In the third pattern, all the M CBs are interleaved in the entire time-frequency resource grid, i.e. multi-OFDM symbol interleaving.
+
+[FIG:7e0fca089bb4fbd40003]
+
+Figure 10. An example of mapping patterns for: pattern 1 -- no interleaving, pattern 2 -- per-OFDM symbol interleaving, pattern 3 – multi-OFDM symbol interleaving
+
+Performance of different interleave schemes in low speed case
+
+In this part, the performance of pattern 1 and pattern 2 in low speed scenarios is evaluated. Two transmission cases as listed in table VII are evaluated. The channel model is CDL-A with 1000ns delay spread, and the velocity is 3km/h. The rest simulation parameters can be referred to table-II in appendix.
+
+The figure 11 compares the performance between pattern 1 and pattern 2 in terms of BLER and SE. From figure 11, we can see that interleaving pattern 2 shows limited performance gain over pattern 1, where the performance gap is no more than 0.6dB at 10-1 of BLER. Thus, with 2-4 CBs per OFDM symbol for frequency interleaving, the performance gain is limited. To allow more CBs number, the system needs larger scheduling bandwidth, or much better SNR condition to support higher order CQI. Therefore, the use case of per-OFDM symbol is highly dependent on a combination of scheduling bandwidth, modulation order and coding rate (channel quality).
+
+Table VII. The parameter combinations of three transmission cases evaluated in the simulation
+
+3km/h | Scheduled bandwidth | Antenna configuration | Modulation order | Coding rate | Rank | CB number per OFDM symbol
+Case 1 | 60MHz (300PRBs) | 4T2R | 64 QAM | 5/6 | 1 | 3
+Case 2 | 60MHz (300PRBs) | 4T4R | 64 QAM | 5/9 | 2 | 4
+Case 3 | 20MHz (100PRBs) | 4T4R | 64 QAM | 5/6 | 2 | 2
+Case 4 | 20MHz (100 PRBs) | 8T8R | 64 QAM | 5/8 | 4 | 3
+
+[FIG:c5e1195d334474f8b2c1]
+
+Figure 11. Performance comparison between the designs of no interleaving and per-OFDM symbol interleaving in terms of BLER and SE under various transmission parameter combinations （Based on the front-loaded DMRS pattern）
+
+Observation 7: The per-OFDM symbol interleaving provides marginal performance gain , where the gain seems less than 0.5dB.
+
+Performance of different interleave schemes in high speed case
+
+In this part, we evaluate the performance of the three patterns in high speed scenarios. The target velocities are set to 60km/h, 120km/h, 200km/h and 300km/h with 15 KHz sub-carrier spacing respectively. The DMRS assumptions are as shown in figure 1, figure 4 and figure 6. Details of simulation assumptions can be found in Table II in appendix.
+
+In figure 12, we show the simulation results of different interleaving schemes under 60km/h. From the simulation results, Pattern-3 shows more than 2.0 dB gain over the pattern 1 and pattern 2 at the BLER of 10-1. Regardless of modulation order, coding rate and channel model, the SE of multi-OFDM symbols interleaving is at least 10% higher than the no interleaving and per-OFDM symbol interleaving at the SNR of 10dB.
+
+Table VIII. Some parameters under 60km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+60km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+Case 2 | 16 QAM&(3/4) | 1 | CDL-A-1000 | 1
+Case 3 | 64 QAM&(5/9) | 1 | CDL-A-100 | 1
+Case 4 | 16 QAM&(3/4) | 1 | CDL-A-100 | 1
+
+[FIG:a5d4ee36ba90203e6c1a] [FIG:3702f40dbb597eb30e63]
+
+Case1 & Case2 : 60km/h-Rank 1-CDL-A-1000
+
+[FIG:0474c331ff7c78268778] [FIG:c3f1ec2e6a7d9cdbdd91]
+
+Case3 & Case4 : 60km/h-Rank 1-CDL-A-100
+
+Figure 12. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interelaving in terms of BLER and SE under various transmission parameter combinations in table VIII
+
+In Figure 13, we show the simulation results of different interleaving schemes under 120km/h. From the simulation results, Pattern-3 shows more than 3.0 dB gain over the pattern 1 and pattern 2 at the BLER of 10-1. In the simulations, the spectrum efficiency of multi-OFDM symbols interleaving is at least 25% higher than the no interleaving and per-OFDM symbol interleaving at the 10 dB SNR of rank 1 and 17 dB of rank 2.
+
+Table IX. Some parameters under 120km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+120km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 16 QAM&(3/4) | 1 | CDL-A-1000 | 1
+Case 2 | 16 QAM&(3/4) | 2 | CDL-A-1000 | 1
+Case 3 | 16 QAM&(3/4) | 1 | CDL-A-100 | 1
+Case 4 | 16 QAM&(3/4) | 2 | CDL-A-100 | 1
+
+[FIG:b2139dd18636b48b0ac3] [FIG:38e0811db5c316e93d0e]
+
+Case1 & Case 2 : 120km/h-16QAM(3/4)-CDL-A-1000
+
+[FIG:cde429a63e9ab36f5b27] [FIG:1d1906e0f0c99fe30458]
+
+Case3 & Case4 : 120km/h-16QAM(3/4)-CDL-A-100
+
+Figure 13. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interelaving in terms of BLER and SE under various transmission parameter combinations in table IX
+
+In Figure14, we show the simulation results of different interleaving schemes under 200km/h with 15 KHz sub-carrier spacing. From the simulation results, Pattern-3 shows more than 6.0 dB gain over the pattern 1 and pattern 2 at the BLER of 10-1. In the simulations, the spectrum efficiency of multi-OFDM symbols interleaving is at least 50% higher than the no interleaving and per-OFDM symbol interleaving at the 14 dB SNR.
+
+Table X. Some parameters under 200km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+200km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+
+[FIG:925db0451d7636acdda5] [FIG:5cbe5a7d5a4bb937eeec]
+
+Figure 14. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interelaving in terms of BLER and SE under various transmission parameter combinations in table X
+
+In Figure 15, the simulation results of different interleaving schemes under 300km/h are shown, where Pattern-3 shows more than 3.0 dB gain over the pattern 1 and pattern 2 at the BLER of 10-1. The spectrum efficiency of multi-OFDM symbols interleaving is at least 15% higher than the no interleaving and per-OFDM symbol interleaving at the 10 dB SNR of rank 1 and 16 dB of rank 2.
+
+Table XI. Some parameters under 300km/h with 15 KHz sub-carrier spacing in the link-level simulation
+
+300km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 16 QAM&(3/4) | 1 | CDL-A-1000 | 1
+Case 2 | 16 QAM&(3/4) | 2 | CDL-A-1000 | 1
+Case 3 | 16 QAM&(3/4) | 1 | CDL-A-100 | 1
+Case 4 | 16 QAM&(3/4) | 2 | CDL-A-100 | 1
+
+[FIG:d676e47493deaee842ec] [FIG:9e2eeafc3f08e281c34d]
+
+Case1 & Case2: 300km/h-16QAM(3/4)-CDL-A-1000
+
+[FIG:3cd154b5090efeed95ce] [FIG:4a4eee0c5ad0dbb62c0f]
+
+Case3 & Case4 : 300km/h-16QAM(3/4)-CDL-A-100
+
+Figure 15. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interelaving in terms of BLER and SE under various transmission parameter combinations in table XI
+
+In Figure16, we show the simulation results of different interleaving schemes under 400km/h with 30 KHz sub-carrier spacing. From the simulation results, Pattern-3 shows about 6.0 dB gain over the pattern 1 and pattern 2 at the BLER of 10-1. In the simulations, the spectrum efficiency of multi-OFDM symbols interleaving is at least 60% higher than the no interleaving and per-OFDM symbol interleaving at the 14 dB SNR.
+
+Table XII. Some parameters under 400km/h with 30 KHz sub-carrier spacing in the link-level simulation
+
+400km/h | Modulation orderCoding rate | Rank | Channel Model | CB number per OFDM symbol
+Case 1 | 64 QAM&(5/9) | 1 | CDL-A-1000 | 1
+
+[FIG:640ec44f30bf4cda9c39] [FIG:7139bc4a3162a0b8f2c8]
+
+Figure 16. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interelaving in terms of BLER and SE under various transmission parameter combinations in table XII
+
+Since the coding rate, modulation order and transmit rank are difficult to keep high in high speed scenarios, the number of CB in each symbol will be limited. As shown in Fig.12 &Fig.13 & Fig.14 & Fig. 15 & Fig. 16, even with 30MHz, the number of CBs in each symbol is only 1, so the gain of Pattern-2, i.e., per symbol interleaving, cannot obtain any performance gain. However, with the same configuration in high scenarios, Pattern-3, i.e., multi-symbols interleaving, still obtains a significant gain (dB at BLER of 10-1) over the other two. It is because that Pattern-3 allows the interleaving across the entire allocated time-frequency resource grid (e.g. n PDSCH symbols in the scheduled bandwidth). The diversity gain is properly obtained by the design of pattern 3.
+
+Observation 8: In high speed scenarios, it is difficult to obtain performance with Per-OFDM symbol interleaving, due to the small CB number in each symbol.
+
+Observation 9: The multi-OFDM symbols interleaving provides significant perforamnce gain in the high speed scnearios, compared to the design of no interleaving.
+
+Different interleaving schemes under the CBG based HARQ are also simulated. The simulation results of different interleaving schemes considering the CBG based HARQ are shown in figure 17. The simulation assumptions can be found in Table II in appendix.
+
+[FIG:df7607b911b7c78cfd64] [FIG:7a83b482cc70cda5cbe5]
+
+Figure 17. Performance comparison among the designs of no interleaving, per-OFDM symbol interleaving and across multi-OFDM symbol interelaving in terms of BLER and SE under super high speed scneario considering CBG based HARQ
+
+As like the CBG based HARQ simulation of mapping order, the retransmission keeps the layer mapping, MCS and coding rate the same as the initial transmission, but schedule the part of bandwidth to accommodate the CBG. In above configuration, the CBG-based retransmission has no influence to the BLER curve which can be observed by the BLER results of figure 17 and Case1 of figure 13. The case in figure17 and the Case1 in figure13 have the same simulation assumptions, except that the CBG based HARQ is used in the figure17 while not used in the Case1 in figure 13. But Pattern-3 has the same gain, about 3dB, in both cases. Though the CBG based HARQ can improve the spectrum efficiency (SE), the SE of multi-OFDM symbol interleaving is still at least 12% higher than the Mapping order-1 at the SNR of 10dB.
+
+Observation 10: In high speed scenario, across multi-OFDM symbol interelaving has better performance than no interleaving and per-OFDM symbol interleaving even considering the CBG based HARQ, where about 2dB gain is observed.
+
+Proposal 2: Under the high speed scnearios in NR, it is very necessary to support the symbol-level interleaving across multiple OFDM symbols.
+
+Conclusions
+
+In this contribution, we have the following observations and proposals:
+
+Observation 1: In 60km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where about 2 dB gain can be observed.
+
+Observation 2: In 120km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where more than 2.4 dB can be observed.
+
+Observation 3: In 200km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where more than 4 dB can be observed.
+
+Observation 4: In 350km/h scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where more than 3.3 dB can be observed.
+
+Observation 5: In 400km/h scenario with 30 KHz sub-carrier spacing, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime”, where about 4 dB can be observed.
+
+Observation 6: In high speed scenario, the mapping order of “layertimefrequency” has better performance than “layerfrequencytime” with considering the CBG based HARQ, where about 2 dB gain can be observed.
+
+Observation 7: The per-OFDM symbol interleaving provides marginal performance gain , where the gain seems less than 0.5dB.
+
+Observation 8: In high speed scenarios, it is difficult to obtain performance with Per-OFDM symbol interleaving, due to the small CB number in each symbol.
+
+Observation 9: The multi-OFDM symbols interleaving provides significant perforamnce enhancement in the high speed scnearios, compared to the design of no interleaving.
+
+Observation 10: In high speed scenario, across multi-OFDM symbol interelaving has better performance than no interleaving and per-OFDM symbol interleaving even considering the CBG based HARQ, where about 2dB gain is observed.
+
+Proposal 1: The mapping order of “layertimefrequency” should also be supported in NR for high speed transmission cases.
+
+Proposal 2: Under the high speed scnearios in NR, it is very necessary to support the symbol-level interleaving across multiple OFDM symbols.
+
+References
+
+3GPP RAN1 NR AH2, Chairman’s note, Qingdao, P.R. China, June 27 – 30, 2017.
+
+R1-1712228, Huawei, HiSilicon, Codeword to layer mapping in NR, 3GPP RAN1#90, Prague, Czech Republic, August 21 – 25, 2017.
+
+Appendix
+
+Table-I Link-level simulation parameters for mapping order in high speed scenario
+
+Parameter | Value
+Carrier Frequency | 4 GHz
+Sub-carrier spacing | 15KHz, 30KHz
+Channel Model | CDL-A with 1000ns/100ns delay
+Velocity | 60km/h, 120km/h, 200km/h, 350km/h, 400km/h
+gNB Antenna Configuration | 4Tx cross polarized array with 0.5λ antenna spacing
+UE Antenna Configuration | 2 Rx non- cross polarized with 0.5λ antenna spacing4 Rx cross polarized with 0.5λ antenna spacing
+CP | Normal
+Waveform | CP-OFDM
+Modulation order | 16QAM,64QAM
+Coding Rate | 3/4, 4/9, 5/9
+Signal Bandwidth | 15MHz, 18MHz, 30MHz
+Channel Estimation | Non-Ideal
+Receiver | MMSE receiver
+CW number | 1
+Layer number | 1, 2
+Rank Adaption | No
+CBG Number | 2/4
+
+Table-II Link-level simulation parameters for interleaving in high speed scenario
+
+Parameter | Value
+Carrier Frequency | 4 GHz
+Sub-carrier spacing | 15KHz, 30KHz
+Channel Model | CDL-A with 1000ns/100ns delay
+Velocity | 60km/h, 120km/h, 200km/h, 300km/h, 400km/h
+eNB Antenna Configuration | 4Tx cross polarized array with 0.5λ antenna spacing
+UE Antenna Configuration | 2 Rx non- cross polarized with 0.5λ antenna spacing,4 Rx cross polarized with 0.5λ antenna spacing
+CP | Normal
+Waveform | CP-OFDM
+Modulation order | 16QAM,64QAM
+Code Rate | 3/4, 5/9
+Signal Bandwidth | 15MHz, 20MHz, 30MHz
+Channel Estimation | Non-Ideal
+Receiver | MMSE receiver
+CW number | 1
+Layer number | 1, 2
+Rank Adaption | No
+CBG Number | 2

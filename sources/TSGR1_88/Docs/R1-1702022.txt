@@ -1,0 +1,104 @@
+3GPP TSG-RAN WG1 #88 R1-1702022
+
+Athens, Greece, February 13 – 17, 2017
+
+Source: Xinwei
+
+Title: Considerations on Number of codewords
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 NR Ad hoc on January, the following agreements are achieved regarding number of codewords.
+
+Agreements:RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layersAgreements:RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution, we further discuss number of codewords for NR.
+
+Discussions
+
+For the current agreement, some supporters of Alt. 1 argue that the number of codewords would be fixed and benefit implementation complexity. But per the proponents’ intention, it seems that a UE may be assigned with multiple PDSCH/PUSCH, thus from implementation perspective, the number of codewords that a UE are required to demodulate simultaneously is still not fixed.
+
+Furthermore, current agreement mainly focus on less than 2 layers. It is not desired that the design for less than 2 layers and single TRP/panel transmission is different from design for more than 2 layers and multiple TRP/panel transmission. Thus, we believe the whole framework should be discussed first rather than focusing only on part of the design.
+
+The whole structure of codeword to layer mapping should be discussed, rather than focus first on less than 2 layers.
+
+If less than 2 layer scenario is discussed first, the design should fit in a unified framework of codeword to layer mapping.
+
+For JT from multiple beams/TRPs, there might be coherent transmission and non-coherent transmission. Conceptually, it seems quite natural to use two or more codewords for non-coherent transmission of two or more beams/panels/TRPs, which means there would be two or more codewords for two or more MIMO layers. We consider the following aspects for the comparison.
+
+Overhead: there would be more overhead for two or more codewords.
+
+gNB need to inform UE about which MCS is used for each codeword. Typically, there would be only one control channel. The DCI information would be simpler if only one codeword and one MCS is applied across beams/panels/TRPs.
+
+UE would need to report the corresponding CSI for each codeword. The exact CSI overhead may rely on CSI measurement scheme. But at least the possibility should not be eliminated that the two panels/beams/TRPs may be measured together. Under these circumstances, UE would only need to report MCS related to one codeword if one codeword scheme is specified. Two codewords would mean higher overhead.
+
+ACK/NACK may also be needed for each codeword. But bundling could be applied across spatial layers.
+
+Backhaul requirement:
+
+There might be slight difference in the exchanged information between two for one codeword scheme and two codeword shcemes. For two codewords, the master TRP could directly transmit the TB for the second TRP when non-coherent transmission is applied. But for one codeword scheme, the information needed may vary according to schemes applied. It is possible to directly transfer the coded bits to the slave TRP. Or the original TB are transmitted directly to the slave TRP and the bits are coded and modulated to symbols as MCS indicated. Then the symbols related to the slave panels are punctured and precoded according to specified schemes.
+
+The requirement of backhaul for one codeword is obviously higher than two codewords for joint transmission.
+
+Performance: performance discussion is involved with Rx complexity. With different receivers, performance gap between one codeword scheme and two codeword scheme is different.
+
+It is well known that MMSE-SIC receiver achieves MIMO channel capacity with much lower complexity than MLSD receiver. To apply MMSE-SIC receiver, it is necessary to adopt one codeword per layer scheme. But the theoretical upper-limit is achieved through complicated MCS adaptation per layer and perfect decoding per codeword. In practice, these are not always satisfied. Symbol level ML detection like sphere decoding would outperform MMSE-SIC scheme under most circumstances and its complexity is comparable to MMSE-SIC.
+
+For multi-panel/beam/TRP non-coherent transmission, there is another issue that need to be considered for one/two codeword scheme selection. Signals on different beams/panels/TRPs would typically experience different fading. For non-coherent transmission, if multiple codewords are transmitted on independent layers, the diversity gain from multiple antennas would be partially lost.
+
+There are some gains for code rate adaptation per layer if multiple codes are supported. Such gains would indeed be degraded due to varied interference. Furthermore, the gains are mainly achieved for the scenario that the SNR gaps between different layers are large. Supporters of one codeword believe such scenarios should be avoided from system perspective because the gains are not worth the increased interference to other cells. This might be true for single point transmission. For non-coherent transmission from multiple TRPs, it is obvious that such code rate adaptation gains could be achieved with properly designed scheduler and interference coordination.
+
+Complexity
+
+Amongst the evaluated Rx, MMSE receiver has the lowest complexity.
+
+MMSE-SIC and sphere decoding has similar complexity at middle to high SNR.
+
+From above discussion, it could be seen that 1 codeword design and 2 codewords design should both be considered. They are useful for different scenarios. Whether 4 codewords design should be introduced needs further study. The tradeoff between related overhead and the corresponding performance gain needs more cautious selection.
+
+One codeword and two codewords design should both be specified to facilitate different transmission schemes and different receiver types.
+
+Design with more than 2 codewords should be further studied.
+
+The gain of adapting MCS usually comes from the fact that there is accurate channel status tracking. But in real deployment, such accurate channel status tracking is rarely the case due to high overhead and instantaneous interference fluctuation. Furthermore, changing modulation order without changing coding rate would introduce even more losses. Only under very rare circumstances could gains be achieved, and its control signaling design are quite complicated, thus modulation adaptation within one codeword is not necessarily to be supported.
+
+Modulation adaptation within one codeword should not be supported.
+
+Evaluation Results
+
+[FIG:bc530ab12edfd8144a8e]
+
+We did some evaluations with assumptions in section 5. The results are shown in above figure.
+
+The above figure mainly shows the following performance: one codeword with soft sphere decoding and MMSE, two codewords with MMSE-SIC and SSD-SIC. It could be seen that two codeword SSD-SIC outperforms all other schemes, while single codeword SSD outperforms two codewords MMSE-SIC. One codeword and two codewords design both seem to be necessary.
+
+Conclusions
+
+Based on the discussion in this contribution we propose the following
+
+Proposal 1 The whole structure of codeword to layer mapping should be discussed first rather than focus first on less than 2 layers.
+
+Proposal 2 If less than 2 layer scenario is discussed first, the design should fit in a unified framework of codeword to layer mapping.
+
+Proposal 3 One codeword and two codewords design should both be specified to facilitate different transmission schemes and different receiver types.
+
+Proposal 4 Design with more than 2 codewords should be further studied.
+
+Proposal 5 Modulation adaptation within one codeword should not be supported.
+
+Annex: Simulation Assumptions
+
+Parameters | Values
+Channel model | EVA
+Channel estimation | Ideal
+MIMO mode | SU-MIMO
+Number of codewords | 1, 2
+Transmission rank | 1, 2
+MCS | QPSK, fixed code rate (R = 0.6)
+Receiver | MMSE/SSD/MMES-SIC/SSD-SIC
+
+References

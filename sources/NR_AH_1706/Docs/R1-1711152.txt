@@ -1,0 +1,285 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1711152
+
+Qingdao, P.R. China 27th – 30th June 2017
+
+Agenda item: 5.1.2.1.1
+
+Source: Qualcomm Incorporated
+
+Title: CW to layer mapping and frequency domain interleaving
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN1 #89 [1] the following agreements regarding the codeword to layer mapping were made:
+
+Agreements:
+
+For >4-layer transmission, each of the two CWs is mapped to at most 4 layers
+
+Agreements:
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:8167e2308bfe4fcccc97] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS  whether the UE report the preferred layer mapping
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+Agreements:
+
+NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UE
+
+FFS details
+
+In this contribution, we summarize our views on the remaining issues on layer mapping procedure.
+
+CW-layer correspondence for > 4 layers
+
+It was agreed in the previous meeting to support the LTE-style of layer mapping correspondence for more than rank 4 PDSCH transmission. There is an FFS on whether a configurable layer mapping should be supported in NR for scenarios of rank 5,6,7,8 and allow a few limited possibilities. The main motivation of allowing higher configurability for more than rank 4 is to group layers in one CW which do not have a large span in their gains. However, if a large span between the channel quality of the layers in a very high rank scenario (rank >4) is observed, then it may just be best to decrease the rank without introducing additional complexity and signalling which may result to unnecessary specification and implementation effort.
+
+Proposal 1: NR supports only fixed CW-layer correspondence.
+
+Layer mapping ordering & Interleaving
+
+It was agreed as a working assumption to support a “Layer Frequency Time” layer mapping procedure at least for DL data channel. It is still to be decided what will be the layer mapping ordering for UL CP-OFDM and DFT-S-OFDM and whether additional layer mapping procedures are needed.
+
+“Layer Time Frequency” procedure
+
+Exploiting time diversity gains in scenarios of multiple codeblocks in one CW, would require the codeblock’s bits to span across multiple OFDM symbols, and such gains (if any) would generally only be evident in scenarios of high or very high mobility.
+
+However, before introducing an additional layer mapping procedure, it is more prudent to first optimize the DMRS location of additional symbols. After all, NR already supports configurable DMRS patterns, which allows enough freedom for designing optimized DMRS patterns that handle well the high speed scenarios. In a later section of this paper we observe that introducing time-domain interleaving over freq-domain interleaving provides only limited gains even for high speed vehicular scenarios (120 kmh at 4 GHz).
+
+Furthermore, when it comes to UL data channel performance in cell-edge scenarios (either for UL DFT-S-OFDM or UL CP-OFDM scenarios), it should be noted that it is likely one codeblock will be spanning across all, or at least the majority of the allocated symbols, in which case the layer mapping procedure does not really matter since the codeblock will take advantage of the maximum time/frequency diversity.
+
+Frequency Interleaving
+
+In order to ensure that each codeblock gets maximum frequency diversity, a codeblock would need to be mapped over a large portion of the frequency-selective channel. In LTE, this was ensured because each OFDM symbol was carrying only one codeblock, due to the narrowband nature of LTE.
+
+However, in NR, due to large bandwidth allocations, we may have many codeblocks per OFDM symbol. For example, assuming 4 layers with 64-QAM (24 bits per resource element) and an allocation of 2000 resource elements, would result to approximately 5 codeblocks in each OFDM symbol. In scenarios of maximum allocation and max spectral efficiency, e.g., 4 layers with 256-QAM and 3300 resource elements, there can be 11.5 codeblocks in each OFDM symbol (code rate of 8/9 and a codeblock information bits of 8192).
+
+[FIG:951abd08959853648a62]
+
+Figure 10. Map across layers first, across frequency second using a row-column interleaver, and then across OFDM symbols (not shown in the above figure).
+
+Note also that such a method still allows pipeline decoding at the receiver since the de-interleaving is happening on the resource-element-level, before the demapper. Then, the LLRs are “in-order” and ready for decoding, without introducing unnecessary delays in the receiver processing. Note that if the frequency interleaving is happening at the transmitter at the bit level, i.e., inter-CB interleaving, then the de-interleaving would need to be in the LLR-level, after the demapper, in which case the codeblock decoding for each OFDM symbol would need to start after all the demapping process for that OFDM symbol has been completed. In other words, bit-level inter-CB interleaving would incur a significant latency cost that does not fundamentally provide any significant gains. Note that an intra-CB interleaving, similar to what was chosen for LTE, can always be used to help the decoding of each CB, this is an independent topic that may be treated in the coding agenda items.
+
+Observation 1: Subcarrier-level frequency interleaving allows for pipeline codeblock decoding at the receiver.
+
+Note that such an interleaving method is expected to have non-trivial gains when there are more than one or two codeblocks in one OFDM symbol. To validate how likely is such scenario in NR, and whether it is an extreme scenario or not, observe that the maximum value of codeblock size is “near” 8192 bits, so for this discussion, we assume we have 8192 information bits. Consider also a short MCS table that covers both small, medium and large spectral efficiencies with 12 entries shown in the Appendix 6.2. Then, the number of codeblocks that we expect in each OFDM symbol per codeword, assuming same modulation for all layers, is approximately:
+
+[EQ:c9c59bb9a19c02c5adc3]
+
+where [EQ:1d9dbd1430416a638d38] is the modulation bits for all layers and [EQ:80b5f7f3efe190a7342a] is the code rate. We now plot for different number of PRBs and number of layers in the codeword the number of codeblocks that are needed using the short MCS table.
+
+[FIG:625ec51d94739fb77168] [FIG:b8f7bb619d7650cee9ec]
+
+[FIG:65715a5abc0ec8c083c2]
+
+Figure 11. Number of codeblocks per OFDM symbol for different MCS and rank
+
+We observe that in many of these combinations, the number of codeblocks per OFDM symbol is exceeding one or two, especially for a medium to large spectral efficiency.
+
+Proposal 1: For the DL data channel and UL data channel with CP-OFDM waveform, the modulated symbol stream associated with a codeword is mapped to the allocated resource in the following manner:
+
+first across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time).
+
+Performance Evaluations
+
+Row-Column per-OFDM symbol interleaver
+
+We now provide a proposal of a row-column interleaver that is happening at the codeword-to-layer mapping in the resource element level and simulation study that demonstrates the gains that can be expected in scenarios of medium and high spectral efficiencies compared to the case of no-frequency interleaving.
+
+In the suggested row-column interleaving procedure, after the encoded data bits are mapped into QAM symbols, the latter are mapped across layers sequentially into logical resource elements for each OFDM symbol, and then bundles of K resource elements are interleaved using a row-column procedure before the precoding step and mapping into physical resource elements. A toy example of such procedure is shown in Figure 1 where K=4, each codeblock spans 8 resource elements and there are a total number of 3 codeblocks. Note that such procedure is happening only in the logical resource elements that carry data, and that no interleaving is happening in the control or RS that could be present in an OFDM symbol.
+
+[FIG:bc4af4bf1b7fe858945f] [FIG:5def74a6b9eaefdee8e4] [FIG:a292cef28794fafaa850]
+
+Figure 2 Toy example of a row-column frequency interleaving procedureFigure 2 Toy example of a row-column frequency interleaving procedure
+
+Simulation results with a 8k block-length LDPC
+
+We now provide simulation results comparing the case of:
+
+no inter-CB interleaver, only intra-CB interleaver (LTE-like procedure)
+
+4-tone-level Interleaver, and intra-CB interleaver
+
+For an LDPC encoding procedure with 8192 information bits and 9216 encoded bits (code rate: 8/9) based on the contribution [4]. Simulations assumptions are shown in Table 1.
+
+Simulation parameter | Value
+(SCS, FFT) | (30 KHz, 4096)
+MIMO scheme | 4 Tx – 4 Rx, random PMI, 4 layers, SCW
+Slot structure | 9 PDSCH symbols, 1 DMRS symbols, 2 PDCCH symbols
+Demapper | Advanced receiver
+Allocations | 45 PRBs, 85 PRBs, 170 PRBs, 275 PRBs
+Channels | TDL-A 30 nsec, TDL-B 100 nsec, TDL-C 300 nsec
+MCSs | (64 QAM across all layers, 8/9) (256 QAM across all layers, 8/9)
+
+The amount of gains we expect with the tone-based interleaver depends significantly on the number of codeblocks that exist in each OFDM symbol. In one extreme scenario, if there is only one codeblock, then there will not be any gain from a tone-interleaver. However, in many scenarios of medium to high spectral efficiency and medium to large allocations, multi-dB level gains can be exploited because there are multiple codeblocks in each OFDM symbol. In the next table we show, for the two MCSs and different allocations, the number of codeblocks per symbol, along with the dB gains for achieving TBLER=10% by introducing a 4-tone interleaver.
+
+|  | (64 QAM, 8/9) | (256 QAM, 8/9)
+Allocation | # CBs per OFDM symbol | dB Gain in 10% TBLER in TDLB 100 nsec | dB Gain in 10% TBLER in TDLC 300 nsec | # CBs per OFDM symbol | dB Gain in 10% TBLER in TDLB 100 nsec | dB Gain in 10% TBLER in TDLC 300 nsec
+45 PRBs | 1.4 | 0.1 dB | 0.1 dB | 1.9 | 0.8 dB | 0.7 dB
+85 PRBs | 2.7 | 0.7 dB | 0.6 dB | 3.5 | 3 dB | 1 dB
+170 PRBs | 5.3 | 1.8 dB | 0.8 dB | 7 | >5 dB | 2 dB
+275 PRBs | 8.6 | 2 dB | 1 dB | 11.5 | >5 dB | >3 dB
+
+In the above table, we show the dB gain that can be achieved using a simple row-column 4-tone interleaver during the layer mapping procedure for a 10% TBLER for different number of codeblocks per OFDM symbol for two MCSs and different allocations (Performance curves are shown in the Appendix). We observe that there are significant gains to be expected by introducing an interleaving procedure during the codeword to layer mapping procedure in scenarios that each OFDM symbol carries are two codeblocks or more.
+
+Observation 2: Introducing tone-level interleaving during the codeword to layer mapping procedure may provide dB-level gains in scenarios where more than one codeblock are mapped into one OFDM symbol.
+
+Simulation results with 3GPP Turbo code
+
+We now provide performance results for a sub-6GHz with a SCS of 30 KHz with 170 RBs, each with 12 subcarriers, which results into a bandwidth of 61.2 MHz in a 4x4 system with link and rank adaptation with realistic channel estimation. Detailed simulation parameters are shown in Table 1.
+
+Parameter | Value
+Coding | 3GPP Turbo with 32 entries in the MCS table. Maximum code rate 0.93, and 256-QAM
+Link/Rank adaptation | 10% TBLER Link Adaptation with TTI 500 usec and rank adaptation up to 4 layers
+MIMO | 4 Tx, 4 Rx, Open Loop, SCW
+CE | MMSE Channel estimation – 4 PRB channel estimation
+BW | 61.2 MHz
+SCS | 30 KHz
+HARQ | 1 transmission with 1 bit ACK/NAK
+
+Table 1 Simulation parameters
+
+[FIG:8bf72d7378d4a6dafc15]
+
+Figure 13 Throughput performance comparison of per-tone (K=1) or per-4-tone (K=4) interleaver compared to no frequency interleaver for a system with BW of 61.2 MHz in a TDL-C 100nsec channel.
+
+[FIG:bf0d09bc5676ffdeba9d]
+
+Figure 14 Throughput performance comparison of per-tone (K=1) or per-4-tone (K=4) interleaver compared to no frequency interleaver for a system with BW of 61.2 MHz in a TDL-C 300nsec channel.
+
+We observe that in both scenarios significant gains can be exploited by using a frequency-domain interleaver, especially for medium and high geometries. Even higher gains are expected in allocations of larger than 60 MHz, which need to be supported by NR.
+
+Proposal 2: For the DL data channel and UL data channel with CP-OFDM waveform, NR supports a K-subcarrier-level interleaver within an OFDM symbol.
+
+FFS: value of K.
+
+Simulation results of Time/Freq interleaver vs. Freq. interleaver
+
+In the next table we present the simulation assumptions of this numerical study.
+
+Parameter | Value
+FFT Size | 2048
+Numerology | 30 KHz SCS with NCP
+Assigned Bandwidth | 1152 subcarriers (96 PRBs)
+Tx antenna configuration | 8
+Rx antenna configuration | 4
+Number of layers | Rank 1 and Rank 2
+Control Overhead | 2 OFDM symbols
+Coding | 3GPP Turbo LTE
+HARQ | RV: 0,1,2,3
+TTI | 0.5 msec (14 OFDM symbols)
+Link Adaptation | Target: 10% TB Error (1 bit ACK/NAK per TTI), SCW MIMO
+DMRS | [FIG:a88deaa76e914900e3ef]
+slot Structure | 12 DL symbols, 3 symbols uplink and guard
+Channel | Doppler spread Fd = 444 Hz (120 Kmh at 4 GHz)
+MCS Table | 32 entries up to 256-QAM with rate 0.8889
+
+Note that in this study:
+
+The allocation is large which means that most of the codeblocks do not span across multiple symbols. In other words, such a scenario would show most gains compared to the scenario of only freq-domain interleaving.
+
+The additional DMRS location has been optimized. Assuming that at high speed scenarios only front-load DMRS will be available is not realistic, and therefore the gains of time interleaving should be demonstrated (if any) after the DMRS locations have been optimized.
+
+We use 3GPP turbo code that has smaller codeblocks than the NR LDPC. This means that the gains of time interleaving are expected to be even smaller than those reported in this paper.
+
+[FIG:8df2f1b439d39a776b6a] [FIG:aa9638ffdd4fff10fcf8]
+
+We observe that the gains of introducing time interleaving on top of frequency interleaving are limited (less than 0.5 dB) even for 120 kmh (444 Hz at 4 GHz carrier frequency) for both rank 1 and rank 2 scenarios. The gains of time interleaving over frequency domain interleaving need to be studied further ad jointly with the DMRS location design. Introducing an additional mode of operation on top of configurable DMRS would lead to additional cost and spec complications without clear and significant gains at this time.
+
+Conclusions
+
+We observe:
+
+Observation 1: Tone -level frequency interleaving allows for pipeline codeblock decoding at the receiver.
+
+Observation 2: Introducing tone-level interleaving during the codeword to layer mapping procedure may provide dB-level gains in scenarios where more than one codeblock are mapped into one OFDM symbol.
+
+We propose:
+
+Proposal 1: For both the DL and UL data channel, the modulated symbol stream associated with a codeword is mapped to the allocated resource in the following manner:
+
+first across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time).
+
+Proposal 2: For the DL data channel and UL data channel with CP-OFDM waveform, NR supports a K-subcarrier-level interleaver within an OFDM symbol.
+
+FFS: value of K.
+
+References
+
+RAN1-88 Chairman’s notes
+
+R1-1613741, “Way forward on Phase 1 and Phase 2 MIMO calibration for NR”, ZTE, ZTE Microelectronics, Ericsson, LG Electronics, Spreadtrum Communications
+
+R1- 1700480 “Summary of [87-29] Simulation assumption for NR DMRS,” LG Electronics, 3GPP TSG-RAN WG1 NR Ad-Hoc, Spokane, Washington, USA
+
+R1-1702642 “Design of multiple family LDPC codes”, Qualcomm, 3GPP TSG-RAN WG1, RAN1 88#, Athens, Greece
+
+Appendix
+
+Performance curves for 8K LDPC
+
+(256 QAM, 8/9)
+
+275 PRBs (leads to ~11.5 CBs/symbol)
+
+[FIG:31e0f5a61199a2d1c6c4] [FIG:80ba96852ec628a9a8de]
+
+170 PRBs (leads to ~7 CBs/symbol)
+
+[FIG:9a01f99fac695074485c] [FIG:99645f319191c024659e]
+
+85 PRBs (leads to ~3.5 CBs/symbol)
+
+[FIG:5a72f8259dac9a214a5d] [FIG:12926e8fe2d91a570fac]
+
+45 PRBs (leads to ~1.9 CBs/symbol)
+
+[FIG:07162c0acf8324a85ff3] [FIG:3c3f6f2dc415dcf694e9]
+
+(64 QAM, 8/9)
+
+275 PRBs (leads to ~8.6 CBs/symbol)
+
+[FIG:70d3eed41eca4d8dc0c9] [FIG:8bd27f11eff603ded056]
+
+170 PRBs (leads to ~5.3 CBs/symbol)
+
+[FIG:6bf6eae80d291fea65e0] [FIG:2e61a1c3116f51223766]
+
+85 PRBs (leads to ~2.7 CBs/symbol)
+
+[FIG:7d25480ee88d1da4f963] [FIG:8b32974247e9bfd4dce8]
+
+45 PRBs (leads to ~1.4 CBs/symbol)
+
+[FIG:1991c9fa18b75e56c3c6] [FIG:351766dfe4df75e703a0]

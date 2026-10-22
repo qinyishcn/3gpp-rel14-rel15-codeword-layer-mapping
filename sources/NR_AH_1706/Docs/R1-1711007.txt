@@ -1,0 +1,182 @@
+3GPP TSG-RAN WG1 NR Ad-Hoc#2 R1-1711007
+
+Qingdao, China, 27th-30th June, 2017
+
+Source: Ericsson
+
+Title: Codeword to layer mapping for DL and UL
+
+Agenda Item: 5.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#89, the following agreements were made:
+
+Agreements:For >4-layer transmission, each of the two CWs is mapped to at most 4 layersAgreements:At least support the following layer split for L >4 layer transmission: the 1st [EQ:d6a2519b295b0d17ec3a] layers CW0 and remaining layers CW1For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities The mapping is configured by gNB to the UEFFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNBFFS  whether the UE report the preferred layer mappingWorking assumption:In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)FFS whether the resource is associated with a CW or with a CB groupFFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)If so, details of configuration signalling, e.g. RRC, DCICompanies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenariosAgreements:Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)Aim to make a decision in the next RAN1 meetingAgreements:NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UEFFS detailsAgreements:For >4-layer transmission, each of the two CWs is mapped to at most 4 layersAgreements:At least support the following layer split for L >4 layer transmission: the 1st [EQ:6df5b92000b35bf52829] layers CW0 and remaining layers CW1For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities The mapping is configured by gNB to the UEFFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNBFFS  whether the UE report the preferred layer mappingWorking assumption:In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)FFS whether the resource is associated with a CW or with a CB groupFFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)If so, details of configuration signalling, e.g. RRC, DCICompanies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenariosAgreements:Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)Aim to make a decision in the next RAN1 meetingAgreements:NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UEFFS details
+
+We will in this contribution provide our view regarding the mapping of data to RE for PDSCH and PUSCH.
+
+On PDSCH and PUSCH to RE Mapping
+
+At RAN1#89 there was a working assumption that PDSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols in the slot in order to support early start of decoding at the UE. This mapping allows for early start of the decoding of a code word, if also an early channel estimate is available from the front loaded DMRS.
+
+Confirm the part of the working assumption that PDSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols.
+
+Furthermore, to keep the symmetry between UL and DL, and to allow early decoding start of UL data transmission in order to maintain overall latency at a minimum, we propose
+
+At least the following mapping order for modulated symbol stream to the allocated resource for UL data channel is supported: First across layers, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+Furthermore, it has been discussed to support multiple mapping alternatives to enable optimizations for multiple use cases. For instance, if intra slot hopping is introduced then a different mapping order may be beneficial, e.g. time first, as one code word would then be mapped to multiple hops (frequency bands). On the other hand, slot hopping is typically used for small resource allocation bandwidths and the single code block will then anyway be mapped to all the hops/the whole slot. Hence, the benefits of an additional mapping order are not clear.
+
+In our view, introducing extra configuration possibilities will also create a more difficult standard to implement, operate and maintain. It also involves additional RAN4 test cases which already is expected to be long due to a configurable DMRS.
+
+Alternative mapping orders would increase implementation complexity, additional test cases and network operation complexity to decide switching criteria when to select the alternative mapping order
+
+Therefore, unless these use cases that may provide benefits are highly important and common so that introduced configurability is highly beneficial, we do not think it is motivated to introduce support of additional mappings. Based on this we currently see no need for introducing additional mappings.
+
+CW to layer correspondence
+
+At RAN1#89 it was agreed to support that in in the case of L>4 layer, map the 1st [EQ:119788c73562e3efd2d9] layers to the first CW and the remaining layers to the second CW. We see not need in supporting additional configurations than this.
+
+Frequency interleaving
+
+Assuming 30kHz SCS (3.5GHz) and a scheduling bandwidth 100 MHz (corresponding to 275 resource blocks), and up to four MIMO layers using up to 256 QAM modulation, each OFDM symbol will contain up to 105600 modulated bits, or up to about 12 LDPC code blocks (CB).  Hence, each LDPC CB is spread out at a bandwidth of roughly 8MHz without frequency interleaving. Based on this we make the following observation:
+
+There will be scheduling cases where multiple LDPC code blocks will be mapped to a single OFDM symbol.
+
+Therefore, a single CB may in some cases be vulnerable to the channel fading as it is mapped to only a localized time frequency resource.
+
+To mitigate this without sacrificing the early decoding principle, we suggest to introduce a frequency domain interleaving and one way to achieve this is to map resource blocks, containing modulated symbols, to other resource blocks within the OFDM symbol. Alternatively, one may instead map individual symbols to subcarriers but we find it sufficient, to obtain frequency diversity, to work at a resource block level, just as done in LTE.
+
+Yet another approach is to introduce a bit level interleaver after the encoding to interleave the code blocks. However, in the channel coding session, the following agreement was made in RAN1#89:
+
+Agreement:
+
+If bit-level interleaving is applied, it should be limited to each code block individually
+
+Performing the interleaving mapping in the resource block domain thus seems to be the most appropriate.
+
+A resource block interleaver is used for PDSCH and PUSCH, to achieve frequency domain diversity per CB.
+
+The interleaver is a mapping process and should hence be part of the 211 spec.
+
+Considerations for the frequency interleaver design
+
+When designing a frequency interleaver it is essential to consider the agreements made on bandwidth parts that will be supported in NR. The concept of bandwidth parts is mainly related to the following properties of NR:
+
+NR should allow for UEs with a bandwidth capability that is less than the maximum network carrier bandwidth.
+
+In order to enable enhanced UE energy performance, NR should also allow for adapting the UE reception bandwidth to be less than the UE downlink bandwidth capability.
+
+This is done by introducing the concept of bandwidth part which is a UE specific configuration that configures the UE to only monitor a subset of the available total system bandwidth.
+
+Furthermore, also the concept of CORESET provides the possibility to limit UE PDCCH monitoring to a part of the overall network carrier. Here, once a UE configured with a reduced reception bandwidth for PDCCH monitoring has received a scheduling assignment it should open up, and potentially also frequency-domain re-position, its receiver for sub-sequent PDSCH reception. However, this will take a certain time meaning that reduction in the reception bandwidth for PDCCH monitoring will also restrict the reception bandwidth for initial PDSCH reception.
+
+Hence, since NR is operating using bandwidth parts and CORESET this will impact the amount of frequency interleaving that can be carried out since performing an interleaving for a UE configured with a bandwidth part in such a way that resource blocks within the bandwidth part are mapped outside the bandwidth part will make impossible for the UE to decode the transmitted data.
+
+Frequency interleaving must be carried out in such a way that resource blocks within the bandwidth part are mapped to physical resource blocks within the same bandwidth part.
+
+Frequency interleaving must be carried out in such a way that it can coexist with the CORESET functionality.
+
+Frequency interleaving considering bandwidth parts
+
+As stated in the observation above it is essential to perform frequency interleaving in such a way that frequency interleaving, for a UE configured with a bandwidth part, is done in such a way that resource blocks within the bandwidth part also are mapped to resource blocks within the same bandwidth part. This condition should naturally be true to all the UEs in the system but this is however not a sufficient condition. Consider the example illustrated in Figure 1: here UE1 has been configured with a bandwidth part (BWP) and UE2 is configured with a bandwidth part that is twice as large as the bandwidth part from UE1. One potential situation that may occur in this system is that UE1 is scheduled between f1 and f3 (hence using its entire bandwidth part) whereas UE2 is scheduled between f0 and f1 (hence only using a subset of its bandwidth part). From this we note that if UE2 would perform frequency interleaving within its bandwidth part it would potentially map some of its resource blocks into the frequency interval used by UE1 which then may result in a resource collision at some of the resource blocks. Hence, UE2 must perform its frequency interleaving within the interval f0 to f1.
+
+[FIG:ecb0277a18a1622f513d]
+
+Figure 1. Two UEs configured with different bandwidth parts.
+
+Based on the reasoning above we identify two potential approaches for performing interleaving in NR:
+
+Approach A: The frequency interleaving is done within the “least common denominator” of all bandwidth parts. 
+Approach B: Perform interleaving only within the scheduled resources for the given UE.
+
+We explain these two approached more in detail below.
+
+Approach A: A least common denominator interleaver
+
+Given this approach the frequency interleaving must be done within a bandwidth that is the “least common denominator” of the different sizes of bandwidth parts. Hence, if a system bandwidth of size W is split into N equal sized sections and all bandwidth parts are defined from these sections one could perform the frequency interleaving contained within bandwidths of size W/N. This will hence motivate a piecewise interleaving process such that interleaving is done within the first section separately, then within the second section and so on. For the example in Figure 1 the “least common denominator” would be the bandwidth part for UE1.
+
+A piecewise interleaving process will work together with bandwidth parts.
+
+Based on the reasoning above, and assuming [EQ:31ff7a01fe957fecbae9] is the value of the “least common denominator” of the different bandwidth parts, an interleaving process could be carried out as follows:
+
+For resource block i derive [EQ:f9c3f267d1e80cc92a64] which will represent the [EQ:321d49445d773bab4e32] :th resource block within the [EQ:d352ee812223942d62bb] :th piece of the system bandwidth.
+
+Perform frequency interleaving within this piece, for instance map the [EQ:d28ba0dc6fd7be0c02bb] :th resource block to the N:th resource block, within the piece, in a wraparound fashion.
+
+Returning to the previous mentioned example with 30kHz SCS (3.5GHz) and a scheduling bandwidth 100 MHz which corresponds to 275 resource blocks we illustrate in Figure 2 the above introduced interleaver for
+
+No interleaving, hence N=1
+
+Interleaving with N = 17 and [EQ:a0fc6391c697ca44a48d] (hence no bandwidth parts)
+
+Interleaving with N = 17 and [EQ:71e94a2950e35c87bd66] (hence a bandwidth part of ~50MHz)
+
+Interleaving with N = 17 and [EQ:4240e626b780200f3dbb] (hence a bandwidth part of ~25MHz)
+
+[FIG:ae22156dcdd7769aa306]
+
+No interleaving, hence N=1
+
+[FIG:8cb3b73558518d04710f]
+
+Interleaving with N = 17 and [EQ:fbd93d0c261b5b33ac51]
+
+[FIG:538f8122fdb4f4150c87]
+
+Interleaving with N = 17 and [EQ:6f9fc00e5c362d42db6f]
+
+[FIG:b8a238c3901e69e215a5]
+
+Interleaving with N = 17 and [EQ:61700da3eee626e9fe3e]
+
+Figure 2. The relation between physical resource block I(i) (x-axis) and the resource block i (y-axis) for a total bandwidth of 275 resource blocks.
+
+Approach B: Perform interleaving only within the scheduled resources for the given UE
+
+Another approach to meet the listed constraints would be to only carry out interleaving within the resource blocks scheduled for a given UE. Hence, if resource blocks i1, i2, …, iN are scheduled for a given UE the interleaver would essentially need to permute those indexes in order to map them to the physical resource blocks. Hence, if the interleaver is described by [EQ:2caf9cc682ff40a48f85] we would require that also [EQ:a55e3d2cab414c4a9ff9] for all [EQ:ffa61de7f323fce78319] . One straightforward way to do that is to map the [EQ:5122e4d5000a76ebf2ac] :th resource block, allocated to a certain UE, to the N:th physical resource block, allocated to the same UE, in a wraparound fashion.
+
+Furthermore, in case of MU-MIMO it is emphasized that the interleaver mapping needs to be done in a UE specific manner. Hence, combining multiple overlapping resource blocks from multiple UEs must be done after the mapping has been carried out on a per UE basis.
+
+Perform interleaving only within the scheduled resources for the given UE will work together with bandwidth parts.
+
+Discussion
+
+In Figure 3 we have listed some examples in order to discuss the pros and cons with the previously suggested two approaches. For the examples in Figure 3a-b we expect the two approaches to be roughly equivalent performance wise. For both situations UE1 should achieve some more diversity gain by using Approach A whereas UE2 obtains a similar or slightly less amount of diversity gain by using Approach B.
+
+In Figure 3c-d we illustrate situations where there is a larger difference between the different approaches. In Figure 3c the obtained diversity gain from Approach A would be substantially less than for Approach B. For Figure 3d we expect the contrary, here Approach A will obtain more diversity gain. It should be noted that Figure 3d may represent a system operating without bandwidth parts. However, a way to obtain a higher diversity gain in this case would be to use distributed resource block allocation meaning that multiple non-frequency-contiguous resource blocks are allocated to the different UEs.
+
+Finally, in Figure 3e we consider a MU-MIMO case where both approach A and approach B will work.
+
+[FIG:ef7f1984340b58ca52b2]
+
+Figure 3. Some examples of bandwidth parts.
+
+To summarize the above discussion, we conclude that the strength of Approach A would be a situation as illustrated in Figure 3d whereas the strength of Approach B would be a situation as illustrated in Figure 3c. Furthermore, we think that Approach B in some sense is easier to operate than Approach A, since it is less complex to configure and also more of a stand alone feature not tightly interconnected to other aspects of the system, and therefore propose
+
+Perform interleaving only within the scheduled resources for a given UE.
+
+It is acknowledged that the suggested proposal does not provide frequency diversity for UEs allocated small packages. This topic may hence need to be considered under the Scheduling/HARQ aspects agenda item.
+
+Frequency interleaving considering CORESET
+
+As previously described the use of CORESET provides the possibility to limit UE PDCCH monitoring to a part of the overall network carrier. If such a UE receives a scheduling assignment it will open up, and potentially also frequency-domain re-position, its receiver for sub-sequent PDSCH reception. However, this will take a certain time meaning that reduction in the reception bandwidth for PDCCH monitoring will also restrict the reception bandwidth for initial PDSCH reception. Hence, during this transition phase the UE will receive PDSCH on a potentially small part of the overall system bandwidth. This problem would also be solved by performing interleaving only within the scheduled resources of a given UE. However, for Approach A there would be a problem here and one would need to be able to turn off the interleaver when a CORESET UE receives a scheduling assignment or alternatively define the “common denominator” according to the bandwidth used by the CORESET UE receiving a scheduling assignment. This bandwidth may however be small and would thereby also limit the amount of interleaving that can be done also when a CORESET UE is not receiving a scheduling assignment. That solution does not seem feasible.
+
+Performing interleaving only within the scheduled resources for a given UE will work together with CORESET.
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 Confirm the part of the working assumption that PDSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols.
+
+Proposal 2 At least the following mapping order for modulated symbol stream to the allocated resource for UL data channel is supported: First across layers, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+Proposal 3 A resource block interleaver is used for PDSCH and PUSCH, to achieve frequency domain diversity per CB.
+
+Proposal 4 The interleaver is a mapping process and should hence be part of the 211 spec.
+
+Proposal 5 Perform interleaving only within the scheduled resources for a given UE.

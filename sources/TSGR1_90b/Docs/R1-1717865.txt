@@ -1,0 +1,59 @@
+3GPP TSG RAN WG1 Meeting #90bis R1-1717865
+
+Prague, P.R. Czech 9th – 13th October 2017
+
+Agenda Item: 7.2.1.1
+
+Source: Lenovo, Motorola Mobility
+
+Title: Remaining details of codeword mapping for DFT-s-OFDM
+
+Document for: Discussion
+
+Introduction
+
+In RAN1#NR3, the following agreements were reached on RE mapping for DFT-s-OFDM [1]:
+
+Agreement:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1: Subcarriers then OFDM symbols
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+The two alternative options (1 and 3) for DFT-S-OFDM with frequency hopping are reproduced in the following diagram:
+
+Figure 1. Two alternative schemes for codeword to RE mapping for DFT-S-OFDM with frequency hopping.
+
+In this contribution we provide an analysis of the two RE mapping schemes for DFT-S-OFDM with frequency hopping.
+
+Discussion
+
+Codeword to RE mapping scheme affects different aspects of NR system design, including decoding BLER performance and processing and chip/hardware design at the UE and gNB.
+
+BLER performance
+
+Time diversity and frequency diversity experienced by each CB affect BLER performance of the CB. This is especially true when frequency hopping is used, where the first part and the second part of the UL resources are transmitted in different sets of PRBs separated by some frequency to achieve frequency diversity. In the example in Figure 1, Option 1 concentrates each CB within one hop, so no frequency diversity and little time diversity is achieved; on the other hand, Option 3 allows each CB to achieve the frequency diversity through hopping. It is expected that Option 3 will achieve better BLER than Option 1 in this case. However, when DFT-S-OFDM is used, the UE is often at the cell edge with very poor channel. It is likely that gNB only assigns very narrow bandwidth to the PUSCH transmission in order to increase the received SINR. If only a single CB is included in the PUSCH, it will have the same BLER performance for both Option 1 and 3. When there are multiple CBs in the PUSCH, these CBs are likely to belong to a single CBG in the PUSCH. Depending on the length and location of the PUSCH, hopping may not take place precisely in the middle of the UL slot. This leads to unequal partition of resources among the two hops, and less frequency diversity for some CBs than others. With CBG bundling, the PUSCH decoding performance depends on the worst CB. The detailed performance gain of Option 3 over Option 1 depends on the scheduling details including allocated bandwidth and OFDM symbols, separation in frequency between the two hops, the symbol position of the hop and the number of CBs in the PUSCH. From BLER performance point of view, we have slight preference of Option 3.
+
+Processing at UE and gNB
+
+Option 3 requires the UE to interleave the RE mapping between the two hops. This contrasts with the case without frequency hopping, where REs are mapped in a frequency first pattern symbol by symbol. Two different mapping patterns complicate the RE design. If Option 1 is used for DFT-S-OFDM both with and without frequency hopping cases, it simplifies the RE design. Option 1 also has the benefit of allowing early decoding at the receiver side when multiple CBs are transmitted in the PUSCH. With Option 3, the gNB is likely to have to wait till the later part of the PUSCH before it can start decoding the first CB, even when there are multiple CBs transmitted in the PUSCH. This complicates the RX pipeline design. From UE and gNB processing point of view, Option 1 is superior than Option 3.
+
+Summarizing the pros and cons of the two options from BLER performance point of view and from processing and chip design point of view, we believe Option 1 for DFT-S-OFDM with frequency hopping should be adopted in Rel.15. Further optimization of RE mapping scheme, both in DL and in UL, with and without frequency hopping, can be further considered in Rel.16. Therefore we propose to adopt Option 1.
+
+Proposal: For DFT-S-OFDM with frequency hopping, codeword should be mapped to RE in subcarriers followed by OFDM symbols (Option 3) for Rel.15. Further optimization of RE mapping scheme for DL and UL can be considered in Rel.16.
+
+Conclusion
+
+We have compared the two RE mapping options for the DFT-S-OFDM with frequency hopping case from BLER performance point of view and chip/hardware implementation point of view. Our proposals are summarized as below:
+
+Proposal: For DFT-S-OFDM with frequency hopping, codeword should be mapped to RE in subcarriers followed by OFDM symbols (Option 3) for Rel.15. Further optimization of RE mapping scheme for DL and UL can be considered in Rel.16.
+
+References
+
+Chairman’s notes, RAN1#NR3.

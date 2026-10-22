@@ -1,0 +1,83 @@
+3GPP TSG-RAN WG1 Meeting #90 R1-1714353
+
+Prague, Czech Republic, 21st – 25th August 2017
+
+Agenda Item: 5.2.4.3
+
+Source: Ericsson
+
+Title: On DMRS port to layer mapping for NC-JT
+
+Document for: Discussion & Decision
+
+Introduction
+
+In this contribution, we identify a potential issue with channel estimation quality if existing DMRS port to layer mapping is re-used for NC-JT transmission and make a proposal of how to resolve this issue.
+
+Background
+
+According to LTE specification, DMRS port groups 7/8/11/13 and 9/10/12/14 occupy orthogonal frequency resources while CDM is used within the port groups as is illustrated in Figure 1. For rank-R transmission, the first [EQ:1ee9d6a6c3e3a9225254] layers are mapped to the first codeword while the remaining [EQ:2bd0aa352ade7d44e330] layers are mapped to the second codeword, implying that for e.g. rank-3, layer 1 is mapped to the first codeword while layer 2 and 3 is mapped to the second codeword. Currently in LTE, consecutive DMRS port numbers are assigned to layers according to Antenna port(s), scrambling identity and number of layers indication in DCI, which is illustrated in Table 1 below. Thus, in our example rank-3 transmission, layers 1,2,3 are mapped to DMRS ports 7,8,9. Which implies that the layer corresponding to the first CW (layer 1, DMRS port 7) and one of the layers corresponding to the second CW (layer 2, DMRS port 8) have DMRS ports that are CDMed.
+
+Existing DMRS-port-to-layer mapping results in that DMRS ports corresponding to different CWs can be CDMed
+
+In regular mode of operation, this is not an issue, since the DMRS channel estimation quality does not depend on which codeword the DMRS port corresponds to. However, with NC-JT feature introduced in feCoMP, each CW is transmitted from a separate TRP, meaning that DMRS ports transmitted from different TRPs are CDMed. Since there can be a substantial difference in received power of the different DMRS ports in this case, due to difference in path loss between the TRPs, channel estimation quality can be reduced. This is because there is always some leakage between ports due to loss of orthogonality in the CDM since the channels are not exactly the same in adjacent OFDM symbols (especially for mobile UEs). If there is power imbalance between the ports, leakage of the strong ports channel onto the weak ports channel can substantially deteriorate the channel estimation of the weak port. Thus, if power imbalance exists between antenna ports, it is better from a channel estimation quality perspective to separate the ports via FDM rather than CDM, so that they are transmitted on orthogonal frequency resources.
+
+Multiplexing antenna ports with power imbalance using CDM can reduce channel estimation quality on the weaker antenna ports due to leakage of channel power from the stronger antenna ports
+
+[FIG:1e7f05078cfb3e054431]
+
+Figure 1: Illustration of DMRS port numbering, ports {7,8,11,13} and {9,10,12,14} constitute two CDM groups which are separated by FDM
+
+Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Message
+0 | 2 layers, ports 7-8, nSCID=0
+1 | 2 layers, ports 7-8, nSCID=1
+2 | 3 layers, ports 7-9
+3 | 4 layers, ports 7-10
+4 | 5 layers, ports 7-11
+5 | 6 layers, ports 7-12
+6 | 7 layers, ports 7-13
+7 | 8 layers, ports 7-14
+
+Table 2: Antenna port(s), scrambling identity and number of layers indication from 36.212
+
+Proposal for new DMRS-port-to-layer mapping
+
+According to the discussion in the previous section, it would be beneficial to not transmit DMRS ports corresponding to different TRP (i.e. different codewords) using CDM and instead rely on FDM in such a case. This may be accomplished by updating the DMRS-port-to-layer mapping according to Table 3. This assures that the layers corresponding to the first CW (i.e. the first TRP) are always transmitted on DMRS ports 7,8,11,13 while the layers corresponding to the second CW (i.e. the second TRP) are always transmitted on DMRS ports 9,10,12,14, for rank>2. Note that since this mapping should only be used for NC-JT transmissions, the rank is always larger than 1. For rank-2, the legacy port mapping using DMRS ports 7 and 8 is kept and is not changed to ports 7 and 9, since this would double the DMRS overhead which would likely cause a performance loss. The new DMRS-port-to-layer mapping can be captured in the spec as new Antenna port(s), scrambling identity and number of layers indication that the UE should use only if the PQI indicates that NC-JT is used (i.e. the PQI state point to a RRC configured parameter list with two sets of PQI parameters).
+
+Rank | DMRS-port-to-layer mapping
+ | DMRS group 1 (CW1) | DMRS group 2 (CW2)
+1 | N/A
+2 | 7 | 8
+3 | 7 | 9,10
+4 | 7,8 | 9,10
+5 | 7,8 | 9,10,12
+6 | 7,8,11 | 9,10,12
+7 | 7,8,11 | 9,10,12,14
+8 | 7,8,11,13 | 9,10,12,14
+
+Table 3: Proposed DMRS-port-to-layer mapping for NC-JT
+
+We therefore propose:
+
+Proposal:
+
+When NC-JT transmission is indicated in PQI, the DMRS port to layer mapping in Table 3 is used
+
+Note: This implies that layers corresponding to different TRPs are mapped to FDMed DMRS ports for rank 3-8. Rank-2 port mapping is the same as legacy to maintain DMRS overhead.
+
+Conclusion
+
+In this contribution, we have discussed an issue with channel estimation quality for NC-JT due to existing DMRS-port-to-layer mapping. We have observed the following:
+
+Observation 1 Existing DMRS-port-to-layer mapping results in that DMRS ports corresponding to different CWs can be CDMed
+
+Observation 2 Multiplexing antenna ports with power imbalance using CDM can reduce channel estimation quality on the weaker antenna ports due to leakage of channel power from the stronger antenna ports
+
+Based on the above observations, the following was proposed:
+
+Proposal:
+
+When NC-JT transmission is indicated in PQI, the DMRS port to layer mapping in Table 3 is used
+
+Note: This implies that layers corresponding to different TRPs are mapped to FDMed DMRS ports for rank 3-8. Rank-2 port mapping is the same as legacy to maintain DMRS overhead.

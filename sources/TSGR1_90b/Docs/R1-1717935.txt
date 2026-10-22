@@ -1,0 +1,43 @@
+3GPP TSG RAN WG1 Meeting #90bis R1-1717935
+
+Prague, Czech Republic, 9th – 13th October 2017
+
+_____________________________________________________________
+
+Agenda Item: 7.2.1.1
+
+Source: LG Electronics
+
+Title: Discussion on codeword mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In the last RAN1 meeting, the following agreement regarding CW to layer mapping were made:
+
+Agreements:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+In this contribution, we have discussed data RE mapping order for DFT-s-OFDM.
+
+Discussion
+
+In DFT-S-OFDM case, each data symbol is spreaded over scheduled RBs because of DFT spreading, Option 1 does not seem to have strong motivation. On the other hand, in Option 3, each code block can achieve not only frequency diversity coming from DFT spreading but also time domain channel diversity and frequency hopping gain. As a result, Option 3 achieves at least the same performance as Option 1. Specifically, in case of high frequency selectivity, time varying channel or time varying interference, Option 3 outperforms Option 1 because of time domain channel diversity and frequency hopping gain. The only advantage of Option 1 is pipeline decoding and required small buffer size but Option 3 provides good trade-off between performance and implementation complexity.
+
+Proposal 1: Option 3, which is in the order of sub-carriers, sub-slots (hopping) and then DFT-SOFDM symbols, should be supported in UL DFT-S-OFDM with frequency hopping case.
+
+Conclusion
+
+In this contribution, we have discussed flexible codeword to layer mapping and resource mapping order, and proposed as following:
+
+Proposal 1: Option 3, which is in the order of sub-carriers, sub-slots (hopping) and then DFT-SOFDM symbols, should be supported in UL DFT-S-OFDM with frequency hopping case.

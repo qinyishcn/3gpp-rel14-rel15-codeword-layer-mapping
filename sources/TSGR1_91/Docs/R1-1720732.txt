@@ -1,0 +1,97 @@
+3GPP TSG-RAN WG1 #91 R1-1720732
+
+Reno, USA, November 27th – December 1st, 2017
+
+Source: Ericsson
+
+Title: On CW mapping and data scrambling
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#90bis, the following agreements were made:
+
+Agreement:No additional CW-layer correspondence is supported, at least in Rel-15, for >4 layersWorking AssumptionFor DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:The RE mapping is performed with the following order:Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping Agreement:No additional CW-layer correspondence is supported, at least in Rel-15, for >4 layersWorking AssumptionFor DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:The RE mapping is performed with the following order:Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+We will in this contribution provide our view regarding remaining details of the mapping of PUSCH to RE for DFT-s-OFDM and also provide our views on bit scrambling for PUSCH and PDSCH.
+
+On PUSCH to RE Mapping for DFT-s-OFDM
+
+For DL it has been agreed to map codewords according to the order layer first, then subcarriers and then symbol. For DFT-S-OFDM one aspect to consider in the choice of CW to layer mapping is the presence of frequency hopping. In the case that one would apply the same mapping as in DL this may imply that when two codeblocks are transmitted, using frequency hopping, the first codeblock may mainly (or fully) be mapped using one frequency hop whereas the second codeblock is mapped using a second frequency hop. This would hence lead to a very limited frequency diversity gain within the codeblocks despite the use of frequency hopping. Note that this problem occurs only in the case of multiple codeblocks in the PUSCH, i.e. for large payloads.
+
+It has therefore been proposed to consider other mappings like for instance layer first, then symbol and then subcarrier which would increase decoding latency. Alternatively, one could consider a mapping procedure where layer first, then subcarriers and then time is utilized but only on every other symbol. This would imply that one codeword is mapped to odd symbols whereas the other codeword is mapped to even symbols. Although these kind of alternative mappings will increase the frequency diversity gain, at the cost of a higher decoding latency, we are not convinced that this effect will be that visible in typical use cases; slot hopping is typically used for small resource allocation bandwidths and the single code block will then anyway be mapped to all the hops/the whole slot.
+
+In the case that multiple code blocks is scheduled in PUSCH there may be a performance gains with this approach but this is likely not the most typical use case for DFT-s-OFDM operation. Hence, the benefits and applicability of these alternative mappings orders are not clear. Therefore we propose
+
+Confirm the working assumption for single codeblock case
+
+For multiple codeblock case with intra-slot frequency hopping, use the same mapping as in the working assumption for the single codeblock case
+
+Bit scrambling for PDSCH and PUSCH
+
+Bit scrambling has been discussed in an email discussion after RAN1#90bis and it was agreed that:
+
+The c_init for data scrambling depends at least on a “Scrambling ID” parameter configured to the UE by RRC. FFS whether one RRC parameter is used for c_init for both PUSCH and PDSCH or if two independent RRC parameters is used.
+
+In LTE, data bits are scrambled with a pseudo-random scrambling sequence initialized with
+
+UE ID,
+
+cell ID
+
+slot number, and
+
+codeword number (for spatial multiplexing).
+
+The principle behind including all these quantities is to make interfering transmissions as random as possible in order to exploit the processing gain in the decoding operation. Clearly, signals that interfere are transmitted using the same radio resources: they are transmitted at the same time at the same frequency location.
+
+However, making the scrambling sequence dependent on all these quantifies also leads to some undesirable effects. The inclusion of a timing component (the slot number) implies that a transmission cannot be prepared in advance, something that could be beneficial if a very quick scheduling decision, “go/no go”, on already prepared data is to be taken. This can be the case when there is URLLC traffic which at a late point in time can override an eMBB scheduling decision, so the eMBB packets needs to be postponed to the next slot. In addition, operation in unlicensed spectrum often implies that transmissions need to be prepared prior to knowing whether it can be transmitted or not due to the listen-before-talk operation:
+
+Including a timing component in the data scrambling sequence generation puts a large demand on gNB and UE processing capabilities for NR unlicensed operation and potentially for URLLC services and eMBB service on the same carrier.
+
+There is no point to initialize scrambling by parameters such as numerology or sub-carrier spacing, since an interfering data transmission that use different numerologies or subcarrier spacing’s appear random anyway. Similarly, there is no point to initialize scrambling by the BWP index, since if two UEs use different but partially overlapping BWPs, they typically don’t interfere, and if they use the same BWP, no additional randomization is achieved by scrambling with BWP index.
+
+Making the scrambling dependent on the ID of a transmission point (cell ID in the case of LTE) turned out to be a problem in LTE when CoMP was introduced, leading to the introduction of “virtual cell ID”. In NR, we propose to take this a step further, by providing scrambling seeds explicitly for all relevant physical channels. In NR, it should not be mandated to have scrambling that is hardcoded to any network identity. This will always make it possible to change transmission point in a transparent way, by assigning a UE-specific scrambling seed.
+
+By avoiding that scrambling initialization is tied to any network identifier, e.g., the cell Id, UE mobility can be made transparent over larger areas.
+
+Clearly, the UE must be provided with the scrambling initializer through higher layer configuration, which was also agreed in the email discussion. As soon the UE is in connected mode, dedicated RRC signaling can be used for that purpose, and this opportunity should be exploited.
+
+In some cases, the UE will need to perform data reception and transmission when it is not in connected mode, e.g., to receive paging and system information. In that case, dedicated RRC signaling cannot be used and some default parameter obtained prior to RRC must be used.
+
+Since a length-31 Gold sequence is already agreed for PBCH DMRS and will serve as a PRBS generator in NR, we proposed to use it also for data scrambling.
+
+It is beneficial if the initialization value spans as many of the 231 states as possible. On the other hand, we still want the flexibility to perform preparation of a transport block without deciding on when to transmit it (i.e. no time dependence).
+
+There are benefits to make the scrambling dependent on whether the transmission is slot based (PDSCH/PUSCH mapping type A) or mini-slot based (Type B), in case a Type B transmission preempts a scheduled Type A transmission to the UE. We also suggest making the scrambling initialization different for UL and DL.
+
+Use a length-31 Gold sequence (same as LTE) for data scrambling
+
+The sequence initialization value of [FIG:15c24ee2b2324d1dd4dc] depends on the RNTI, the codeword index, the channel type (DL or UL), whether it is slot based or non-slot based and an identifier [FIG:6eabb5ccb251d97d55d9] which is a UE specific higher layer configured integer in the range 0-1007, according to
+
+[FIG:960c01d7608dfb20db4a]
+
+Where [FIG:00aaf7a761aa3c90fda4] for downlink, [FIG:33683cd874765989bfdd] for uplink, [FIG:75a9ce0b9481ca1fed67] for PDSCH/PUSCH mapping Type A and [FIG:c7cb826e72f3497941dd] for PDSCH/PUSCH mapping Type B. Default value of [FIG:a628c3f5093cf47d0e56] , before RRC configuration is equal to [FIG:05b51d416a49a673abf4] .
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 Confirm the working assumption for single codeblock case
+
+Proposal 2 For multiple codeblock case with intra-slot frequency hopping, use the same mapping as in the working assumption for the single codeblock case
+
+Proposal 3 Use a length-31 Gold sequence (same as LTE) for data scrambling
+
+Proposal 4 The sequence initialization value of [FIG:496ccacb4f467d50e6a5] depends on the RNTI, the codeword index, the channel type (DL or UL), whether it is slot based or non-slot based and an identifier [FIG:c5a18b9e2195df1bf559] which is a UE specific higher layer configured integer in the range 0-1007, according to
+
+[FIG:84effd1936163db7e3c3]
+
+Where [FIG:dc51f8aef0be0f969a90] for downlink, [FIG:97a6d151e70358e5a5f3] for uplink, [FIG:3fb50eb42d63480cdd9a] for PDSCH/PUSCH mapping Type A and [FIG:c80b2be237652d3410a4] for PDSCH/PUSCH mapping Type B. Default value of [FIG:06068bd2b40fbe45daab] , before RRC configuration is equal to [FIG:0b635a8fdf3c47002c41] .
+
+References
+
+[1] R1-1718424, “Further details on CW mapping”, 3GPP TSG RAN WG1 Meeting 90bis, Prague, CZ, 9th – 13th, October 2017

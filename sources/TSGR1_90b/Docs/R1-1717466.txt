@@ -1,0 +1,121 @@
+3GPP TSG RAN WG1 Meeting #90bis R1-1717466
+
+Prague, CZ, 9th – 13th, October 2017
+
+Source: vivo
+
+Title: On Remaining Details of Codeword Mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In the 3GPP RAN1 #90 and NR Ad hoc #3, the following agreements for codeword mapping were achieved [1][2].
+
+Regarding codeword to layer mapping order:
+
+Agreements:
+
+For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR:
+
+First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL
+
+No frequency and/or time interleaving is supported in Rel-15 NR
+
+FFS for DFT-s-OFDM uplink with and without frequency hopping
+
+Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+Regarding mapping order for DFT-s-OFDM waveform, the following agreements were achieved.
+
+Agreement:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+In this contribution, remaining details of codeword mapping are discussed. This contribution is a revision of the contribution submitted last meeting.
+
+Discussion
+
+Codeword Correspondence
+
+Currently, it has already been agreed that UE would support the following codeword correspondence:
+
+The 1st L/2 [FIG:b8e8fa89979252494b02] layers CW0 and remaining layers CW1
+
+The major concerns raised from above mapping is that for multi-TRP scenarios, if joint transmission is scheduled, then the network would have to map data of one codeword to multiple TRPs. As shown in following figure, the link between TRP1 and UE is rank 4 while in the link between TRP2 and UE, the rank is 2. If the network only follows the agreed codeword correspondence manner, for the link between TRP1 and UE, there would be 3 layers corresponding to the first codeword. The remaining one layer and the two layers between TRP2 and UE would bear the second codeword.
+
+[FIG:85fe07e9e90d2d890394]
+
+This would introduce the following issues:
+
+Performance degradation: UE would typically experience different interference and channel variations on different panels. Although scattering modulated symbols for one codeword across multiple TRPs may bring benefits of diversity, it may also incur severe interference on every transmitted codeword. Retransmission per codeword would bring benefits for the scenario that codewords are mapped per TRP, due to the fact that low SINR symbols or unreliable bits are concentrated in one codeword. Furthermore, AMC is conducted per TRP. From system performance perspective, it is beneficial to map one codeword to one TRP.
+
+Higher backhaul requirement: scattering one codeword across TRPs may also bring some extra requirements on backhaul. If only one transmit block is limited within one TRP, then the communication between the TRPs would be MAC level. But if one codeword is scattered in multiple TRPs, then the TRPs would have to exchange information about the corresponding detailed codeword mapping information at PHY layer. This is not a clean for implementation and brings extra amount of backhaul requirement.
+
+The reasons that do not support extra codeword to layer correspondence mainly include:
+
+The listed jointed multiple TRP scenarios could be supported by multiple PDSCH transmission. But according to current agreement, at most two PDSCH would be simultaneously scheduled. It means such solution would be suitable for at most two TRPs. For TRPs greater than 2, UE would still have to divide one codeword to multiple TRPs.
+
+It would bring some extra signaling and implementation complexity. But with multiple TRPs, especially for NC-JT, QCL group information of DMRS would any way have to be signaled to UE. Such information could be leveraged to implicitly indicate the corresponding codeword mapping. From the perspective of implementation complexity, UE would anyway have to implement the receiver of any number of layers. Codeword correspondence would not bring extra processing and latency.
+
+From above analysis, it could be seen that mapping one codeword to only one TRP is a reasonable choice. Rather than adding some extra configuration, it should be specified to further reduce one codeword mapped within one DMRS QCL group.
+
+Proposal 1:
+
+For L>4, one codeword should only be mapped within one DMRS QCL group.
+
+Layer mapping for DFT-s-OFDM
+
+Last meeting, it was proposed for the DFT-s-OFDM waveform, UE may need some additional layer mapping for frequency hopping scenarios. The following three examples are given. The performance gain is mainly from mapping more diverse channels within one code-block. Simulations are conducted to verify the performance of the three mappings. It is shown that under some special conditions the performance of Option 2 and Option 3 are almost the same while Option 1 is worse than those two.
+
+[FIG:ff4ab6e8533c2ba7a911]
+
+However, such performance is achieved with the condition that one codeblock does not cross the two hops. This is not always the case. Frequency hopping is typically applied for the case that there are no reliable or timely UL channel sounding. Small payload is one of the major application scenarios. For such scenario, the RB allocation would not be too large and one codeblock would cross two hops. Thus configurable between option 1 and option 3 for frequency hopping scenarios seems to be a reasonable choice.
+
+Proposal 2:
+
+For frequency hopping DFT-s-OFDM, support configurable RE mapping between option1 and option3.
+
+[FIG:0198606823cae92ec887]
+
+Simulation Assumptions
+
+The corresponding simulation assumptions are as following:
+
+Parameters | Values
+Carrier Frequency | 4GHz
+Subcarrier Spacing for data | 15kHz
+Channel Model | TDL-A modeldelay spread =300nsUE speed=3km/h
+BS antenna configurations | For 4 GHz: BS antenna number =2.
+UE antenna configurations | For 4 GHz: UE antenna number =1
+DMRS pattern | Configuration 1, one additional DMRS
+
+Conclusion
+
+In this contribution, remaining details of codeword mapping are discussed and the following proposals are given:
+
+Proposal 1:
+
+For L>4, one codeword should only be mapped within one DMRS QCL group.
+
+Proposal 2:
+
+For frequency hopping DFT-s-OFDM, support configurable RE mapping between option1 and option3.
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 Meeting #90.
+
+Chairman’s notes for 3GPP TSG RAN WG1 Meeting NR Ad hoc #3.

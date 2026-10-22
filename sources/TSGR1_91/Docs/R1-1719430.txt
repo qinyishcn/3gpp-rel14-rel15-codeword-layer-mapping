@@ -1,0 +1,120 @@
+3GPP TSG RAN WG1 Meeting #91 R1-1719430
+
+Reno, USA, November 27th – December 1st, 2017
+
+Agenda Item: 7.2.1.1
+
+Source: Huawei, HiSilicon
+
+Title: Remaining details of codeword mapping in NR
+
+Document for: Discussion and decision
+
+Introduction
+
+The agreements, conclusion and working assumption on codeword to layer mapping obtained in the meeting of RAN1 #90b [1] are as below:
+
+Agreement:
+
+No additional CW-layer correspondence is supported, at least in Rel-15, for >4 layers
+
+Conclusion:
+
+There is no consensus on supporting 2-CW layer mapping in addition to agreed 1-CW mapping, for 2, 3, and 4 layers for completion by December, 2017
+
+Working Assumption
+
+For DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:
+
+The RE mapping is performed with the following order:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+According to the latest progress, for DFT-s-OFDM waveform transmission with intra-slot frequency hopping in single codeblock case, the mapping order follows the scheme used in LTE, and for DFT-s-OFDM waveform transmission with intra-slot frequency hopping in multi-codeblock case, the mapping order needs FFS. In this contribution, the analysis is given on the remaining issues of codeword to layer mapping.
+
+Mapping scheme for uplink DFT-s-OFDM
+
+There are three options for mapping ordering in the case of DFT-S-OFDM case as follows:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Although Option-2 is observed with best performance due to the gain of frequency hopping and time diversity gain, but in AH_NR#3 meeting, only Option-1 and Option-3 are left for further down-selection. In this contribution, the diagrams of above 2 options (Option-1 and Option 3) with frequency hopping are shown in figure 1 & 2 respectively.
+
+In option 1, the modulated symbols from the same code block (CB) are concentrated in one or several OFDM symbols. However, it may not be able to obtain neither frequency hopping nor diversity gain because one CB is highly possible mapped into only one of the hops.
+
+In option 3, each code block is distributed in different hops which can obtain frequency hopping and time diversity gain (since the CB is distributed in time domain in different hops). However, one issue of Option-3 is that the different hops may correspond to different length. So, some CBs will be mapped into the different hops, but some CBs will be only mapped in one hop if the other hop is full. An example is illustrated in figure 2 that CB 3 of option 3 is only mapped into 2nd hop. That means only some CBs have the hopping gain but some CBs have not. Then, the corresponding CQI will be mismatched for different CBs. Another problem is the different mapping scheme for different CB will increase the complexity for decoding at UE side.
+
+[FIG:49a0acc67a3ce08f6d2b]
+
+Figure 1. Two possible examples of PUSCH CW-to-RE mapping schemes with frequency hopping
+
+[FIG:be313b87f150387e392e]
+
+Figure 2. Possible example of PUSCH CW-to-RE mapping schemes with different length of 2 hops
+
+Through the above analysis, the pros and cos of 2 possible mapping schemes can be summarized in table I. In the table, “√” means positive and “×” means negative.
+
+Table I. Summary of 3 possible examples of PUSCH CW-to-RE mapping schemes
+
+Scheme | Time diversity gain | Frequency hopping gain | Implementation | A little less delay for decoding
+Option 1 | × | × | √ | √
+Option 3 | √ | √ | × | ×
+
+In this contribution, we provide the simulation results for the comparison between Option-1 and Option-3. In the simulation, the gap between the two hops is set to 100PRBs. The slot structure and DMRS locations used under 3km/h and 240km/h are illustrated in Fig.1 in appendix respectively. Other parameters can be referred to the table I in appendix. The simulation results are shown in Fig.2 and Fig.3 in the appendix for 3km/h and 240km/h, respectively. From the comparison between Option-1 and Option-3, Option-3 is better performance than Option-1, since part of frequency hopping gain and part of time diversity gain can be obtained in Option-3.
+
+In the case of only one code block in frequency hopping, option-1 also can obtain the frequency hopping gain. So, it is fine to confirm the working assumption made in the previous meeting.
+
+However, in the case of multiple code blocks case, option 3 has a significant performance gain over the option 1 as shown in simulation results. So, Option-3 is preferred in multiple code blocks case.
+
+Thus, we have the following proposals:
+
+Proposal 1: If DFT-S-OFDM for multiple codeblocks with intra-slot frequency hopping is supported, option 3 should be supported.
+
+Conclusion
+
+In this contribution, we have the following proposal:
+
+Proposal 1: If DFT-SOFDM for multiple codeblocks with intra-slot frequency hopping is supported, option 3 should be supported.
+
+References
+
+3GPP RAN1 #91, Prague, Czech Republic, October 9-13, 2017.
+
+Appendix
+
+Table-I Link-level simulation parameters
+
+Parameter | Value
+Carrier Frequency | 4 GHz
+Sub-carrier spacing | 15 KHz
+Channel Model | CDL-A with 1000ns delay
+Velocity | 3km/h, 240km/h
+gNB Antenna Configuration | 4Rx cross polarized array with 0.5λ antenna spacing
+UE Antenna Configuration | 2Tx non- cross polarized with 0.5λ antenna spacing
+Waveform | DFT-s-OFDM
+Modulation order | 16QAM,64QAM
+Coding Rate | 0.75, 0.53
+Signal Bandwidth | 50RBs
+Channel Estimation | Non-Ideal
+Receiver | MMSE receiver
+CW number | 1
+Layer number | 1
+Rank Adaption | No
+
+[FIG:cd4f53d53908d47add0a]
+
+Figure 1. The slot structure and DMRS location in the simulation with frequency hopping
+
+[FIG:474fd8b3e7139f256c47] [FIG:9689497c137995f0f9cf]
+
+Figure 2. Performance comparison between 2 options with frequency hopping under 3km/h
+
+[FIG:71bf87f0697d0f648ad4] [FIG:1ae47168cfb9369f1141]
+
+Figure 3. Performance comparison between 2 options with frequency hopping under 240km/h

@@ -1,0 +1,83 @@
+3GPP TSG RAN WG1 Meeting #89 R1-1707347
+
+Hangzhou, P.R. China 15th – 19th May 2017
+
+Source: Intel Corporation
+
+Title: Remaining details on CW-to-MIMO layer mapping
+
+Agenda item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN1#88 and RAN188bis meeting, the following agreements wre reached regarding CW-to-MIMO layer mapping for NR [1]:
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewords…Agreements:Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CW
+
+In this contribution we provide remaining detail regarding support of the multiple CWs in case of rank 5-8.
+
+Discussion
+
+Indication of the maximum number of MIMO layers
+
+CW-to-MIMO layer mapping scheme agreed in RAN1#88 and RAN1#88bis supports different number of CWs depending on the actual number of MIMO layers. In general case to support such case two MCS/RV/NDI fields should be provisioned in DCI, where one of the MCS/RV/NDI field can be blanked in case of rank 1 and 2 due to use of SCW. At the same time support of the more than four MIMO layers is not expected to be frequently used, e.g. due to TRP or UE implementation constraints, to justify usage of two MCS/RV/NDI fields in DCI.
+
+To reduce the control signalling overhead, indication for the maximum number of MIMO layers in DL should be supported, where indication can be explicitly signaled to the UE or implicitly derived at the UE based on the other configurations (e.g., UE capability for number of MIMO layers, number of configured ports for SRS/CSI-RS, etc.). For example, if the maximum number of MIMO layers is limited to 4, the DCI can contain at most one combination of MCS/RV/NDI, that can help to reduce the signalling overhead. Similar overhead reduction can be achieved in UCI for ACK/NACK and CSI reports.
+
+If the maximum number of MIMO layers are above 4, the DCI can contain two MCS, RV and NDI – one per each CW.
+
+We also note that proposed signaling for the maximum number of MIMO layers can be used at the UE to reduce power consumption in the DL, by autonomous turning on/off of the RF chains [3]. In this case the control signalling indication should also include other values, e.g. 2.
+
+Summarizing the discussion above the following proposal can be made:
+
+Proposal:
+
+NR should support signalling assistance from gNB to the UE for the maximum number of MIMO layers for PDSCH
+
+The maximum number of MIMO layers can be indicated to the UE using MAC signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the maximum number of MIMO layers indicated by gNB
+
+UE can use this information for autonomous turn on/off RF chains for power reduction
+
+Supported values in the control signalling are at least {2,4}
+
+Downlink MIMO layer splitting across CWs
+
+Another open issue of supporting multiple CWs for ranks 5-8 is splitting of the MIMO layers across CWs. In general case for each CW it is preferable to minimize SINR difference between associated MIMO layers which may be large of the number of associated MIMO layers is large. In this case, the most efficient way of MIMO layer splitting is almost equal partition between CWs, similar to MIMO layer partition supported by LTE.
+
+Based on the discussion above the following proposal can be made:
+
+Proposal:
+
+NR supports “almost equal” splitting of MIMO layers between two CWs similar to LTE
+
+Summary
+
+In this contribution we discuss remaining details of supporting multiple CWs. The following proposals were made:
+
+NR should support signalling assistance from gNB to the UE for the maximum number of MIMO layers for PDSCH
+
+The maximum number of MIMO layers can be indicated to the UE using MAC signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the maximum number of MIMO layers indicated by gNB
+
+UE can use this information for autonomous turn on/off RF chains for power reduction
+
+Supported values in the control signalling are at least {2,4}
+
+NR supports “almost equal” splitting of MIMO layers across two CWs similar to LTE
+
+References
+
+Chairman’s notes for RAN1#87, 3GPP TSG RAN WG1 Meeting #88, Athens, Greece 13th - 17th February 2017.
+
+Chairman’s notes for RAN1#88bis, 3GPP TSG RAN WG1 Meeting #88bis, Spokane, USA, 3th - 7th April 2017.
+
+R1-1702189, MIMO layer adaptation and control signalling overhead reduction, Intel Corporation, 3GPP TSG RAN WG1 Meeting #88, Athens, Greece 13th - 17th February 2017.

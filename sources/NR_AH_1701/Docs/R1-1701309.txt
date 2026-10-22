@@ -1,0 +1,5 @@
+3GPP TSG RAN WG1 NR AdHoc #1 R1- 1701309 Spokane, USA January 16 th -20 th , 2017 Agenda item: 5.1.2.1 WF on CW to layer mapping and RE mapping for data channels Qualcomm , Ericsson, … 1
+
+2 Mapping to physical resources: Due to early-decoding-constraints layer mapping over frequency should be prioritized over time. Mapping across layers of each codeblock provides spatial diversity Codeword to layer mapping: S ubcarrier interleaver NR shall support large bandwidth allocations. CBs span limited frequency bandwidth and additional frequency diversity can be exploited to provide significant gains Each OFDM symbol may carry many CBs, especially in regimes of medium and high spectral efficiency Background
+
+3 For the DL/UL data channels , layer mapping to physical resources is happening across layer first, then across subcarriers and then across OFDM symbols . For the DL/UL data channels, NR supports a per-OFDM-symbol subcarrier interleaver in the codeword to layer mapping procedure . Proposals

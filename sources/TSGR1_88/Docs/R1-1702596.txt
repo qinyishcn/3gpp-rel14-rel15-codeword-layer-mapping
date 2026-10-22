@@ -1,0 +1,223 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702596
+
+13th - 17th February 2017
+
+Athens, Greece
+
+Agenda item: 8.1.2.1.1
+
+Source: Qualcomm Incorporated
+
+Title: CW to Layer Mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN1 #86bis [1] and #87 [2], the following agreements regarding the codeword to layer mapping were made:
+
+Agreements:
+
+•       RAN1 to study the following aspects:
+
+–      Codeword-to-layer mapping
+
+–      Number of codewords on a “NR-PDSCH”
+
+–      Other techniques not precluded
+
+Agreements:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In RAN1 #87 AH [3], an additional agreement was made:
+
+Agreements:
+
+RAN1 will down select among followings and select one alternative in the next meeting
+
+Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers
+
+One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields
+
+FFS: the number of CQIs and MCS fields in DCI
+
+FFS: number of CWs for 3 and more layers
+
+Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers
+
+Alt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution, we present our views on the codeword to layer mapping that NR should support. In short:
+
+We propose NR to support only single codeword MIMO (SCW) with different modulation order for each layer for SU-MIMO of up to 8 layers.
+
+SCW MIMO with per-layer (or per-group-of-layers) modulation may achieve similar performance to the case of MCW MIMO while having lower control signalling and lower uplink control channel overhead.
+
+Single codeword MIMO (SCW)
+
+Discussion
+
+As one of the most important MIMO transmission techniques, spatial multiplexing generates one or more spatial layers on which multiple data streams can be transmitted in parallel. Those data streams can be either separately or jointly coded before the spatial multiplexing, as shown in Figure 1. The former is often referred to as multi-codeword (MCW) transmission, while in contrast the latter is called single-codeword (SCW) transmission.
+
+[FIG:73195deaa343c31d875a]
+
+(a) Multi-codeword transmission
+
+[FIG:1a3af97f6cd0aab898dd]
+
+(b) Single-codeword transmission
+
+Figure 1. Multi-codeword transmission and single-codeword transmission.
+
+For LTE, neither the SCW (one codeword to all layer mapping) nor MCW (one-to-one codeword-to-layer mapping) schemes is adopted. Instead, a middle-way was chosen, whereby at most two codewords are used, even more than two layers are transmitted. Same MCS is used for the same codeword which may contain multiple code blocks, even if a codeword is mapped to multiple layers. In NR, the codeword to layer mapping in MIMO transmission need to be revisited taken into account NR frame structure, HARQ timeline, etc.
+
+In the extreme case of MCW transmission, a separate codeword can be mapped to each of the spatial layers. The UE may take advantage of such mapping by using successive interference cancellation (SIC) receiver to achieve significant gains. However, the first codeword to be decoded are subjected to higher interference levels compared to later decoded codewords. In order to make SIC receiver work properly, the first codeword to be decoded shall be more robust than the second codeword, and the second codeword shall be more robust than the third codeword, etc. Such differentiation in robustness of different codewords can be achieved by applying different modulation and coding schemes (MCSs) to the different codewords, which is also referred to as per-antenna rate control (PARC). For example, the first codeword to be decoded shall use a lower-order modulation and lower coding rate. The gains brought by SIC receiver with PARC thus may potentially come at the expense of more control signalling, including CQI reporting for each codeword, the per codeword MCS indication in the downlink control information (DCI), and multiple bits to convey HARQ ACK/NACK for each codeword.
+
+For each codeword, subband CQI reporting may be needed for better support of link adaptation in frequency-domain. Furthermore, a UE may be configured to report CQI for multiple CSI-RS resources when the LTE CLASS B type CSI-RS is configured, not to mention cases of multi-TRP transmission and carrier aggregation where multi-fold of reporting may be needed for each TRP and/or each component carrier. All these lead to a significant increase of uplink control overhead.
+
+Observation 1: MCW MIMO transmissions may come at the expense of more control signaling and significant increase of the uplink control overhead.
+
+In contrast, SCW transmission leads to a reduction in the amount of control signalling required for CQI reporting, for HARQ ACK/NACK feedback and potentially for MCS indication in DCI. The single codeword need to be mapped across spatial, frequency, and time-domains. QAM symbols can be mapped first across layers, then across subcarriers, then across OFDM symbols. Then, a code block spans across all spatial layers of a set of consecutive logical subcarriers and can potentially span across two or more consecutive OFDM symbols depending on the RB allocation. Different modulation can be assigned to each layer for a better adaptation to the supportable spectral efficiency of the OFDM symbols to which the code blocks are mapped.
+
+Also, the SCW transmission may generally be more suitable for pipelined decoding and self-contained operation. It is worth noting that less HARQ ACK/NACK bits are not only important for uplink control overhead reduction, but may help transmit pipelining also.
+
+Observation 2: SCW MIMO transmission may have some advantages compared to MCW transmission for pipelined decoding and low latency applications.
+
+Multi-TRP considerations and number of CWs
+
+Supporting multiple CWs in NR in order to address the scenarios of multi-point transmission needs to be carefully investigated.
+
+To start with, in any CoMP scheme which has been supported until now, and includes non-coherent JT, it is generally assumed the existence of a central processing unit. In such a scenario, the argument that SCW will increase the backhaul requirements is not clear, after considering the following:
+
+In the MCW case, the central processing unit performs the encoding essentially of X1, X2 information bits, into Y1, Y2 bits for the first and second CW respectively, assuming for simplicity two CWs in this example that are mapped into one layer each. Backhaul carries Y1 and Y2 respectively to each transmission point independently.
+
+In the SCW case for the same example, the central processing unit performs the encoding of X1+X2 information bits into Y1+Y2 bits (approximately), where Y1 and Y2 are the bits that are supposed to be transmitted on the layer of each transmission point. Backhaul carries Y1 and Y2 respectively to each transmission point independently, since there is no need of transmitting Y1+Y2 in both the TRPs; no increase on backhaul demand is expected.
+
+We observe that in both cases, the same load is transmitted through the backhaul. Note that in scenarios that the transmission over the ideal backhaul is happening in some other form, like time-domain samples, then obviously no difference exist between SCW and MCW approach.
+
+Furthermore, in CoMP scenarios of non-ideal backhaul, or distributed/independent scheduling per TRP, it is generally difficult to send a common grant from one transmission point, in which case it would make more sense to use separate control, grants and therefore Transport blocks (TBs). In such a case, supporting a SCW MIMO per grant is enough, and there is no need of introducing the option of MCW MIMO for the same grant.
+
+Therefore, even though we are open in considering new CoMP schemes, e.g., more distributed non-coherent CoMP scenarios, we need to be careful in introducing “forward compatible layer mappings” to accommodate it, before knowing details about such CoMP schemes, their incremental usefulness over previous CoMP schemes, their requirements (e.g., do they require from the UE to send ACK/NAK and/or CSI to multiple TRPs selectively, etc.), and before agreeing NR to support them.
+
+Finally, note that even if other CoMP schemes are discussed and/or supported in the future, thorough studies are needed to understand the percentage of the CoMP population that would use the new schemes, since only this percentage of data/users might require an additional backhaul demand. In other words, if indeed for a new CoMP scheme, SCW MIMO might result in an additional backhaul demand, if the percentage of users/data using such a scheme is low, this increase in backhaul demand might also be small/negligible. If that is not the case, then MCW could be re-considered in future releases as the need and clear use cases arise.
+
+Performance evaluation: SCW vs. MCW
+
+We now provide simulation results in which we compare the following approaches:
+
+SCW with per-layer modulation order,
+
+SCW with the same modulation order across layers,
+
+MCW with per-layer modulation order for the layers belonging in a CW. For ranks 2, 4, 8 we use 2 CWs,
+
+MCW with per-layer modulation order for the layers belonging in a CW. For rank 2, 4, 8 we use 2 and 4 and 4 CWs respectively,
+
+for the sub-6GHz Phase-1 calibrated channel model according to [4] and simulation parameters agreed for the DMRS evaluations in [5] and the mmWave channel model.
+
+In short, for sub-6GHz, we assume a 16x8 system with (M,N,P,Mg,Ng) = (8,4,2,1,1) at the BS and (M,N,P,Mg,Ng) = (1,4,2,1,1) at the UE and present spectral efficiency results for a system with SCS of 30 KHz, Doppler spread of 11.11 Hz, 84 PRBs, and realistic DMRS and SRS channel estimation. The slot contains 12 downlink symbols, 1 guard symbol and 1 uplink SRS symbol. The eNB uses the SRS symbols to derive through reciprocity a channel estimate of the downlink channel and use SVD-based precoding vectors across RB bundles of 4 PRBs. The link adaptation has a target of 10% BLER for each CW, and when modulation-per-layer is assumed, then the same coding rate is chosen for all layers in a CW, but potentially a different modulation order is used.
+
+Figures 1-5 show the performance results for rank 2, 4 and rank 8 for CDL-B 100nsec, CDL-C 300nsec when there is realistic SRS channel estimation, which results to imperfect SVD-based beamforming on the downlink. Results for perfect SRS estimation and SVD beamforming appear in Figure 6-8. We observe that for rank 4 and 8 some performance degradation is seen when SCW is used without the option of configurable QAM order per layer, especially for the case of 8 layers. However, most of that loss is being recovered when this feature is enabled even for SU-MIMO rank 8 transmissions.
+
+[FIG:434e87746c2108b0e4e5] [FIG:a0df2e1684bbd98ac3a3]
+
+Figure 1 CDL-100 nsec, Rank 4 Figure 2 CDL-100 nsec, Rank 8
+
+[FIG:a822f6685c8543b8649e] [FIG:3036ae8a91f0ae448e3c]
+
+Figure 3 CDL-300 nsec, Rank 2 Figure 4 CDL-300 nsec, Rank 4
+
+[FIG:8c77d32e312d2e1903df]
+
+Figure 5 CDL-300 nsec, Rank 8
+
+Figures 6-8 present similar results as above but assuming perfect SRS transmission and SVD-based beamforming at the downlink for a similar simulation setup with 48 PRBs allocation. Same as before, we observe that, SCW with modulation order that is different per layer has similar performance with MCW MIMO.
+
+[FIG:6b4981a07a19b7181fcb] [FIG:3512eb49f331241aa026]
+
+Figure 6 CDL-100 nsec, Rank 4 Figure 7 CDL-100 nsec, Rank 8
+
+Additional results for advanced receiver using an LTE framework and the same MCS per layer for up two layers is shown in the Appendix.
+
+In Figure 8 and Figure 9, we present spectral efficiency results obtained from MMW 30GHz frequency, with 120 kHz subcarrier spacing, 64 RBs with 12 subcarriers each, CDL B/C channel with random angular translation and 3kmh UE speed. Both BS and UE use cross-polarized directional antennas, and the antennas of same polarization on one panel is mapped to 1 port, with analog beamforming based on DFT beam towards the strongest cluster at both BS and UE. The slot contains 12 downlink symbols, 1 guard symbol and 1 uplink SRS symbol. The BS uses the SRS symbols to derive through reciprocity a channel estimate of the downlink channel and use SVD-based precoding vectors across RB bundles of 4 PRBs. The link adaptation has a target of 10% BLER for each CW.
+
+In Figure 8, we assume CDL-C with 300ns delay spread, a 2x2 system with (M,N,P,Mg,Ng) = (4,8,2,1,1) at the BS and (M,N,P,Mg,Ng) = (2,4,2,1,2) at the UE, where the 2 UE panels are of opposite azimuth orientation, which is random across drops, and the panel with higher receive power is selected for each drop to model polarization MIMO, and 2 layer transmission. It can be seen that, in this case, there is about 1.5dB gain of using SCW with per-layer modulation, as compared to SCW with single modulation, even though the two polarizations from the same panel have same average post-beamforming SNR.
+
+In Figure 9, we assume CDL-B with 100ns delay spread, a 4x4 system with (M,N,P,Mg,Ng) = (4,8,2,1,2) at the BS and (M,N,P,Mg,Ng) = (2,4,2,1,2) at the UE, where the 2 UE panels are of opposite azimuth orientation, which is random across drops, and both panels are used to model spatial MIMO, and 4 layer transmission. It can be seen that, in this case, there is about 7~8dB gain of using SCW with per-layer modulation, as compared to SCW with single modulation, as the two panels may see vastly different post-beamforming SNR, depending the UE orientation. The gain of MCW (w. 2CW or 4CW) over SCW in this case is very small.
+
+[FIG:5f2181f6daae99f9e5d7] [FIG:45e6626d5e1db2f8a615]
+
+Figure 8 CDL-C 300 nsec, 2x2 Rank 2 at 30GHz Figure 9 CDL-B 100 nsec, 4x4 Rank 4 at 30GHz
+
+Observation 3: The performance of a SCW and MCW MIMO transmission scheme with per-layer modulation order can be similar.
+
+Proposal 1: NR supports SCW MIMO per grant as the supported CW to layer mapping for SU-MIMO up to 8 layers with per-group-of-layers modulation order.
+
+FFS the maximum number of layer groups with the same modulation order that NR supports
+
+Conclusions
+
+Observation 1: MCW MIMO transmissions come at the expense of more control signaling and significant increase of the uplink control overhead.
+
+Observation 2: SCW MIMO transmission may have some advantages compared to MCW transmission for pipelined decoding and low latency applications.
+
+Observation 3: The performance of a SCW and MCW MIMO transmission scheme with per-layer modulation order can be similar.
+
+Proposal 1: NR supports SCW MIMO per grant as the supported CW to layer mapping for SU-MIMO up to 8 layers with per-group-of-layers modulation order.
+
+FFS the maximum number of layer groups with the same modulation order that NR supports
+
+References
+
+RAN1-86bis Chairman’s notes
+
+RAN1-87 Chairman’s notes
+
+RAN1-87 AH Chairman’s notes
+
+R1-1613741, “Way forward on Phase 1 and Phase 2 MIMO calibration for NR”, ZTE, ZTE Microelectronics, Ericsson, LG Electronics, Spreadtrum Communications
+
+R1- 1700480 “Summary of [87-29] Simulation assumption for NR DMRS,” LG Electronics, 3GPP TSG-RAN WG1 NR Ad-Hoc, Spokane, Washington, USA
+
+Appendix
+
+Simulation parameters
+
+The slot structure and the DMRS pattern is shown in Figure 3. Data and DMRS can be FDM-ed when a comb is not used for DMRS.
+
+[FIG:5fed3dc44ddd7525b044] [FIG:8892e4ecf0fec28c3fa2]
+
+Figure 1: Slot and DMRS pattern chosen in the simulation study shown in Section 5.
+
+Simulation results for advanced receiver and LTE frame structure
+
+In the appendix we present throughput evaluation results that also appeared in a previous contribution [2] but are added here for reference. In this study, we simulate an LTE frame structure and numerology in a 2x2 system with channel estimation, advanced receiver, LTE Turbo coding with 4 Re-Tx and IR and an MCS table with 29 entries where the following two scenarios are compared:
+
+Only SCW for both rank 1 and rank 2 transmissions
+
+Rank 1 is transmitted with SCW, whereas rank 2 uses 2-CW transmission
+
+We provide two examples in which SCW and MCW demonstrate similar performance:
+
+[FIG:e779fa13657f93dfaaa1] [FIG:a510e512e3c4c19de929]
+
+We observe that on both these scenarios the performance loss due to SCW compared to MCW is small. Note that in these results in the SCW case the same modulation is being used for both layers. Adjusting the modulation per layer could potentially be a more robust approach for the SCW case especially in the geometries where the transition from Rank 1 to Rank 2 is happening. Further studies are needed to identify for which scenarios MCW does not provide a considerable gain over the SCW approach.

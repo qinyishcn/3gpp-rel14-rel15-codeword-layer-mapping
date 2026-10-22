@@ -1,0 +1,65 @@
+3GPP TSG RAN WG1 Meeting#88 R1-1702445
+
+Athens, Greece 13th - 17th February 2017
+
+_____________________________________________________________
+
+Agenda Item: 8.1.2.1.1
+
+Source: LG Electronics
+
+Title: Discussion on codeword-to-layer mapping in NR
+
+Document for: Discussion/Decision
+
+Introduction
+
+In the last RAN1 ad hoc meeting, several agreements regarding CW to layer mapping were made as followings:
+
+Agreements:
+
+RAN1 will down select among followings and select one alternative in the next meeting
+
+Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers
+
+One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields
+
+FFS: the number of CQIs and MCS fields in DCI
+
+FFS: number of CWs for 3 and more layers
+
+Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers
+
+Alt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution, we have discussed the number of codewords and codeword to layer mapping,
+
+Discussion
+
+The maximum number of supported codewords impacts the physical layer design in many ways. It is worth to consider at least three aspects: potential CWIC gain in a receiver side, potential link adaptation gain and CoMP.
+
+CWIC have been considered as one of promising advanced receivers to cancel inter-layer interference with minimum residual interference. Taking into account the future needs and potential gain of CWIC, LTE system supports two cordwords transmission at the beginning. As LTE system has been evolved, advanced receivers including CWIC were studied in terms of not only performance but also feasibility and complexity through many LTE work/study items such as Rel-12 SU-MIMO IC, Rel-12 NAICS, and Rel-14 MUST. Unfortunately, majority UE vendors were not ready for CWIC implementation and as a result RAN4 test requirement was based on R-ML or symbol level IC. The study item for Rel-14 SU-MIMO IC is under discussion but the need of CWIC seems unclear up to now. Considering the history about advanced receiver and current situation, CWIC does not provide a clear motivation to support multiple codewords in NR.
+
+Observation 1: CWIC does not provide a clear motivation to support multiple codewords in NR.
+
+By using multiple codewords, link adaptation per codeword can be supported while it leads to more signalling overhead both for CQI reporting, and for HARQ ACK/NACK feedback. The benefits of flexible link adaptation using multiple codewords should be carefully studied, taking into account the different characteristics of NR system from LTE system. For example, bi-direction antenna panels at UE side can be used so that the channel quality from one direction can be different from the opposite direction. Therefore, a potential link adaptation gain from multiple codewords should be investigated based on the channel characteristics of NR system. Also, if independent layers are transmitted from different panels with different analog beam at a single TRP, the layers can have different channel quality.
+
+In NR, various CoMP schemes shall be supported including different NR-PDSCH data streams transmission from multiple TRPs, which was agreed in the last RAN1 adhoc meeting. In this case, Independent layers from different TRPs are likely to have different channel quality. As a result, flexible link adaptation form multiple codewords helps to optimize MCS and improve throughput. Further studies on maximum number of codewords more than two may be considered to support independent layer JT across multi-TRP more efficiently (i.e., one codeword per TRP). Along with the maximum number of codewords, codeword-to-layer mapping should be studied for NR. More flexible codeword-to-layer mapping can be considered to reflect propagation characteristics (e.g., large-scale fading) of TRPs and beams. For example, we can consider a 3 TRP CoMP with 2 codewords where the first codeword is mapped to spatial layers of 2 TRPs with similar propagation environments, and the second codeword is used to transmit layers of 1 TRP with entirely different propagation characteristics from previous TRPs. To support flexible codeword-to-layer mapping, it can be considered for gNB to indicate the mapping or for UE to feedback preferred mapping.
+
+Observation 2: Considering independent layer JT and the channel characteristics resulting from high carrier frequency and various antenna configurations, multiple codewords can provide a potential gain taking advantage of better link adaptation.
+
+Proposal 1: At least 2 codewords should be supported.
+
+Proposal 2: Flexible codeword-to-layer mapping mapping can be considered especially for independent layer joint transmission.
+
+Conclusion
+
+In this contribution, we have discussed the number of codewords and codeword to layer mapping, and proposed as following:
+
+Observation 1: CWIC does not provide a clear motivation to support multiple codewords in NR.
+
+Observation 2: Considering independent layer JT and the channel characteristics resulting from high carrier frequency and various antenna configurations, multiple codewords can provide a potential gain taking advantage of better link adaptation.
+
+Proposal 1: At least 2 codewords should be supported.
+
+Proposal 2: Flexible codeword-to-layer mapping mapping can be considered especially for independent layer joint transmission.

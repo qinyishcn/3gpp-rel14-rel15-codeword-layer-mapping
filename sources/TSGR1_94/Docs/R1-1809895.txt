@@ -1,0 +1,82 @@
+3GPP TSG RAN WG1 Meeting #94 R1-1809895
+
+Gothenburg, Sweden, August 20th – 24th, 2018
+
+Agenda item: 7.1.2.1
+
+Source: Samsung
+
+Title: Summary for further discussion on codeword mapping
+
+Document for: Discussion and Decision
+
+Further discussion
+
+Based on the issue raised in the two submitted contributions for RAN1#94 ([1]-[2]) and summarized in [3], some further discussion took place. The summary is given below.
+
+Context/background: Clarification for the agreement on TB disabling using (IMCS, rvid) = (26,1) in DCI 1_1, i.e. disabling one out of two TBs when 2-CW transmission is configured.
+
+Additional issues/questions during discussion:
+
+The need for confirming/clarifying previous agreement with refined description (05/2018): single TB disabling using (MCS, RV) = (26,1) in DCI 1_1, i.e. disabling one out of two TBs when 2-CW transmission is configured?
+
+CR for 5.1.3.2 of TS38.214: “In case the higher layer parameter maxNrofCodeWordsScheduledByDCI indicates that two codeword transmission is enabled, then a transport block one of the two transport blocks is disabled by DCI format 1_1 if IMCS = 26 and if rvid = 1 for the corresponding transport block, otherwise the transport block is enabled. If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. If only one transport block is enabled, then the enabled transport block is always mapped to the first codeword.”
+
+Enabling triggering AP-SRS without data assignment and (if applicable) CSI reporting via TB disabling in DCI 1_1?
+
+This implies support for disabling 2 out of 2 TBs with (IMCS, rvid) = (26,1) when 2-CW transmission is configured in DCI 1_1?
+
+“No” implies that (IMCS, rvid) = (26,1) on both TBs is usable for DL data assignment in 1_1.
+
+“Yes” implies that (IMCS, rvid) = (26,1) on both TBs is unusable for DL data assignment in 1_1 since it is used for (2 out of 2) TB disabling.
+
+Given the control session agreement on 08/21/2018: UE is not expected to be indicated ‘UL-SCH indicator’ = “0” and ‘CSI request’ = “zero(s)” (not triggered) in DCI format 0-1.
+
+Should the control session agreement be revised to: UE is not expected to be indicated ‘UL-SCH indicator’ = “0” and ‘CSI request’ = “zero(s)” (not triggered) and ‘SRS request’ = “0” (not triggered) in DCI format 0-1? Note: This allows triggering AP-SRS without UL data grant and without A-CSI triggering
+
+Alternatives to resolve the above issues
+
+Alt | Issue 1 | Issue 2 | Issue 3
+A | Yes | No | Yes
+B | Yes | No | No
+C | Yes | Yes | No
+
+Company positions can be summarized as follows:
+
+Alt A: Ericsson, Huawei/HiSi, ZTE/Sanechips, Samsung (1st alternative)
+
+Alt B: AT&T, Qualcomm, Samsung (2nd alternative)
+
+Alt C: LG
+
+Observation:
+
+Without any further agreement, Alt B seems to be the default solution.
+
+AP-SRS triggering can still be done without CSI request and low data grant/assignment overhead (e.g. 1 symbol, 1 PRB)
+
+All alternatives agree that issue 1 needs to be addressed (CR for 5.1.3.2 of TS38.214 is required)
+
+Issue 2: disabling 1 out of 1 TB in DCI 0_1 as well as 2 out 2 TBs in DCI 1_1 have not been discussed.
+
+Issue 3: revising an agreement in control session (despite its technical merit) may be infeasible.
+
+Therefore, the following resolution is possible.
+
+Proposal:
+
+Agree on the following CR for 5.1.3.2 of TS38.214: “In case the higher layer parameter maxNrofCodeWordsScheduledByDCI indicates that two codeword transmission is enabled, then a transport block one of the two transport blocks is disabled by DCI format 1_1 if IMCS = 26 and if rvid = 1 for the corresponding transport block, otherwise the transport block is enabled. If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. If only one transport block is enabled, then the enabled transport block is always mapped to the first codeword.”
+
+Briefly discuss Alt A and Alt B.
+
+If Alt A can be agreed, revise the agreement from the control channel to: UE is not expected to be indicated ‘UL-SCH indicator’ = “0” and ‘CSI request’ = “zero(s)” (not triggered) and ‘SRS request’ = “0” (not triggered) in DCI format 0-1
+
+If Alt A cannot be agreed, no further action is required
+
+References
+
+R1-1808146, Remaining issues on multi-antenna schemes, Huawei, HiSilicon
+
+R1-1809052, Text proposal for MIMO codeword mapping, AT&T
+
+R1-1809493, Summary for codeword mapping, Samsung

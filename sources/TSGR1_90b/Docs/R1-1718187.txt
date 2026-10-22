@@ -1,0 +1,138 @@
+3GPP TSG RAN WG1 Meeting #90b R1-1718187
+
+Prague, CZ, 9th – 13st, October 2017
+
+Source: NTT DOCOMO
+
+Title: Remaining details on CW mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+At the last meeting, there were discussions on details of codeword (CW) mapping including resource element mapping, symbol interleaving, etc. Agreements were reached as follows [1].
+
+Agreements:For RE mapping for DFT-S-OFDM without frequency hopping:Option 1For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:Option 1Option 3 Reminder (agreed WF on RE mapping for DFT-s-OFDM - R1-1715161): Option 1: Subcarriers then OFDM symbols Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+In this contribution, we present our views on details on resource element mapping for NR.
+
+Discussion
+
+Resource element mapping for DFT-s-OFDM with intra-slot frequency hopping
+
+At the RAN1 AH-NR#3 meeting, there was a discussion on RE mapping options for DFT-s-OFDM and it was agreed that option 1 is supported for DFT-s-OFDM without frequency hopping [1]. Option 1, which is described in Figure 1, is advantageous, since it can achieve pipe-line decoding. The remaining issue is RE mapping for DFT-s-OFDM with intra-slot frequency hopping. It is very important that NR potentially achieves the same or better coverage compared to LTE/LTE-A, thus the RE mapping option is expected to obtain sufficient frequency hopping gain.
+
+Observation 1: RE mapping that exploits frequency hopping gain should be supported for DFT-s-OFDM with intra-slot frequency hopping.
+
+In the last meeting, it was agreed that RE mapping options are downselected from option 1 and option 3. Figure 1 shows the mapping orders of option 1 and option 3, in which options 1 and 3 are identical to the previous agreement [2]. Option 1 performes frequency first mapping, where the order of CW mapping is FrequencyTime. This option doesn’t achieve frequency diversity gain in multiple CBs case, since a CB is localized in a either of the hopping resource (To be more precise, one CB may be mapped across hopping resouces, but other CBs don’t). DFT-s-OFDM is expected to apply for high SINR case as well as low SINR, thereby it is important to increase throughput for high MCS situation, i.e. many CBs. On the other hand, option 3 achieves frequency diversity gain, since a CB is distributed to both of the hopping resources. Decoding timing in option 3 is delayed compared to option 1 but is faster than time first mapping which is applied in LTE/LTE-A. Option 3 is a well-balanced mapping scheme in terms of both frequency-hopping gain and latency performance.
+
+We present link-level simulation results to clarify the performance for different RE mapping options for uplink DFT-s-OFDM with intra-slot frequency hopping. Detailed simulation parameters are given in Table A. Carrier frequency is set to 4 GHz. The system bandwidth is set to 150 RBs with the data allocated bandwidth of 10 and 50 RBs. We apply three different MCS sets of QPSK (R=1/2), 16QAM (R=1/2) and 64QAM (R=5/6).
+
+[FIG:b43673e42fa666a7faa9] [FIG:5380be2b7a44af9c464d]
+
+(a) Option 1 (b) Option 3
+
+Figure 1: RE mapping for DFT-s-OFDM with frequency hopping (Example for 2 CBs)
+
+Figure 2 shows link-level simulation results for the different RE mapping options for frequency hopping, where DM-RS is mapped at the 1st and the 8th symbols. From the results, options 1 and 3 achieve approximately the same performance for the case of the number of CB of 1. This is because, for all options, a CB is mapped to both of the hopping resources and achieves frequency hopping gain. On the other hand, for the number of CBs of two or larger, we can observe frequency diversity gain for option 3 compared to option 1 (frequency first mapping). More specifically, the frequency diversity gain of approx. 1.5-2 dB is observed at the average BLER of 0.1.
+
+Observation 2: For DFT-s-OFDM with frequency hopping, performance for frequency first mapping (as in option 1) is degraded compared to option 3 with freqency hopping gain.
+
+Proposal 1: Option 3 is supported for RE mapping for DFT-s-OFDM with intra-slot frequency hopping.
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:e4a3480b1306e4b35473] [FIG:5c7574fd692a1412037a] [FIG:bb152f2e56a61148009b]
+
+(a) Resource allocation = 10 RBs
+
+[FIG:c12bebf74e0a9a7d8f3a] [FIG:3cdb7c5218c54086c321] [FIG:aaf5998e81c9904d378e]
+
+(b) Resource allocation = 50 RBs
+
+Figure 2: BLER performance for RE mapping options 1 and 3 with DFT-s-OFDM with frequency hopping
+
+Resource element mapping for asymmetry SS-length
+
+Length of 1st sub-slot (SS) and 2nd SS can be different for example mini-slot or another case. In these situations, option 3 does not necessarily achieve frequency hopping gain for all CBs. However, we can apply option 3+ instead of option 3 as shown in Figure 3 (c), if concerned. For example, when 1st hop and 2nd hops are composed of A and B symbols in option 3+, option 3+ maps resource elements by the ratio of A to B. Option 3+ obtains frequency hopping gain for all CBs in asymmetry SS-length since a CB is mapped to both of the hopping resources.
+
+[FIG:cfb6d9cba3d5bf2f3ac3] [FIG:fcee379e9cc17460d86c]
+
+(a) Option 3 (b) Option 3+
+
+Figure 3: RE mapping options in asymmetry SS-length for DFT-s-OFDM with frequency hopping
+(Example for 3 CBs)
+
+We present link-level simulation results clarify the performance in the case of asymmetry SS-length for uplink DFT-s-OFDM with intra-slot frequency hopping. Detailed simulation parameters are the same as the above simulation and we set (A, B) = (7, 5) and (9, 3).
+
+Figure 4 shows that link-level simulation results in the case of asymmetry SS-length, where DM-RS is mapped at the 1st symbol of each hop. From the results, option 3+ achieves better BLER performance than option 1 for multiple CBs case. Option 3+ provides the similar BLER as option 3 in some of results and outperforms compared to option 3 in the other results. This is because whether or not all CBs are mapped in both hops depends on the ratio of SS length and the number of CBs. Note that option 3 acheives the same or better BLER at any cases. However, the situation with asymmetry SS-length is generally a very corner case. It should be also avoided since it causes increase of scheduling complexity. When mini-slot case of 7 symbols (except for DMRS symbols), all CBs may be mapped in both hops by setting 3 symbols for 1st SS and 4 symbols for 2nd SS, i.e. as equal as possible.
+
+Observation 3: For DFT-s-OFDM with frequency hopping, option 3+ modified from option 3 achieve frequency hopping gain and achieve the same or better performance in the case of asymmetry SS-length.
+
+Proposal 2: Option 3+ is supported for RE mapping for DFT-s-OFDM with intra-slot frequency hopping, if concerned about the case of asymmetry SS-length.
+
+Option 3+: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop, where the number of subcarriers mapped once depends on each SS-length.
+
+[FIG:79c4183b475c5515f820] [FIG:f6936c2d2df12b30b569]
+
+i. Resource allocation = 10 RBs
+
+[FIG:d427a3184c12e7c74134] [FIG:464bc8f34d6f175929f9] [FIG:1634f355093f6f3c4356]
+
+ii. Resource allocation = 50 RBs
+
+(a) (A, B) = (7, 5)
+
+[FIG:9d923ff89aa4b8e8f606] [FIG:0e3937de975d0d252073]
+
+i. Resource allocation = 10 RBs
+
+[FIG:b5d8624eb41d549c3fb9] [FIG:fae95b70132ddbc0de19] [FIG:87a5bdb651c709ccb15e]
+
+ii. Resource allocation = 50 RBs
+
+(b) (A, B) = (9, 3)
+
+Figure 4: BLER performance for different RE mapping options in asymmetry SS-length
+
+with DFT-s-OFDM with frequency hopping
+
+CW-to-layer correspondence
+
+At the previous meeting, CW-to-layer correspondence was agreed with the similar scheme as LTE/LTE-A, i.e. two CWs are divided into almost equal layers for over rank 4 transmissions. For NR, cooperation of multiple TRPs will be more important than LTE/LTE-A, since blockage in mmWave has a large effect on SINR, thereby channel quality is significantly different among TRPs. The optimal CW and layer correspondence can’t be almost equal division of two CWs. NR should support flexible correspondence of CW-to-layer depending on the channel quality in order to improve more than rank 4 transmissions. Note that it is important to verify potential gain of flexible CW-to-layer correspondence considering increase of DCI overhead. In addition, this kind of flexible CW-to-layer correspondence should be discussed together with other solutions such as multiple PDCCH transmission.
+
+Observation 4: NR considers flexible CW-to-layer correspondence (FFS: detailed solutions).
+
+Summary
+
+In this contribution, we presented our views on CW mapping. Observations and proposals were reached as follows.
+
+Observation 1: RE mapping that exploits frequency hopping gain should be supported for DFT-s-OFDM with intra-slot frequency hopping.
+
+Observation 2: For DFT-s-OFDM with frequency hopping, performance for frequency first mapping (as in option 1) is degraded compared to option 3 with freqency hopping gain.
+
+Proposal 1: Option 3 is supported for RE mapping for DFT-s-OFDM with intra-slot frequency hopping.
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Observation 3: For DFT-s-OFDM with frequency hopping, option 3+ modified from option 3 achieve frequency hopping gain and achieve the same or better performance in the case of asymmetry SS-length.
+
+Proposal 2: Option 3+ is supported for RE mapping for DFT-s-OFDM with intra-slot frequency hopping, if concerned about the case of asymmetry SS-length.
+
+Option 3+: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop, where the number of subcarriers mapped once depends on each SS-length.
+
+Observation 4: NR considers flexible CW-to-layer correspondence (FFS: detailed solutions).
+
+References
+
+3GPP, “Draft_Minutes_report_RAN1#AH_NR3_v010,” Sept. 2017.
+
+3GPP, R1-1715161, “WF on RE mapping for DFT-s-OFDM,” NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm, Aug. 2017.
+
+Appendix
+
+Table A: Link simulation parameters
+
+[FIG:c99477508990cc9cb9a9]

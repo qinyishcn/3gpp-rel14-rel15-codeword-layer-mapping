@@ -1,0 +1,69 @@
+3GPP TSG RAN WG1 Meeting 91 R1-1719561
+
+Reno, USA, November 27th – December 1st, 2017
+
+Source: MediaTek Inc.
+
+Title: Codeword mapping for DFT-s-OFDM based UL
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+In RAN1 #90bis, the following agreements are reached [1]:
+
+Agreement:
+
+No additional CW-layer correspondence is supported, at least in Rel-15, for >4 layers
+
+Conclusion:
+
+There is no consensus on supporting 2-CW layer mapping in addition to agreed 1-CW mapping, for 2, 3, and 4 layers for completion by December 2017.
+
+Working Assumption
+
+For DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:
+
+The RE mapping is performed with the following order:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+In this contribution, we provide our views on RE mapping for DFT-s-OFDM
+
+Discussion
+
+Two options are considered for RE mapping for DFT-s-OFDM with frequency hopping:
+
+Option 1: first map to subcarriers then OFDM symbols
+
+Option 3: first map to subcarriers in 1st hop, then subcarriers in 2nd hop, then repeat process on the subsequent OFDM symbols
+
+In particular, Option 3 could show performance gain over Option 1 when multiple code blocks are transmitted. It is because in such a mapping scheme, each code block spreads over two frequency hops, which results in frequency diversity & time diversity (see Figure 1(a)). However, as previous analysis (e.g., [2]) shows, Option 3 incurs a larger decoding latency and requires a higher buffer size on UE. Alternative approach that makes it configurable (between Option 1&3) is also considered. However, such an alternative approach just complicates the design (in particular if a control signaling is required) and transmitter/receiver implementation still needs to take the worst case design into account.
+
+In fact, in order to achieve the frequency hopping (FH)/time diversity gain, one can consider inter-slot FH. First, by inter-slot FH, it allows DMRS interpolation within a slot to improve channel estimation. Second, if a retransmission is demanded, frequency diversity can be realized on the retransmitted blocks. Figure 1(c) illustrates the mapping when inter-slot FH is configured. Slot aggregation [3] with inter-slot FH is another use case: in slot aggregation the same code blocks in a TB are repeated in aggregated slots with potentially different RV on each slot [4]. To reduce control overhead of slot aggregation, if single DCI is used, one could predefine hopping patterns or derive hopping pattern base on a certain rule. On the other hand, in intra-slot FH case, one can consider mini-slot configuration as shown in Figure 1(b) (in this example, two mini-slots in a regular slot). Similar to inter-slot FH, code blocks have chance to leverage frequency diversity when retransmission.
+
+[FIG:4767711ed8113e4054cf]
+
+Figure 1. Mapping scheme with frequency hopping
+
+Comparing with Option 3, Option 1 can minimize latency and implementation cost. In addition, as discussed above there are potential schemes with Option 1 that could leverage FH gain. Therefore, we propose:
+
+Proposal: NR supports frequency first map to subcarriers then OFDM symbols (as Option 1) for DFT-s-OFDM RE mapping scheme.
+
+Summary
+
+Proposal: NR supports first map to subcarriers then OFDM symbols (as Option 1) for DFT-s-OFDM RE mapping scheme.
+
+References
+
+[1] Chairman notes 3GPP TSG RAN WG1 Meeting #90bis, Prague, October 2017.
+
+[2] R1-1716208, “Codeword mapping for DFT-s-OFDM based UL,” Mediatek, 3GPP TSG RAN WG1 #AH_NR3, Nagoya, September 2017.
+
+[3] Chairman notes 3GPP TSG RAN WG1 Meeting #86bis, Reno, November 2016.
+
+[4] R1-1716823, “WF on TB Mapping for Slot Aggregation,” MediaTek, Ericsson, Qualcomm, Samsung, Nokia, Nokia NSB, Intel, ZTE, TCL, 3GPP TSG RAN WG1 #AH_NR3, Nagoya, September 2017.

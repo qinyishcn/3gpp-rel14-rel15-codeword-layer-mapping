@@ -1,0 +1,113 @@
+3GPP TSG RAN WG1 Meeting 90bis R1-1718335
+
+Prague, CZ, 9th – 13th, October 2017
+
+Source: MediaTek Inc.
+
+Title: Codeword mapping for DFT-s-OFDM based UL
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+In RAN #AH_NR3, the following agreements are reached:
+
+Agreements:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, down select between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+Reminder (agreed WF on RE mapping for DFT-s-OFDM - R1-1715161):
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+In this contribution, we provide our views on RE mapping for DFT-s-OFDM
+
+Discussion
+
+Resource element mapping for DFT-s-OFDM
+
+In WF [1], three possible options are listed for DFT-s-OFDM. Figure 1 [1] illustrates the scheme for each option:
+
+Option-1: Subcarriers then OFDM symbols (i.e., frequency first)
+
+Option-2: OFDM symbols then subcarriers (i.e., time first)
+
+Option-3: Subcarriers in the 1st hop, then subcarriers in the 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:e5b75762f5931af9223a]
+
+Figure 1. RE mapping options for DFT-s-OFDM from [1]
+
+Without frequency hopping, Option-3 can be treated as CBs interleaved in time domain to spread a CB in two parts in TTI.
+
+When choosing a RE mapping scheme for DFT-s-OFDM, the following aspects need to be taken into consideration:
+
+Processing latency and data buffer
+
+Processing latency has been discussed for CP-OFDM in previous meetings. DFT-s-OFDM has similar channel processing flow as CP-OFDM with additional DFT precoding operation, so in general it has tighter timeline budget than a CP-OFDM system. Among aforementioned options, Option-1 (frequency first) minimizes process latency as it is able to start DFT precoding at transmitter once the data for the first OFDM symbol is ready. Similarly, at receiver side, it can start decoding as soon as data for the first CB is available without waiting other OFDM. On the other hand, Option-2 and Option-3 need to wait until subsequent CBs (OFDM symbols, if Rx) are ready to start DFT precoding (decoding, if Rx) process. In particular, Option-2 incurs maximum latency and needs to buffer all TTI data before precoding/decoding processes, while Option-3 requires to buffer at least half of TTI data.
+
+Frequency hopping gain and time diversity
+
+Due to DFT precoding, data symbols spread over allocated subcarriers in an OFDM symbol, thus, frequency-first scheme (Option-1) will not provide additional gain. Note that in Option-1, even with frequency hopping, only the center CB could span two subbands to get frequency hopping gain. Furthermore, a CB is located in a shorter time period, implying less time diversity. At the other extreme, Option-2 can achieve the maximum time/frequency diversity because every CB spreads over all symbols in time and across different subbands. Finally, Option-3 is in somewhere between Option-1 and Option-2. In this scheme, every CB spreads over two parts in time. With frequency hopping, a CB can also span two subbands to achieve frequency hopping gain.
+
+Link level performance is evaluated with data bandwidth 50RBs and hopping offset 50 RBs. Three fixed CQI values: 5, 8, 14 are simulated. That corresponds to configuration (modulation, CodeRate) = (QPSK, 0.43), (16QAM, 0.48) and (64QAM, 0.85), respectively, and result in 2, 3, and 6 CBs in a TTI. Detail configurations are given in Appendix A. Figure 2 and Figure 3 show the BLER result with two channel environments. Compare with other schemes, Option-1 has around 1-2dB loss at target BLER 10%, while Option-3 is able to achieve most of gain as Option-2.
+
+[FIG:1052ef531e286da1c4dd]
+
+Figure 2. Block error rate (3km/h, DS=100ns)
+
+[FIG:ae22fde9085525df0b0e]
+
+Figure 3. Block error rate (30km/h, DS=300ns)
+
+We have following observations:
+
+Observation 1: Option-1 minimizes processing latency. Options-2 maximizes time diversity/frequency hopping gain with cost of large timeline/buffer requirement. Option-3 can also achieve similar time diversity/frequency hopping gain with less timeline/buffer requirements.
+
+Last but not least, many details in UCI multiplexing with PUSCH are still not defined in NR, the RE mapping for DFT-s-OFDM based PUSCH should be also evaluated with that in mind.
+
+Consider the factors discussed above, we have the following proposal for RE mapping for DFT-s-OFDM.
+
+Proposal 1: Down select from Option-1 and Option-3 for default DFT-s-OFDM RE mapping scheme, considering the design on UCI and DFT-OFDM multiplexing.
+
+Summary
+
+Observation 1: Option-1 minimizes processing latency. Options-2 maximizes time diversity/frequency hopping gain with cost of large timeline/buffer budget. Option-3 can also achieve similar time diversity/frequency hopping gain with less timeline/buffer requirements.
+
+Proposal 1: Down select from Option-1 and Option-3 for default DFT-s-OFDM RE mapping scheme, considering the design on UCI and DFT-OFDM multiplexing.
+
+References
+
+[1] R1-1715161, WF on RE mapping for DFT-s-OFDM, NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, 
+Qualcomm RAN1 #90, August, 2017
+
+Appendix A
+
+Link level simulation parameters
+
+Parameter | Values
+Waveform | DFT-s-OFDM
+Carrier frequency | 4GHz
+subcarrier spacing | 15KHz
+System bandwidth | 150 RBs
+Data bandwidth | 50 RBs
+Frequency hop offset | 50 RBs
+UE speed | 3 km/h, 30km/h
+Number UE Antennas | 1
+Number Cell Antennas | 2
+Channel Model | CDL-C with DS=100ns, 300ns
+Channel Coding | LTE Turbo code
+MCS | CQI=5: Rate=0.43, QPSK. NumCB=2.CQI=8: Rate=0.48, 16QAM. NumCB=3.CQI=14: Rate=0.85, 64QAM. NumCB=6.
+ |

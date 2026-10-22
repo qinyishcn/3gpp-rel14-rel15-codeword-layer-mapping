@@ -1,0 +1,183 @@
+3GPP TSG RAN WG1 Meeting #92bis R1-1803736
+
+Sanya, China, April 16th –20th, 2018
+
+Source: CATT
+
+Title: Remaining issues on codeword mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+AgreementFor NR Rel-15, DMRS port ordering is performed as follows for one-CW transmission (DL)Simple ordering with increasing index (port number) In the last meeting, the following agreement on DMRS port ordering for one-codeword (DL) transmission was made[1].
+
+However, the DMRS port ordering for two-codeword transmission for DL is still an open issue. Additionally, the mapping between transport block(s) to codeword(s) should also be specified in specification. In this contribution, we discuss the remaining issues and possible approaches to complete the related parts in specifications regarding layer-to-antenna port mapping and transport block-to-codeword mapping.
+
+Discussion on layer-to-antenna port mapping
+
+2.1. Incomplete description of layer-to-antenna port mapping in specification
+
+As listed below, layer-to-antenna port mapping for DL is defined in section 7.3.1.4 of 38.211[2].
+
+TS 38.2117.3.1.4 Antenna port mappingThe block of vectors [FIG:80f31ff7811f73bf0783] , [FIG:67a1289dd37052162afa] shall be mapped to antenna ports according to [FIG:d9ee938530a7b591abb2] where [FIG:68555960083d349140d6] , [FIG:15632add4861dd3dd69c] . The set of antenna ports [FIG:ee9e82649f18feb507e6] shall be determined according to the procedure in [6, TS 38.214]. In 38.212[3], DMRS port allocation information fields for different configurations of DL-DMRS-config-type and DL-DMRS-max-len parameters are interpreted in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 respectively, wherein the DMRS port(s) being scheduled are indicated by the antenna port allocation index in the DMRS table for each case. However, it doesn’t imply a reasonable order of DMRS ports for data transmission. What’s more, in TS 38.214[4], corresponding description on the above-mentioned procedure for determining the set of antenna ports [FIG:04924498ba138bb40f2a] is not included yet.
+
+Actually, no matter for single-TRP or multi-TRP transmission, the mapping between layer and DMRS port should be specified clearly. That is, the values of [FIG:bb26d468f96f7af88a05] in section 7.3.1.4 of 38.211[2] should be given somewhere in specification. Without that, it is not clear which layer is mapped to which port.
+
+Compared with LTE, the main difference lies in the fact that the numbering of [FIG:aecfcbb88eea11051f74] in the above equation is no longer necessarily to be consecutive. Consequently, even though the DMRS port(s) allocation is indicated in DCI, without specifically defined order of [FIG:165473ea4dc4c1801b39] , the mapping between layer and port is still ambiguous.
+
+As shown below, the reason is that more orthogonal ports are allowed in MU scheduling for NR. Whereas, as only 2 orthogonal ports can be scheduled in MU transmission for UE-specific RS based transmission in LTE, if more than one layers are used, the numbering of DMRS ports in precoding step is consecutive and in an increasing order. Therefore, with the indication of allocated DMRS port(s) in DCI, the mapping between layer(s) and port(s) can be determined through the following equation in section 6.3.4.4 of TS36.211[5] without any ambiguity. It’s noted that in the following mapping, the number of each DMRS port is specified clearly.
+
+[FIG:ff7cfb8111923971f035]
+
+TS 36.2116.3.4.1 Precoding for transmission on a single antenna portFor transmission on a single antenna port, precoding is defined by [FIG:94c704ca270d0136672f] where [FIG:705a12ad7d6c963e7550] is the number of the single antenna port used for transmission of the physical channel and [FIG:13eab72209a677b736ea] , [FIG:7b710de3c897ecca8f12] .…6.3.4.4 Precoding for spatial multiplexing using antenna ports with UE-specific reference signalsPrecoding for spatial multiplexing using antenna ports with UE-specific reference signals is only used in combination with layer mapping for spatial multiplexing as described in Section 6.3.3.2. Spatial multiplexing using antenna ports with UE-specific reference signals supports up to eight antenna ports and the set of antenna ports used is [FIG:ac424d2d19fdf78334a2] . For transmission on [FIG:73591e48750dbeef0eda]  antenna ports, the precoding operation is defined by [FIG:3b667c93c299d80648fb] where [FIG:6cbc840349227f3a3037] , [FIG:cead201f7d41e01a5680] .As discussed above, to avoid any ambiguity in layer-2-port mapping operation, it is needed to specify the values of [FIG:e721ac08c993ebc0f1fc] for each combination of number of CWs, number of DMRS CDM groups, number of front-load DMRS symbols as well as transmission rank. As we already have a set of concrete tables for DMRS ports allocation, where DMRS port(s) being scheduled are given by antenna port allocation indices for each configuration of higher-layer parameters DL-DMRS-config-type and DL-DMRS-max-len, to minimize the specification impact and also the corresponding work load to the editors, instead of duplicating the descriptions and tables in TS 38.214 redundantly, we propose to indicate the set of antenna ports [FIG:6a3a5b7ad7bb79cdbdc6] for each case in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in TS 28.212[3]. That is, we can replace the fields of “DMRS port(s)” directly with the set of antenna ports “ [FIG:9785f21bbba3e49b27d3] ”. Alternatively, it has to define a rule for ordering [FIG:2887d7853531b00f36c8] somewhere in specifications.
+
+Observation 1: The values of [FIG:28fa07c60a4d9adbeac6] should be specified clearly in specification to avoid any ambiguity in layer-2-port mapping operation.
+
+Proposal 1: Replace the label of “DMRS port(s)” with “ [FIG:a392ad685bb713e90378] ” in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of 38.212.
+
+Table 1. Example of modified DMRS table with single codeword enabled
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled
+Value | Number of DMRS CDM group(s) without data | DMRS port(s){P0,…,Pv-1}
+
+Table 2. Example of modified DMRS table with both codewords enabled
+
+One Codeword:Codeword 0 enabled,Codeword 1 disabled | Two Codewords:Codeword 0 enabled,Codeword 1 enabled
+Value | Number of DMRS CDM group(s) without data | DMRS port(s){P0,…,Pv-1} | Number of front-load symbols | Value | Number of DMRS CDM group(s) without data | DMRS port(s){P0,…,Pv-1} | Number of front-load symbols
+
+2.2. Impact of DMRS port ordering on layer-to-port mapping
+
+Actually, as shown below, the ordering of DMRS ports in vector [FIG:b35ed676f21b7f992a99] has potential impact on performance and implementation especially for 2-codeword transmission with multi-TRPs/panels. Unfortunately, it seems that we still have quite limited discussion on it.
+
+Observation 2: Ordering of DMRS ports for 2-codeword transmission in is still an open issue.
+
+With the scheduled DMRS port(s) indicated via DCI, the potential impact of port ordering on multi-TRP/panel transmission needs to be considered. For example, for non-coherent transmission of 2 codewords, it would be desirable to constrain each codeword in one TRP/panel, especially considering the potential difference in channel qualities of different TRPs/panels. In such case, if one codeword is mapped into more than one TRPs/panels, the link adaptation performances would be affected by more unbalanced qualities between two parts of layers from two TRPs/panels and inherent mismatch of MCS for the codeword.
+
+Based on the codeword-to-layer mapping procedure in [2], for transmission with odd number of layers, codeword 0 always has fewer layers. Therefore, keeping the above consideration in mind, it’s reasonable to keep the DMRS ports within the QCL group with fewer number of ports in the front of the ordered DMRS port vector [FIG:449bbecd31d7d308aac3] . Even though the configuration of QCL group is still open, as stated in [2], at least the UE can assume that DMRS ports within one CDM group are QCL-ed. Therefore, for the cases where two CDM groups are allocated to the UE, we can order the allocated DMRS ports in the way that DMRS ports within the CDM group with fewer DMRS ports always located in the front of DMRS port vector for multi-TRP/panel transmission. Figure 1 illustrates an example of DMRS port ordering for rank-5 transmission.
+
+[FIG:b6bc160ff9b27427f4ae]
+
+Figure 1. DMRS port ordering for rank-5 transmission
+
+For single-TRP/panel or single-QCL group based transmission, on the other hand, no additional complexity or performance loss are induced with such ordering principle. Therefore, same rule for both cases in 2-codeword transmission can be applied.
+
+Observation 3: For single-TRP/panel or single-QCL group based transmission, no additional complexity or performance loss are induced with specific ordering principle.
+
+If DMRS configuration type2 is used, things are getting a little bit complicated for 2-codeword transmission with scheduled DMRS located in all the three CDM groups. Fortunately, based on Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 in [3], only two cases fall into such situation, namely rank-5 and rank-6 transmissions with indices 0 and 1 respectively.
+
+In Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of [3], for DL-DMRS-config-type=2, value=0 corresponds to the case where DMRS ports 0-4 are being scheduled. To ensure that each codeword is mapped to only one QCL group, we can order the available ports as: 0, 1, 2, 3, 4. Wherein ports {0, 1}, {2, 3} and {4} are with CDM group 0,1 and 2 respectively. The two DMRS groups need to be specifically configured, such as {0, 1} and {2, 3, 4}, to avoid splitting one codeword into two DMRS groups.
+
+In Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of [3], for DL-DMRS-config-type=2, value=1 corresponds to the case where DMRS ports 0, 1, 2, 3, 4, 5 are being scheduled. In such case, if two QCL groups are configured, it’s impossible to divide the 6 ports evenly among both QCL groups. That is, one of the codewords have to be mapped to more than one QCL groups. Each of the DMRS groups could have 2 or 4 DMRS ports then.
+
+Besides the above case, there is still one more issue needs to be mentioned for rank adaptation operation in multi-TRP/panel transmission. Take rank-5 transmission with 2 CDM groups being scheduled to one UE and higher-layer parameters DL-DMRS-config-type=2 and DL-DMRS-max-len=2 as an example, we can order the 5 ports available as 2, 3, 0, 1, 6 to make sure that each codeword is mapped to a group of QCL-ed ports within one CDM group. In such case, ports {2, 3} and {0, 1, 6} are with CDM group 0 and 1 respectively.
+
+With rank adaptation, the UE might be allocated with DMRS ports 0,1,2,3,6,8 (rank=6) in the next scheduling occasion dynamically. According to the physical resources mapping of DMRS in [3], DMRS ports{0, 1, 6} and {2, 3, 8} belong to CDM group 0 and 1 respectively. Without any restriction, both the order 0, 1, 2, 3, 6, 8 or 2, 3, 8, 0, 1, 6 can be used for DMRS port vector [FIG:4cef698d31cd65025006] . However, if codeword 0 and 1 were mapped to DMRS ports {2, 3} and {0, 1, 6} respectively in previous scheduling with 5 layers, and the transmission rank is adapted to 6 in current scheduling, the order 2, 3, 8, 0, 1, 6 in rank-6 transmission is slightly preferred, as it keeps the correspondence between codeword and CDM group among different rank. Figure 2 shows the example of alternatives for ordering DMRS ports considering rank adaptation.
+
+[FIG:445631e7d69c8e5b7be3]
+
+Figure 2. DMRS port ordering with rank adaptation
+
+Observation 4: The ordering of DMRS ports in vector [FIG:0eefdeff75c0d5e0934e] has potential impact on performance and implementation for 2-codeword transmission with multi-TRPs/panels.
+
+Proposal 2: DMRS ports should be ordered so that a codeword uses port(s) that are CDM-ed or QCL-ed (as much as possible).
+
+Proposal 3: The order keeping the correspondence between codeword and CDM group among different rank is preferred.
+
+Based on the proposals above, we have the following proposal on changes to the order of DMRS ports in Table 7.3.1.2.2-2 (configuration type=1, DL-DMRS-max-len=2) and Table 7.3.1.2.2-4 (configuration type=2, DL-DMRS-max-len=2) of 38.212. The corresponding text proposals are also presented below. It’s noted that no extra complexity is induced with such predefined order.
+
+Proposal 4: For Table 7.3.1.2.2-2 (configuration type=1, DL-DMRS-max-len=2) of 38.212, adopt the following changes:
+
+Reorder 0-4 to 2,3,0,1,4
+
+Reorder 0,1,2,3,4,6 to 2,3,6,0,1,4,
+
+Reorder 0,1,2,3,4,5,6 to 2,3,6,0,1,4,5
+
+Reorder 0,1,2,3,4,5,6,7 to 2,3,6,7,0,1,4,5
+
+Proposal 5: For Table 7.3.1.2.2-4 (configuration type=2, DL-DMRS-max-len=2) of 38.212, adopt the following changes:
+
+Reorder 0,1,2,3,6 to 2,3,0,1,6
+
+Reorder 0,1,2,3,6,8 to 2,3,8,0,1,6
+
+Reorder 0,1,2,3,6,7,8 to 2,3,8,0,1,6,7
+
+Reorder 0,1,2,3,6,7,8,9 to 2,3,8,9,0,1,6,7
+
+Observation 5: No extra complexity is induced with the predefined order.
+
+Text proposal to 38.212----------------------------------------------------Start of CR to 38.212-----------------------------------------------7.3.1.2.2 Format 1_1Unaffected parts omitted…Table 7.3.1.2.2-1: Antenna port(s) (1000 + DMRS port), DL-DMRS-config-type=1, DL-DMRS-max-len=1One Codeword:Codeword 0 enabled,Codeword 1 disabledValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}010111210,1320421522623720,1822,3920-21020-31120,212-15ReservedReservedTable 7.3.1.2.2-2: Antenna port(s) (1000 + DMRS port), DL-DMRS-config-type=1, DL-DMRS-max-len=2One Codeword:Codeword 0 enabled,Codeword 1 disabledTwo Codewords:Codeword 0 enabled,Codeword 1 enabledValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}Number of front-load symbolsValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}Number of front-load symbols0101022,3,0,1,42111112 2,3,6,0,1,42210,11222,3,6,0,1,4,523201322,3,6,7,0,1,4,5242114-31reservedreservedreserved52216231720,11822,31920-211020-311120,2112202132121422215232162421725218262192722020,122122,322224,522326,722420,422522,622620,1,422722,3,622820,1,4,522922,3,6,723020,2,4,6231ReservedReservedReservedTable 7.3.1.2.2-3: Antenna port(s) (1000 + DMRS port), DL-DMRS-config-type=2, DL-DMRS-max-len=1One codeword:Codeword 0 enabled,Codeword 1 disabledTwo codewords:Codeword 0 enabled,Codeword 1 enabledValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}ValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}010030-4111130-5210,12-31reservedreserved320421522623720,1822,3920-21020-31130123113321433153416351730,11832,31934,52030-22133-52230-32320,224-31ReservedReservedTable 7.3.1.2.2-4: Antenna port(s) (1000 + DMRS port), DL-DMRS-config-type=2, DL-DMRS-max-len=2One codeword:Codeword 0 enabled,Codeword 1 disabledTwo Codewords:Codeword 0 enabled,Codeword 1 enabledValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}Number of front-load symbolsValueNumber of DMRS CDM group(s) without data{P0,…,Pv-1}Number of front-load symbols0101030-411111130-51210,11222,3,0,1,623201322,3,8,0,1,624211422,3,8,0,1,6,725221522,3,8,9,0,1,6,7262316-63ReservedReservedReserved720,11822,31920-211020-311130112311133211433115341163511730,111832,311934,512030-212133-512230-312320,21243022531226322273322834229352303623137232382333923431023531123630,123732,323834,523936,724038,9241310,1124230,1,624332,3,824434,5,1024530,1,6,724632,3,8,924734,5,10,112481024911250162511725210,125316,725420,125522,325626,725728,9258-63ReservedReservedReservedUnaffected parts omitted…----------------------------------------------------END of CR to 38.212----------------------------------------------
+
+TB-to-CW mapping
+
+In current version of 38.212, the mapping between transport block to codeword is still not specified. For this issue, we prefer to simply reuse the same approach as DCI format 2C of LTE. That is, use a fixed TB-to-CW mapping when both transport blocks are enabled, while always maps the enabled transport block to codeword 0 when only one transport block is enabled.
+
+Proposal 6: Adopt the following rules for transport block-to-codeword mapping.
+
+If both transport blocks are enabled, transport block 1 is mapped to codeword 0 and transport block 2 is mapped to codeword 1.
+
+In case one of the transport blocks is disabled, always maps to the enabled transport block to codeword 0.
+
+Conclusions
+
+In this contribution, we discuss the remaining details regarding layer-to-DMRS port mapping. In addition, exemplary DMRS tables (Table 1-4) are presented. Based on the discussion above, we have the following observations and proposals.
+
+Observation 1: The values of [FIG:288bdeb4010a931c758e] should be specified clearly in specification to avoid any ambiguity in layer-2-port mapping operation.
+
+Proposal 1: Replace the label of “DMRS port(s)” with “ [FIG:8512f6d3658750e772f2] ” in Table 7.3.1.2.2-1, Table 7.3.1.2.2-2, Table 7.3.1.2.2-3 and Table 7.3.1.2.2-4 of 38.212.
+
+Observation 2: Ordering of DMRS ports for 2-codeword transmission in is still an open issue.
+
+Observation 3: For single-TRP/panel or single-QCL group based transmission, no additional complexity or performance loss are induced with specific ordering principle.
+
+Observation 4: The ordering of DMRS ports in vector [FIG:96ea7838ec17fb9e4b28] has potential impact on performance and implementation for 2-codeword transmission with multi-TRPs/panels.
+
+Proposal 2: DMRS ports should be ordered so that a codeword uses port(s) that are CDM-ed or QCL-ed (as much as possible).
+
+Proposal 3: The order keeping the correspondence between codeword and CDM group among different rank is preferred.
+
+Proposal 4: For Table 7.3.1.2.2-2 (configuration type=1, DL-DMRS-max-len=2) of 38.212, adopt the following changes:
+
+Reorder 0-4 to 2,3,0,1,4
+
+Reorder 0,1,2,3,4,6 to 2,3,6,0,1,4,
+
+Reorder 0,1,2,3,4,5,6 to 2,3,6,0,1,4,5
+
+Reorder 0,1,2,3,4,5,6,7 to 2,3,6,7,0,1,4,5
+
+Proposal 5: For Table 7.3.1.2.2-4 (configuration type=2, DL-DMRS-max-len=2) of 38.212, adopt the following changes:
+
+Reorder 0,1,2,3,6 to 2,3,0,1,6
+
+Reorder 0,1,2,3,6,8 to 2,3,8,0,1,6
+
+Reorder 0,1,2,3,6,7,8 to 2,3,8,0,1,6,7
+
+Reorder 0,1,2,3,6,7,8,9 to 2,3,8,9,0,1,6,7
+
+Observation 5: No extra complexity is induced with the predefined order.
+
+Proposal 6: Adopt the following rules for transport block-to-codeword mapping.
+
+If both transport blocks are enabled, transport block 1 is mapped to codeword 0 and transport block 2 is mapped to codeword 1.
+
+In case one of the transport blocks is disabled, always maps to the enabled transport block to codeword 0.
+
+In addition, the corresponding text proposal on changes to the DMRS tables in 38.212 are presented in section 2.2.
+
+References
+
+RAN1#92 chairman’s notes.
+
+3GPP TS 38.211 v15.1.0.
+
+3GPP TS 38.212 v15.1.0.
+
+3GPP TS 38.214 v15.1.0.
+
+3GPP TS 36.211, Physical Channels and Modulation.
