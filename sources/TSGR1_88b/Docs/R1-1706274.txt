@@ -1,0 +1,5 @@
+3GPP TSG-RAN WG1 # 88bis 							R1- 1706274 Spokane, USA, 3 rd – 7 th April 2017 Agenda : 8.1.2.1.1 WF on CW to layer mapping scheme for data channels Qualcomm, Samsung, Nokia, ASB, CATT, Intel , Interdigital 1
+
+2 Codeword to layer mapping scheme: Due to early-decoding-constraints layer mapping over frequency should be prioritized over time. Mapping across layers of each codeblock provides spatial diversity Background
+
+3 For the DL/UL data channels , the following codeword to layer mapping scheme is supported across layers first, then across subcarriers (frequency) and then across OFDM symbols (time). FFS: Support of an additional layer mapping scheme with a different ordering Proposals

@@ -1,0 +1,148 @@
+3GPP TSG-RAN WG1 #88bis R1-1705883
+
+Spokane, USA 3rd - 7th April 2017
+
+Source: Ericsson
+
+Title: Codeword to layer mapping for DL and UL
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#88, the following agreements were made:
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordfFor 5 to 8-layer transmission: 2 codewordsWorking assumption:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenariosAgreements:For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluationsAgreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordfFor 5 to 8-layer transmission: 2 codewordsWorking assumption:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenariosAgreements:For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluations
+
+We will in this contribution provide out view regarding the working assumption as well as the mapping of data to RE for PDSCH and PDCCH.
+
+On the number of codewords
+
+Simulations
+
+It has been agreed to use 1 CW for 1-2 layer transmission and 2 CWs for 5-8 layer transmission. There is also a working assumption to use 1 CW for 3-4 layer transmission (Alt1) but there is also other alternatives like for instance to instead use 2 CWs for 3-4 layer transmission (Alt2).
+
+In order to evaluate the performance impact of Alt1 vs. Alt2 we have evaluated a set of SU-MIMO transmission schemes using a 8 port BS antenna with (M,N,P,Mg,Ng) = (4,2,2,1,1) as well as a 32 port BS antenna with (M,N,P,Mg,Ng) = (8,4,2,1,1) for the 3D UMi scenario. The evaluations where made using UEs with antenna configurations (M,N,P,Mg,Ng) = (1,n,2,1,1) with n=2 or 4, hence 4Rx and 8Rx, which results in a maximum of 4 or 8 MIMO layers respectively. For both alternatives one CQI and MCS per codeword was used.
+
+Simulation assumptions are presented in Appendix and results are presented in Tables 1-4. When studying the results we have noticed that the scheduler, on average, uses higher ranks when simulation Alt2 compared to Alt1. More precisely, for transmissions where the channel matrix is such that for instance using rank 3 is a relevant option the Alt1 may in some cases use rank 2 since it is constrained to use one CQI and MCS for all three layers if using rank 3. Alt2 may on the other hand, in the same situation, choose to use rank 3 since it will use 2 codewords for the corresponding transmission. Hence, there may in principle exist some spatial multiplexing gains for Alt2 compared to Alt1 since the scheduler will have more flexibility. However, when studying the rank statistics we observed that this effect was rather small in all our simulations which in turn makes this spatial multiplexing gain quite limited. In fact, in many of our simulations it vanished due to the fact that a higher rank makes it more difficult for the IRC receiver to decode the received signal. This can also be seen in our results, presented in Tables 1-4, where the performances are more or less the same for Alt1 and Alt2.
+
+Table 1. Performance comparison between 1 and 2 CW for rank 3-4 using a 4 RX UE, hence (M,N,P,Mg,Ng) = (1,2,2,1,1) and a 8 port BS antenna with (M,N,P,Mg,Ng) = (4,2,2,1,1) at 50% resource utilization.
+
+Metric | Alt 1 | Alt 2
+Cell edge gain [%] | 0 | -1
+Normalized user throughput gain [%] | 0 | 1
+
+Table 2. Performance comparison between 1 and 2 CW for rank 3-4 using a 4 RX UE, hence (M,N,P,Mg,Ng) = (1,2,2,1,1) and a 32 port BS antenna with (M,N,P,Mg,Ng) = (8,4,2,1,1) at 50% resource utilization.
+
+Metric | Alt 1 | Alt 2
+Cell edge gain [%] | 0 | 4
+Normalized user throughput gain [%] | 0 | 4
+
+Table 3. Performance comparison between 1 and 2 CW for rank 3-4 using a 8 RX UE, hence (M,N,P,Mg,Ng) = (1,2,2,1,1) and a 8 port BS antenna with (M,N,P,Mg,Ng) = (4,2,2,1,1) at 50% resource utilization.
+
+Metric | Alt 1 | Alt 2
+Cell edge gain [%] | 0 | 4
+Normalized user throughput gain [%] | 0 | 3
+
+Table 4. Performance comparison between 1 and 2 CW for rank 3-4 using a 8 RX UE, hence (M,N,P,Mg,Ng) = (1,2,2,1,1) and a 32 port BS antenna with (M,N,P,Mg,Ng) = (8,4,2,1,1) at 50% resource utilization.
+
+Metric | Alt 1 | Alt 2
+Cell edge gain [%] | 0 | -3
+Normalized user throughput gain [%] | 0 | -2
+
+Hence, we make the following observation based on simulation results
+
+The performances are very similar for Alt1 (1 CW) and Alt2 (2 CW).
+
+Furthermore, since we do not observe much difference in performance between Alt1 and Alt2 in the presented simulations we don’t see the motivation to support per layer/per layer group modulation adaptation. Introducing such framework will make the specification process more challenging in terms of MCS and rate tables, DCI overhead etc. Thus, the potential small performance gain observed in some cases does not motivate this.
+
+Per layer/per layer group modulation is not motivated from performance perspective.
+
+Further discussion
+
+One of the motivations for supporting two codewords per PDSCH is that codeword-IC type approaches can be used at the UE receiver. In a serial version of this type of receiver (SIC), the first codeword is decoded, and then the soft values at the output of the decoder are used to regenerate the received samples on the layer(s) corresponding to the first codeword. The regenerated signal(s) (inter-layer interference) are then subtracted from the received samples prior to decoding the second codeword. Having two codewords allows for more effective interference cancellation than if only a single codeword was used. This is true since the signal regeneration can be based on decoder output soft values for rather than be constrained to decoder input soft values which are less reliable.
+
+Ideally, if SIC receivers are used at the UE, then the per-codeword rates should be selected to account for the interference cancellation achieved at the UE. This typically results in different code rates for each codeword, with the larger rate typically corresponding to the 2nd codeword. The trade-off is that the UE feedback (CQI and HARQ ACK/NACK) is doubled compared to the case of a single-codeword. The downlink control information (DCI) associated with the scheduled modulation and coding scheme (MCS) for the two codewords is also twice that for a single-codeword.
+
+In LTE, for the case of 2 codewords, the UE feedback overhead (CQI, HARQ ACK/NACK) and downlink control information (modulation, transport block size) is double that for a single codeword.
+
+For NR, at least two aspects of NR are different from LTE:
+
+Potentially shorter transmission durations (slots, minislots)
+
+Potentially shorter HARQ ACK/NACK turnaround times
+
+The former occurs for the case of subcarrier spacings larger than 15 kHz (as in LTE) in the introduction of slot as the scheduling unit and also the mini-slot for low latency, and the latter occurs for the case when the UE is configured to provide an ACK/NACK in the same slot as the data (for TDD systems). This puts a burden on the UE in terms of processing demands which may anyway preclude the use of codeword-IC approaches.
+
+In NR, codeword-IC receivers at the UE may not be practical due to the short slots/mini-slots and fast HARQ ACK/NACK turnaround times.
+
+Due to these constraints, IRC or ML/Reduced Complexity ML receivers are likely candidates for implementation. In both cases, the benefits of being able to separately control the rate on multiple codewords for 3-4 layers transmissions are questionable as indicated by our simulations. For 3-4 MIMO layers, there may be situations where more than one TRP is involved in the transmission and the SINR per layer is significantly different, such as the distributed MIMO (D-MIMO) case where some layers are transmitted/received at TRP#1 and the remaining layers at TRP#2. Note that RAN1 has made an agreement to support the case when not all DMRS ports are QCL, which targets the D-MIMO use case.
+
+For the multi-TRP case, there is an option to use multiple scheduled PDSCH to the same UE, and potentially independent scheduling control on each PDSCH. This may also allow for an opportunity to relax the inter baseband latency/bandwidth requirements between TRPs. Multiple PDSCH scheduling is also be considered for operation in very wide bandwidths, to parallelize the decoding, hence this something that may be supported in NR anyway (and is supported in carrier aggregation for LTE).
+
+A single codeword per PDSCH is sufficient to enable D-MIMO since multiple PDSCHs can be used, one per TRP
+
+Hence, we propose
+
+Confirm the working assumption in adopting 1 CW for 3 and 4 layer PDSCH and PUSCH transmission.
+
+On PDSCH and PUSCH to RE Mapping
+
+In LTE uplink and downlink the mapping of P*SCH to resource elements [FIG:5285088122a197508844] on antenna port [FIG:cfc0fa087de8a37283dd] not reserved for other purposes shall be in increasing order of first the index [FIG:2d1cdaff9d38d704c44a] over the assigned physical resource blocks and then the index [FIG:1199a9c99e155fa517f1] , starting with the first slot in a subframe.
+
+This mapping allows, in principle, for early start of the decoding of a code word, if a channel estimate is available. In NR, this early start will be possible due to the design using front-loaded DMRS symbols and the same mapping principle should be adopted in NR as well..
+
+PDSCH and PUSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols in the slot in order to support early start of decoding at the receiver.
+
+Assuming 30kHz SCS (3.5GHz) and a scheduling bandwidth 100 MHz (corresponding to 275 resource blocks), and up to four MIMO layers using up to 256 QAM modulation, each OFDM symbol will contain up to 105600 modulated symbols, or up to about 12 LDPC code blocks (CB).  Hence, each LDPC CB is spread out at a bandwidth of roughly 8MHz without frequency interleaving. Based on this we make the following observation:
+
+There will be scheduling cases where multiple LDPC code blocks will be mapped to a single OFDM symbol.
+
+Therefore, a single CB may in some cases be vulnerable to the channel fading as it is mapped to only a localized time frequency resource.
+
+To mitigate this without sacrificing the early decoding principle, we suggest to introduce a frequency domain interleaving and one way to achieve this is in the mapping of modulated symbols to subcarriers within each OFDM symbol. Another approach is to introduce a bit level interleaver after the encoding to interleave the code blocks. However, this approach seems more complex, as only code blocks that maps to a single OFDM symbol should be interleaved to maintain the early decoding principle. Performing the interleaving in the tone domain seems more straightforward.
+
+Support a per OFDM symbol subcarrier interleaver when mapping the codewords symbols to resource elements to achieve frequency domain diversity per CB.
+
+For example, the CW can be mapped to every N:th subcarrier in a wraparound fashion, or subcarrier bundles of adjacent subcarriers can be introduced and the subcarrier interleaver can operate with these bundles as the granularity.
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 Confirm the working assumption in adopting 1 CW for 3 and 4 layer PDSCH and PUSCH transmission.
+
+Proposal 2 PDSCH and PUSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols in the slot in order to support early start of decoding at the receiver.
+
+Proposal 3 Support a per OFDM symbol subcarrier interleaver when mapping the codewords symbols to resource elements to achieve frequency domain diversity per CB.
+
+Appendix
+
+Simulation parameters
+
+Simulation Parameters
+Carrier frequency | 2 GHz
+Bandwidth | 10 MHz
+Scenarios | 3D UMi 200m ISD
+BS antenna configuration | (M,N,P,Mg,Ng) = (8,4,2,1,1) with 2x1 virt., (130° tilt)
+UE antenna configuration | (M,N,P,Mg,Ng) = (1,n,2,1,1) with n=1, 2 or 4
+Cell layout | 57 homogeneous cells
+Wrapping | Radio distance based
+UE receiver | MMSE
+CSI periodicity | 5 ms
+CSI delay | 5 ms
+CSI mode | PUSCH Mode 3-2
+Outer loop Link Adaptation | Yes, 10% BLER target
+UE noise figure | 9 dB
+BS Tx power | 41 dBm (UMi)
+Traffic model | FTP Model 1, 500 kB packet size
+UE speed | 3 km/h
+Scheduling | Proportional fair in time and frequency
+DMRS overhead | Overhead accounted for.
+CSI-RS | Overhead accounted for. Channel estimation error modeled.
+HARQ | Max 5 retransmissions
+Antenna spacing | 0.8 lambda in vertical, 0.5 lambda in horizontal
+Handover margin | 3 dB
+Transmission Mode | TM10, with non-shifted CRS

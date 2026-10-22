@@ -1,0 +1,115 @@
+3GPP TSG RAN WG1 88bis R1-1706216
+
+Spokane, USA, 3rd - 7th April 2017
+
+Agenda item: 8.1.2.1.1
+
+Source: Samsung, Huawei
+
+Title: Summary of Issues on Codeword-to-Layer Mapping for NR
+
+Document for: Discussion
+
+Introduction
+
+In RAN1#88, the following agreements were made [1]:
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsWorking assumption: For 3 and 4-layer transmission: 1 CWFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersCompanies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+Based on the submitted contributions in RAN1#88bis for this agenda item ([2] - [15]), the following issues are identified and summarized in the following sections.
+
+Working assumption for 3- and 4-layer transmission
+
+CQI and MCS per CW
+
+Layer mapping scheme
+
+Frequency interleaver
+
+Working assumption for 3- and 4-layer transmission
+
+In terms of whether the working assumption for 3- and 4-layer transmission should be confirmed into an agreement, three views –along with their supporters – can be summarized as follows.
+
+Confirm the working assumption of 1-CW: CATT, Ericsson, Intel, Nokia, ASB, NTT DOCOMO, Qualcomm, Samsung
+
+Configurable # CWs (between 1 and 2): AT&T (with UE feedback of # CWs), Lenovo, LG, ZTE, ZTE Microelectronics, Huawei, HiSilicon (2 CWs to separate QCL)
+
+Change the working assumption from 1-CW to 2-CW: Huawei, HiSilicon, ZTE, ZTE Microelectronics
+
+CQI and MCS per CW
+
+In terms of CQI, MCS, and HARQ-related field per CW, two views –along with their supporters – can be summarized as follows.
+
+1 CQI, 1 MCS in DCI: AT&T, CATT, Ericsson, Huawei, HiSilicon, LG Electronics, Nokia, ASB, NTT DOCOMO, Samsung
+
+>1CQI, per-layer/layer-group modulation in DCI: Qualcomm, ZTE, ZTE Microelectronics
+
+Note that the detailed design on HARQ-related field (e.g. to support CB-group-level HARQ) is currently being discussed in HARQ AI.
+
+Layer Mapping Scheme
+
+In terms of layer mapping scheme, seven views –along with their supporters – can be summarized as follows.
+
+Layers first sub-carriers (frequency) OFDM symbols (time): CATT, Ericsson, Nokia, ASB, NTT DOCOMO, Qualcomm, Samsung
+
+Configurable layer mapping (depending on scenarios, e.g. URLLC puncturing, HARQ resources): Huawei, HiSilicon, ZTE, ZTE Microelectronics
+
+Sub-carriers first (frequency) layers OFDM symbols (time): Xinwei
+
+Sub-carriers/OFDM symbols (F/T) interleaving layers: Lenovo
+
+For a given CW, each CB is first mapped across n out of L layers (n<L) sub-carriers (frequency) OFDM symbols (time): MediaTek
+
+Dynamic layer mapping for 2-CW: AT&T, LG Electronics
+
+Further study on frequency first or time first mapping is needed by taking into account front loaded DMRS symbol, waveform, and URLLC puncturing.: LG Electronics
+
+In addition, two companies (CATT and Samsung) mention the possibility of using layer/CW shifting for >4-layer transmission at least to reduce the number of CQIs.
+
+For L>4-layer transmission, at least two companies (Nokia and Samsung) indicate that the first [EQ:d75eac2b075f95890fc8] layers are mapped to the first CW while the remaining layers are mapped to the second CW.
+
+At least one company (Huawei, HiSilicon) states that cross layer-group mapping should be avoided, where layer-group means the layers in a group with QCLed.
+
+Frequency Interleaver
+
+Here, frequency interleaver refers to ensuring that, whenever applicable, modulation symbols associated with a CB is spread across the frequency span of the allocated RBs within the minimum number of OFDM symbols. Two views –along with their supporters – can be summarized as follows.
+
+Support: Ericsson, NTT DOCOMO, Qualcomm, Samsung [16], ZTE, ZTE Microelectronics
+
+Negative/skeptical to frequency interleaving only: AT&T, CATT, Huawei, HiSilicon (configurable interleaving scheme, e.g., in the case of high speed, configure joint time and frequency domain interleaving)
+
+Among the companies which support frequency interleaving, at least one (Qualcomm) prefers to introduce it in layer mapping procedure while at least one (Samsung) prefers to incorporate it in CB concatenation. Furthermore, at least one (Samsung) argues that it should be applicable only when the number of CBs (relative to the frequency span of the allocated RBs) is sufficiently large.
+
+References
+
+3GPP, RAN1#88, Chairman’s Notes
+
+R1-1704335, Remaining issues in the codeword-to-layer mapping for NR MIMO, AT&T
+
+R1-1704390, Codeword to layer mapping and interleaving, ZTE, ZTE Microelectronics
+
+R1-1704446, Codeword mapping in NR, MediaTek Inc.
+
+R1-1704544, Discussion on codeword mapping, CATT
+
+R1-1704661, Consideration and Evaluation on Codewords to Layer Mapping, Beijing Xinwei Telecom Techn.
+
+R1-1704717, Codeword to MIMO layer mapping and overhead reduction, Intel Corporation
+
+R1-1704871, Discussion on codeword mapping, LG Electronics
+
+R1-1705073, Codeword to layer mapping in NR, Huawei, HiSilicon
+
+R1-1705333, Open Issues on Layer Mapping, Samsung
+
+R1-1705574, CW-to-layer mapping and frequency domain interleaving, Qualcomm Incorporated
+
+R1-1705649, Discussion of codeword mapping, Lenovo, Motorola Mobility
+
+R1-1705715, Discussion on Codeword Mapping, NTT DOCOMO, INC.
+
+R1-1705883, Codeword to layer mapping for DL and UL, Ericsson
+
+R1-1705952, On the number of codewords in NR, Nokia, Alcatel-Lucent Shanghai Bell
+
+R1-1705418, LDPC coding chain for data channel, Samsung
