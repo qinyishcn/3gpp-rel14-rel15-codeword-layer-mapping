@@ -1,0 +1,5 @@
+WF on codeword mapping MediaTek , …… 3GPP TSG RAN WG1 NR Ad Hoc Meeting R1-1711793 Qingdao, China, 27 th – 30 th June 2017 Agenda item: 5.1.2.1.1
+
+Background Working assumption: In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword , then across subcarriers (frequency) and then across OFDM symbols (time) FFS whether the resource is associated with a CW or with a CB group FFS other schemes (e.g., Layer  Time  Frequency, Time  Frequency  Layer, Frequency  Layer  Time) If so, details of configuration signalling , e.g. RRC, DCI Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Proposal NR supports the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with a CB group, then across subcarriers (frequency) and then across OFDM symbols (time)
