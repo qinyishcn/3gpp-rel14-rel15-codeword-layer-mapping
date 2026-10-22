@@ -1,0 +1,5 @@
+3GPP TSG RAN WG1 Meeting #88 R1-170 3878 Athens, Greece, 13th-17th February 2017 Agenda item: 8.1.2.1.1 WF on number of codeword s in NR Huawei, HiSilicon, IITH, AT&T, CATR , IITM, ZTE, CEWIT, ZTE Microelectronics, Tejas Networks, Sony, AltioStar , MediaTek , Softbank , Deutsche Telekom , LGE, China Telecom , Xinwei , Mitsubishi Electric 1
+
+2 RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields FFS: the number of CQIs and MCS fields in DCI FFS: number of CWs for 3 and more layers Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers Alt. 3: NR supports 2 CWs for 2 layers Background
+
+3 T he maximal number of codewords for throughout all ranks (from 1 to at least 8) is X The value of X is no less than 2 FFS X is more than 2 Proposals

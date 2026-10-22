@@ -1,0 +1,292 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1701790
+
+Athens, Greece, 13th - 17th February 2017
+
+Source: ZTE, ZTE Microelectronics
+
+Title: On number of codewords for NR
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 NR Ad-hoc meeting[1], the following options on number of codewords for NR have been agreed for down selection:
+
+RAN1 will down select among followings and select one alternative in the next meeting
+
+Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers
+
+One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields
+
+FFS: the number of CQIs and MCS fields in DCI
+
+FFS: number of CWs for 3 and more layers
+
+Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers
+
+Alt. 3: NR supports 2 CWs for 2 layers
+
+In light of the above progress, further discussion on codeword for NR have been introduced in this contribution with corresponding simulations.
+
+Discussion on number of codewords for NR
+
+In LTE system, up to 2 codewords is supported for MIMO due to performance gain. Fixed CW-to-layer mapping (e.g. 2-to-2 mapping) as well as per-CW HARQ is supported. Considering the application of NR at lower frequency, similar rich-scattering channel would be experienced in some scenarios. It is expected similar gain can be obtained from supporting multiple codewords in NR.
+
+In general, whether to use single codeword (SCW) or multiple codeword (MCW) has impact at least on the following two different standardization aspects.
+
+CSI feedback – If only SCW is supported, CSI feedback is performed based on single codeword assumption. If we follow the LTE approach of feeding back one CQI per codeword, it means only one CQI is available in CSI feedback for multi-layer transmission.
+
+HARQ – HARQ ACK/NACK feedback is performed per codeword. Link adaptation per codeword can also be done by using OLLA. If it is two layers only, OLLA can be done per layer in case of MCW. Single codeword means only one set of OLLA can be done. Also, retransmission is done per codeword. In case of SCW, it means data associated with layer(s) with good quality is forced to be re-transmitted. It can potentially reduce overall system efficiency.
+
+Benefits of multiple codewords (MCW)
+
+To be more specific, MCW is beneficial in the following aspects considering single TRP and multi-TRP transmission:
+
+Single TRP transmission:
+
+In rich scattering scenarios, higher rank is due to channel links coming from multi-path. The layers have different contribution from multi-path with different link quality. Even for SU-MIMO rank 2, the two layers may not come from dual polarized antennas. Different polarization may also experience different interference.
+
+Antennas may not always be dual polarized in real network. Even it is dual polarized, different polarization may come from different panels in HF system. They may use different beams on different polarization and hence is likely to have different link quality.
+
+For MU-MIMO, it is well known that CSI accuracy requirement is higher than SU-MIMO. It is desirable to have more accurate CQI information (resembling amplitude information) on each layer so that MU pairing algorithm e.g. ZF, BD can be performed more accurately. The per-layer information is also beneficial to transmission with reduced rank which helps the network to decide which layer to pick and which MCS is used after rank reduction. After MU-pairing, different layers can experience different MU interference. Restricting multi-layer to use the same MCS would hurt MU performance. Particularly when channel reciprocity is available, link adaptation accuracy can be improved with MCW.
+
+MCW also favours use of successive interference cancellation. Regardless it is codeword level or symbol level SIC, SIC is beneficial to the cases when multiple layers have different qualities. If only SCW is supported, it implies the UE needs to have different receiver architecture for doing interference cancellation due to SU-MIMO inter-layer interference or MUST/MU-MIMO type interference in the same cell.
+
+Multi-TRP/panel transmission:
+
+For multi-TRP/panel transmission including schemes like non-coherent JT or frequency selective DPS, different layers can experience different link quality. In multi-panel system, different panel pairs experience different interference. MCW clearly provides the advantage of flexible link adaptation. Dense TRPs especially for HF often results in LoS with high probability and hence limits the degree of freedom if only single TPR is considered. Consequently, it is expected spatial multiplexing would be better supported via multi-TRP transmission to achieve higher degree of freedom and hence facilitate higher rank transmission. Therefore, multi-TRP/panel transmission is important scenario.MCW also favours use of successive interference cancellation for the case of non-coherent JT [2].
+
+SCW has certain benefits when the link qualities of multiple layers are similar. It reduces CSI and HARQ feedback overhead and control signalling overhead. However, the overhead may not always be an issue e.g. when UL overhead is not limited. Further we can optimize the control signalling overhead e.g. based on the transmission setting framework [3].
+
+Multiple codewords with multiple PDSCH/PUSCH assignments:
+
+It is described in Alt1 in Section 1 that single CW is supported per PDSCH/PUSCH assignment. It implies that it requires multiple PDSCH assignments to support multi-TRP/Panel transmission. This requires an UE to detect multiple PDCCHs which unnecessarily complicates the UE design. Also, joint optimization (e.g. on control signaling or CSI feedback) becomes more difficult as multiple PDSCH/PUSCH assignment is more suitable to the case where multiple transmissions are independent to each other e.g. when non-ideal backhaul is assumed. If ideal or fast backhaul is available, MCW allows more optimized performance with lower signaling overhead.
+
+Different modulation schemes in single codeword:
+
+It is observed from [4] that per-layer link adaptation is beneficial. It was proposed to support modulation schemes in single codeword. The granularity of adaptation on modulation scheme only may be too coarse in such case but it can be used in combination with 2 codewords to further optimize per-layer adaptation in higher rank case. This can be used to adapt to different interference situations in one codeword which experiences frequency selective interference as described in [5].
+
+Performance evaluation
+
+It is noticed that some evaluation results for comparison between SCW and MCW were provided in 3GPP RAN1 NR Adhoc meeting [4][6][7][8][9][10]. However, evaluation results were not sufficient and too diverged to draw any conclusion. Proponents of Alt1 in Section 1 either only show LLS results[4] or SLS results with limited scenarios e.g. 2Tx SU-MIMO or 2Tx-4Rx JT[7] or low load scenarios[8]. In reality, performance of SCW and MCW can highly depend on various factors e.g. antenna configuration, interference condition, closed loop/outer loop link adaptation algorithms, MU precoding, traffic model, scheduling and re-transmission algorithm, etc. We should perform evaluation under system level in order to reflect more realistic interference situation in different scenarios. Here we provide simulation results in single-TRP transmission and multi-TRP transmission with different scenarios.
+
+Observation 1: Performance of SCW and MCW can highly depend on various factors e.g. antenna configuration, interference condition, closed loop/outer loop link adaptation algorithms, MU precoding, traffic model, scheduling and re-transmission algorithm, etc.
+
+Single-TRP transmission
+
+In this case, simulations are conducted in both indoor hotspot and 3D-UMi scenarios. As shown in Figure 1, totally, eight TRPs are located in the indoor area with the corresponding ISD equal to 30m. For the simulation with SU-MIMO mode, FTP traffic model is adopted with different load and UEs are uniformly distributed in the area. The maximum two layers are supported in DL transmission.
+
+[FIG:14b2ca0038f62d7adc69]
+
+Figure 1 Topology for the indoor hotspot
+
+For MU-MIMO simulation in 3D-UMi, 10 UEs per cell is considered with full buffer traffic model. The MU paring is conducted between two UEs with maximum of 4 MU layers. Moreover, CQI calculation and HARQ per CW are supported in this simulation. The detailed configurations about the simulation can be found in Table 6 and Table 7 in appendix 1. In both scenarios, each UE is equipped with 2Rx so that the maximum rank per UE is 2.
+
+According to the above configurations, we compare the performance between 1CW scheme and 2CW scheme. In this setup, the only difference between two schemes is whether 1CW or 2CW is used for rank 2 transmission. We first show the difference between two CQIs for rank 2 CSI feedback in Figure 2. The performance comparison in single TRP transmission scenarios is then shown in Table1-3 below.
+
+[FIG:4ceafddba6465ec4c2c6]
+
+Figure 2 Distribution of delta SINR between two CQIs for rank 2 CSI per UE
+
+SU-MIMO
+
+Table 1 SU-MIMO in indoor hotspot scenario
+
+FTP load | Scheme | Mean UPT | 5% UPT | 50% UPT | 95% UPT | Real RU
+20% | 1CW | 33.4558 | 8.4926 | 29.6296 | 56.338 | 0.2283
+ | 2CW | 35.3015 | 10.4712 | 33.6134 | 56.338 | 0.2165
+ | Gain | 5.52% | 23.30% | 13.45% | 0.00% | 
+50% | 1CW | 18.504 | 2.7119 | 12.1212 | 51.2821 | 0.4874
+ | 2CW | 20.06 | 2.7952 | 12.7389 | 55.5556 | 0.4908
+ | Gain | 8.41% | 3.07% | 5.10% | 8.33% | 
+80% | 1CW | 11.3895 | 0.9374 | 7.0922 | 36.036 | 0.7953
+ | 2CW | 12.3078 | 1.101 | 7.5901 | 38.0952 | 0.7907
+ | Gain | 8.06% | 17.45% | 7.02% | 5.71% |
+
+Table 2 SU-MIMO in UMi scenario
+
+FTP with lambda | Schemes | Mean UPT | 5% UPT | 50% UPT | Real RU
+2.6 | 1CW | 41.4773 | 21.472 | 42.6909 | 0.2326
+ | 2CW | 43.0199 | 25.641 | 43.9656 | 0.2187
+ | Gain | 3.72% | 19.42% | 2.99% | 
+3.5 | 1CW | 36.3854 | 16.9034 | 37.3544 | 0.3513
+ | 2CW | 38.502 | 20.7828 | 39.1288 | 0.3217
+ | Gain | 5.82% | 22.95% | 4.75% | 
+4.6 | 1CW | 30.2777 | 9.321 | 29.907 | 0.5595
+ | 2CW | 33.6116 | 12.8127 | 34.2178 | 0.4847
+ | Gain | 11.01% | 37.46% | 14.41% | 
+5.6 | 1CW | 25.4597 | 4.9936 | 24.8447 | 0.7383
+ | 2CW | 28.8539 | 7.7473 | 28.7988 | 0.6368
+ | Gain | 13.33% | 55.14% | 15.92% |
+
+MU-MIMO
+
+Table 3 MU-MIMO in UMi scenario
+
+Schemes | Average SE | 5% SE
+1CW | 5.5627 | 0.0948
+2CW | 5.7274 | 0.125
+Gain | 2.96% | 31.90%
+
+Here are some observations from the results:
+
+In Figure 2, distribution of SINR difference between two layers observed at the UE side is shown. It can be observed that the difference is notable which proves that different CQIs should be assigned to different layers.
+
+From results shown in Table 1 and Table 2, significant performance gain can be found due to application of MCW (two codeword) schemes. It verifies that in both scenarios, different channel conditions are experienced by each layer, even in the case of rank 2. Link adaption per layer can enhance the system performance by taking into account different channel qualities in different layers. Re-transmission for the layer with high quality is avoided.
+
+Huge gain can be observed from the cell edge performance in MU case according to Table 3. The optimized MU paring algorithm can be applied to paired UEs by TRP since more accurate channel information is obtained in the MCW mode. Per layer MCS assignment is also conducted according to the experienced MU interference.
+
+Observation 2: In single TRP transmission case, significant performance gain of MCW scheme has been observed in both SU and MU-MIMO for indoor hotspot and 3D-UMi scenarios.
+
+Multi-TRP transmission
+
+The simulations with coordination among TRPs are conducted in the indoor scenario (shown in Figure 1).Two different kinds of UE, which equipped with two and four receive antennas respectively, are considered. The simulation considering UE with two Rx antennas are conducted at 3.5GHz and 30GHz. The simulation considering UEs with four Rx antennas is done at 3.5GHz. More details about the simulation can be found in Table 6 in Appendix 1.
+
+We compare the performance between the following two schemes:
+
+DPS/DPB (baseline scheme) – dynamic point switching and blanking is done with single TRP transmission in each subframe. Two codewords is used for rank 2 transmission for this scheme.
+
+NCJT – non-coherent joint transmission is done between two TRPs which requires simultaneous transmission of two codewords, with each codeword transmitted from each TRP.
+
+Based on above two schemes, performance of DPS/DPB and NCJT in terms of mean UPT and 5%/50%/95% UPT are obtained as shown in Table 4 and Table 5. It can be observed that NCJT with two codewords can provide significant performance gain comparing with the baseline scheme of DPS/DPB for both 2Rx and 4Rx cases.
+
+Table 4 Simulation results for 4Rx UEs at 3.5 GHz
+
+FTP with pre-defined RU | TP coordination scheme | Mean UPT | 5% UPT | 50% UPT | 95% UPT | Real RU
+5% | DPS/DPB | 52.09 | 28.55 | 56.34 | 56.34 | 6.64%
+ | NCJT | 70.31 | 36.62 | 74.4 | 88.89 | 6.69%
+ | Gain | 34.98% | 28.27% | 32.06% | 57.77% | 
+20% | DPS/DPB | 43.88 | 13.23 | 53.2 | 56.34 | 19.40%
+ | NCJT | 53.56 | 15.68 | 56.14 | 84.26 | 18.46%
+ | Gain | 22.06% | 18.52% | 5.53% | 49.56% | 
+40% | DPS/DPB | 32.66 | 3.07 | 31.01 | 56.34 | 37.99%
+ | NCJT | 40.62 | 3.68 | 38.1 | 85.11 | 33.27%
+ | Gain | 24.37% | 19.87% | 22.86% | 51.06% | 
+70% | DPS/DPB | 19.02 | 1.63 | 12.62 | 55.95 | 67.29%
+ | NCJT | 21.73 | 1.89 | 14.37 | 68.29 | 66.45%
+ | Gain | 14.25% | 15.95% | 13.87% | 22.06% |
+
+Table 5 Simulation Results for 2Rx UEs (RU ~80%)
+
+Frequency (GHz) | TP coordination scheme | Mean UPT | 5% UPT | 50% UPT | 95% UPT | RU
+3.5 | DPS/DPB | 5.638 | 0.6676 | 3.2051 | 18.6047 | 0.872
+ | NCJT | 6.7479 | 0.7027 | 3.413 | 21.978 | 0.854
+ | Gain | 19.69% | 5.26% | 6.49% | 18.13% | 
+30 | DPS/DPB | 5.91 | 0.55 | 2.65 | 19.4 | 0.8319
+ | NCJT | 6.3 | 0.56 | 2.73 | 22.22 | 0.8283
+ | Gain | 6.60% | 1.82% | 3.02% | 14.54% |
+
+Here are some observations based on the results:
+
+In low load scenarios, NCJT provided tremendous gain in all regions of the UPT metrics, especially at lower frequency. Meanwhile, consistent performance benefit for lower percentile UEs in different loading situations. It has gain of 16-20% even for medium to high loads for 4Rx case. Interference mitigation by NCJT has the major effect on those interference-limiting UEs.
+
+High percentile UEs tend to have better gain. It can reach as high as 50% gain for low to medium load scenarios. For these UEs, the major benefit is coming from supporting more transmission layers with joint transmission.
+
+Considerable gain can be also observed for 2Rx UEs. This means MCW is also beneficial to two layers considering multi-TRP transmission.
+
+It is essential for non-coherent JT to use two CWs because of different received link qualities from different TRPs. It is beneficial to support independent CW transmission which requires less coordination between two TRPs. According to the single TRP results, the baseline scheme of DPS/DPB is higher than single CW case. It is expected more gain is observed if NCJT with 2CW is compared with SCW case.
+
+Observation 3: In multiple-TRP case, NCJT with two codewords can provide significant performance gain.
+
+We observe that MCW is beneficial in various scenarios and transmission schemes. Therefore, it is very important to support MCW in order to ensure no performance degradation compared to LTE in all scenarios. If SCW is found beneficial to certain scenarios, it is up to the network to configure to SCW mode which reduces signaling overhead. Considering pros and cons of SCW and MCW approaches and performance benefits of MCW, it is reasonable to make the number of codewords configurable according to the scenarios and network implementation.
+
+Proposal: To support different scenarios and schemes, number of codewords per UE should be configurable at least between 1 and 2 for NR
+
+Conclusion
+
+In this contribution, the issue w.r.t the number of codewords in NR has been discussed based on observations from the simulation in indoor hotspot and 3D-UMi scenarios. The significant gain can be observed from the above simulation due to application of MCW schemes even in 2 layer cases. The following proposal and observations are listed according to our analysis:
+
+Observation 1: Performance of SCW and MCW can highly depend on various factors e.g. antenna configuration, interference condition, closed loop/outer loop link adaptation algorithms, MU precoding, traffic model, scheduling and re-transmission algorithm, etc.
+
+Observation 2: In single TRP transmission case, significant performance gain of MCW scheme has been observed in both SU and MU-MIMO for indoor hotspot and 3D-UMi scenarios.
+
+Observation 3: In multiple-TRP case, NCJT with two codewords can provide significant performance gain.
+
+Proposal: To support different scenarios and schemes, number of codewords per UE should be configurable at least between 1 and 2 for NR.
+
+Reference
+
+Chairman's Notes RAN1_NRadhoc_final.doc
+
+R1-1701795, Multi-TRP Transmission considering advanced receiver, ZTE, ZTE Microelectronics
+
+R1-1701833, Framework for Transmission Setting, ZTE, ZTE Microelectronics
+
+R1-1700795, CW to layer mapping, Qualcomm Incorporated
+
+R1-1701839, Enhancements for non-coherent JT, ZTE, ZTE Microelectronics
+
+R1-1700119, Multi-TRP Transmission considering advanced receiver, ZTE, ZTE Microelectronics
+
+R1-1700338, Study on the number of codewords for NR, Intel Corporation
+
+R1-1700898, Codeword-to-layer mapping for DL and UL NR MIMO, Samsung
+
+R1-1700777, Evaluation Results and Considerations on Number of Codewords, Xinwei
+
+R1-1700412, Number of codewords for physical data channel, Huawei, HiSilicon
+
+3GPP TR 36.873, Study on 3D channel model for LTE
+
+Appendix 1
+
+Table 6 Simulation assumption for indoor scenario
+
+Parameter | Values used for evaluation
+Carrier Frequency | Single-TRP: 3.5 GHz/ Multiple-TRPs: 3.5 and 30 GHz
+Duplex Mode | FDD
+System Band | 10 MHz
+Carrier Number | 1
+Network Synchronization | Synchronized
+Antenna Configuration | Transmitter: 2Tx cross-polarized antennaReceiver: 2 antennas for single-TRP and both 2 and 4 antennas for multiple-TRP
+Tx Power | 24 dBm
+eNB antenna height | 6m
+UE antenna height | 1.5m
+Number of small cells | 8
+Minimum distance (2D distance) | Small cell-small cell: 20m
+ | Small cell-UE: 3m
+ | Macro – UE: 35m
+Traffic model | FTP Model 1 with packet size 0.5 Mbytes(low load ~5%, 20% RU,40% RU,70% RU)
+Handover margin | 3dB
+UE attachment | Based on RSRP (formula) from CRS port 0
+Metrics | Mean, 5%, 50%,95% UPT
+UE Speed | 3km/h
+CQI/PMI reporting interval and frequency granularity | 5ms for CQI/PMI, 6RB
+Feedback scheme | Rel-12 enhanced CSI feedback, PUSCH mode 3-22Tx codebook, 16Tx FD-MIMO codebookCQI, PMI and RI reporting triggered per 5msFeedback delay is 5 ms
+Transmission scheme | Single TRP: SU-MIMOMultiple-TRPs: TM10, Two CSI processes, DPS/DPB/non-coherent JT with rank adaptation
+Scheduler | Proportional Fair
+Overhead | 3 symbols for DL CCHs, 2 CRS ports and DM-RS with 12 REs per PRB
+Backhual | Ideal backhaul for multiple-TRPs
+Receiver | Single TRP: MMSE-IRCMultiple TRP: MMSE-IRC and SIC
+HARQ Scheme | Chase Combining
+Maximum number of retransmissions | 3
+Channel estimation | Non-ideal modeling of channel estimation error modeling [FIG:44b5f9a577f159592fd5] is used,based on CSI-RS for channel measurements, based on DMRS for data demodulation, based on IMR for interference measurement
+
+Table 7 Simulation assumption for UMi scenario
+
+Parameter | Values used for evaluation
+Carrier Frequency | 2 GHz
+Duplex Mode | FDD
+System Band | 10 MHz
+Carrier Number | 1
+Network Synchronization | Synchronized
+Antenna Configuration | Transmitter: (4,4,2) with polarization Model -2 from 36.873 [5]Receiver: 2 antennas
+Tx Power | 41 dBm
+Number of cells | 7 sites and 21 sectors
+Traffic model | SU-MIMO: FTP Model 1 with packet size 0.5 Mbytes(lambda = 2.6, 3.5)MU-MIMO: Full buffer
+Handover margin | 3dB
+UE attachment | Based on RSRP (formula) from CRS port 0
+Metrics | Full buffer: Average SE and 5% SEFTP: Mean, 5% UPT
+UE Speed | 3km/h
+UE distribution | according to 36.873 [5]
+CQI/PMI reporting interval and frequency granularity | 5ms for CQI/PMI, 6RB
+Feedback scheme | Rel-12 enhanced CSI feedback, PUSCH mode 3-22Tx codebook, 16Tx FD-MIMO codebookCQI, PMI and RI reporting triggered per 5msFeedback delay is 5 ms
+Transmission scheme | SU-MIMO and MU-MIMO
+Scheduler | Proportional Fair
+Overhead | 3 symbols for DL CCHs, 2 CRS ports and DM-RS with 12 REs per PRB
+Receiver | MMSE-IRC
+HARQ Scheme | Chase Combining
+Maximum number of retransmissions | 3
+Channel estimation | Non-ideal modeling of channel estimation error modeling [FIG:7477cfeedc818e6137f0] is used,based on CSI-RS for channel measurements, based on DMRS for data demodulation, based on IMR for interference measurement

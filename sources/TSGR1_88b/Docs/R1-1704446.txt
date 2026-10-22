@@ -1,0 +1,95 @@
+3GPP TSG RAN WG1 Meeting #88bis R1-1704446
+
+Spokane, USA, April 3-7 2017
+
+Source: MediaTek Inc.
+
+Title: Codeword mapping in NR
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+In RAN1 #87 Adhoc, the following agreements regarding to the codeword to layer mapping were made:
+
+For the DL/UL data channels, study whether/how the interleaving is performed in the codeword to layer mapping procedure (e.g., a per-OFDM-symbol subcarrier interleaver in the codeword to layer mapping procedure, etc.)
+
+This may or may not be connected with coding design
+
+For NR codeword to layer mapping, it was agreed in the RAN1#88 that,
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 2-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+FFS for 3 & 4-layer transmissions
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+In RAN1#88, the following working assumption is provided.
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):
+
+For 3 and 4-layer transmission: 1 CW
+
+FFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)
+
+Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+In this contribution, we provide our views on codeword-to-layer mapping.
+
+Introduction
+
+In a conventional LTE network, interference experienced at a UE is from base stations’ transmissions, which can be due to SU-MIMO transmission and in the form of inter-spatial layer interference, or due to MU-MIMO transmission or due to intercell interference. Interference experienced at a base station is caused by transmissions from UEs in its own cell or neighboring cells.
+
+In NR, dynamic TDD (or flexible duplexing) introduces a new type of interference, i.e. cross link interference, which makes the interference scenarios in NR more complicated (actually with the introduction of eIMTA, cross-link interference also exists in LTE).
+
+As there is a higher chance to obtain a high spatial rank in an environment with rich local scatters, and such an environment is often encountered in a small cell deployment scenario, e.g. indoor hotspot, there can be overlap between the target scenarios for SU-MIMO and dynamic TDD.
+
+When many antennas are exploited at base station, and highly directional beams can be formed simultaneously towards multiple UEs, then can be overlap between the target scenarios for MU-MIMO and dynamic TDD as well.
+
+With dynamic TDD, a receiver at either the UE side or the base station side may experience Cross-Link-Interference (CLI) in addition to intracell/intercell interference in a conventional radio network. Hence it is important to consider dynamic TDD when designing codeword-to-layer mapping in NR.
+
+Discussion
+
+Receiver technology has been identified as a useful means to handle CLI. For a UE with multiple Rx antennas, CLI can be suppressed with an IRC receiver. From that, the UE can consider the possible CLI in its CSI feedback.
+
+Assume the receiver model at UE is
+
+[FIG:8bf0e1eada5855336b17]
+
+where [FIG:cbf72fa9c59c61877a79] is the number of Rx antennas at the desired UE, [FIG:c9ea027513043941e0d8] is the number of Tx antennas at base station, [FIG:ee33754c0351687db06e] is the desired signal, [FIG:f3346e578ac3dfccdf7d] is the channel response between base station and the desired UE, [FIG:aded46adc49469faf1bd] is the precoder used by the base station, and [FIG:7b6aecf9b11937e12d6d] is the transmission rank of [FIG:f43062376a89bf2e157c] , [FIG:8429c6b36820f212a77f] is the interference signal from an interfering UE, [FIG:e2b1d3ddc83cf6a3e1cd] is its transmission rank, and [FIG:1ff6c0dd5d395c576780] is the channel response between the interfering UE to the victim UE, [FIG:97061173501d4b5b1418] is for noise and conventional interference.
+
+Always providing CSI feedback assuming the presence of CLI seems a rather pessimistic strategy. Hence it would be eneficial to provide a CSI feedback to the base station which is robust to the occurrence of CLI.
+
+We can consider a setup with [FIG:37b6d1c7f41213ae4e61] , [FIG:d262652b3a8aeffa3c29] , [FIG:84126afc754dbded4502] . If the CLI is not present, then it is possible the rank indicator from the desired UE is 4, and with CLI the desired transmission rank can be lower. One strategy for CSI feedback to account for both scenarios is the UE reports a PMI, so [FIG:d13935f190b88b013190] is not aligned with [FIG:59608d99370757050c30] , but [FIG:66e6328637ccbde9ea9f] is aligned with [FIG:62b91c36066b95a9584b] .
+
+With that, if the base station has a 4 layer transmission to the desired UE, we can differentiate two cases:
+
+If two codewords are used, then codeblocks in codeword are mapped to the first two spatial layers (layers 1 and 2); and a different codeblock in the second codeword are mapped to other spatial layers (layer 3 or layer 3 and layer 4).
+
+If one codeword is used, then some codeblocks in the codeword are mapped to the first two spatial layers (layers 1 and 2); and other codeblocks in the second codeword are mapped to other spatial layers (layer 3 or layer 3 and layer 4).
+
+When the CLI is not present, the desired UE can receive all transmitted codewords/codeblocks with a high success rate. When the CLI is present, the desired UE can still receive one codeword, or at least some codeblocks in a codeword correctly. In the case multiple codeblocks are received correctly, then multiple Ack bit feedback can be put to good use and retransmission can be made for those codeblocks not received correctly on the first transmission.
+
+In contrast, when a codeword is mapped to all four spatial layers, especially when one codeblock is mapped to all four spatial layers, the presence of CLI can be really damaging; and all the codeblocks can be damaged and retransmission for them may be necessary.
+
+From that we have
+
+Proposal: Consider dynamic TDD in the defining of codeword/codeblock to spatial layer mapping.
+
+Conclusion
+
+In this contribution, we provide our views on NR codeword to layer mapping. We have
+
+Proposal: Consider dynamic TDD in the defining of codeword/codeblock to spatial layer mapping.

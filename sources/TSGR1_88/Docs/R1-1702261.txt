@@ -1,0 +1,176 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702261
+
+13th – 17th February 2017
+
+Athens, Greece
+
+Agenda item: 8.1.2.1.1
+
+Source: AT&T
+
+Title: Benefits of Multi Codeword MIMO Schemes in NR
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. In RAN1 # 87 and the following agreement was reached on the number of Codewords.
+
+Agreements:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In RAN1# the following agreements were made
+
+Agreements:
+
+RAN1 will down select among the followings and select one alternative in the next meeting
+
+Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers
+
+One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields
+
+FFS: the number of CQIs and MCS fields in DCI
+
+FFS: number of CWs for 3 and more layers
+
+Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers
+
+Alt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution, we describe our views on the number of codewords for both DL and UL with simulation results.
+
+Simulation Model
+
+In this contribution, we evaluate the performance of multi codeword MIMO systems with link level simulations. We consider 4 port and 2 port closed loop MIMO configurations are considered with link adaptation, where the rank information, precoding information, modulation, coding rate/transport block size are dynamically updated for each TTI. In our simulations we assume perfect channel estimation. For link adaptation, UE chooses the PMI, RI and MCS based on maximization of Mutual information. The feedback is assumed to have 4 TTI delays and is assumed to be error free. Simulations are run for a UE with different SNRs and the wireless channel assumed is TDL-A channel. The velocity of the mobile is assumed to be 3 Kmph. The main simulation parameters are tabulated in Table 1.
+
+Table 1 Detailed link level simulation assumptions
+
+Assumptions | Value
+Carrier frequency | 2.1 GHz
+Duplex | FDD
+System Bandwidth | 10 MHz
+TTI length | 1 ms
+Subcarrier spacing | 15KHz
+Guard time interval | 4.7us (interval of LTE normal CP) as baseline
+FFT size | 1024
+Data transmission bandwidth | 48 subcarriers for 15 KHZ spacing
+Antenna configuration | (4,4,2,1,1), (2,2,2,1,1)
+Number of codewords | 4,3,,2,1
+Precoding codebook | LTE-Release 8
+Channel encoder | LTE turbo code
+MCS | For link adaptation: QPSK, 16-QAM and 64-QAM are considered with variable code rate
+Control Overhead | Zero
+Channel estimation | Ideal
+ACK/NACK feedback error rate | Baseline: 0%
+PMI / rank feedback error rate | Baseline: 0%
+CQI feedback error rate | Baseline: 0%
+Feedback delay | 4 TTI
+
+Simulation Results with 4 Antenna Ports
+
+In this section, we present our simulation results with 4 Antenna ports. Figure 1 shows the spectral efficiency as a function of SNR for single codeword and 4 codeword. Note that in this case, the spectral efficiency is computed by
+
+Spectrum efficiency = TBS*(1-BLER)/(T*BW)
+
+Where, TBS is the transport block size in bits, BLER is the block error rate, T is the time duration of one subframe, BW is the actual bandwidth. It can be observed that for very low SNRs the performance with single codeword is almost identical to that of 4 codewords. This is because at very low SNR (0 dB or -5 dB) there is a high probability that rank is either 1. However, for medium to high SNRs, the performance with single codeword is inferior to 4 codewords. For example at medium SNR of 10 dB, 19% loss in the spectral efficiency compared to 4 codeword MIMO. Similarly, at high SNR of 25 dB, the loss is around 20% compared to the 4 codeword MIMO. The loss is significant because in a single codeword MIMO, the CQI is controlled by the SINR of the weaker layer.
+
+[FIG:3464b424f711fde7f84e]
+
+Figure 1 Spectral efficiency comparison for Single codeword and four codeword MIMO
+
+Figure 2 shows the performance with two codeword MIMO. We also plotted the performance with four codeword and single codeword MIMO. In this case, the performance is same as that of single codeword, and four codeword MIMO as the probability of rank 1 is high, however the performance of two codeword MIMO is same as that of four codeword even at medium SNRs. This is because at medium SNRs, the probability of UE reported rank 2 or rank 1 is high. Since for rank 1 and rank 2, the transmission structure for four codeword and two codeword are equal. However, for higher SNRS, we observed 7% loss in two codeword MIMO compared to the four codeword MIMO. This is expected as for rank 3 and rank 4 transmissions, these two structures are different and the CQI for each codeword is controlled by the weaker layer SINR within the codeword.
+
+[FIG:1eedf8a775124c4631b6]
+
+Figure 2 Spectral efficiency comparison for two codeword and four codeword MIMO
+
+Figure 3 shows the spectral efficiency comparison with three codeword MIMO with four codeword MIMO. In this case, the performance is almost equal to that of four codeword MIMO. The loss is very minimal at high SNR and is around 2 %. This is expected as the probability of rank is equal to 4 occurs only at high SNRs.
+
+[FIG:94dfef1bf61f465e310b]
+
+Figure 3 Spectral efficiency comparison for three codeword and four codeword MIMO
+
+Figure 4 shows the percentage of loss compared to the four codeword MIMO ate low (0 dB), medium (10 dB) and High SNR (25 dB). It can be observed that with single codeword MIMO, the loss is significant at medium and high SNRS and is around 20% while with two codeword, the loss is significantly reduced to 7%. Hence we recommend minimum two codewords for more than 1 layer transmission in NR MIMO.
+
+[FIG:5cc441c1fceb0ed25080]
+
+Figure 4 Percentage of loss in spectral efficiency with four codeword MIMO
+
+Proposal 1: In NR the number of CWs for transmission rank > 1 shall be configurable.
+
+Simulation Results with 2 Antenna Ports
+
+Figure 5 shows performance of single codeword with two codeword when the number of antenna ports is equal to 2. In this case the performance of single codeword is equal to that of two codeword MIMO ate low to medium SNRs. However, there is a significant loss at high SNR due to rank 2 transmission at high SNR. As shown in Figure 6, the loss is around 13 % at high SNR of 25 dB.
+
+[FIG:204ab585b9c9ef5d7d42]
+
+Figure 5 Spectral efficiency comparison for two codeword and single codeword MIMO with 2 antenna ports
+
+[FIG:ca624344996d7848a14b]
+
+Figure 6 Percentage of loss in spectral efficiency with single codeword MIMO for 2 antenna ports
+
+Simulation Results with Rank Restriction
+
+For analysing the benefits of single codeword and two codewords for lower rank transmission, we used rank restriction for 4 antenna ports. We limited the number of layers to either 1 or 2. Figure 7 shows the performance of single codeword with two codeword MIMO. In this case, similar to the2 antenna port, we observed a significant loss at medium and high SNRs. The loss is around 9% at medium to high SNR. [FIG:7d40e5993a94a7205c66]
+
+Figure 7 Spectral efficiency comparison for two codeword and single codeword MIMO with rank restriction
+
+SNR Distribution with Four Antenna Ports
+
+For analysing the benefits of multi codeword MIMO, we plotted the delta SNR defined as the difference between the maximum per layer SNR and minimum per layer SNR for 4 transmit antenna ports. Figure 8 shows the percentage of delta SNRs at h25 dB SNR when the UE reported rank is equal to 4. It can be observed from Figure that around 25 % of the time the SNR difference is more than 12 % which corresponds to difference of 6 CQI indices if we use the LTE CQI mapping table. If we use the single codeword MIMO, we need to use the minimum CQI for reporting. Hence there is a significant loss if we use the single codeword MIMO. Similarly for 2 antenna port, we observed that around 95 % of the time two codeword MIMO is beneficial over single codeword MIMO when the UE reported rank is equal to 2.
+
+[FIG:9c33606f97b77601faf3]
+
+Figure 8 Distribution of Delta SNR at high SNR of 25 dB with 4 antenna ports
+
+Configurable number of Codewords for NR
+
+It can be observed from simulations that multi codeword MIMO is beneficial even though slight increase in the control channel overhead. However in our view fixing the number of codewords to single value is inefficient as the UE might be reporting the same CQI for each codeword even though the layers have different signal noise ratios. In that case, the network should have the flexibility to reduce the number of codewords. Similarly, the network should have the flexibility to configure more number of codewords. For example, at low and medium SNRs, the network can configure the UE to have less number of codewords and at high SNRs, the network can configure the UE have more number of codewords.
+
+Hence we propose that the network should support either dynamically or semi statically configure the number of codewords.
+
+Proposal 2: The network should be able to support flexible number of codewords per each transmitted rank either dynamically or by the use of RRC signaling
+
+Since the UE estimates the channel and is in a better position to determine the number of codewords, we suggest the UE should indicate the number of codewords as part of CSI transmission. Similar to the scheduling parameters such as transmission rank etc, the network can choose different number of codewords compared to the UE recommendation, see [1] for detail reporting. We believe transmitting the have the number of codewords similar to CSI have huge benefits to the MIMO system, as the number of codewords are also adapted according to the channel conditions.
+
+Proposal 3: UE should recommend the number of codewords as part of CSI feedback
+
+Another important use case is the switching between single TRP and multi-TRP transmission. Allow different TRP with different codewords can significantly reduce the amount of data to be carried by the backhaul transport. Therefore, it’s likely that the required number of codewords is different between single TRP or multi-TRP transmission. In order to support seamless switch between those two cases, UE should be able to recommend the number of codewords associated with the single TRP or multi-TRP cases.
+
+Proposal 4: The UE recommendation of number of codewords should be based on the hypothesis of single or multiple TRPs.
+
+Conclusions
+
+In this contribution we outlined our views on the number of codewords with simulation results. Based on our observations we recommend
+
+Proposal 1: In NR the number of CWs for transmission rank > 1 shall be configurable.
+
+Proposal 2: The network should be able to support flexible number of codewords per each transmitted rank either dynamically or by the use of RRC signaling
+
+Proposal 3: Proposal 3: UE should recommend the number of codewords as part of CSI feedback
+
+Proposal 4: The UE recommendation of number of codewords should be based on the hypothesis of single or multiple TRPs.
+
+Reference
+
+[1] R1-1700320 UE Assisted UCI Format Selection for NR, AT&T

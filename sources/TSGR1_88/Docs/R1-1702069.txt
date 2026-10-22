@@ -1,0 +1,109 @@
+3GPP TSG RAN WG1 #88 R1-1702069
+
+Athens, Greece 13th - 17th February 2017
+
+Source: CATT
+
+Title: On codeword-to-layer mapping
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In 3GPP RAN1 #86bis, it was agreed that [1]:
+
+At least 8 orthogonal DL DMRS ports is supported for SU-MIMO schedulingAt least 8 orthogonal DL DMRS ports is supported for MU-MIMO scheduling
+
+In 3GPP RAN1#87 meetings, the following agreements on number of codeword(s) for NR have been reached [2]:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and ULFor 1-2 MIMO layers – FFS between 1 codeword and 2 codewordsFor 3-8 MIMO layers FFS amongAlt 1: 1 codewordAlt 2: 2 codewordsAlt 3: >= 3 codewordsStudy the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.Study possible use of different modulations in single codewordStudy the possibility of configurable number of codewords per UE by NW
+
+Based on the agreements listed above, it’s concluded that [3]:
+
+RAN1 will down select among the followings and select one alternative in the next meetingAlt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution, we present our consideration on supported number of codeword(s) and codeword-to-layer mapping for coherent MIMO in NR. The mapping schemes for non-coherent MIMO are discussed in one of our company’s contributions [4].
+
+Discussion on codeword-to-layer mapping for NR
+
+General consideration on the number of codeword
+
+As discussed above, multi-codeword transmission offers the flexibility of adapting MCS to the capacity of each sub-channel, and therefore maximizing the spectral efficiency. Another important motivation of using more than one codeword in transmission is to enhance receive performance through codeword-level interference cancellation. However, from perspectives of both link adaptation and SIC receiver, the existence of multiple MCS-adjustable codewords is meaningful to performance enhancement only if the MIMO sub-channels have substantial difference to each other in term of transmission qualities.
+
+However, for dual-polarization and small-spacing antenna array being assumed throughout MIMO discussion, the two layers in rank-2 transmission usually use the same long-term/wideband beam on different polarizations respectively. And therefore, they are most likely to share quite similar channel qualities. For higher order transmissions, with richer near-field scattering around transmitter and receiver, and possibly distinct long-term/wideband beam for each layer, the differences in channel quality between layers are expected to be larger. Thereby, multi-codeword transmission and SIC receiver might be capable of achieving remarkable gain.
+
+Whereas, as the number of codeword could be as many as that of layers, the overhead for MCS indication, ACK/NACK and possibly subband CQI reporting for each codeword are inevitable in multi-codeword transmission. In addition, detection delay inherent with serial interference cancellation framework also makes it unsuitable for latency-sensitive service and self-contained subframe in NR. In such case, IRC or ML-like receivers could be considered instead of SIC.
+
+Proposal 1: for coherent MIMO, taking flexibility, control/feedback overhead, complexity and performance into account, up to 2 MCS-adjustable codewords can be supported.
+
+Proposal 2: single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers is preferred.
+
+Proposal 3: for more than 2 layers, support configurable number of CWs.
+
+Layer mapping
+
+Depending on detailed transmission scheme design, codeword-to-layer mapping could be different.
+
+For single-layer transmission, such as single-stream beamforming, CDD, co-phasing cycling, etc., 1-to-1 mapping seems to be the only choice.
+
+For transmit diversity schemes like SFBC or SFBC+FSTD, the codeword-to-layer mapping similar to LTE could be re-used. That is, mapping from one codeword to v layers. Wherein, the value v is the number of virtual antenna ports involved in transmission. For example, v=2 for SFBC, while v=4 for SFBC+FSTD.
+
+For close-loop spatial multiplexing, up to 2 codewords can be supported. The examples of both single-codeword and double-codeword mappings are shown in Fig. 1.
+
+Examples shown in Fig. 2 apply to open-loop/semi-open-loop as well. In addition to those, if 2 codewords can be supported, the mapping could be shifted at RE or symbol-level according to a predefined pattern to obtain additional spatial diversity gain. Furthermore, the qualities of equivalent channel for the 2 codewords could also be balanced. Therefore, CQI feedback for single codeword only would be possible.
+
+[FIG:e701a4f79bebfcbcf953]
+
+Figure 1. Examples of layer mapping for spatial multiplexing
+
+[FIG:c32f3c134b7f01429e87]
+
+Figure 2. Examples of layer mapping for open-loop/semi-open-loop spatial multiplexing
+
+Proposal 4: for transmit diversity schemes like SFBC or SFBC+FSTD, the codeword-to-layer mapping similar to LTE could be re-used.
+
+Proposal 5: for open-loop or semi-open-loop, if 2 codewords can be supported, the mapping could be shifted at RE or symbol-level according to a predefined pattern to obtain additional spatial diversity gain.
+
+Configurable number of codeword
+
+As discussed in the previous sections, with single-codeword transmission, the system could benefit from lower overhead in control and feedback. Lower-latency detection is a promising feature of single-codeword transmission as well. On the other hand, double-codeword offers more flexibility in adaptively optimizing transmission. In [2], it was proposed to study possible use of different modulations in single codeword. The idea behind this approach is to reap the gain with adaptive modulation similar to double or multi-codeword transmissions while keep the overhead as low as possible. However, if modulation order indication and feedback are needed for each layer, the overall benefit to system would be questionable.
+
+Actually, all the efforts in feedback and transmission is to try to adapt signal to the channel and noise plus interference seen by the receiver. Meanwhile, details in the implementation of MIMO receiver are of great important in selecting suitable parameters of transmission, which might not be well reflected in CQI/PMI/RI and ACK/NACK feedback. As an alternative, the number of codeword could also be recommended by the receiver in addition to CSI and HARQ information to facilitate the adaptive configuration of transmission.
+
+Potential solutions to support configurable number of codeword(s) are listed as follows:
+
+Alt-1: UE reports its capability including supported number of codeword.
+
+Alt-2: UE reports its capability including supported number of codeword. According to network configuration, UE reports multiple sets of CSI based on different hypothesis with respect to the number of codeword.
+
+Alt-3: Based on network configuration and DL measurement, UE reports the recommended number of codeword and corresponding CSI.
+
+Proposal 6: consider the alternatives elaborated in section 2.3 for configurable number of codeword.
+
+Conclusions
+
+In this contribution, we discussed the number of codeword(s) and codeword-to-layer mapping in NR. Based on the discussion above, we propose:
+
+Proposal 1: for coherent MIMO, taking flexibility, control/feedback overhead, complexity and performance into account, up to 2 MCS-adjustable codewords can be supported.
+
+Proposal 2: single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers is preferred.
+
+Proposal 3: for more than 2 layers, support configurability regarding the number of CWs.
+
+Proposal 4: for transmit diversity schemes like SFBC or SFBC+FSTD, the codeword-to-layer mapping similar to LTE could be re-used.
+
+Proposal 5: for open-loop or semi-open-loop, if 2 codewords can be supported, the mapping could be shifted at RE or symbol-level according to a predefined pattern to obtain additional spatial diversity gain.
+
+Proposal 6: consider the alternatives elaborated in section 2.3 for configurable number of codeword.
+
+References
+
+RAN1 #86bis Chairman’s Notes.
+
+RAN1 #87 Chairman’s Notes.
+
+RAN1 AH NR Meeting Chairman’s Notes.
+
+R1-1702071, “Discussion on multi-panel/multi-TRP transmission”, CATT.

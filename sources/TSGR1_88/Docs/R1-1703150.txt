@@ -1,0 +1,194 @@
+3GPP TSG RAN WG1#88 R1-1703150
+
+Athens, Greece, 13th - 17th February, 2017
+
+Agenda item: 8.1.2.1.1
+
+Source: Nokia, Alcatel-Lucent Shanghai Bell
+
+Title: On the number of codewords in NR
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+During 3GPP RAN1#87 it has been agreed to investigate the amount of codewords needed to be supported in NR:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+During the RAN1 ah-hoc meeting, the following agreement for made:
+
+RAN1 will down select among followings and select one alternative in the next meeting
+
+Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers
+
+One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields
+
+FFS: the number of CQIs and MCS fields in DCI
+
+FFS: number of CWs for 3 and more layers
+
+Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers
+
+Alt. 3: NR supports 2 CWs for 2 layers
+
+In this contribution we address the above issues from the single and multi-point perspective.
+
+2 Discussion
+
+Before starting the discussion, it is important to set the requirements the NR CW2layer design needs to meet:
+
+Single TRP
+
+A point can transmit from 1 to 8 layers
+
+A point may use two codewords for high amount of layers
+
+Multi TRP requirements
+
+Ideal and non-ideal backhaul should be supported
+
+Centralized and independent scheduler should be supported
+
+PDCCH decoding complexity
+
+UL feedback overhead
+
+The following options for CW2layer mapping have been discussed:
+
+A1 One CW mapped to all layers, single PDSCH on all TRPs
+
+A2 One CW mapped to all layers, per TRP PDSCH
+
+B One CW mapped to up to 2 layers, 2 CWs mapped to 3-8 layers
+
+C One CW mapped to up to 8 layers, 2 CWs mapped to 8 layers (a hybrid of above)
+
+The scenarios we use in the analysis are single TRP, multi TRP
+
+Table 1: Potential solutions for CW2layer mapping schemes
+
+A1 | [FIG:7d61c03ad1aa64f32b8c] [FIG:bca1907cb150acdb1c3f] | [FIG:78a73c7e6fa78dacc94d] | [FIG:966a46d32a42ed844f44]
+A2 | [FIG:7edc5a066562bdaabebc] [FIG:2347cf2d3d8bf27b9559] | [FIG:88d323ff38c953e2f3a3] | [FIG:d5ac4d0e7832214f8a25]
+B | [FIG:4e59d6610d15cc167aa4] [FIG:c5715d8c40ca88d20f71] | [FIG:10e0c06d179b59dd8fbe] [FIG:fcdf6b4c3bd0e9be998e] | [FIG:c6ebd0b07be3482980e9]
+
+Table 2: Applicability of schemes w.r.t requirements
+
+| Non-ideal backhaul | Non-centralized scheduler | PDCCH decoding complexity | UL connectivity | UL overhead | System performance
+A1 | inefficient | inefficient | Low | One UL | Low | Inefficient
+A2 | efficient | efficient | Increases with TRPs1 | Increases with TRPs2 | Increases with TRPs3 | Efficient
+B | Inefficient4 | Inefficient4 | Not more than LTE | Not more than LTE | Not more than LTE | Depends on scenario5
+
+1 not more than LTE for 2TRPs
+
+2 may be optimized with a single UL
+
+3 per TRP link adaptation implies per TRP feedback
+
+4 needs a form of layer grouping
+
+5 for 2 TRPs the performance is similar to scheme A2
+
+As can be seen from the summary in Table 2, each solution has its own trade-offs depending on the applicability. It is worth to notice that the distributed MIMO transmission is the complex scenario which needs to be covered by a flexible CW2layer mapping scheme.
+
+Multi-TRP operation
+
+In multi TRP operation, the above schemes are exhibiting the following characteristics:
+
+A1. Single CW per a single PDSCH from multiple TRPs:
+
+- limits the link adaptation and it is problematic in non-ideal backhaul and non-centralized scheduler
+
+- has low UL feedback
+
+A2. Single CW per single PDSCH per TRP:
+
+- flexible link adaptation
+
+- fits non-ideal backhaul and distributed scheduler
+
+- needs per PDSCH control channel and increased PDCCH complexity
+
+- has UL overhead per TRP. Note that the attempt of having a single UL would diminish the flexibility in distributed scheduler/non-ideal backhaul as the single UL needs to be further processed across the TRPs.
+
+- needs UE capability discussion
+
+B. Dual CW per single PDSCH, for more than 2 layers
+
+- flexible link adaptation for up to 2 TRPs, also LTE-like operation for single TRP
+
+- for more than 2 TRPs it needs a form of layer grouping, hence problematic for distributed scheduler and non-ideal backhaul
+
+In the above short analysis we see that an important point is the amount of TRPs used in dMIMO/CoMP. For up to 2 TRPs, there are great similarities between SCWperLayer and MCWperLayer. In Figure 1 we present statistics for the number of TRPs abaialble in 10 dB window in indoor and UMi scenarios. In indoor scenario it is known that there is no dominant interferer and a set of TRPs has similar transmission power, hence more than 2 serving TRPs are a valid scenario. On the other hand, multiple TRPs transmission in dMIMO are likely implying the simultaneous reception with more than 2 panels at the UE, something which is perhaps beyond the scope of the Phase I NR.
+
+[FIG:023f3d98ea45406612ed] [FIG:346094b63a09a8f8aa25]
+
+Figure 1: Number of TRPs in 10 dB window
+
+Observations:
+
+A single codeword mapped to multiple TRPs (scheme A1) is likely not to allow a flexible link adaptation.
+
+Per PDSCH CW scales flexibly with the amount of TRP and is versatile in any NW scheduler/backhaul configuration.
+
+Per PDSCH CW, for 2 CWs, is reaching the LTE dual connectivity complexity.
+
+Even if the SCW per PDSCH seems like a good solution, the possibility of layer grouping in order to allow the transmission of less DCIs than codewords, should be further considered. The scalability of SCWperPDSCH scheme becomes impractical for larger amount of TRP where the UE complexity can be rather high.
+
+Proposal: Consider the layer grouping as an additional option to SCW per PDSCH.
+
+3 System performance
+
+In this section, we present system performance for NCJT operating in indoor and 3D Urban Micro scenarios with bursty traffic having low RU in 3D UMi and low and high in other scenarios. Assuming 2Tx APs and 4Rx UEs, the maximal transmission rank per UE is up to 4. For NCJT, the maximal transmission rank per TP per CW for CoMP UE is restricted to 2. For CSI feedback, wideband CSI per TP is assumed. The bandwidth allocation of two CWs is assumed perfectly aligned for the UE. Both MMSE-IRC and CWIC receivers are considered here. The CoMP coordination. threshold was 10 dB.
+
+We have been focusing on the designs described in Table 1. In addition, for the case of different codewords, we have consider both linear and non-linear receivers. In a first setup we have considered that same codeword is used for both TRPs and different data layers are transmitted. In a second setup we have considered per TRP codeword and that same information is transmitted, this adding to the link robustness which can be used for URLLC. The case of different streams from different points was considered with non-linear receivers (CWIC).
+
+Multiple codewords are providing mean gains in indoor and low load 3D UMi scenarios. On the other hand there are not gains in cell edge, this being explained by the fact that rank 1 is mainly utilized on this occasion, and hence multiple CWs cannot help. In the indoor scenario we observe that gains from one or two codewords are not for both mean and cell edge, hence the system could be further tunes to balance the mean/cell edge operation. If the choice would be for a system operating with 1 CW, there seems not critical gains which could be missed. Certainly there are situations where more than one codeword may be beneficial, but these could be compensated by more aggressive 1 CW link adaptation.
+
+[FIG:56ee963f6b878021e6f7] [FIG:5b061452d88e97623fa2]
+
+Figure 2: multi-point system level simulation, indoor and 3D UMi environments.
+
+4 Conclusions
+
+In this contribution we have been analysing the number of codewords needed in NR operation. The following proposals are summarized:
+
+Proposal: Consider the layer grouping as an additional option to SCW per PDSCH.
+
+References
+
+[1] R1-1611973, “On codeword to MIMO layer mapping”, Intel Corporation
+
+[2] R1-1612318, “On codewords and layer mapping”, Ericsson
+
+[3] R1-1612738, “CW to layer mapping”, Qualcomm Incorporated
+
+A Appendix
+
+Table 3: SLS Results for non-coherent JT Case 1 in indoor and 3D UMi scenarios
+
+DL MIMO Configuration | DL CoMP Configuration | FeedbackConfiguration | UE Receiver | Mean UE Tput (Mbps)Cell Edge UE Tput (Kbps)
+ |  |  |  | Indoor | load | 3D UMi | load | 3D UMi | load
+SU-MIMO BASELINE2X4 | N/A(Single Cell Scheduling) | LTE 2TX CBOOKWB CQI, PMI, RIMax rank = 2 | 4RX MMSE | 27.0 | 38%5140 | 51.4 | 14%17.5 | 25.2 | 57%4420
+Non-coherent JT(single CWs and different layers from the TRPs)2x4 or 4x4 | 1 or 2 strongest TPs per UE | Per TPLTE 2TX PMI, RIMax rank = 2WB CQI |  | 31.9 | 45%5810 | 53.2 | 17%18.2 | 28.6 | 59%5000
+Non-coherent JT(same streams from both TPs)2x4 or 4x4 | 1 or 2 strongest TPs per UE | Per TPLTE 2TX PMIJointWB CQI, RIMax rank = 2 |  | 27.0 | 45%5480 | 52.4 | 17%18.2 | 28.6 | 59%5000
+Non-coherent JT(different streams from each TP)2x4 or 4x4 | 1 or 2 strongest TPs per UE | Per TPLTE 2TX CBOOKWB CQI, PMI, RIMax rank = 2(Weaker CQI assumes cancellation of the stronger TP) |  | 34.2 | 44%5660 | 55.8 | 17%17.5 | 28.4 | 61%4700
+ |  |  | 4RX CWIC |  |  |

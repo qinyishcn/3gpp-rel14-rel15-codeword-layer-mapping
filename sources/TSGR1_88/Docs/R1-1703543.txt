@@ -1,0 +1,5 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1703543 Athens, Greece, 13th-17th February 2017 Agenda item: 8.1.2.1.1 WF on codeword-to-layer mapping Huawei, HiSilicon , AT&T, MediaTek , IITH,CEWIT , Tejas Networks, IITM, Sharp Corporation, Sony, ZTE, ZTE Microelectronics, CATR, Xinwei , LGE, AltioStar 1
+
+2 RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers One UL- or DL-related DCI includes one HARQ-related (NDI and RV) fields FFS: the number of CQIs and MCS fields in DCI FFS: number of CWs for 3 and more layers Alt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layers Alt. 3: NR supports 2 CWs for 2 layers Background
+
+3 Support the following aspects for codeword-to-layer mapping For 2 layers, 2 CWs are at least supported For x (3<=x<=8) layers, FFS: two or more than 2 Proposals

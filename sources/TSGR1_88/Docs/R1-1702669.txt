@@ -1,0 +1,140 @@
+3GPP TSG-RAN WG1 #88 R1-1702669
+
+Athens, Greece, 13th – 17th February, 2017
+
+Source: Ericsson
+
+Title: About the number of codewords
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#NR-Adhoc, the following agreement was made:
+
+Agreements:RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layersAgreements:RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layers
+
+Simulation results
+
+In order to evaluate the performance impact of the number of CWs and the three alternatives listed in the agreement from last meeting, we have evaluated a set of SU-MIMO transmission schemes using a 32 port BS antenna with (M,N,P,Mg,Ng) = (8,4,2,1,1) for the 3D UMi scenario.
+
+The evaluations where made using UEs with antenna configurations (M,N,P,Mg,Ng) = (1,n,2,1,1) with n=1, 2 or 4. Hence, this results in a maximum of 2,4 or 8 MIMO layers respectively. The following schemes were considered:
+
+One CW is used for all MIMO layers (Alt.1)
+
+Max two CWs are used for all MIMO layers (Alt.3, as in LTE)
+
+One CW per MIMO layer (Alt.3, but with extension for >2 layers)
+
+In Scheme 1, a single CQI and MCS is used, irrespectively of the rank. In scheme 2, one MCS and one CQI was used per group of layers and at most two CQI/MCS, just as in LTE. In scheme 3, one CQI and MCS per layer was used.
+
+Simulation assumptions are presented in Appendix and results are presented in Tables 1-3.
+
+Table 1. Performance numbers using a 2 RX UE, hence (M,N,P,Mg,Ng) = (1,1,2,1,1).
+
+RU | Metric | 1 CW for all layers | Max 2 CWs for all layers (LTE) [%]
+20 % | Cell edge gain [%] | 0 | -4
+ | Normalized user throughput gain [%] | 0 | -5
+50 % | Cell edge gain [%] | 0 | -11
+ | Normalized user throughput gain [%] | 0 | -4
+
+As can be seen in table 1, there is a loss in performance when using 2 CW instead of 1 CW for 2 layer transmission.
+
+Alt.1 (One CW for all MIMO layers) shows best performance for 2 RX UE in UMi
+
+For 4 and 8 RX UE, the comparisons are shown in the tables below.
+
+Table 2. Performance numbers using a 4 RX UE, hence (M,N,P,Mg,Ng) = (1,2,2,1,1).
+
+RU | Metric | 1 CW for all layers | Max 2 CWs for all layers (LTE) [%] | 1 CW per layer [%]
+20 % | Cell edge gain [%] | 0 | -1 | -7
+ | Normalized user throughput gain [%] | 0 | -1 | -3
+50 % | Cell edge gain [%] | 0 | -8 | -11
+ | Normalized user throughput gain [%] | 0 | -5 | -7
+
+Table 3. Performance numbers using a 8 RX UE, hence (M,N,P,Mg,Ng) = (1,4,2,1,1).
+
+RU | Metric | 1 CW for all layers | Max 2 CWs for all layers (LTE) [%] | 1 CW per layer [%]
+20 % | Cell edge gain [%] | 0 | 1 | -13
+ | Normalized user throughput gain [%] | 0 | 0 | -7
+50 % | Cell edge gain [%] | 0 | -8 | -31
+ | Normalized user throughput gain [%] | 0 | -3 | -15
+
+Based on the presented results, we observe that using a single CW provides slightly better performance than using multiple CWs. This is due to a diversity gain and more robust CSI which in turn results in a more stable link adaptation. Based on these results we further expect performance gains only in particular situations, like for instance D-MIMO, from using more than one CWs.
+
+From performance perspective, for 1-2 layers transmission, it is desired to use a single CW for both initial and retransmissions in DL since the additional overhead from multiple CWs is not motivated by any performance gains.
+
+Note that it does not make sense to split a rank 2 transmission with one layer per TRP across two TRPs since dual polarized antennas at TRP is most likely to be used and both polarization from the same TRP have a strong link (e.g. LOS) to the UE.
+
+Further discussion
+
+One of the motivations for supporting two codewords per PDSCH is that codeword-IC type approaches can be used at the UE receiver. In a serial version of this type of receiver (SIC), the first codeword is decoded, and then the soft values at the output of the decoder are used to regenerate the received samples on the layer(s) corresponding to the first codeword. The regenerated signal(s) (inter-layer interference) are then subtracted from the received samples prior to decoding the second codeword. Having two codewords allows for more effective interference cancellation than if only a single codeword was used. This is true since the signal regeneration can be based on decoder output soft values for rather than be constrained to decoder input soft values which are less reliable.
+
+Ideally, if SIC receivers are used at the UE, then the per-codeword rates should be selected to account for the interference cancellation achieved at the UE. This typically results in different code rates for each codeword, with the larger rate typically corresponding to the 2nd codeword. The trade-off is that the UE feedback (CQI and HARQ ACK/NACK) is doubled compared to the case of a single-codeword. The downlink control information (DCI) associated with the scheduled modulation and coding scheme (MCS) for the two codewords is also twice that for a single-codeword.
+
+In LTE, for the case of 2 codewords, the UE feedback overhead (CQI, HARQ ACK/NACK) and downlink control information (modulation, transport block size) is double that for a single codeword.
+
+For NR, these design choices made for LTE must be revisited since at least two aspects of NR are different from LTE:
+
+Potentially shorter transmission durations (slots, minislots)
+
+Potentially shorter HARQ ACK/NACK turnaround times
+
+The former occurs for the case of subcarrier spacings larger than 15 kHz (as in LTE) in the introduction of slot as the scheduling unit and also the mini-slot for low latency, and the latter occurs for the case when the UE is configured to provide an ACK/NACK in the same slot as the data (for TDD systems). This puts a burden on the UE in terms of processing demands which may anyway preclude the use of codeword-IC approaches.
+
+In NR, codeword-IC receivers at the UE may not be practical due to the short slots/mini-slots and fast HARQ ACK/NACK turnaround times.
+
+Due to these constraints, IRC or ML/Reduced Complexity ML receivers are likely candidates for implementation. In both cases, the benefits of being able to separately control the rate on multiple codewords are questionable. Moreover, for 1-2 layer transmission, in most scenarios the two polarizations are utilized, for example in a dual polarized beam and since the UE has multiple receive antennas our basic assumption is that the SINR of the two layers will be very similar. Therefore it is worth considering a single CW for both initial and retransmissions in DL.
+
+In UL, the polarizations of a 2 TXRU UE is even more entangled than in the DL, due to the more UE complicated form factor and antenna element placements, hence it is expected also in UL that the two layers are very similar in receive SINR and the use of per layer code word is not well motivated. Taking into account the performance figures in Umi from the previous section, we reach the following proposal:
+
+Support Alt.1, only a single codeword is used for PUSCH and PDSCH for 1-2 layers
+
+For 3-8 MIMO layers, there may be situations where more than one TRP is involved in the transmission and the SINR per layer is significantly different, such as the distributed MIMO (D-MIMO) case where some layers are transmitted/received at TRP#1 and the remaining layers at TRP#2. Note that RAN1 has made an agreement to support the case when not all DMRS ports are QCL, which targets the D-MIMO use case.
+
+For the multi-TRP case, there is an option to use multiple scheduled PDSCH to the same UE, and potentially independent scheduling control on each PDSCH. This may also allow for an opportunity to relax the inter baseband latency/bandwidth requirements between TRPs. Multiple PDSCH scheduling is also be considered for operation in very wide bandwidths, to parallelize the decoding, hence this something that may be supported in NR anyway (and is supported in carrier aggregation for LTE).
+
+A single codeword per PDSCH is sufficient to enable D-MIMO since multiple PDSCHs can be used
+
+Hence, we propose
+
+Support a single codeword for PUSCH and PDSCH for 3-8 layers
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 Support Alt.1, only a single codeword is used for PUSCH and PDSCH for 1-2 layers
+
+Proposal 2 Support a single codeword for PUSCH and PDSCH for 3-8 layers
+
+Appendix
+
+Simulation parameters
+
+Simulation Parameters
+Carrier frequency | 2 GHz
+Bandwidth | 10 MHz
+Scenarios | 3D UMi 200m ISD
+BS antenna configuration | (M,N,P,Mg,Ng) = (8,4,2,1,1) with 2x1 virt., (130° tilt)
+UE antenna configuration | (M,N,P,Mg,Ng) = (1,n,2,1,1) with n=1, 2 or 4
+Cell layout | 57 homogeneous cells
+Wrapping | Radio distance based
+UE receiver | MMSE
+CSI periodicity | 5 ms
+CSI delay | 5 ms
+CSI mode | PUSCH Mode 3-2
+Outer loop Link Adaptation | Yes, 10% BLER target
+UE noise figure | 9 dB
+BS Tx power | 41 dBm (UMi)
+Traffic model | FTP Model 1, 500 kB packet size
+UE speed | 3 km/h
+Scheduling | Proportional fair in time and frequency
+DMRS overhead | Overhead accounted for.
+CSI-RS | Overhead accounted for. Channel estimation error modeled.
+HARQ | Max 5 retransmissions
+Antenna spacing | 0.8 lambda in vertical, 0.5 lambda in horizontal
+Handover margin | 3 dB
+Transmission Mode | TM10, with non-shifted CRS

@@ -1,0 +1,304 @@
+3GPP TSG RAN WG1 Meeting #88bis R1-1704390
+
+Spokane, USA, 3rd - 7th April 2017
+
+Source: ZTE, ZTE Microelectronics
+
+Title: Codeword to layer mapping and interleaving
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#88 meeting [1], the following agreements and working assumption have been achieved:
+
+Agreements:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 2-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+FFS for 3 & 4-layer transmissions – revisit today
+
+Working assumption:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):
+
+For 3 and 4-layer transmission: 1 CW
+
+FFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)
+
+Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+Agreements:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+Moreover, the following agreements on data mapping are also made:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+Considering the above progress, more details on codeword to layer mapping and interleaving are discussed.
+
+CW number for 3&4 layer transmission
+
+In LTE system, 2 codewords is supported for MIMO scheme with rank (rank > 1) due to performance gain. Fixed CW-to-layer mapping (e.g. 2-to-3 and 2-to-4 mapping) as well as per-CW HARQ is supported. Considering the application of NR at lower frequency, similar rich-scattering channel would be experienced in some scenarios. It is expected similar gain can be obtained from supporting multiple codewords in NR.
+
+In general, whether to use single codeword (SCW) or multiple codeword (MCW) has impact at least on the following two different standardization aspects.
+
+CSI feedback – If only SCW is supported, CSI feedback is performed based on single codeword assumption. If we follow the LTE approach of feeding back one CQI per codeword, it means only one CQI is available in CSI feedback for multi-layer transmission.
+
+HARQ – HARQ ACK/NACK feedback is performed per codeword. Link adaptation per codeword can also be done by using OLLA. If it is two layers only, OLLA can be done per layer in case of MCW. Single codeword means only one set of OLLA can be done. Also, retransmission is done per codeword. In case of SCW, it means data associated with layer(s) with good quality is forced to be re-transmitted. It can potentially reduce overall system efficiency.
+
+Benefits of multiple codewords (MCW)
+
+To be more specific, MCW is beneficial in the following aspects considering single TRP and multi-TRP transmission:
+
+Single TRP transmission:
+
+In rich scattering scenarios, higher rank is due to channel links coming from multi-path. The layers have different contribution from multi-path with different link quality. Even the different interference are experienced for transmission with different polarization.
+
+Antennas may not always be dual polarized in real network. Even it is dual polarized, different polarization may come from different panels in HF system. They may use different beams on different polarization and hence is likely to have different link quality.
+
+For MU-MIMO, it is well known that CSI accuracy requirement is higher than SU-MIMO. It is desirable to have more accurate CQI information (resembling amplitude information) on each layer so that MU pairing algorithm e.g. ZF, BD can be performed more accurately. The per-layer information is also beneficial to transmission with reduced rank which helps the network to decide which layer to pick and which MCS is used after rank reduction. After MU-pairing, different layers can experience different MU interference. Restricting multi-layer to use the same MCS would hurt MU performance. Particularly when channel reciprocity is available, link adaptation accuracy can be improved with MCW.
+
+MCW also favours use of successive interference cancellation. Regardless it is codeword level or symbol level SIC, SIC is beneficial to the cases when multiple layers have different qualities. If only SCW is supported, it implies the UE needs to have different receiver architecture for doing interference cancellation due to SU-MIMO inter-layer interference or MUST/MU-MIMO type interference in the same cell.
+
+Multi-TRP/panel transmission:
+
+For multi-TRP/panel transmission including schemes like non-coherent JT or frequency selective DPS, different layers can experience different link quality. In multi-panel system, different panel pairs experience different interference. MCW clearly provides the advantage of flexible link adaptation. Dense TRPs especially for HF often results in LoS with high probability and hence limits the degree of freedom (e.g., up to 2) if only single TPR is considered. Consequently, it is expected spatial multiplexing would be better supported via multi-TRP transmission to achieve higher degree of freedom and hence facilitate higher rank transmission. Therefore, multi-TRP/panel transmission is important scenario. MCW also favours use of successive interference cancellation for the case of non-coherent JT [2].
+
+SCW has certain benefits when the link qualities of multiple layers are similar. It reduces CSI and HARQ feedback overhead and control signaling overhead. However, the overhead may not always be an issue e.g. when UL overhead is not limited. Further we can optimize the control signaling overhead e.g. based on the transmission setting framework [3].
+
+Multiple codewords with multiple PDSCH/PUSCH assignments:
+
+Considering the working assumption described in Section 1, single CW is supported per PDSCH/PUSCH assignment. It implies that it requires multiple PDSCH assignments to support multi-TRP/Panel transmission. This requires an UE to detect multiple PDCCHs which unnecessarily complicates the UE design. Also, joint optimization (e.g. on control signaling or CSI feedback) becomes more difficult as multiple PDSCH/PUSCH assignment is more suitable to the case where multiple transmissions are independent to each other e.g. when non-ideal backhaul is assumed. If ideal or fast backhaul is available, MCW allows more optimized performance with lower signaling overhead. In addition, it is not reasonable to require multiple PUSCH assignments for a multi-panel UE to transmit different beams to different TRPs.
+
+Based on the aforementioned analysis, the working assumption w.r.t to number of CWs for 3 and 4 layers should not be confirmed if 1 CW is the only option. Number of CWs should be configurable between 1 and 2 for 3 and 4 layer transmissions.
+
+Proposal 1: Number of CWs should be configurable between 1 and 2 for 3 and 4 layer transmission.
+
+.
+
+Discussion on the per-layer link adaptation
+
+It is observed from [4] that per-layer link adaptation is beneficial. It was proposed to support multiple modulation schemes in single codeword. The granularity of adaptation on modulation scheme only may be too coarse in such case but it can be used in combination with 2 codewords to further optimize per-layer adaptation in higher rank case. This can be used to adapt to different interference situations in one codeword which experiences frequency selective interference as described in [5].
+
+For evaluating the performance of per layer modulation, the simulations are conducted in both indoor hotspot and 3D-UMi scenarios. As shown in Figure 1, totally, eight TRPs are located in the indoor area with the corresponding ISD equal to 30m. For the simulation with SU-MIMO mode, FTP traffic model is adopted with different load and UEs are uniformly distributed in the area. The maximum two layers are supported in DL transmission.
+
+[FIG:58bebd24f17e5bcfd851]
+
+Figure 1 Topology for the indoor hotspot
+
+For MU-MIMO simulation in 3D-UMi, 10 UEs per cell is considered with full buffer traffic model. The MU paring is conducted between two UEs with maximum of 4 MU layers. Moreover, CQI calculation and HARQ per CW are supported in this simulation. The detailed configurations about the simulation can be found in Table 4 and Table 5 in appendix. In both scenarios, each UE is equipped with 2Rx so that the maximum rank per UE is 2.
+
+According to the above configurations, we compare the performance between 1CW with/without per-layer link adaptation. We first show the difference between two CQIs for rank 2 CSI feedbacks in Figure 2. The performance comparison in single TRP transmission scenarios is then shown in Table1-3 below.
+
+[FIG:78c51a9cd512e13397da]
+
+Figure 2 Distribution of delta SINR between two CQIs for rank 2 CSI per UE
+
+SU-MIMO
+
+Table 1 SU-MIMO in indoor hotspot scenario
+
+FTP load | Scheme | Mean UPT | 5% UPT | 50% UPT | 95% UPT | Real RU
+20% | Without per-layer link adaptation | 33.4558 | 8.4926 | 29.6296 | 56.338 | 0.2283
+ | With per-layer link adaptation | 35.3015 | 10.4712 | 33.6134 | 56.338 | 0.2165
+ | Gain | 5.52% | 23.30% | 13.45% | 0.00% | 
+50% | Without per-layer link adaptation | 18.504 | 2.7119 | 12.1212 | 51.2821 | 0.4874
+ | With per-layer link adaptation | 20.06 | 2.7952 | 12.7389 | 55.5556 | 0.4908
+ | Gain | 8.41% | 3.07% | 5.10% | 8.33% | 
+80% | Without per-layer link adaptation | 11.3895 | 0.9374 | 7.0922 | 36.036 | 0.7953
+ | With per-layer link adaptation | 12.3078 | 1.101 | 7.5901 | 38.0952 | 0.7907
+ | Gain | 8.06% | 17.45% | 7.02% | 5.71% |
+
+Table 2 SU-MIMO in UMi scenario
+
+FTP with lambda | Schemes | Mean UPT | 5% UPT | 50% UPT | Real RU
+2.6 | Without per-layer link adaptation | 41.4773 | 21.472 | 42.6909 | 0.2326
+ | With per-layer link adaptation | 43.0199 | 25.641 | 43.9656 | 0.2187
+ | Gain | 3.72% | 19.42% | 2.99% | 
+3.5 | Without per-layer link adaptation | 36.3854 | 16.9034 | 37.3544 | 0.3513
+ | With per-layer link adaptation | 38.502 | 20.7828 | 39.1288 | 0.3217
+ | Gain | 5.82% | 22.95% | 4.75% | 
+4.6 | Without per-layer link adaptation | 30.2777 | 9.321 | 29.907 | 0.5595
+ | With per-layer link adaptation | 33.6116 | 12.8127 | 34.2178 | 0.4847
+ | Gain | 11.01% | 37.46% | 14.41% | 
+5.6 | Without per-layer link adaptation | 25.4597 | 4.9936 | 24.8447 | 0.7383
+ | With per-layer link adaptation | 28.8539 | 7.7473 | 28.7988 | 0.6368
+ | Gain | 13.33% | 55.14% | 15.92% |
+
+MU-MIMO
+
+Table 3 MU-MIMO in UMi scenario
+
+Schemes | Average SE | 5% SE
+Without per-layer link adaptation | 5.5627 | 0.0948
+With per-layer link adaptation | 5.7274 | 0.125
+Gain | 2.96% | 31.90%
+
+Here are some observations from the results:
+
+In Figure 2, distribution of SINR difference between two layers observed at the UE side is shown. It can be observed that the difference is notable which proves that different CQIs should be assigned to different layers.
+
+From results shown in Table 1 and Table 2, significant performance gain can be found due to application of scheme with per-layer link adaptation. It verifies that in both scenarios, different channel conditions are experienced by each layer, even in the case of rank 2. Link adaption per layer can enhance the system performance by taking into account different channel qualities in different layers. Re-transmission for the layer with high quality is avoided.
+
+Huge gain can be observed from the cell edge performance in MU case according to Table 3. The optimized MU paring algorithm can be applied to paired UEs by TRP since more accurate channel information is obtained when per layer link adaption is adopted. Per layer MCS assignment is also conducted according to the experienced MU interference.
+
+Observation 1: In single TRP transmission case, significant performance gain of scheme with per layer adoption has been observed in both SU and MU-MIMO for indoor hotspot and 3D-UMi scenarios.
+
+Proposal 2: The per-layer link adaption should be supported in NR. One option is to use per-layer modulation schemes with the same coding rate.
+
+Symbol mapping and interleaving
+
+Considering the time consumption for the CB processing in NR, similar mapping scheme as current LTE for the modulated symbol is proposed [1]:
+
+The modulated symbol should be mapped across layer first, then across subcarriers and then across OFDM symbols
+
+However, comparing with the LTE, much larger bandwidth will be assigned for each UE. And if the aforementioned method is adopted, one CB could be mapped along the continuous frequency bandwidth within only one OFDM symbol, and the performance will degrade due to frequency selective and/or time-selective fading.
+
+To optimize the performance in this case, the following interleaving schemes, which can maximize the diversity gain, should be considered:
+
+Scheme 1 - Frequency domain interleaving: As illustrated in Figure 3 (left), with the data mapped following the order of layer->frequency->time, additional interleaving is done only in the frequency domain.
+
+Scheme 2 - Frequency & layer domain joint interleaving: As illustrated in Figure 3 (right), after the data mapped following the order of layer->frequency->time, additional interleaving is done jointly in frequency and spatial domain. This operation can also be done via the mapping of the data jointly in frequency and time domain firstly, then to the time domain.
+
+[FIG:8f514146e864d6c897ba]
+
+Figure 3 Interleaving methods
+
+Moreover, although more diversity gain could be introduced in Scheme 2, a lot of standardization work is required. After considering the tradeoff among performance and complexity, at least the interleaving Schemes 1 should be supported in NR.
+
+Proposal 3: Scheme 1 (i.e. Frequency domain interleaving) should be supported in NR.
+
+Additionally, since the URLLC will also be supported in NR, and the transmitted eMBB data will be punctured once the URLCC is required. Since the frequency resource within several OFDM symbols will be occupied by URLLC, the decoding of CBs will be effected if one CB is only mapped to single symbol. In this case, if multiple A/N resource is configured to one TB, retransmission could be done per CB to alleviate this performance degradation with high efficiency. However, if only one A/N resource is configured, the whole TB with large size will be retransmitted with much lower efficiency. In this situation, the data mapping order should be changed into the following way:
+
+The modulated symbol should be mapped across layer first, then across OFDM symbols and then across Frequency domain
+
+According to this method, one CB will be mapped to multiple symbols to enhance the robustness of decoding. The mapping should be configurable considering A/N resource.
+
+Observation 2:
+
+When more A/N resources is configured, eMBB data mapping scheme with order of (layer->frequency->time), is more efficient for data processing.
+
+When less A/N resources is configured, eMBB data mapping scheme with order of (layer-> time ->frequency), is more robustness w.r.t to URLLC.
+
+Proposal 4: Different mapping schemes should be supported in NR considering the existing of URLLC and configuration of N/A resources.
+
+Conclusion
+
+This contribution, the discussion on the CW number, per layer modulation and mapping schemes are conducted with the following observations and proposals:
+
+Observation 1: In single TRP transmission case, significant performance gain of scheme with per layer adoption has been observed in both SU and MU-MIMO for indoor hotspot and 3D-UMi scenarios.
+
+Observation 2:
+
+When more A/N resources is configured, eMBB data mapping scheme with order of (layer->frequency->time), is more efficient for data processing.
+
+When less A/N resources is configured, eMBB data mapping scheme with order of (layer-> time ->frequency), is more robustness w.r.t to URLLC.
+
+Proposal 1: 2 CWs should be supported for 3&4 layer transmission.
+
+Proposal 2: The per-layer link adaption should be supported in NR. One option is to use per-layer modulation schemes with the same coding rate.
+
+Proposal 3: Scheme 1 (i.e. Frequency domain interleaving) should be supported in NR.
+
+Proposal 4: Different mapping schemes for eMBB data should be supported in NR considering the existing of URLLC and configuration of N/A resources.
+
+References
+
+RAN1#88 Chairman’s Notes
+
+R1-1704395, “ Multi-TRP Transmission and interference coordination”, ZTE, ZTE Microelectronics
+
+R1-1704397, “On DL MIMO Transmission Setting”, ZTE, ZTE Microelectronics
+
+R1-1700795, CW to layer mapping, Qualcomm Incorporated
+
+R1-1701839, Enhancements for non-coherent JT, ZTE, ZTE Microelectronics
+
+R1-1702597, “Frequency domain interleaving” , Qualcomm Incorporated
+
+R1-1702670,“On PDSCH and PUSCH to RE mapping” ,Ericsson
+
+R1-1701790,“On number of codewords for NR” , ZTE, ZTE Microelectronics
+
+3GPP TR 36.873, Study on 3D channel model for LTE
+
+Appendix
+
+Table 4 Simulation assumption for indoor scenario
+
+Parameter | Values used for evaluation
+Carrier Frequency | Single-TRP: 3.5 GHz/ Multiple-TRPs: 3.5 and 30 GHz
+Duplex Mode | FDD
+System Band | 10 MHz
+Carrier Number | 1
+Network Synchronization | Synchronized
+Antenna Configuration | Transmitter: 2Tx cross-polarized antennaReceiver: 2 antennas for single-TRP and both 2 and 4 antennas for multiple-TRP
+Tx Power | 24 dBm
+eNB antenna height | 6m
+UE antenna height | 1.5m
+Number of small cells | 8
+Minimum distance (2D distance) | Small cell-small cell: 20m
+ | Small cell-UE: 3m
+ | Macro – UE: 35m
+Traffic model | FTP Model 1 with packet size 0.5 Mbytes(low load ~5%, 20% RU,40% RU,70% RU)
+Handover margin | 3dB
+UE attachment | Based on RSRP (formula) from CRS port 0
+Metrics | Mean, 5%, 50%,95% UPT
+UE Speed | 3km/h
+CQI/PMI reporting interval and frequency granularity | 5ms for CQI/PMI, 6RB
+Feedback scheme | Rel-12 enhanced CSI feedback, PUSCH mode 3-22Tx codebook, 16Tx FD-MIMO codebookCQI, PMI and RI reporting triggered per 5msFeedback delay is 5 ms
+Transmission scheme | Single TRP: SU-MIMOMultiple-TRPs: TM10, Two CSI processes, DPS/DPB/non-coherent JT with rank adaptation
+Scheduler | Proportional Fair
+Overhead | 3 symbols for DL CCHs, 2 CRS ports and DM-RS with 12 REs per PRB
+Backhual | Ideal backhaul for multiple-TRPs
+Receiver | Single TRP: MMSE-IRCMultiple TRP: MMSE-IRC and SIC
+HARQ Scheme | Chase Combining
+Maximum number of retransmissions | 3
+Channel estimation | Non-ideal modeling of channel estimation error modeling [FIG:029637a584d0f80fe655] is used,based on CSI-RS for channel measurements, based on DMRS for data demodulation, based on IMR for interference measurement
+
+Table 5 Simulation assumption for UMi scenario
+
+Parameter | Values used for evaluation
+Carrier Frequency | 2 GHz
+Duplex Mode | FDD
+System Band | 10 MHz
+Carrier Number | 1
+Network Synchronization | Synchronized
+Antenna Configuration | Transmitter: (4,4,2) with polarization Model -2 from 36.873[9]Receiver: 2 antennas
+Tx Power | 41 dBm
+Number of cells | 7 sites and 21 sectors
+Traffic model | SU-MIMO: FTP Model 1 with packet size 0.5 Mbytes(lambda = 2.6, 3.5)MU-MIMO: Full buffer
+Handover margin | 3dB
+UE attachment | Based on RSRP (formula) from CRS port 0
+Metrics | Full buffer: Average SE and 5% SEFTP: Mean, 5% UPT
+UE Speed | 3km/h
+UE distribution | according to 36.873 [9]
+CQI/PMI reporting interval and frequency granularity | 5ms for CQI/PMI, 6RB
+Feedback scheme | Rel-12 enhanced CSI feedback, PUSCH mode 3-22Tx codebook, 16Tx FD-MIMO codebookCQI, PMI and RI reporting triggered per 5msFeedback delay is 5 ms
+Transmission scheme | SU-MIMO and MU-MIMO
+Scheduler | Proportional Fair
+Overhead | 3 symbols for DL CCHs, 2 CRS ports and DM-RS with 12 REs per PRB
+Receiver | MMSE-IRC
+HARQ Scheme | Chase Combining
+Maximum number of retransmissions | 3
+Channel estimation | Non-ideal modeling of channel estimation error modeling [FIG:8850267cab40b314258d] is used,based on CSI-RS for channel measurements, based on DMRS for data demodulation, based on IMR for interference measurement

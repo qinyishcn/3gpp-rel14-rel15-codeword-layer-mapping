@@ -1,0 +1,89 @@
+3GPP TSG-RAN WG1 #88b R1-1704661
+
+Spokane, US, April 3 – 7, 2017
+
+Source: Xinwei
+
+Title: Considerations and Evaluation on Codeword to Layer Mapping
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 #88 meeting, the following agreements and working assumptions are achieved for number of codewords.
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordfFor 5 to 8-layer transmission: 2 codewordsFFS for 3 & 4-layer transmissions – revisit today Working assumption:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenariosAgreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordfFor 5 to 8-layer transmission: 2 codewordsFFS for 3 & 4-layer transmissions – revisit today Working assumption:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+For codeword to layer mapping, the following needs further study.
+
+Agreements:For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluationsAgreements:For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluations
+
+In this contribution, we discuss codeword to layer mapping based on the agreed number of codewords for NR.
+
+Discussions
+
+There are mainly three kinds of codeword to layer mapping as listed below:
+
+Alt 1: Modulated QAM symbols should be mapped to layer first, then to time/frequency RE resources;
+
+Alt 2: Modulated QAM symbols should be mapped to time/frequency RE resources first, then to different layers;
+
+Alt 3: Modulated QAM symbols should be mapped to subcarrier, then to layer, and lastly to different symbols;
+
+Combination of above alternatives:
+
+E.g. for number of layers smaller than or equal to 2, follow Alt 1; for number of layers larger than 2, follow Alt 2.
+
+Latency, performance, UE complexity and eMBB/URLLC multiplexing related aspects could be compared for the above three alternatives.
+
+Latency:
+
+For latency aspect, if modulated symbols are firstly mapped to layers then codeblocks could be received fully earlier. Alt 1 and Alt 3 are better from this perspective. However, latency of 1 layer would anyway be tolerated, the reduced latency due to Alt 1 and Alt 3 seems not necessary.
+
+Performance:
+
+For performance aspect, different layers would see different signal to noise ratios. If data symbols could be mapped to layers first, then it is possible to gain full spatial diversity. Alt 1 could achieve such diversity gain.
+
+Another gain is from successive interference cancellation. If data symbols are mapped to RE symbols first, then SIC receivers could be facilitated to achieve such gains. Alt 2 and Alt 3 could achieve such gains.
+
+It is also possible for Alt 2 and Alt 3 to achieve diversity gains. For example, modulated symbols are mapped to RE resources first, but for adjacent REs, layers are mapped alternatively.
+
+UE complexity
+
+There is no large difference between the two schemes if the same receivers are used.
+
+UE may have to buffer more soft LLR value due to longer code blocks for Alt 2, but the difference seems trivial.
+
+eMBB/URLLC multiplexing
+
+URLLC may occupy scheduled resources of eMBB. Typically, the two data streams would be multiplexed in time domain. Under such conditions, Alt 1 and Alt 3 may have higher probability of eMBB demodulation due to more complete code-blocks. The alternative that UE could mapped to frequency resources first, then to different layers and lastly to time domain.
+
+From above analysis, Alt 3 seem to outperform the other two schemes. Thus we have the following proposal.
+
+Codeword to layer mapping should be defined in such a way that modulated symbols are mapped across subcarriers in scheduled RBs, then to different layers and lastly to different OFDM symbols.
+
+Evaluation Results
+
+[FIG:7887a2ef88c307648425]
+
+[FIG:a70c0c23320b5df05da4]
+
+We did some evaluations with assumptions in section 5. The results are shown in above figures. It could be seen that mapping across layers first would have some performance losses. Mapping across subcarriers first would enable the use of SIC receivers and thus provide some gains. With layer shift across the subcarriers would also achieve the diversity gains.
+
+Conclusions
+
+Based on the discussion in this contribution we propose the following.
+
+Codeword to layer mapping should be defined in such a way that modulated symbols are mapped across subcarriers in scheduled RBs, then to different layers and lastly to different OFDM symbols.
+
+Annex: Simulation Assumptions
+
+Parameters | Values
+Channel model | CDL-A
+Channel estimation | Ideal
+MIMO mode | SU-MIMO
+Receiver | MMSE/SSD/MMES-SIC/SSD-SIC
+
+References

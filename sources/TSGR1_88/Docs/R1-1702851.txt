@@ -1,0 +1,103 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702851
+
+Athens, Greece 13th - 17th February 2017
+
+Source: NTT DOCOMO
+
+Title: Discussion on Codeword-to-Layer Mapping
+
+Agenda Item: 8.1.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+At the last meeting, there were intensive discussions on codeword-to-layer mapping for data transmission with 1 and 2 layers and its interleaving. Agreements were reached as follows [1].
+
+Agreements:RAN1 will down select among followings and select one alternative in the next meeting Alt. 1: NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layersOne UL- or DL-related DCI includes one HARQ-related (NDI and RV) fieldsFFS: the number of CQIs and MCS fields in DCIFFS: number of CWs for 3 and more layersAlt. 2: NR supports configurability regarding the number of CWs for 1 and 2 layersAlt. 3: NR supports 2 CWs for 2 layersAgreements:For the DL/UL data channels, study whether/how the interleaving is performed in the codeword to layer mapping procedure (e.g., a per-OFDM-symbol subcarrier interleaver in the codeword to layer mapping procedure, etc.)This may or may not be connected with coding design
+
+In this contribution, we present our views on codeword-to-layer mapping.
+
+Discussion
+
+Fig. 1 shows overview of channel processing for LTE-Advanced. In this section, we discuss on design of codeword (CW)-to-layer mapping for NR.
+
+[FIG:f48d63ded3aa19b18275]
+
+Fig. 1: Overview of channel processing for LTE
+
+Accuracy of link adaptation
+
+For LTE-A, a codeword (CW) is used as a unit of MCS control. Two CWs are utilized for the spatial multiplexing with the layers greater than 2. In general, MIMO transmission quality differs per stream and the gap between streams becomes greater especially when the MIMO layer is large. In this sense, it is natural to consider that the MCS is controlled per MIMO layer or a group of MIMO layers, e.g., CWs, for the large number of MIMO layers. In the last meeting, there were several simulation results comparing throughput performance for the number of CWs. Majority of the results shows that the throughput performance between 1 CW and 2 CWs are not very significant and even shows degradation for some cases, for the MIMO layers of 2.
+
+Observation 1: Multiple CWs with per CW MCS selection is beneficial when the number of MIMO layers is large.
+
+Granularity of HARQ
+
+HARQ result highly depends on relationship between selected MCS and the channel and interference condition. For this reason, the unit of HARQ is better to be reported at least with the unit of MCS selection, i.e., the unit of HARQ reporting should not be larger than that of MCS selection. In the last meeting, there were some discussions of HARQ feedback with higher granularity than the CW, e.g., codeblock (CB)-based and CB group (CBG)-based HARQ. Considering that RAN1 agreed to support puncturing of eMBB downlink data by a short URLLC downlink data, which is likely resulting in decoding failure of a subset of CBs for a given TB, it may be reasonable to support more than one HARQ bits for one CW.
+
+Observation 2: HARQ is reported with higher granularity compared to the unit of CQI control.
+
+Proposal 1: CB/CBG-level HARQ should be considered.
+
+DCI and UCI overhead
+
+Table I shows DCI and UCI overhead for PDSCH and PUSCH transmission, for LTE-A, respectively. It is observed that the DCI and UCI overheads are doubled, if the number of CW is 2. The impact to the overhead is relatively larger for MCS compared to the case for HARQ.
+
+Observation 3: Impact of DCI and UCI overhead is larger for MCS control (compared to HARQ control).
+
+Table I: DCI and UCI bits for different number of CWs
+
+[FIG:cfcc01fd90d6b61c0af2]
+
+Advanced receiver
+
+One of the motivations to introduce multiple CWs is to support CW-level SIC receiver. It is advantageous for the environment that the spatial degrees of freedom for interference signal is large. However, CW-level SIC can’t apply pile-line demodulation of PDSCH, since the CWs are serially demodulated using the CW(s) demodulated on ahead. Considering the tight requirement for the delay reduction for NR, CW-SIC seems to be a not the best option as an advanced receiver. In addition, in the Rel. 12 NAICS and MIMO discussion, it was observed that performance benefit of CW-level SIC is not very significant compared to the ML-type receiver including reduced complexity ML (R-ML). It is reasonable to consider advanced receiver other than CW-level SIC.
+
+Observation 4: CW-SIC receiver is not appropriate for NR system with tight delay requirement.
+
+Multi-TRP transmission
+
+Non-coherent joint transmission (NC-JT) may have impact on design of CW-to-layer mapping. Fig. 2 shows two possible DCI designs for NC-JP. One is that the single DCI triggers multiple streams from multiple TRPs. In this case, it is desired that separate CWs are transmitted from each TRP, since different TRPs usually have different communication quality. CW-to-layer mapping should be very flexible considering the number of TRPs and MIMO layers per TRP. The other is that independent DCI is transmitted per TRP. This case may not require very tight coordination in the backhaul, since scheduling information may not be shared among TRPs. We need to study new DCI mechanism as in Rel. 14 FeCoMP SI.
+
+Observation 5: Per TRP PDCCH transmissions should be considered for NC-JT.
+
+[FIG:4013e6c5118f6be46f29]
+
+(a) Single DCI (b) Separate DCIs
+
+Fig. 2: Multi-TRP transmission with NC-JT
+
+Configurability on the number of CWs
+
+Although configurability enables flexible operation for some cases, it should be avoided as much as possible. It should not be introduced unless clear use cases are identified.
+
+Proposal 2: DCI per CW should be considered for NC-JT.
+
+Considering the whole aspects on the CW-to-layer mapping, we make the following proposal.
+
+Proposal 3: NR supports single CW per PDSCH/PUSCH assignment for MIMO layers of 1 and 2.
+
+Summary
+
+In this contribution, we presented our views on CW-to-layer mapping. Observations and proposals were reached as follows.
+
+Observation 1: Multiple CWs with per CW MCS selection is beneficial when the number of MIMO layers is large.
+
+Observation 2: HARQ is reported with higher granularity compared to the unit of CQI control.
+
+Observation 3: Impact of DCI and UCI overhead is larger for MCS control (compared to HARQ control).
+
+Observation 4: CW-SIC receiver is not appropriate for NR system with tight delay requirement.
+
+Observation 5: Per TRP PDCCH transmissions should be considered for NC-JT.
+
+Proposal 1: CB/CBG-level HARQ should be considered.
+
+Proposal 2: DCI per CW should be considered for NC-JT.
+
+Proposal 3: NR supports single CW per PDSCH/PUSCH assignment for MIMO layers of 1 and 2.
+
+References
+
+3GPP, “Draft report of 3GPP TSG RAN WG1 #NR-1 v0.2.0,” Jan. 2017.

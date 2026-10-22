@@ -1,0 +1,3 @@
+WF on Number of Codewords for NR Samsung, Ericsson, Intel Corporation, Qualcomm, Nokia, Alcatel-Lucent Shanghai Bell, CATT, KT Corporation, Verizon, Softbank Corp, NTT DOCOMO, KDDI, ETRI , BT , NEC 3GPP TSG RAN WG1 88 Athens, Greece 13 th - 17 th Feb. 2017 Agenda item : 8.1.2.1.1 R1-1703600
+
+Proposal NR supports single CW per PDSCH/PUSCH assignment per UE for 1 and 2 layers FFS : number of CWs for 3 and more layers

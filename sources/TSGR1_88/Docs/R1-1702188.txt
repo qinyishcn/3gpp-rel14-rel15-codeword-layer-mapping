@@ -1,0 +1,65 @@
+3GPP TSG RAN WG1 Meeting #88 R1-1702188
+
+Athens, Greece 13th - 17th February 2017
+
+Source: Intel Corporation
+
+Title: On codeword to MIMO layer mapping for NR
+
+Agenda item: 8.1.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN#87, it was agreed to study the number of codewords (CWs) and codeword to MIMO layer mapping issue for NR [1]:
+
+Agreements:The number of codeword(s) per one scheduled physical data channel in NR both for DL and ULFor 1-2 MIMO layers – FFS between 1 codeword and 2 codewordsFor 3-8 MIMO layers FFS among Alt 1: 1 codeword Alt 2: 2 codewords Alt 3: >= 3 codewordsStudy the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.Study possible use of different modulations in single codewordStudy the possibility of configurable number of codewords per UE by NW
+
+In this contribution we provide our views on codeword to MIMO layer mapping for NR considering not only advanced receiver operation but also link adaptation aspects including scenarios with transmission from single TRP and multiple TRP.
+
+Discussion
+
+CW-to-MIMO layer mapping
+
+LTE supports multiple CWs, where each CW depending on the total number of MIMO layers can be mapped to one or multiple MIMO layers. The illustration of CW-to-MIMO layer mapping supported by LTE is provided in Figure 1, where two CWs is already assumed in case two MIMO layers.
+
+1 layer | 2 layers | 3 layers | 4 layers
+[FIG:2738bf50222937886a62] | [FIG:0185a4990e828a944790] | [FIG:618390b3ff53ef867cfb] | [FIG:28bdcd7ce943f8fe25b0]
+
+Figure 1: CW-to-MIMO layer mapping supported by LTE
+
+Support of the multiple CWs for LTE was mainly introduced to facilitate advanced receiver operation for SU-MIMO and improve the link adaptation accuracy. More specifically, for the transmission with multiple CWs it is possible to apply codeword level interference cancellation (CW-IC) receiver to better suppress interference from the co-scheduled MIMO layers. On the other hand, considering recent Rel-12 evaluations of advanced receivers for LTE in RAN4 [2], the link-level performance difference of CW-IC comparing to symbol level R-ML receiver was not significant to justify the use of CW-IC receiver in case of two MIMO layers. Therefore, support of two CWs for 2 MIMO layers may not be required.
+
+Another aspect of supporting multiple CWs is link adaptation on MIMO layers. More specifically, if the MIMO layers has substantial difference in the received SINR, the transmission efficiency can be improved by independent selection of the MCS per MIMO layer. On the other hand considering beam based operation for data transmission in NR, two MIMO layers in most of the cases will be transmitted using the same beam from the same TRP using orthogonal polarizations. In this case the expected SINR difference on MIMO layers should not be significant to justify multiple CWs and single CW for 2 MIMO layer may be already sufficient. For more than two MIMO layers, multiple beams from the same or different TRPs will be used, which would require support of multiple CWs for more accurate adaptation of MCS to possibly different SINR on the received beams. Therefore, support of multiple CWs should be considered starting from 3 or more MIMO layers.
+
+1 layer | 2 layers | 3 layers | 4 layers
+[FIG:355ee0c6947d25a4ab9d] | [FIG:c60c7b8a08aa689fe587] | [FIG:4077a7033117f5c7f155] | [FIG:188caa090820e6f1a65e]
+
+Figure 2: Proposed candidate for CW-to-MIMO layer mapping in NR
+
+Summarizing discussion above the following proposal can be made wrt to CW-to MIMO-layer mapping for NR. Illustration of the proposed mapping is also provided in Figure 2.
+
+Proposal:
+
+NR should support two CWs for three or more MIMO layers and single CW in other cases
+
+To reduce the control signalling overhead for the proposed CW to MIMO layer mapping scheme the higher layer signalling regarding the maximum number of MIMO layers to be supported by the TRP can be introduced. More specifically for the proposed CW-to-MIMO layer mapping scheme, the maximum number of MIMO layers can be used to indicate the number of MCS, RVs and NDI in the DCI. For example, if the maximum number of MIMO layers is limited to 2 and indicated to the UE, the DCI can contain at most one MCS, RV and NDI corresponding to one CW, which can help to reduce the signalling overhead. If the number of MIMO layers indicated to the UE are above 2, the DCI transmitted to the UE should contain two MCS, RV and NDI – one per each CW.
+
+Proposal:
+
+NR should support signalling to indicate the maximum number of MIMO layers to be used for the downlink transmission
+
+Summary
+
+In this contribution we provide our views regarding codeword (CW) to MIMO layer mapping for NR. The following proposal was made:
+
+NR should support two CWs for three or more MIMO layers and single CW in other cases
+
+NR should support signalling to indicate the maximum number of MIMO layers to be used for the downlink transmission
+
+References
+
+Chairman’s notes for RAN1#87, 3GPP TSG RAN WG1 Meeting #87, Reno, USA 14th - 18th November 2016.
+
+R4-150102, “Update on the summary of single cell demodulation alignment and impairment results”, TSG RAN4 meeting #74, Athens, Greece, February 9-13, 2015.
