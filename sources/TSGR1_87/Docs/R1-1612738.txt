@@ -1,0 +1,91 @@
+3GPP TSG-RAN WG1 #87 R1-1612738
+
+14th – 18th November 2016
+
+Reno, Nevada, USA
+
+Agenda item: 7.1.3.1
+
+Source: Qualcomm Incorporated
+
+Title: Codeword to Layer Mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN1 #86bis [2], the following agreements regarding the demodulation reference signal (DMRS) for data were made:
+
+Agreements:
+
+•       RAN1 to study the following aspects:
+
+–      Codeword-to-layer mapping
+
+–      Number of codewords on a “NR-PDSCH”
+
+–      Other techniques not precluded
+
+In this contribution, we present our views on the codeword to layer mapping that NR should support.
+
+As one of the most important MIMO transmission techniques, spatial multiplexing generates one or more spatial layers on which multiple data streams can be transmitted in parallel. Those data streams can be either separately or jointly coded before the spatial multiplexing, as shown in Figure 1. The former is often referred to as multi-codeword (MCW) transmission, while in contrast the latter is called single-codeword (SCW) transmission.
+
+[FIG:5cdb2c6ce2ec6c129354]
+
+(a) Multi-codeword transmission
+
+[FIG:400c36511fc9bfd37b82]
+
+(b) Single-codeword transmission
+
+Figure 1. Multi-codeword transmission and single-codeword transmission.
+
+For LTE, neither the SCW (one codeword to all layer mapping) nor MCW (one-to-one codeword-to-layer mapping) schemes is adopted. Instead, a middle-way was chosen, whereby at most two codewords are used, even more than two layers are transmitted. Same MCS is used for the same codeword which may contain multiple code blocks, even if a codeword is mapped to multiple layers.
+
+In NR, the codeword to layer mapping in MIMO transmission need to be revisited taken into account NR frame structure, HARQ timeline, etc. In this contribution, we discuss our views on codeword-to-layer mapping design for NR.
+
+Discussion
+
+In the extreme case of MCW transmission, a separate codeword can be mapped to each of the spatial layers. The UE may take advantage of such mapping by using successive interference cancellation (SIC) receiver to achieve significant gains. However, the first codeword to be decoded are subjected to higher interference levels compared to later decoded codewords. In order to make SIC receiver work properly, the first codeword to be decoded shall be more robust than the second codeword, and the second codeword shall be more robust than the third codeword, etc. Such differentiation in robustness of different codewords can be achieved by applying different modulation and coding schemes (MCSs) to the different codewords, which is also referred to as per-antenna rate control (PARC). For example, the first codeword to be decoded shall use a lower-order modulation and lower coding rate. The gains brought by SIC receiver with PARC thus come at the expense of more control signaling, including CQI reporting for each codeword, the per codeword MCS indication in the downlink control information (DCI), and multiple bits to convey HARQ ACK/NACK for each codeword.
+
+For each codeword, subband CQI reporting may be needed for better support of link adaptation in frequency-domain. Furthermore, a UE may be configured to report CQI for multiple CSI-RS resources when the LTE CLASS B type CSI-RS is configured, not to mention cases of multi-TRP transmission and carrier aggregation where multi-fold of reporting may be needed for each TRP and/or each component carrier. All these lead to a significant increase of uplink control overhead.
+
+Observation 1: MCW MIMO transmissions come at the expense of more control signaling and significant increase of the uplink control overhead.
+
+In contrast, SCW transmission leads to a reduction in the amount of control signaling required for CQI reporting, for MCS indication in DCI, and for HARQ ACK/NACK feedback. The single codeword need to be mapped across spatial, frequency, and time-domains. QAM symbols can be mapped first across layers, then across subcarriers, then across OFDM symbols. Then, a code block spans across all spatial layers of a set of consecutive logical subcarriers and can potentially span across two or more consecutive OFDM symbols depending on the RB allocation. Different MCS can be assigned to each code blocks for a better adaptation to the supportable spectral efficiency of the OFDM symbols to which the code block is mapped.
+
+The SCW transmission is suitable for pipelined decoding and the self-contained subframe. Frequency-domain interleaving at tone-level or RB-level can be considered which allows for code block-level pipelining between channel estimation, demapper, and demodulator backend. It’s worth noting that less HARQ ACK/NACK bits are not only important for uplink control overhead reduction, but can help transmit pipelining.
+
+Observation 2: SCW MIMO transmission may have some advantages compared to MCW transmission for pipelined decoding and low latency applications.
+
+Performance evaluation
+
+We now provide link-level throughput evaluation results for an LTE frame structure and numerology in a 2x2 system with DMRS channel estimation, advanced receiver, LTE Turbo coding with 4 Re-Tx and IR and an MCS table with 29 entries where the following two scenarios are compared:
+
+Only SCW for both rank 1 and rank 2 transmissions
+
+Rank 1 is transmitted with SCW, whereas rank 2 uses 2-CW transmission
+
+We now provide two examples in which SCW and MCW demonstrate similar performance:
+
+[FIG:e51d21666274254f06a4] [FIG:2391d426e7aaabdb68d3]
+
+We observe that on both these scenarios the performance loss due to SCW compared to MCW is small. Note that in these results in the SCW case the same modulation is being used for both layers. Adjusting the modulation per layer could potentially be a more robust approach for the SCW case especially in the geometries where the transition from Rank 1 to Rank 2 is happening. Further studies are needed to identify for which scenarios MCW does not provide a considerable gain over the SCW approach.
+
+Observation 3: The performance of an SCW and MCW MIMO transmission in Rank 2 CL or OL scenarios can be similar.
+
+Proposal 1: NR should study SCW MIMO as one of the supported CW to layer mapping
+
+Conclusions
+
+Observation 1: MCW MIMO transmissions come at the expense of more control signaling and significant increase of the uplink control overhead.
+
+Observation 2: SCW MIMO transmission may have some advantages compared to MCW transmission for pipelined decoding and low latency applications.
+
+Observation 3: The performance of an SCW and MCW MIMO transmission in Rank 2 CL or OL scenarios can be similar.
+
+Proposal 1: NR should study SCW MIMO as one of the supported CW to layer mapping
+
+References
+
+[1] R1-1611064, “Way Forward on Network Coordination for Advanced Receivers”, Samsung, Intel, MediaTek, AT&T, Orange, Vodafone, IITH, Tejas Networks, IITM, KDDI, CeWiT, Reliance Jio, 3GPP TSG RAN WG1 Meeting #86bis

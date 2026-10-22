@@ -1,0 +1,83 @@
+3GPP TSG RAN WG1 Meeting #87 R1-1611973
+
+Reno, USA 14th - 18th November 2016
+
+Source: Intel Corporation
+
+Title: On codeword to MIMO layer mapping
+
+Agenda item: 7.1.3.2
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN#86bis, it was agreed to study the codeword (CW) to MIMO layer mapping considering advanced receiver operation [1]:
+
+Agreements:RAN1 to study the following aspects :Codeword-to-layer mappingNumber of codewords on a “NR-PDSCH”Other techniques not precludedOther techniques not precluded
+
+In this contribution we provide our views on codeword to MIMO layer mapping for NR considering not only advanced receiver operation but also link adaptation aspects including scenarios with transmission from single TRP and multiple TRP. Possible network assistance to the UE regarding the maximum number of MIMO layers is also proposed for the NR to reduce power consumption at the UE and overhead for DCI and CSI payload sizes.
+
+Discussion
+
+CW-to-MIMO layer mapping
+
+LTE supports multiple CWs, where each CW depending on the total number of MIMO layers can be mapped to one or multiple MIMO layers. The illustration of CW-to-MIMO layer mapping supported by LTE is provided in Figure 1, where two CWs is already assumed in case two MIMO layers.
+
+1 layer | 2 layers | 3 layers | 4 layers
+[FIG:a8f07c87d82e24e076db] | [FIG:f50c38144364bb171395] | [FIG:28bf713bbf73fbe24c0c] | [FIG:faa4f503086ad90e6f8a]
+
+Figure 1: CW-to-MIMO layer mapping supported by LTE
+
+Support of the multiple CWs for LTE was mainly introduced to facilitate advanced receiver operation for SU-MIMO and improve the link adaptation accuracy. More specifically, for the transmission with multiple CWs it is possible to apply codeword level interference cancellation (CW-IC) receiver to better suppress interference from the co-scheduled MIMO layers. On the other hand, considering recent Rel-12 evaluations of advanced receivers for LTE in RAN4 [3], the link-level performance difference of CW-IC comparing to symbol level R-ML receiver was not significant to justify the use of CW-IC receiver in case of two MIMO layers. Therefore, support of two CWs for 2 MIMO layers may not be required.
+
+Another aspect of supporting multiple CWs is link adaptation on MIMO layers. More specifically, if the MIMO layers has substantial difference in the received SINR, the transmission efficiency can be improved by independent selection of the MCS per MIMO layer. On the other hand considering beam based operation for data transmission in NR, two MIMO layers in most of the cases will be transmitted using the same beam from the same TRP using orthogonal polarizations. In this case the expected SINR difference on MIMO layers should not be significant to justify multiple CWs and single CW for 2 MIMO layer may be already sufficient. For more than two MIMO layers, multiple beams from the same or different TRPs will be used, which would require support of multiple CWs for more accurate adaptation of MCS to possibly different SINR on the received beams. Therefore, support of multiple CWs should be considered starting from 3 or more MIMO layers.
+
+1 layer | 2 layers | 3 layers | 4 layers
+[FIG:14dd65cdf9348bb8be1b] | [FIG:6d2654577959267d7d54] | [FIG:d66cbcb9bfe276ded3ed] | [FIG:5044ddef9df8137d47b7]
+
+Figure 2: Proposed candidate for CW-to-MIMO layer mapping in NR
+
+Summarizing discussion above the following proposal can be made wrt to CW-to MIMO-layer mapping for NR. Illustration of the proposed mapping is also provided in Figure 2.
+
+Proposal:
+
+NR should support two CWs for three or more MIMO layers and single CW in other cases
+
+Indication of the maximum number of MIMO layers
+
+In [1], for wide system bandwidth of NR it was proposed to support configurable bandwidth for the UE as means to adapt operating bandwidth of the UE to the traffic needs and, therefore, optimize UE power consumption. It should be noted that the similar power consumption optimization may be beneficial for SU-MIMO transmission, when UE on some carrier can capable of supporting large number of MIMO layers (e.g. up to 4). The received signal processing according to the maximum number of MIMO layers for reception of the PDSCH may not be always desirable from power consumption perspective. To facilitate power efficient UE operation (e.g. by turning off some of the receiving chains) optimized to the traffic load, assistance signalling for the maximum number of MIMO layers should be supported in NR. Considering dynamic traffic variation the signalling assistance for the maximum number of MIMO layers should be fast and reliable enough. For example, MAC signalling can be candidate for that purpose similar to MAC CE based activation mechanism supported in LTE for carrier aggregation.
+
+If the indicated maximum number of MIMO layers is configured for the UE, UE should not expect PDSCH scheduling with more than indicated number of MIMO layers and can autonomously decide regarding the number of the required receiving chains. In addition the payload size for DCI and CSI bits can be optimized accordingly to minimize the control signalling overhead.
+
+Proposal:
+
+NR should support signalling assistance for the maximum number of MIMO layers
+
+The maximum number of MIMO layers can be indicated to the UE using MAC signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the number of MIMO layers
+
+Summary
+
+In this contribution we provide our views regarding codeword (CW) to MIMO layer mapping for NR. The following proposal were made:
+
+NR should support two CWs for three or more MIMO layers and single CW in other cases
+
+NR should support signalling assistance for the maximum number of MIMO layers
+
+The maximum number of MIMO layers can be indicated to the UE using MAC signalling
+
+UE should not expect PDSCH scheduling from gNB with more than indicated number of MIMO layers
+
+The payload of DCI and UCI can be determined according to the number of MIMO layers
+
+References
+
+Chairman’s notes for RAN1#86bis, 3GPP TSG RAN WG1 Meeting #86bis, Lisbon, Portugal 10th - 14th October 2016.
+
+R1-1610546 “Way Forward on bandwidth adaptation in NR”, Mediatek, 3GPP TSG RAN WG1 Meeting #86bis, Lisbon, Portugal 10th - 14th October 2016.
+
+R4-150102, “Update on the summary of single cell demodulation alignment and impairement results”, TSG RAN4 meeting #74, Athens, Greece, Febuary 9-13, 2015.

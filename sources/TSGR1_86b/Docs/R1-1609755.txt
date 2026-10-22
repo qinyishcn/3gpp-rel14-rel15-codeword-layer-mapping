@@ -1,0 +1,73 @@
+3GPP TSG-RAN WG1 #86bis R1-1609755
+
+Lisbon, Portugal, October 10 – 14, 2016
+
+Source: Ericsson
+
+Title: On codewords and layer mapping
+
+Agenda Item: 8.1.4.2
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#86, the following agreement was made regarding a framework for NR MIMO:
+
+Agreements:Strive to design a unified CSI framework, avoiding introducing multiple classes/subclasses and redundant (equally performing) configurations, while still covering a wide variety of use cases and frequency bandsCoupling/Decoupling (e.g. fixed timing relationships, joint configuration) between the following functions should be studiedRS transmission used for CSI acquisition (CSI-RS transmitted in DL and SRS transmitted in UL)Use of other RS(s) is not precluded (e.g., DMRS)Note that CSI-RS and SRS may or may not have the same physical signal designNote that the reference signal naming can be revisited laterCSI measurement/reportingMulti-antenna transmission method/schemeDownlink control signalingStudy flexible scheduling/configuration of  CSI-RS, CSI report and transmission method/scheme for data and controlDL DMRS and UL DMRS based spatial multiplexing (SU-MIMO/MU-MIMO) is supportedFFS: Necessity of sidelink spatial multiplexingAt least 8 orthogonal DL DMRS ports is supported for SU-MIMO schedulingAt least 8 orthogonal DL DMRS ports is supported for MU-MIMO schedulingSupport dynamic switching between transmission methods/schemes, e.g. betweenTransmit diversitySpatial multiplexingAgreements:Strive to design a unified CSI framework, avoiding introducing multiple classes/subclasses and redundant (equally performing) configurations, while still covering a wide variety of use cases and frequency bandsCoupling/Decoupling (e.g. fixed timing relationships, joint configuration) between the following functions should be studiedRS transmission used for CSI acquisition (CSI-RS transmitted in DL and SRS transmitted in UL)Use of other RS(s) is not precluded (e.g., DMRS)Note that CSI-RS and SRS may or may not have the same physical signal designNote that the reference signal naming can be revisited laterCSI measurement/reportingMulti-antenna transmission method/schemeDownlink control signalingStudy flexible scheduling/configuration of  CSI-RS, CSI report and transmission method/scheme for data and controlDL DMRS and UL DMRS based spatial multiplexing (SU-MIMO/MU-MIMO) is supportedFFS: Necessity of sidelink spatial multiplexingAt least 8 orthogonal DL DMRS ports is supported for SU-MIMO schedulingAt least 8 orthogonal DL DMRS ports is supported for MU-MIMO schedulingSupport dynamic switching between transmission methods/schemes, e.g. betweenTransmit diversitySpatial multiplexing
+
+According to the to the agreement, both transmit diversity and spatial multiplexing are to be supported. One of the key aspects to decide for NR is how the codeword-to-layer mapping should work in both cases. In this contribution we make several observations regarding the design.
+
+Discussion
+
+In LTE, the maximum number of supported codewords is two. In [1], the way in which the coded symbols for each codeword are mapped to layers is specified. Essentially, the stream of coded symbols corresponding to a the first codeword is mapped in round robin fashion to one or more layers. For the second codeword, the symbols are mapped to the remaining layers.
+
+In LTE, one of the motivations for supporting two codewords is so that codeword-IC type approaches can be used at the UE receiver. In a serial version of this type of receiver (SIC), the first codeword is decoded, and then the soft values at the output of the decoder are used to regenerate the received samples on the layer(s) corresponding to the first codeword. The regenerated signal(s) (inter-layer interference) are then subtracted from the received samples prior to decoding the second codeword. Having two codewords allows for more effective interference cancellation than if only a single codeword was used. This is true since the signal regeneration can be based on decoder output soft values for rather than be constrained to decoder input soft values which are less reliable.
+
+Ideally, if SIC receivers are used at the UE, then the per-codeword rates should be selected to account for the interference cancellation achieved at the UE. This typically results in different code rates for each codeword, with the larger rate typically corresponding to the 2nd codeword. The trade-off is that the UE feedback (CQI and HARQ ACK/NACK) is doubled compared to the case of a single-codeword. The downlink control information (DCI) associated with the scheduled modulation and coding scheme (MCS) for the two codewords is also twice that for a single-codeword.
+
+In LTE, for the case of 2 codewords, the UE feedback overhead (CQI, HARQ ACK/NACK) and downlink control information (modulation, transport block size) is double that for a single codeword.
+
+For NR, these design choices made for LTE need to be revisited since at least wo aspects of NR are different from LTE:
+
+Potentially shorter transmission durations (slots, minislots)
+
+Potentially shorter HARQ ACK/NACK turnaround times
+
+The former occurs for the case of subcarrier spacings larger than 15 kHz (as in LTE) in the introduction of slot as the scheduling unit and also the mini-slot for low latency, and the latter occurs for the case when the UE is configured to provide an ACK/NACK in the same slot as the data (for TDD systems). This puts a burden on the UE in terms of processing demands which may anyway preclude the use of codeword-IC approaches.
+
+In NR, codeword-IC receivers at the UE may not be practical due to the short slots/mini-slots and fast HARQ ACK/NACK turnaround times.
+
+Due to these constraints, IRC or ML/Reduced Complexity ML receivers are likely candidates for implementation. In both cases, the benefits of being able to separately control the rate on multiple codewords are questionable. Furthermore, the signalling overhead savings in both uplink and downlink from a single-codeword design become attractive.
+
+Study single vs multiple (in particular dual) codeword per physical data channel (PDCH) in NR, for both UL and DL
+
+A further consideration is the case of distributed MIMO (D-MIMO) which will be studied for NR. Two possible design options for D-MIMO are
+
+Option 1: Two PDCHs (one per TRP) with a single codeword per PDCH
+
+Option 2: Single PDCH with two codewords (one per TRP)
+
+Both options appear feasible, and will have different advantages and disadvantages. For example, Option 2 may require connection of the two TRPs either to common baseband or separate baseband, but with a low latency/high bandwidth link between the baseband units. With Option 1 and independent scheduling control on each PDCH, there may be an opportunity to relax the inter baseband latency/bandwidth requirements. For this option, the higher layer implications of supporting more than one PDCH should be studied.
+
+While quite a few of the above arguments point toward benefits of a single codeword only design for NR, the case of D-MIMO may impose different requirements. Hence, it is proposed to further study this scenario before making a design choice.
+
+For distributed MIMO (D-MIMO), single vs. multiple PDCH designs should be studied before deciding whether NR should be restricted to support only a single codeword per PDSCH in the codeword-to-layer mapping procedure.
+
+Conclusions
+
+In this contribution we made the following observations regarding design choices for the codeword-to-layer mapping procedure for spatial multiplexing.
+
+Observation 1 In LTE, for the case of 2 codewords, the UE feedback overhead (CQI, HARQ ACK/NACK) and downlink control information (modulation, transport block size) is double that for a single codeword.
+
+Observation 2 In NR, codeword-IC receivers at the UE may not be practical due to the short slots/mini-slots and fast HARQ ACK/NACK turnaround times.
+
+Hence we propose the following:
+
+Proposal 1 Study single vs multiple (in particular dual) codeword per physical data channel (PDCH) in NR, for both UL and DL
+
+Proposal 2 For distributed MIMO (D-MIMO), single vs. multiple PDCH designs should be studied before deciding whether NR should be restricted to support only a single codeword per PDSCH in the codeword-to-layer mapping procedure.
+
+References
+
+3GPP TS 36.211, “Physical channels and modulation.”
