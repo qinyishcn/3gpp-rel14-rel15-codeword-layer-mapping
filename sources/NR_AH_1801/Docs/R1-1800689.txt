@@ -1,0 +1,126 @@
+3GPP TSG RAN WG1 Meeting AH 1801 R1-1800689
+
+Vancouver, Canada, January 22nd – 26th, 2018
+
+Source: Ericsson
+
+Title: Corrections on CW mapping and data scrambling
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In this contribution, we discuss minor corrections related to CW mapping and data scrambling. The corrections and proposals are based on the latest version of TS 38.211.
+
+Issues related transport block to codeword mapping
+
+In TS 38.212 there is currently no description on when DCI contains a disabled transport block. Furthermore, there is also no definition on how a disabled transport block is indicated. Hence, we propose to add the same principles as in LTE. See the proposed changes in red below.
+
+Text proposal for 7.3.1.2.2 of TS38.212
+
+[…]
+
+For transport block 1:
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Subclause x.x of [6, TS38.214]
+
+For transport block 2:
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Subclause x.x of [6, TS38.214]
+
+- HARQ process number – 4 bits
+
+- Downlink assignment index – number of bits as defined in the following
+
+- 4 bits if the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 MSB bits are the counter DAI and the 2 LSB bits are the total DAI;
+
+- 0 bits otherwise.
+
+- TPC command for scheduled PUCCH – 2 bits as defined in Subclause x.x of [5, TS38.213]
+
+- PUCCH resource indicator – 2 bits as defined in Subclause x.x of [5, TS38.213]
+
+- PDSCH-to-HARQ_feedback timing indicator – 3 bits as defined in Subclause x.x of [5, TS38.213]
+
+- Antenna port(s) – 4, 5, or 6 bits as defined by Tables 7.3.1.2.2-1/2/3/4, where the number of CDM groups without data of values 1, 2, and 3 refers to CDM groups {0}, {0,1}, and {0, 1,2} respectively.
+
+- Transmission configuration indication – 0 bit if higher layer parameter tci-PresentInDCI is not enabled; otherwise 3 bits as defined in Subclause x.x of [6, TS38.214].
+
+- SRS request – 2 bits as defined by Table 7.3.1.1.2-5.
+
+- CBG transmission information –0, 2, 4, 6, or 8 bits as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter maxCodeBlockGroupsPerTransportBlock for the PDSCH.
+
+- CBG flushing out information –0 or 1 bit as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter codeBlockGroupFlushIndicator.
+
+- DMRS sequence initialization – 1 bit if transform precoding is enabled
+
+In case the higher layer parameter Number-MCS-HARQ-DL-DCI indicates that two codeword transmission is enabled and if both transport blocks are enabled, transport block 1 is mapped to codeword 0 and transport block 2 is mapped to codeword 1. In case one of the transport blocks is disabled as specified in section 5.1.3.2 of [TS38.214], the transport block to codeword mapping is specified according to Table X1
+
+Table X1: Transport block to codeword mapping
+(one transport block enabled).
+
+transport block 1 | transport block 2 | codeword 0
+(enabled) | codeword 1
+(disabled)
+enabled | disabled | transport block 1 | -
+disabled | enabled | transport block 2 | -
+
+Text proposal for 5.1.3.2 of TS38.214
+
+In case the higher layer parameter Number-MCS-HARQ-DL-DCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if [FIG:131915ce69ec72ee2413]  and if [EQ:b93d38a26c6e7b044c95] for the corresponding transport block, otherwise the transport block is enabled.
+
+For the PDSCH assigned by a PDCCH with DCI format 1_0/1_1 with CRC scrambled by C-RNTI,
+
+if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' is configured and [FIG:72cf42e6b83492d72708] [EQ:e854059c994ada2077c6] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' configured and [FIG:59ce6c5273c8d358601b] [EQ:fc660ebca17dfa3afb77] , the UE shall, except if the transport block is disabled in DCI format 1_1, first determine the TBS as specified below:
+
+[…]
+
+Issues related to data scrambling
+
+In TS 38.211, the data scrambling depends on RNTI but there is a missing reference to which RNTI is assumed. In addition, The nID in the scrambling seed should equal the configured value only for some RNTIs (the C-RNTI and other RNTIs unique to a UE like the CS-RNTI ) but not for other RNTIs common to multiple UEs (e.g. SI-RNTI, P-RNTI).
+
+Text proposal for DL (Section 7.3.1.1)
+
+Up to two codewords can be transmitted, [FIG:fe2cfae40d62c476f3b9] . In case of single-codeword transmission, [FIG:8c4d2f1212914bbafb8d] .
+
+For each codeword [FIG:e479e5552280d9035769] , the UE shall assume the block of bits [FIG:ed4cd5e9a081b8fda9be] , where [FIG:186e07791f589ec9de07] is the number of bits in codeword [FIG:0725785f2d4ba996dd0d] transmitted on the physical channel, are scrambled prior to modulation, resulting in a block of scrambled bits [FIG:6618160445e8b04cbf21] according to
+
+[FIG:23064ce82fd857077a3e]
+
+where the scrambling sequence [FIG:d3f4cdaff16265ffc133] is given by clause 5.2.1. The scrambling sequence generator shall be initialized with
+
+[FIG:87d34ba4893fd1488786]
+
+where
+
+- [FIG:1c94438a8c965ea9ee9e] equals the higher-layer parameter Data-scrambling-Identity if configured and the RNTI equals the C-RNTI,
+
+- [FIG:a38449f54c131833b5c6] otherwise
+
+and where [FIG:fabb57d42aa9c10d46bf]  corresponds to the RNTI associated with the PDSCH transmission as described in clause 5.1 3GPP TS 38.214 [6].
+
+Text proposal for UL (Section 6.3.1.1)
+
+[…]
+
+where x and y are tags defined in [4, TS38.212] and where the scrambling sequence [FIG:827bc88cc61f01bbafff] is given by clause 5.2.1. The scrambling sequence generator shall be initialized with
+
+[FIG:49684aaa31bbad379244]
+
+where
+
+- [FIG:0aea352b01588c47c92b] equals the higher-layer parameter Data-scrambling-Identity if configured,
+
+- [FIG:bac3f9f5ef1e568c7521] otherwise
+
+and where [FIG:08bab72a9de721f35748]  corresponds to the RNTI associated with the PUSCH transmission as described in clause 6.1 3GPP TS 38.214 [6].

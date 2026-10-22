@@ -1,0 +1,139 @@
+3GPP TSG RAN WG1 NR-AH3 R1-1716797
+
+Nagoya, Japan, 18th – 21st September 2017
+
+Agenda item: 6.2.1.1
+
+Source: Samsung
+
+Title: Summary of Open Issues on Layer Mapping
+
+Document for: Discussion
+
+Introduction
+
+The current agreement on layer mapping can be summarized as follows:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 4-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:5d5e7cf6d05ae63a66f1] layers CW0 and remaining layers CW1
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+Signaling (DCI and UCI) design related issues:
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UE
+
+NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCH
+
+Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layers
+
+NR supports higher layer signalling for the maximum number of CQIs in UCI
+
+Unless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI report
+
+For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR:
+
+First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL
+
+No frequency and/or time interleaving is supported in Rel-15 NR
+
+This contribution summarizes the views of different companies (inferred from the submitted contributions) on the following open issues.
+
+CW-layer correspondence
+
+Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+RE mapping for DFT-SOFDM with and without frequency hopping
+
+CW-layer correspondence
+
+Based on the available proposals (in [1] –[12]), AT&T, Intel, CATT, LG, and Samsung propose to support at least one additional CW-layer correspondence. Just as in the previous meeting, this can be summarized as follows:
+
+Some companies argue that the main reason for introducing at least one additional CW-layer correspondence is to address multi-TRP scenarios. In addition, AT&T argues that allowing some flexibility in configuring CW-layer correspondence based on some UE feedback increases system throughput.
+
+Among companies that propose such, there is not yet a single unified proposal. For instance, some propose a limited number of supported schemes while others propose a fully flexible correspondence wherein a UE can be configured with a restricted subset of possible correspondence schemes.
+
+A main concern on full flexibility is the associated signalling overhead for dynamic mapping (e.g. DCI field)
+
+Qualcomm and Huawei/HiSi propose not to support any additional CW-layer correspondence.
+
+Given the lack of consensus and progress in this issue for several meetings, the following proposal may be feasible in RAN1 NR-AH3:
+
+Finalize this issue in RAN1 NR-AH3:
+
+Discuss if a consensus can be reached among the proponents of more flexible CW-layer correspondence, and if the proposal is agreeable
+
+If not, conclude this issue, i.e. no additional CW-layer correspondence is supported
+
+RE mapping for DFT-SOFDM
+
+Based on the available proposals (in [1] –[12]), the proposals can be identified and summarized in Table 1 and Table 2.
+
+Table 1 RE mapping without frequency hopping
+
+Proposal | Proponents
+Frequency first (FT): sub-carriers DFT-SOFDM symbols [option 1] | Samsung, CATT, AT&T, Intel, Ericsson, Mediatek
+Time first (TF): DFT-SOFDM symbols sub-carriers [option 2] | ZTE/Sanechips, Huawei/HiSi, LG, vivo, NTT Docomo
+FSS T: sub-carriers sub-slots DFT-SOFDM symbols [option 3] | LG
+
+Table 2 RE mapping with frequency hopping
+
+Proposal | Proponents
+FT SS: sub-carriers DFT-SOFDM symbols sub-slots (hopping) [option 1] | Samsung, CATT, AT&T, Intel, Ericsson, Mediatek
+TF SS: DFT-SOFDM symbols sub-carriers sub-slot (hopping) [option 2] | LG, vivo, Huawei/HiSi
+FSS T: sub-carriers sub-slots (hopping) DFT-SOFDM symbols [option 3] | NTT Docomo, vivo, Mediatek, LG
+
+Observation:
+
+Arguments from the proponents of time-first mapping include superior performance at high speed as well as some other arguments used for DL and UL CP-OFDM (where frequency-first mapping was chosen).
+
+Without frequency hopping: no clear majority between option 1 and 2
+
+With frequency hopping: option 1 seems to be the slight majority view, followed by option 3
+
+For scenarios with frequency hopping, Qualcomm observes that option 2 and 3 perform similarly and better than option 1 while option 2 results in significantly higher UE buffer memory requirements.
+
+ZTE proposes not to support intra-slot hopping for DFT-SOFDM while NTT Docomo proposes to support intra-slot hopping even for CP-OFDM.
+
+Based on the above summary, the following proposal may be feasible in RAN1 NR-AH3:
+
+Without frequency hopping: down select between option 1 and option 2
+
+With frequency hopping: down select between option 1 and option 3
+
+References
+
+R1-1715611, On remaining details of codeword mapping, vivo.
+
+R1-1715793, On codeword mapping, CATT
+
+R1-1715430, Remaining details of codeword mapping, ZTE, Sanechips
+
+R1-1715850, Discussion on codeword mapping, LG Electronics
+
+R1-1716174, Codeword to layer mapping for DL and UL data channels, AT&T
+
+R1-1715459, Remaining details of codeword mapping in NR, Huawei, HiSilicon
+
+R1-1716284, Remaining details on CW to MIMO layer mapping, Intel Corporation
+
+R1-1716663, Finalizing Layer Mapping, Samsung
+
+R1-1716208, Codeword mapping for DFTs-OFDM based UL, MediaTek Inc.
+
+R1-1716340, Further details on CW mapping, Ericsson
+
+R1-1716077, Remaining details on resource element mapping, NTT DOCOMO, INC.
+
+R1-1716387, Remaining issues on CW to layer mapping Qualcomm Incorporated

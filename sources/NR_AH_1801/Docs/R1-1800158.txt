@@ -1,0 +1,85 @@
+3GPP TSG RAN WG1 Meeting AH 1801 R1-17100158
+
+Vancouver, Canada, January 22nd-26th 2018
+
+Source: MediaTek Inc.
+
+Title: Remaining issues in codeword mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+A number of issues are identified in TS 38.211 and TS 38.214 concerning transmit chain. We provide proposals to address the identified issues.
+
+Issues in specifications concerning the NR transmit chain
+
+In TS 38.211 and TS 38.214, the following Tx chain is specified for DL CP-OFDM, UL DFT-S-OFDM and CP-OFDM:
+
+[FIG:04af66850db25d36ce43]
+
+Figure 1 The current Tx chain as in NR specifications
+
+In NR, two resource allocation types are defined:
+
+Resource allocation type 0 (RAT 0): PRBs are divided into groups of contiguous PRBs (RBG), the addressable unit is a RBG from resource allocation’s point of view;
+
+Resource allocation type 1 (RAT 1): there are two flavours of RAT 1:
+
+Non-interleaved: VRB to PRB mapping is in order;
+
+Interleaved: a block interleaver is used to shuffle PRB bundles to create frequency diversity for a codeblock’s transmission.
+
+Issue 1a: PAPR due to non-contiguous RBGs
+
+This issue can be first explained by one example: with a RBG size at 2 RBs, a bitmap [1000…0001] for resource allocation type 0 requires a UE to transmit over 4 PRBs at the edge of a BWP, the resulted waveform’s PAPR can be high and the intermodulation issue can be severe, hence non-contiguous RBGs allocation is not suitable for DFT-S-OFDM in NR.
+
+From Rel-10 LTE, and Rel-14 LTE, 2-cluster PUSCH and interlaced PUSCH have been supported, one might be tempted to cite that as a precedence. Note the DCI design for both cases allows efficient signaling of resource allocation for PUSCH, RAT 0’s signaling design in NR has not been optimized for that. Considering NR unlicensed most likely will be specified, it is advantageous to leave a clean slate for optimized NR unlicensed design rather than require the forthcoming NR unlicensed to accommodate an inefficient precedence.
+
+When contiguous RBGs are used for DFT-S-OFDM, the length of PRBs in the allocation should have factors from {2,3,5} only to retain the same complexity for DFT spread.
+
+We have
+
+Proposal 1: DFT-S-OFDM is not supported with non-contiguous RBGs with RAT 0 in Rel-15. When contiguous RBGs are used for DFT-O-OFDM, the total number of PRBs in the allocation has factor(s) from {2,3,5} only.
+
+Proposal 2: non-contiguous RBG allocation is an optional feature for CP-OFDM uplink in Rel-15.
+
+Issue 1b: PAPR due to interleaved VRB-PRB mapping
+
+When DFT-S-OFDM is used in uplink, as step 6 comes after step 4, when interleaved VRB-PRB mapping for RAT 1 or non-contiguous RBGs with RAT 0 is used, the PAPR of the resulted signal’s waveform can be large.
+
+We have
+
+Proposal 3: DFT-S-OFDM is not supported with interleaved VRB-PRB mapping with RAT 1 in Rel-15.
+
+Proposal 4: interleaved VRB-PRB allocation with RAT 1 is an optional feature for CP-OFDM uplink in Rel-15.
+
+Issue 2: the order of spatial precoding and VRB-PRB mapping
+
+In step 5, to apply the appropriate precoders, which can be different for different PRBs, to the incoming signal, the PRB indices correspond to those precoders must already be known, and the precoding operation is best conducted over subbands with physical meaning. Yet in step 6, the operation of VRB-PRB mapping suggests that is not the case, actually the incoming signal for Step 6 is in a logical domain. Such an examination suggests Step 6 as in the current NR specification needs to be moved to somewhere prior to the current Step 5.The following Tx chain is suggested.
+
+[FIG:89fa2e10e923b5edf32b]
+
+Figure 2 Proposed Tx chain
+
+In the suggested Tx chain, frequency hopping can be handled in Step G (mapper 2), and VRB-PRB mapping is moved to Step D.
+
+We have
+
+Proposal 5: The Tx chain specification in TS 38.211 is adjusted according to Figure 2, i.e. the VRB-PRB mapping is performed after codeword layer mapping.
+
+Conclusion
+
+In this contribution, we examine a few issues identified on the Tx chain captured in the current NR specifications. We have
+
+Proposal 1: DFT-S-OFDM is not supported with non-contiguous RBGs with RAT 0 in Rel-15. When contiguous RBGs are used for DFT-O-OFDM, the total number of PRBs in the allocation has factor(s) from {2,3,5} only.
+
+Proposal 2: non-contiguous RBG allocation is an optional feature for CP-OFDM uplink in Rel-15.
+
+Proposal 3: DFT-S-OFDM is not supported with interleaved VRB-PRB mapping with RAT 1 in Rel-15.
+
+Proposal 4: interleaved VRB-PRB allocation with RAT 1 is an optional feature for CP-OFDM uplink in Rel-15.
+
+Proposal 5: The Tx chain specification in TS 38.211 is adjusted according to Figure 2, i.e. the VRB-PRB mapping is performed after codeword layer mapping.
