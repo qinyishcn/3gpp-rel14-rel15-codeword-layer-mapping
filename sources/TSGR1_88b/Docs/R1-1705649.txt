@@ -1,0 +1,145 @@
+3GPP TSG RAN WG1 Meeting #88bis R1-1705649
+
+Spokane, USA 3rd- 7th April 2017
+
+Agenda Item: 8.1.2.1.1
+
+Source: Lenovo, Motorola Mobility
+
+Title: Discussion of codeword mapping
+
+Document for: Discussion
+
+Introduction
+
+In the January RAN1 ad hoc meeting, it was decided that study of interleaving in the codeword to layer mapping procedure is needed for 5G NR [1]. In RAN1#88 meeting, the following agreements were reached [2].
+
+Agreements:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+In this contribution we discuss issues raised when eMBB traffic is multiplexed with URLLC in the same resource in DL and UL, and propose codeword to RE mapping scheme to mitigate of the interference/puncturing caused by bursty URLLC to eMBB transmission in the DL/UL data channel.
+
+Also discussed in the January RAN1 ad hoc meeting was the number of codewords supported and the relationship between the number of codewords and the number of layers. A maximum of 2 codewords per PDSCH/PUSCH assignment per UE was agreed with 1 and 2 layers being mapped to a single codeword and 5 to 8 layers mapped to 2 codewords.
+
+Agreements:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 2-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+A working assumption was reached that 3 and 4 layers should be mapped to a single codeword with further study for the alternative of mapping to 3 and 4 layers to 2 codewords especially in the case multi-panel/multi-TRP scenarios
+
+Working assumption:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):
+
+For 3 and 4-layer transmission: 1 CW
+
+FFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)
+
+Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+One of the motivations for mapping 3 and 4 layers to two codewords was multi-TRP/multi-panel scenarios where the layers’ SINR spread could be too large for transmission with a single code rate and possibly modulation order [4] On the other hand system simulation results in [5] indicate that the transmission by more than one TRP is unlikely or not that beneficial in scenarios other than indoor office and therefore extra complexity of multiple codewords is unnecessary.
+
+This contribution addresses the single-TRP multi-panel case, presenting system simulation results of coherent transmission with multiple panels with a phase error between panels.
+
+Codeword to RE Mapping
+
+In order to meet the stringent latency requirement of the URLLC traffic, URLLC packets are transmitted in mini-slots. It may be sent in a single OFDM symbol, or 2 or 3 consecutive OFDM symbols for larger packet. Different numerology, i.e. larger subcarrier spacing, may be used to further shorten the URLLC transmission. This makes URLLC very bursty in the time domain, and may cause short but significant interference when multiplexed with eMBB traffic. In the downlink, both eMBB and URLLC packets are transmitted by the gNB. The gNB can suspend the transmission of the eMBB codeword while transmitting URLLC, effectively puncturing the eMBB codeword. But another problem arises. Suppose an eMBB transmission block is transmitted to a UE1 in a regular slot. It is based on the schedule made by the gNB and the corresponding DCI is transmitted in the beginning of the current slot, or even before the current slot in the case of cross-slot scheduling [3]. While the UE1 is receiving (or expecting to receive) the eMBB traffic based on its received DCI, the gNB receives a DL URLLC packet for UE2. Given the urgency of the URLLC, it may start a mini-slot in the middle of the eMBB slot to transmit the URLLC packet to UE2. It suspend transmission to UE1 during the mini-slot. The mini-slot can be self-contained, i.e. it carries DCI to UE2 in the beginning. From UE2’s point of view, there is no ambiguity as to in which resource to receive the URLLC packet. There is also no interference from the eMBB packet to the URLLC packet. From UE1’s point of view, it is receiving its eMBB packet punctured by the URLLC packet without knowing it. In the UL, a grant-free URLLC transmission may occur in the middle of an eMBB slot, causing the URLLC and the eMBB transmissions to interfere to each other. For the URLLC transmission in a mini-slot, it is either free from interference from the eMBB transmission (in the DL), or all the URLLC REs suffer interference from the eMBB transmission (UL). It is unlikely to benefit from a particular codeword to RE mapping scheme. In this contribution, we address the issue of protecting the eMBB transmission from URLLC.
+
+Figure 1. Multiplexing of eMBB and URLLC transmission. The eMBB transmission for UE1 occupies a slot of 14 symbols, while the URLLC transmission for UE2 occupies a mini-slot of two symbols starting from symbol number 5.
+
+Figure 1 shows an example of eMBB and URLLC multiplexed together. The URLLC transmission of UE2 occupies a mini-slot of symbols 5 and 6, and causes interference or puncturing to the eMBB transmission of UE1 occupies an entire slot. Since the problem is similar in the UL and the DL case, we will use the word puncturing and interference interchangeably in the following discussion. Because puncturing is concentrated in the time domain and spreads along the frequency domain, it is beneficial to map the eMBB codeword to the RE in the time domain first, at least when the latency requirement is not as demanding. This avoids having consecutive modulation symbols of the eMBB codeword being punctured.
+
+Proposal 1: Consider mapping codeword to RE for eMBB traffic in the time domain first, at least for the regular latency requirement case.
+
+Because URLLC transmission usually occupies a few (typically 1 or 2) consecutive OFDM symbols, it is beneficial to map consecutive eMBB codeword modulation symbols to non-consecutive OFDM symbols. This can be achieved with some time-domain interleaving scheme. This does not preclude frequency domain interleaving at the subcarrier level.
+
+Proposal 2: Consider symbol-level interleaving in the time domain for eMBB codeword.
+
+It has been agreed that a codeword can be mapped to multiple layers [2]. For example, two codewords are mapped to 5-8 layers. If the modulation symbols of a codeword are mapped across layers first, consecutive modulation symbols will be punctured by the bursty URLLC mini-slot. This may lead to severe decoding performance loss. To spread out the puncturing effect more or less evenly across the codeword, mapping consecutive modulation symbols across layers should be avoided. This can be done by mapping the codeword in the time-frequency domain first, in a layer-by-layer manner.
+
+Proposal 3: Avoid mapping consecutive modulation symbols of a codeword across layers in the same RE.
+
+Number of Codewords for 3 and 4 Layers
+
+System simulations of single-TRP multi-panel transmissions to determine the likelihood of rank 3-4 transmission assuming coherent transmission and a frequency-flat phase error [6]. An urban micro scenario was simulated with each panel consisting of a 4 X 4 array of dual-polarized antennas virtualized to 8 ports and an inter-panel spacing of 6.4 wavelengths. For each rank hypothesis r, SVD precoding was applied with equal power per layer followed by power equalization between panels. A histogram of the selected ranks taken over UEs and TTIs is shown in Figure 2. Rank 3-4 is selected in approximately half of transmission intervals. Even in scenarios without multi-TRP transmission therefore, transmission rank above 2 can be significant. The potential for significant 3-4 layer transmission in multi-panel scenarios should be considered when deciding whether to confirm the working assumption of 3-4 layer single codeword transmission.
+
+Proposal 4: The potential for significant 3-4 layer transmission in multi-panel scenarios should be considered when deciding whether to confirm the working assumption of 3-4 layer single-codeword transmission.
+
+[FIG:414f5e3d9bc39e8c5453]
+
+Figure 2: Histogram of rank selection with single-TRP two-panel transmission. Rank 3 or 4 transmission is significant, occurring in about 50% of transmissions.
+
+[FIG:b35b3e5e9f5d0de5e6cb]
+
+[FIG:e5dacd4765d116db332a]
+
+[FIG:4bd11270349f14d49172]
+
+Figure 3. CCDF of conditional number for the rank 2, 3, 4 cases respectively (from top to bottom).
+
+It is clear that for the rank 2 case the two spatial layers are very close, and a single codeword is more than enough. The rank 3 case is marginal, where 70% of the UEs have their conditional number below 5dB. This implies there is not much capacity loss when a single codeword is applied to all 3 layers. Either 1 or 2 codewords can be applied to the rank 3 case. For the rank 4 case, the conditional number (ratio of the 1st and the 4th singular values) is more diverse than rank3. For over 30% of the UE, there is more than 10dB discrepancy between the strongest and the weakest spatial layers. We believe this justifies using separate codewords for the strongest 2 (1st and 2nd) layers and the weakest 2 (3rd and 4th) layers.
+
+Proposal 5: Either 1 or 2 codewords can be applied to the rank 3 case. Consider 2 codewords for the rank 4 case.
+
+Conclusion
+
+In this contribution, we have analyzed the interference between URLLC and eMBB tranmissions when they are multiplexed in the same resources. Due to the bursty nature of the URLLC transmission, it is necessary to design proper interleaving schemes for eMBB in the time-frequency-spatial domain to prevent consecutive modulation symbols of an eMBB codeword from being punctured.
+
+We have also analyzed the number of codewords required for the rank=3/4 case using simulation. The simulation results support use of 2 codewords for the rank 4 case for multi-panel gNB.
+
+Proposal 1: Consider mapping codeword to RE for eMBB traffic in the time domain first, at least for the regular latency requirement case.
+
+Proposal 2: Consider symbol-level interleaving in the time domain for eMBB codeword.
+
+Proposal 3: Avoid mapping consecutive modulation symbols of a codeword across layers in the same RE.
+
+Proposal 4: The potential for significant 3-4 layer transmission in multi-panel scenarios should be considered when deciding whether to confirm the working assumption of 3-4 layer single-codeword transmission.
+
+Proposal 5: Either 1 or 2 codewords can be applied to the rank 3 case. Consider 2 codewords for the rank 4 case.
+
+References
+
+Chairman’s notes, RAN1 NR Ad hoc meeting #1.
+
+Chairman’s notes, RAN1#88.
+
+Chairman’s notes, RAN1#86bis.
+
+R1-1701790, “On number of codewords for NR”, ZTE, RAN1 #88.
+
+R1-1703341, “Number of codewords for physical data channel”, Huawei, RAN1#88
+
+[6] R1-1703150, “On the number of codewords in NR”, Nokia, Alcatel-Lucent Shanghai Bell, RAN1#88
+
+R1-1700758, “On Type I CSI feedback extension to multi-panel operation”, WG1 #87ah-NR
+
+Appendix 1
+
+Simulation Parameters
+Carrier frequency | 2 GHz
+Bandwidth | 10 MHz
+Scenarios | 3D UMi 200m ISD
+BS antenna configuration | Non-Uniform Panel Array [EQ:44c5d53d6db2163ade9a] , [EQ:306e9d521171c411079b] , 2x2 virtualizaiton [EQ:e48116bbde52b9f1ec3c] tilt0.8 [EQ:6243fd89e314c54e98f0] vertical antenna spacing, 0.5 [EQ:25d41bfa9bec4aac72d8] horizontal antenna spacing6.4 [EQ:fb0de6c6c21d2e2e5222] Horizontal panel spacing of 6.4 [EQ:b0b879c12807be31b2de] Random phase error between panels
+UE antenna configuration | (M,N,P,Mg,Ng) = (1,2 ,2)
+Cell layout | 57 homogeneous cells
+MIMO mode | SU-MIMO with rank adaptation
+Precoder selection | SVD of 4 X 16 channel of both panels including random phase error
+Wrapping | Geographical distance based
+UE receiver | MMSE
+UE noise figure | 9 dB
+BS Tx power | 41
+Traffic model | Full Buffer
+UE speed | 3 km/h
+Scheduling | Round robin
+Channel estimation | Ideal
