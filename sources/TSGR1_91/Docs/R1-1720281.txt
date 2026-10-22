@@ -1,0 +1,51 @@
+3GPP TSG RAN WG1 91 R1-17120281
+
+Reno, USA, 27th November – 1st December 2017
+
+Agenda item: 7.2.1.1
+
+Source: Samsung
+
+Title: Finalizing Layer Mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 NR-AH3 and #90bis, it was decided that frequency-first RE mapping (“Opt 1”) used for DFT-SOFDM without intra-slot frequency hopping (FH) [1]. In addition, the same scheme was made a working assumption for the case of intra-slot FH with 1 CB [2]. The only open issue on layer mapping is the RE mapping for DFT-SOFDM with intra-slot FH and >1 CBs:
+
+[Option 1] FTSS: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+[Option3] FSST: the modulated symbols are first mapped across sub-carriers, the across sub-slots (occupying different sets of PRBs), then across DFT-SOFDM symbols within a sub-slot
+
+This contribution addresses this issue.
+
+Discussion
+
+As repeatedly discussed, the most prevalent use cases for DFT-SOFDM involve coverage-limited scenarios where the number of CBs is expected to be small and the SNR of operation is low. In this case, the diversity gain offered by FH is limited (since diversity gain is observable at higher SNR values). Moreover, at low SNR, the diversity gain from FH (if any) is expected to be offset by the loss in channel estimation as DMRS time interpolation is not possible. Therefore, optimizing RE mapping to attain maximum diversity gain for this particular combination (DFT-SOFDM + FH) is not expected to offer much benefit. The same RE mapping as the other scenarios (DL, UL CP-OFDM, UL DFT-SOFDM without FH), option 1 is the best choice. This is a working assumption for 1 CB which should be confirmed as an agreement.
+
+For a larger yet relative small number of CBs (where DFT-SOFDM is still prevalent), the above argument still applies. Therefore, option 1 is also the best choice for this case.
+
+For a larger yet relative large number of CBs, it is expected that DFT-SOFDM is used much less frequently than CP-OFDM. This is because the operational SNR tends to be higher and the UL transmission is not coverage-limited. Since the choice of UL waveform can be dynamically altered (at least using the transmission scheme fallback mechanism), the benefit for optimizing the combination between DFT-SOFDM and FH (where FH is expected to provide measurable diversity gain) is unclear. Adding the extra complexity incurred from supporting an additional RE mapping scheme (gNB scheduler and UE implementations, specification effort for control channels), option 1 is again the best choice for this case.
+
+Proposal: For DFT-SOFDM with intra-slot frequency hopping, the RE mapping scheme is as follows:
+
+Confirm the working assumption as an agreement: For DFT-SOFDM and single CB with intra-slot frequency hopping, only Option 1 is supported
+
+For >1 CBs per TB, only option 1 is supported just as other cases
+
+Conclusions
+
+In this contribution, Samsung’s view on remaining issue on layer mapping is presented. Our proposal can be summarized as follows:
+
+For DFT-SOFDM with intra-slot frequency hopping, the RE mapping scheme is as follows:
+
+Confirm the working assumption as an agreement: For DFT-SOFDM and single CB with intra-slot frequency hopping, only Option 1 is supported
+
+For >1 CBs per TB, only option 1 is supported just as other cases
+
+References
+
+3GPP, RAN1 NR-AH3, Chairman’s Notes
+
+3GPP, RAN1#90bis, Chairman’s Notes

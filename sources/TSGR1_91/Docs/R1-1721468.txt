@@ -1,0 +1,159 @@
+3GPP TSG RAN WG1 91 R1-1721468
+
+Reno, USA, 27th November – 1st December 2017
+
+Agenda item: 7.2.1.1
+
+Source: Samsung
+
+Title: Summary of Open Issues on Layer Mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+This contribution summarizes the views of different companies on the following open issues critical to the completion of Phase I NR.
+
+RE mapping for DFT-SOFDM with frequency hopping (FH) for 1 CB: confirm the working assumption of Option 1 as an agreement
+
+RE mapping for DFT-SOFDM with frequency hopping (FH) for multiple CBs
+
+PDSCH/PUSCH data scrambling
+
+It was previously agreed that the layer mapping for UL CP-OFDM is the same as that for DL (layer frequency time). Since there is neither condition nor exception, this agreement is (and should be) understood as all-encompassing. Therefore, for one-layer UL CP-OFDM transmission (with and without FH), this mapping is clearly reduced to Option 1 (frequency time). Two companies (AT&T, NTT Docomo), however, raised the possibility of supporting Option 3 for UL CP-OFDM when FH is used. Given the agreement, this proposal can be valid only if Option 3 is proposed as an additional RE mapping scheme (unless the agreement is to be revoked). Given that this is not a critical issue and the same argument as that for Issue #2 is used, this is to be discussed only if time allows.
+
+Since no issue is raised regarding Issue 1, the following proposal may be feasible in RAN1#91:
+
+For RE mapping for DFT-SOFDM with frequency hopping for 1 CB: confirm the working assumption of Option 1 as an agreement
+
+[Critical, RRC impact] Issue 2 – RE mapping for DFT-SOFDM with intra-slot frequency hopping
+
+Issue 2 involves two questions:
+
+Q1: Is the use of DFT-SOFDM with FH and multiple CBs a critical use case?
+
+Q2: If the use of DFT-SOFDM with FH and multiple CBs is supported, which RE mapping scheme is supported?
+
+Option 1 (FT SS): sub-carriers DFT-SOFDM symbols sub-slots (hopping). This mapping is used for other scenarios, i.e. DL, UL with CP-OFDM, UL with DFT-SOFDM without FH, and UL with DFT-SOFDM with FH +1 CB
+
+Option 3 (FSS T): sub-carriers sub-slots (hopping) DFT-SOFDM symbols.
+
+Based on the available proposals (in [1]–[14]), the proposals can be identified and summarized in Table 1.
+
+Table 1. Views on Q1
+
+Position | Proponents | Justification
+Yes | AT&T | In our view it is up to network to configure a UE either in DFT-SOFDM or in CP-OFDM. Hence we can’t guarantee that a UE can never be scheduled more than one CB. Since this feature shows performance gain over option 1 , we prefer to have this feature in the first release.
+Yes | NTT Docomo | DFT-SOFDM cannot be dynamically changed to CP-OFDM since it was agreed that UL waveform is switched by RRC. Thus, DFT-s-OFDM can be used also for higher MCS, i.e. multiple CBs.Furthermore, RAN4 prioritizes contiguous scheduling for CP-OFDM, based on the NR work scope reduction. Enough frequency diversity gain cannot be achieved without frequency hopping regardless of the waveform, i.e. DFT-SOFDM or CP-OFDM.
+Yes | ZTE | Since the UL waveform is configured by RRC signalling, in case of dynamic change of SINR, the number of transmitted CBs can also be larger than 1. Moreover, the usage of DFT-SOFDM for should also take into account the RF performance at UE side, e.g., PAPR, even in high SINR case.
+No | Samsung | DFT-SOFDM is intended for coverage limited scenario where the operating SNR is low (therefore diversity gain is much less important than channel estimation quality, i.e. ability to perform time interpolation is desirable). Moreover, in coverage limited scenario, assigning smaller TBs composed of 1 CB is more likely.
+No | Ericsson | Same view as Samsung
+
+Table 2. Views on Q2
+
+Position | Proponents | Justification
+Option 1 | CATT, Ericsson, Intel, MediaTek, Motorola/Lenovo, Samsung, Qualcomm | The gain of Option 3 over Option 1 occurs where DFT-SOFDM is not expected to be used.
+Option 3 | AT&T, Huawei/HiSi, NTT Docomo, ZTE/Sanechips, LGE | Better performance than Option 1 when DFT-SOFDM is used with FH and multiple CBs
+
+Observation:
+
+In terms of RRC impact, supporting option 3 may require some additional RRC/DCI signaling depending on, e.g. whether option 1 is also supported for multiple CBs.
+
+On Q1: There is no clear majority hence lack of consensus on the importance of DFT-SOFDM with FH and multiple CBs.
+
+On Q2: There is no clear majority hence lack of consensus between Option 1 and Option 3
+
+Void of other consideration, Option 1 requires less specification impact since it is already supported for other scenarios (DL, UL CP-OFDM, UL SFT-SOFDM without FH, UL DFT-SOFDM with HF + 1 CB)
+
+Based on the above summary, the following conclusion may be feasible in RAN1#91:
+
+There is no consensus whether DFT-SOFDM with FH and multiple CBs is a critical use case. Therefore there is no consensus if features solely pertaining to this use case needs to be optimized (at least in Phase I).
+
+Discuss whether to support either Option 1 or Option 3 for UL DFT-SOFDM + FH + multiple CBs.
+
+[Critical, RRC impact] Issue 3 – PDSCH/PUSCH data scrambling
+
+Issue 3 involves several factors such as sequence design, parameters used for initialization, and initialization generator equation.
+
+Table 3. Data scrambling
+
+Company | Sequence | Parameters used for initialization | Initialization generator equation
+AT&T | Gold-31 | UE – specific scrambling ID | Cinit = F(UE- specific scrambling ID)
+Ericsson | Gold-31 | RNTI (n_RNTI), CW index (q), 10-bit RRC configured parameter (N_ID), DL/UL (d). Default N_ID is the physical CellID Note: Slight change compared to R1-1720732 | [FIG:ab2b15cd72cf79a77c9b]
+Intel | Gold-63, Gold 31 as second preference | 16-bits SCID (Default SCID = [PCID SSB-ID]), 16-bits RNTI, OFDM symbol index in radio frame (the parameter can be disabled by RRC for low latency transmissions), CW index | Dedicated bits for each fields in case of Gold 63. Hashing function for c_init for Gold 31
+LG | Gold-31 | nRNTI (16 bits)CW index (1 bit)Timing information (4 bits) Scrambling ID (10 bits) | [FIG:e520ee970bb29fa62ba4]
+NTT Docomo | Gold-31 | RNTI, CW index, UE specifically configured scrambling ID (default: PCID) | 
+Samsung | Gold-31 | RNTI (~16 bits)CW index (1 bit)Timing information (~4 bits) or HARQ process ID (3 bits)Scrambling ID (10 bits) | Option 1: [EQ:ac50d3a689aeefbddfe0] Option 2: [EQ:6ad67cc9e0d486561eb7]
+vivo | Gold-31 | ~16 bits RNTI, ~1 bit CW index, ~14 bit RRC scrambling ID | [FIG:36c772ce403d13120b60]
+Qualcomm | Gold-31 | RNTI (n_RNTI), CW index (q), 10-bit RRC configured parameter (N_ID), Default N_ID is the physical CellID | [EQ:89c2b4da542db7eee983]
+ZTE | Gold-31 | RNTI (n_RNTI), DM-RS group ID (d), SlotID, X-bit RRC configured parameter (N_ID), Default N_ID is the physical CellID | [EQ:54e6dcf631e8589b18c4] The [EQ:276f8ecde67e9f5702cf] should be normalized based on the reference numerology in case of simultaneously transmission with multiple numerologies: [EQ:8156733f315d0bb938e4]
+
+Observation:
+
+In terms of RRC impact, there could be an additional RRC signaling needed for data scrambling initialization.
+
+For data scrambling initialization, the following parameters are proposed:
+
+By all companies: nRNTI (UE-specific, 16 bits),
+
+By majority: CW index (1 bit), scrambling ID or N_ID (RRC configured, various bitwidth, default is cell ID)
+
+By a few (>1) companies: timing information such as SlotID (various bitwidth)
+
+Gold-31 sequence is the majority view.
+
+One company (Huawei/HiSi) stated that this discussion should take place in a different agenda item.
+
+Based on the above summary, the following proposal may be feasible in RAN1#91:
+
+Gold-31 sequence is used for PDSCH/PUSCH data scrambling
+
+The following parameters are used for data scrambling initialization:
+
+nRNTI (UE specific): 16 bits
+
+CW index: 1 bit
+
+Scrambling ID or N_ID (RRC configured with the default setting as Cell ID): X bits
+
+Timing information: Y bits
+
+Further discuss and decide the following issues in RAN1#91:
+
+The values of X and Y
+
+Whether timing information is Slot ID
+
+The need for other parameters
+
+Equation for cinit : as a starting poin, [EQ:cbe9d65b75962317b8bc]
+
+References
+
+R1-1719763, Remaining issues on codeword mapping, vivo
+
+R1-1720177, On remaining details of codeword mapping, CATT
+
+R1-1719526, Remaining details of codeword mapping, ZTE, Sanechips
+
+R1-1719901, Discussion on codeword mapping, LG Electronics
+
+R1-1719629, On frequency hopping for NR PUSCH, AT&T
+
+R1-1719430, Remaining details of codeword mapping in NR, Huawei, HiSilicon
+
+R1-1720065, Remaining details on CW to MIMO layer mapping, Intel Corporation
+
+R1-1720281, Finalizing layer mapping, Samsung
+
+R1-1719561, Remaining details on codeword mapping, MediaTek Inc.
+
+R1-1720732, On CW mapping and data scrambling, Ericsson
+
+R1-1720798, Remaining details on CW mapping, NTT DOCOMO, INC.
+
+R1-1720656, Remaining issues on CW to layer mapping, Qualcomm Incorporated
+
+R1-1719733, Remaining details of codeword mapping for DFT-s-OFDM, Lenovo, Motorola Mobility
+
+R1-1720456, Discussions on additional CW-to-layer correspondence, Sony

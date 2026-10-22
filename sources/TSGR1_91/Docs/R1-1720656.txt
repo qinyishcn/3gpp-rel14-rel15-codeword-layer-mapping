@@ -1,0 +1,175 @@
+3GPP TSG RAN WG1 Meeting 91 R1-1720656
+
+Reno, USA, November 27th – December 1st, 2017
+
+Agenda item: 7.2.1.1
+
+Source: Qualcomm Incorporated
+
+Title: Remaining Issues on CW to layer mapping & Data Scrambling
+
+Document for: Discussion/Decision
+
+Introduction
+
+This contribution is a revision of R1-1713386 submitted in RAN1 #90. The following agreements regarding the codeword to layer mapping were made:
+
+R1-1715161 WF on RE mapping for DFT-s-OFDM NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm
+
+Agreement:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+In RAN1 #89, the following agreement was made to provide frequency diversity on PUSCH.
+
+Agreements:
+
+For DFT-s-OFDM based NR-PUSCH transmission, contiguous RB allocation with/without frequency hopping are supported
+
+At least intra-slot frequency hopping is supported for 14 symbol slot case
+
+FFS on detailed resource allocation
+
+FFS on detailed frequency hopping for PUSCH
+
+In RAN1 #90Bis, the following agreement was made to provide frequency diversity on PUSCH.
+
+Working Assumption
+
+For DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:
+
+The RE mapping is performed with the following order:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+Agreements:
+
+Support PUSCH frequency-hopping for DFT-s-OFDM and CP-OFDM waveform with RA Type 1.
+
+At least support intra-slot FH for Msg.3.
+
+FFS: details including hopping pattern/configurations, signaling designs, etc.
+
+FFS whether applicable to all PUSCH durations within a slot
+
+FFS: whether to support repetition of Msg.3
+
+Support UE-specific RRC configuration of the following:
+
+Mode 1: intra-slot FH only
+
+FFS whether applicable to all PUSCH durations within a slot
+
+Note: Mode 1 is applicable to single slot and repetition case
+
+Mode 2: inter-slot only
+
+Note:  Mode 2 is applicable to repetition case
+
+FH across mini-slots for repetitions
+
+FFS: whether it can be enabled by which mode and details, including alignment with slot boundary, pattern etc. Target to have a common FH design between slot and mini-slot.
+
+FFS: details including the number of configurations, hopping pattern/configurations, signaling designs, etc.
+
+Support RAR/UL grant indication for PUSCH frequency-hopping
+
+FFS: details including how to indicate enable/disable and pattern/mode of FH.
+
+Agreements:
+
+The c_init for data scrambling depends at least on a “Scrambling ID” parameter configured to the UE by RRC. FFS whether one RRC parameter is used for c_init for both PUSCH and PDSCH or if two independent RRC parameters is used.
+
+Discuss further this issue and dependence on other parameters, default value etc in RAN1#91.
+
+In this contribution, we summarize our views on the remaining issues on layer mapping procedure for PUSCH hopping and data channels scrambling.
+
+Layer mapping for PUSCH with Hopping
+
+Long discussions have already occurred on this topic and technical results have occurred. For one codeblock transmission, no performance loss is expected by confirming the working assumption and extend it also for PUSCH with CP-OFDM. For the scenarios of multiple codeblocks, some loss after 5 dB of geometry may be expected, but the gNB may still schedule inter-slot hopping to combat these losses. Loss against LTE is not expected if the subcarrier spacing used for NR sub6 is 30 KHz, 2 slots of 60 khz has the same duration as one subframe of LTE.
+
+Proposal 1: For the case of PUSCH with hopping confirm working assumption and support Option 1 for all scenarios.
+
+Scrambling for data channels
+
+We propose to use the LTE PN sequence, similarly to our proposal for PBCH and DMRS channels. On the number of bits used for initialization, we do not currently see a clear need to use more than 31 bits (similar to LTE) for the following reasons.
+
+If cell ID, RNTI, and codeword index are used for PN sequence generation (assuming no change with respect to LTE), it would require a total of 27 bits in NR.
+
+We believe that timing information should not be used in the [EQ:48efbc2df35ca201c295] formula of the data channels for the following reasons:
+
+one use case of not including the slot index in the data channel scrambling generation could be when we want to hold on the transmission due to various reasons: unlicensed operation is one example. More specifically, when there is a LBT failure, the transmitter could hold on the packet and transmit later.
+
+The argument that adding timing information may provide additional randomization is not valid in practical scenarios. To see this, the only scenario that it could provide some additional randomization is when a UE in two consecutive transmissions (a Tx + a re-Tx) using the same RV is interfered by another two consecutive transmissions (a Tx + a re-Tx) using also the same RV. If either one second transmission, either of the serving or of the interfering transmission, uses a different RV, additional randomization by introducing timing information is not needed. Note that the Re-Tx is typically with a different RV, than the first transmission, so such a situation will not appear in practice.
+
+Proposal 2: Data channel scrambling sequence is based on the length-31 Gold sequence (same as LTE) with [EQ:82c3c8dc2e3d9adb4ec4] given by the following formula:
+
+[EQ:2ebea1c71bad549cc3e5]
+
+where [EQ:98430c31647fe494f09c] equals physical cell ID if no value for [EQ:76aea74819d71806fb0f] is provided by higher layers, otherwise it equals [EQ:d0001c42e38dfe02ed6d]
+
+Conclusions
+
+We make the following proposals:
+
+Proposal 1: For the case of PUSCH with hopping confirm working assumption and support Option 1 for all scenarios.
+
+Proposal 2: Data channel scrambling sequence is based on the length-31 Gold sequence (same as LTE) with [EQ:7556fdb1c8a4cbfad162] given by the following formula:
+
+[EQ:68b7dcb1c0f84558b83c]
+
+where [EQ:e2d180835d2fd00faf21] equals physical cell ID if no value for [EQ:87ee9c945ba0b47174f9] is provided by higher layers, otherwise it equals [EQ:078be2781a85b7c06f99]
+
+References
+
+3GPP RAN1 #90 Chairman’s notes
+
+3GPP RAN1 #90 AH3 Chairman’s notes
+
+3GPP RAN1 #90 Bis Chairman’s notes
+
+Appendix
+
+We present simulation results for a 2 Tx, 2 Rx system up to 64-QAM, rank 1, with DFTS-OFDM for the following slot structure with hop: There are total 10 symbols carrying PUSCH with an overhead of total 1 DMRS symbol per hop as follows:
+
+[FIG:db160a6d7aaa2b72c162] [FIG:ff5484b4f2b79e4ac0dd]
+
+We simulate the case that each hop has a bandwidth of X={10,40,60} PRBs, with a gap of 80 PRBs between the two hops, for 3 kmh, and 120 kmh speeds (11 Hz and 444 Hz Doppler spread respectively) in a TDL-C 300 nsec channel with 4 PRB-based MMSE channel estimation with noise covariance estimation, and 3GPP Turbo code with 1 bit ACK/NAK and inner loop and outer loop link adaptation with 10 % TBLER target error rate.
+
+Low mobility (3 Kmh)
+
+10 PRBs each hop
+
+[FIG:403612dfa11f97c3eef6]
+
+40 PRBs each hop
+
+[FIG:078bb36cd38754cc1e8b]
+
+60 PRBs each hop
+
+[FIG:d8e2805b7256c4dc4dd1]
+
+High mobility (120 Kmh)
+
+10 PRBs each hop
+
+[FIG:13fc53a6474e4d1f06e7]
+
+40 PRBs each hop
+
+[FIG:03f1d50979c4d260e35a]
+
+60 PRBs each hop
+
+[FIG:906cb5f8f366bd509b29]

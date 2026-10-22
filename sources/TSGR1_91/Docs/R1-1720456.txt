@@ -1,0 +1,69 @@
+3GPP TSG-RAN WG1 #91 R1-1720456
+
+Reno, USA, Nov. 27th-Dec. 1st, 2017
+
+Agenda Item: 7.2.1.1
+
+Source: Sony
+
+Title: Remaining CW-to-layer mapping issue
+
+Document for: Discussion and consideration
+
+Introduction
+
+During RAN1 #90bis meeting, RAN1 agreed on that no additional CW-to-layer correspondence for >4 layers is supported in Rel.15 and concluded that no consensus among companies to support additional CW-to-layer correspondence for <= 4 layers. As a reminder, key agreements and conclusion are listed in what follows.
+
+R1-1709356 WF on configurable codeword to layer mapping LG Electronics, AT&T, ZTE
+
+Agreements:
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:fb132df047257ad45099] [EQ:fc9f34f9bf5e6925eaac] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS whether the UE report the preferred layer mapping
+
+R1-1718798 Summary of Open Issues on Layer Mapping Samsung
+
+Agreement:
+
+No additional CW-layer correspondence is supported, at least in Rel-15, for >4 layers
+
+Conclusion:
+
+There is no consensus on supporting 2-CW layer mapping in addition to agreed 1-CW mapping, for 2, 3, and 4 layers for completion by December, 2017
+
+In this contribution, regarding the remaining additional CW-to-layer correspondences, we present our views when taking the multi-TRP/panel transmission into account. In addition, this contribution is revised from R1-1718666.
+
+Additional CW-to-layer correspondence
+
+Before we investigate the additional CW-to-Layer correspondence, let us first revisit the agreed default CW-to-Layer mapping scheme. Specifically, on a per PDSCH basis, at most 2 codewords are allowed. If the number of layer L > 4, the 1st [FIG:68ab56952972bc66b480] layers are mapped to CW0, and the remaining layers are mapped to CW1. In additional, FFS the case when L = 3 or 4, whether NR supports 2 CWs or not. Obviously, the default scheme is pre-defined in specification and therefore simple for both gNB and UE to implement without any need of signaling support. However, it lacks of flexibility in some scenarios, since the CW-to-Layer mapping of LTE-style cannot guarantee to work smoothly in NR scenarios. There are a few of corner cases to which we have to pay attention.
+
+[FIG:94787c5e2cbe90a2db2a]
+
+Two TRPs transmit L = 4 with single CW
+
+Take the multi-TRP/panel transmission in Figure 1 as example. When L = 4, according to the default CW-to-Layer mapping rule, we have only 1 CW, which maps from Layer 1 through Layer 4. The channel quality of first two layers from TRP 1 may significantly different from that of last two layers from TRP 2. Therefore, 2 CQIs reported from UE are more appropriated than single CQI. Otherwise, that single CQI UE measures and reports may be a tradeoff between the layers from TRP 1 and the other layers from TRP 2. It then wastes the strong channel condition of two layers by transmitting with lower MCS level and increases the BLER of the other two layers. Thereby, we have following proposal.
+
+For L = 2/3/4, NR supports additional CW-to-layer correspondence with 2 CWs in Rel.15.
+
+Furthermore, even RAN1 has agreed that there is no support for additional CW-to-layer mapping for >4 layers in Rel.15. However, considering the upcoming progress for multiple-TRP/panel transmission after Dec., 2017 [2], hopefully, NR should at least consider additional CW-to-layer mapping for >4 layers.
+
+Conclusions
+
+Finally, allow us to summary our proposals as below again
+
+For L = 2/3/4, NR supports additional CW-to-layer correspondence with 2 CWs in Rel.15.
+
+References
+
+R1-1715459, “Remaining details of codeword mapping in NR”, 3GPP RAN1 NR #3.
+
+RP-172108, “Updated work plan of RAN1 and 4 NR”, 3GPP RANP #77.

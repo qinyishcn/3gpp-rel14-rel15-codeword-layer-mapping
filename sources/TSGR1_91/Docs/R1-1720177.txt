@@ -1,0 +1,65 @@
+3GPP TSG RAN WG1 Meeting #91 R1-1720177
+
+Reno, USA, November 27th – December 1st, 2017
+
+Source: CATT
+
+Title: On remaining details of codeword mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and decision
+
+Introduction
+
+In 3GPP RAN1 #90bis, the following working assumptions on codeword mapping for NR have been made [1]:
+
+Working AssumptionFor DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:The RE mapping is performed with the following order:Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+In this contribution, we present our consideration on remaining issues of codeword mapping in NR. This contribution is revised from R1-1717806.
+
+RE mapping for DFT-S-OFDM based PUSCH
+
+As agreed in [2], companies are encouraged to perform link-level evaluation of PUSCH CW-to-RE mapping schemes for DFT-s-OFDM with and without frequency hopping. In [3], the following examples are listed:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:08c31dad1c3c7cb592be]
+
+Figure 2. Examples for 2-CB mapping
+
+For option 1, as data is spread over frequency domain with DFT, frequency domain first mapping can gain from frequency domain diversity. In addition, one more benefit with this approach is the support of fast decoding. However, if each codeblock is mapped within one hop, no more additional frequency domain diversity can be achieved with frequency hopping.
+
+For option 2, time domain diversity can be achieved under fast channel variation in high mobility scenarios or with frequency hopping. However, as each codeblock is spread over all the symbols within the slot, fast decoding is impossible. Meanwhile, achievable time domain diversity within one slot would be questionable. Therefore, in RAN1 #NR_AH3, this option has already been precluded.
+
+For option 3, if each codeblock can be split into two hops, additional frequency domain diversity can be achieved, while fast decoding is still impossible.
+
+Observation 1: Both diversity gain and decoding latency should be taken into account in RE mapping scheme selection for DFT-S-OFDM based PUSCH.
+
+As shown in [4] & [5], option 3 shows observable gain over option 1 only with more than one CBs and higher MCS. However, that would not likely to be the case for cell edge users with limited power, which is actually the scenario justifying DFT-s-OFDM and frequency hopping.
+
+Proposal 1: For DFT-S-OFDM based PUSCH with intra-slot frequency hopping, only Option 1 is supported.
+
+Conclusions
+
+In this contribution, we discussed the number of codeword(s) and codeword-to-layer mapping in NR. Based on the discussion above, we propose:
+
+Observation 1: Both diversity gain and decoding latency should be taken into account in RE mapping scheme selection for DFT-S-OFDM based PUSCH.
+
+Proposal 1: For DFT-S-OFDM based PUSCH with intra-slot frequency hopping, only Option 1 is supported.
+
+References
+
+RAN1 #90bis Chairman’s Notes.
+
+RAN1 #90 Chairman’s Notes.
+
+R1-1715161, “WF on RE mapping for DFT-s-OFDM NTT DOCOMO”, Huawei, HiSilicon, Intel, Mediatek, Qualcomm.
+
+R1-1716387, “Remaining issues on CW to layer mapping”, Qualcomm Incorporated
+
+R1-1716284, “Remaining details on CW to MIMO layer mapping”, Intel Corporation

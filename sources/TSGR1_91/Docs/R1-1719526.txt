@@ -1,0 +1,119 @@
+3GPP TSG RAN WG1 Meeting #91 R1-1719526
+
+Reno, USA, November 27th – December 1st, 2017
+
+Source: ZTE, Sanechips
+
+Title: Remaining details of codeword mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+For the UL transmission with DFT-S-OFDM, the following agreements have been achieved in RAN1 #90bis meeting [1]:
+
+Working Assumption
+
+For DFT-SOFDM for single codeblock with intra-slot frequency hopping, only Option 1 is supported:
+
+The RE mapping is performed with the following order:
+
+Frequency-first mapping followed by time and sub-slot: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+FFS: DFT-SOFDM for multiple codeblock with intra-slot frequency hopping
+
+Meanwhile, the discussion on data scrambling has also been conducted with the following agreements achieved in email discussion [90b-NR-10]:
+
+The c_init for data scrambling depends at least on a “Scrambling ID” parameter configured to the UE by RRC. FFS whether one RRC parameter is used for c_init for both PUSCH and PDSCH or if two independent RRC parameters is used.
+
+Discuss further this issue and dependence on other parameters, default value etc in RAN1#91.
+
+As a revised contribution from R1-1717416, more details on CW to resource mapping for UL with DFT-S-OFDM and data scrambling are elaborated.
+
+Resource Mapping in a codeword
+
+In order to satisfy various use cases in NR, the factors including performance, processing latency, cross-link interference and characteristics of application scenarios, e.g., high speed train, should be considered for choosing the resource mapping scheme.
+
+More specifically, with the introduction of dynamic TDD in NR, the quality of received data will be different per symbol as the example as shown in Figure 1. In this case, the last few symbols of downlink data transmitted from TRP 1 to UE1 are interfered by uplink data from UE2 to TRP2. Since different types of frame structure are used at different time in dynamic TDD scenarios, varying interference is expected to be experienced by different symbol within PUSCH received by UE2. More specifically, due to the lack of prior information about the scheduling of dynamic TDD, the influence cannot be well alleviated by CBG-based methods, e.g., CBG-based HARQ.
+
+Moreover, in the application case with high speed, e.g., high speed train scenario, the decoding of data within one symbol (e.g., one or multiple CBs) will be affected by fast fading in time domain.
+
+In the above cases, for achieving better performance with time diversity, the data should be mapped to time domain as much as possible. Considering the candidate schemes listed in the agreement above, which are illustrated in Figure 2, option 3 (subcarriers in the 1st hop, then subcarriers in the 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop) is preferred since more time diversity can be harvested.
+
+UE1UE2TRP1TRP2 [FIG:02474d07d4832118f9f4]
+
+Figure 1 Illustration of cross link interference
+
+In order to verify the above analysis, the corresponding link level evaluations have been conducted with CDL-D model in high speed scenario (i.e., V = 120 or 500 km/h) for these two schemes. Performance for data transmission with three allocated RBs (e.g., 10/30/50 RBs) is investigated with system bandwidth configured to 100 RBs. More detailed simulation assumption can be found in Table 2.
+
+[FIG:30ae2c3b56bcb2272ede]
+
+Figure 2 CW to resource mapping schemes used in simulation
+
+[FIG:bd9904c6416e2504bf51]
+
+Figure 3 Performance comparison when number of RB = 10/30/50
+
+Performance comparison for each mapping order is shown in Figure 2. It can be found that in the case of 10 RB, similar performance is achieved for these three mapping orders. The reason is that in this case, only single CB is transmitted, diversity gains in both time and frequency domains can be well harvested for this CB. With increasing number of RBs, performance of option 3 is better than option 1 with up to 20% gain. The reason is that for option 1, when the number of allocated RBs is increased, the number of CBs increases and the number of symbols for each CB decreases which results in less diversity gain in time domain. Based on these observations, for the transmission with only single codeblock in case of intra-slot frequency hopping, option 1 is fine. However, in multiple codeblocks case, the option 3 is preferred due to the obvious performance gain.
+
+Observation 1: Option 3 with intra-slot hopping outperforms Option 1 with significant gain in case of high speed scenario with multiple-CWs.
+
+Proposal 1：Confirm the working assumption with support of Option 1 for single block transmission. For multiple codeblock case, Option 3 should be supported ,in which CW is mapped to subcarriers in the 1st hop, then subcarriers in the 2nd hop with repetition of the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Scrambling for data channels
+
+In LTE, for minimizing the interference among received data (e.g., from different cell or TB), cell ID, RNTI, codeword index and slot index are introduced for initializing PN sequence for data channel scrambling. With similar motivations, these parameters, i.e., RNTI, cell ID and time domain information should also be supported in NR. For example, in our view, the time domain information is required for maximizing the benefits of interference randomization once asynchronous transmission occurs. Meanwhile, for the same UE, in order to support simultaneous transmission of slot-based and non-slot-based transmission, or data reception from multiple BWPs with different numerologies (as the example illustrated in Figure 4), the time index should be normalized based on the smallest sub-carrier space. It means that in the equation for the scrambling sequence generation, the slot index [FIG:834ba06f9550099a54d5] for the ith data is should be calculated as [EQ:16e3b4e1e9b58af98b7f] , here the [FIG:a859b09500319de831cb] and [FIG:52c2c445f14e2d73b13c] refer to the original slot index and subcarrier space for ith data. [FIG:e2e680249ee7cd2d5177] is the subcarrier space of reference numerology.
+
+[FIG:bf10b1f55523144abe1b]
+
+Figure 4 Illustration of co-transmission with different numerologies
+
+Moreover, in NR, given that one CW is used for 1-4 layers, these layers can be transmitted from multiple TPs/panels/beams with different QCL assumption. The scrambling in CW level cannot guarantee the interference randomization among different data resources. Currently, since DM-RS groups is introduced for handling the transmission in aforementioned cases, the DM-RS group ID can be used for generating the scrambling sequence for associated data instead of existing CW index. Additionally, for keeping the simplicity and symmetric of DL and UL, the same parameters can be used for scrambling sequence generation.
+
+Proposal 2：For scrambling sequence generation for both UL and DL data channel:
+
+Support the existing parameters, i.e., cell ID, RNTI and slot index
+
+In case of simultaneous transmission with multiple numerologies, normalization of slot index based on the reference subcarrier space should be conducted as: [EQ:ade70d440dcba3ef3132] . The [EQ:74fd1849160119b1a759] , [EQ:d36f5d15eed3721860dc] and [EQ:4ce7acb725ebb7401956] refer to the original slot index, subcarrier space for ith data and subcarrier space of reference numerology, respectively.
+
+Support the usage of DM-RS group ID instead of CW index
+
+Conclusion
+
+In this contribution, the details related to CW to resource mapping for UL with DFT-S-OFDM and data scrambling are discussed. Based on the analysis, the following observation and proposal are reached:
+
+Observation 1: Option 3 with intra-slot hopping outperforms Option 1 with significant gain in case of high speed scenario with multiple-CWs.
+
+Proposal 1：Confirm the working assumption with support of Option 1 for single block transmission. For multiple codeblock case, Option 3 should be supported ,in which CW is mapped to subcarriers in the 1st hop, then subcarriers in the 2nd hop with repetition of the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Proposal 2：For scrambling sequence generation for both UL and DL data channel:
+
+Support the existing parameters, i.e., cell ID, RNTI and slot index
+
+In case of simultaneous transmission with multiple numerologies, normalization of slot index based on the reference subcarrier space should be conducted as: [EQ:914b81a1346e609b6517] . The [EQ:99cce089374a9dafa7ac] , [EQ:6fbd88e25ac540c99960] and [EQ:54fa0a61f813593e0dea] refer to the original slot index, subcarrier space for ith data and subcarrier space of reference numerology, respectively.
+
+Support the usage of DM-RS group ID instead of CW index
+
+References
+
+RAN1 #90bis Chairman’s Notes
+
+Appendix
+
+Table 2 Configuration for link level simulation
+
+Configuration | Value
+System bandwidth | 20MHz
+Number of PRBs | 10/30/50 PRBs with hopping
+Channel Model | CDL-D
+Waveform | DFT-S-OFDM
+Antenna configuration | 1Tx, 1Rx
+Carrier frequency | 4 GHz
+Subcarrier space | 15 kHz
+MCS | (1/2, 16QAM)
+UE velocity | 120/500km
+Number of symbols for Control | 2
+Number of Layer | 1
+DM-RS pattern | [FIG:576e1233fc5b92c99ba1]
