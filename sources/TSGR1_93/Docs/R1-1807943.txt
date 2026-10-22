@@ -1,0 +1,93 @@
+3GPP TSG-RAN1 Meeting #93 R1-1807943
+
+Busan, Korea, May 21 – 25, 2018
+
+CR-Form-v11.2
+CHANGE REQUEST
+
+ | 36.211 | CR | 0449 | rev | - | Current version: | 15.1.0 | 
+
+For HELP on using this form: comprehensive instructions can be found at 
+http://www.3gpp.org/Change-Requests.
+
+Proposed change affects: | UICC apps |  | ME | X | Radio Access Network | X | Core Network |
+
+Title: | Correction on layer-to-port mapping for feCoMP
+ | 
+Source to WG: | Ericsson
+Source to TSG: | 
+ | 
+Work item code: | feCOMP_LTE-Core |  | Date: | 2018-06-05
+ |  |  |  | 
+Category: | F |  | Release: | Rel-15
+ | Use one of the following categories:
+F (correction)
+A (mirror corresponding to a change in an earlier release)
+B (addition of feature), 
+C (functional modification of feature)
+D (editorial modification)Detailed explanations of the above categories can
+be found in 3GPP TR 21.900. | Use one of the following releases:
+Rel-8 (Release 8)
+Rel-9 (Release 9)
+Rel-10 (Release 10)
+Rel-11 (Release 11)
+Rel-12 (Release 12)
+Rel-13 (Release 13)
+Rel-14 (Release 14)
+Rel-15 (Release 15)
+Rel-16 (Release 16)
+ | 
+Reason for change: | One-layer transmission should not be captured in the two-codeword transmission table.
+ | 
+Summary of change: | Correction of Table 6.3.4.4-1 according to the endorsed TP in R1-1803721
+ | 
+Consequences if not approved: | Incorrect feCoMP specification
+ | 
+Clauses affected: | 
+ | 
+ | Y | N |  | 
+Other specs |  | X | Other core specifications | TS/TR ... CR ...
+affected: |  | X | Test specifications | TS/TR ... CR ...
+(show related CRs) |  | X | O&M Specifications | TS/TR ... CR ...
+ | 
+Other comments: |
+
+6.3.4.4 Precoding for spatial multiplexing using antenna ports with UE-specific reference signals
+
+Precoding for spatial multiplexing using antenna ports with UE-specific reference signals is only used in combination with layer mapping for spatial multiplexing as described in clause 6.3.3.2. Spatial multiplexing using antenna ports with UE-specific reference signals supports up to eight antenna ports.
+
+If the higher-layer parameter dmrs-tableAlt is set to 1 and the set of antenna ports [FIG:335f0a88a4ecf04bbb37] is used for two layers transmission, the precoding operation for transmission on the two antenna ports is defined by
+
+[FIG:6b16471caa6ae8c48df9]
+
+where [FIG:32650eed88769bd5790b] , [FIG:90d2e5f1ea39b720c367] .
+
+If the higher-layer parameter semiOpenLoop is set to 1 and the set of antenna ports [FIG:c2b065a630f5e9ea6c60] is used for rank=2 transmission, the precoding operation for transmission on the two antenna ports is defined by
+
+[FIG:4717072e2c1f53bb2b36]
+
+where [FIG:0cc51f957810ddef3649] and [FIG:c8b16c22e940f5b758b2] .
+
+If the number of codewords is two and the DCI associated with the scheduled PDSCH is of Format 2D and the 'PDSCH RE Mapping and Quasi-Co-Location indicator' field in the DCI indicates a higher-layer configured PDSCH-RE-MappingQCL containing two sets of parameters, the precoding operation for transmission on [FIG:26f511c6c08b2dd0e03e] antenna ports is defined by
+
+[FIG:5e30aa69c17b867473c5]
+
+where [FIG:9e0e03ef7d20a59054da] , [FIG:b98851502a242015fb6f] and set of antenna ports [FIG:f613add1e3021626cb57] used is given by Table 6.3.4.4-1.
+
+Table 6.3.4.4-1: Layer-to-port mapping for two-codeword transmission when PDSCH-RE-MappingQCL contains two sets of parameters
+
+Number of layers [FIG:0b15ed0339006966ace4] | Layer-to-port mapping [FIG:7c4cb1b064431f5fd723]
+ | [FIG:b2ce0490d9b3cd5b1871]
+2 | [FIG:a2e95a79269a04ebf478]
+3 | [FIG:b66cb4720df0c200aade]
+4 | [FIG:ac84a854d77b5d2f3e83]
+5 | [FIG:9a46d935e8a54e13e375]
+6 | [FIG:d13b206999b8e34eb79e]
+7 | [FIG:a0998a00b72e577ea2b5]
+8 | [FIG:8025360c296d02dad0f0]
+
+Otherwise, the set of antenna ports used is [FIG:ba7d25f099426ea0edae] and the precoding operation for transmission on [FIG:bca52bca4712b09f57a0] antenna ports is defined by
+
+[FIG:cfceff6b760238c9c198]
+
+where [FIG:51a2229eecb792db51d5] , [FIG:ab049dc4b7534d092f5f] .

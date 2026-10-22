@@ -1,0 +1,75 @@
+3GPP TSG RAN WG1 Meeting #93 R1-1806975
+
+Busan, Korea, May 21st – 25th, 2018
+
+Agenda item: 7.1.2.1.1
+
+Source: AT&T
+
+Title: Remaining Issues for Codeword Mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. It was agreed to have two codewords when the transmission rank is greater than four else single codeword is used. The technical specifications were agreed during the December RAN plenary meeting. However, we observed few issues related to two codeword mapping. The current specification does not support transport block switching. That switching the transport block from one codeword to the other codeword for example in re-transmissions.
+
+In this contribution, we propose signaling techniques for switching the transport block in one transmission to the other codeword in retransmissions.
+
+Transport block switching in NR Multi Codeword MIMO
+
+In this section, we discuss about the switched transmission. What we meant by switched transmission is that a transport block mapped to one codeword in one transmission (say initial) and the same transport block is mapped to another codeword during re-transmissions. This cases arises in many cases as shown in Table 2. Table 2 shows the case when the number of layers is greater than 4 (i.e. two transport blocks) during the first transmission, and the possible number of layers for the next transmission (subsequent retransmission). Note that P indicates HARQ-ACK, N indicates HARQ-N, OT indicates old transmission, NT indicates a new transmission, ST indicates switched transmission.
+
+Table 1 Mapping Table when the number of layers for the first transmission is >4
+
+Transmitted packet | Retransmitted packet
+HARQ-ACK for TB1 | HARQ-ACK for TB2 | UE reported Rank | ScheduledRank | TB1 | TB2
+P | P | >4 | >4 | NT | NT
+P | F | >4 | >4 | NT | OT
+F | P | >4 | >4 | OT | NT
+F | F | >4 | >4 | OT | OT
+P | P | <=4 | <=4 | NT | ----
+P | F | <=4 | <=4 | ST | 
+F | P | <=4 | <=4 | OT | -----
+F | F | <=4 | <=4 | OT or ST |
+
+The following observations can be made from the table 1.
+
+When the number of layers for the first transmission > 4, the number of layers for re-transmitted packets is greater than 4, say the HARQ-status of first TB is F and second is P, then during retransmissions, the network can reschedule OT and NT for the two TBS.
+
+When the number of layers for the first transmission >4, and the number of layers for re-transmitted packets is greater than 4, say the first TB is P and second TB is F, then the network can reschedule NT and OT during retransmission.
+
+When the number of layers for the first transmission > 4, the number of layers for re-transmitted packets is less than 4, say the HARQ-status of first TB is F and second is P, then during retransmissions, the network can reschedule OT for the first TB.
+
+When the number of layers for the first transmission > 4, the number of layers for re-transmitted packets is less than 4, say the HARQ-status of first TB is P and second is F, then during retransmissions since there is no mechanism of transmitting the second TB, we propose to introduce switched transmission which are highlighted in yellow.
+
+Similarly Table 2 shows the case when the number of layers for the first transmission is less than 4, and during retransmissions the number of layers is changed to >4. In this case the summary is as
+
+The following observations can be made from the table 3.
+
+When the number of layers for the first transmission <= 4, the number of layers for re-transmitted packets is greater than 4, say the HARQ-status of first TB is P then during retransmissions, the network can reschedule NT and NT for the two TBS.
+
+When the number of layers for the first transmission <= 4, the number of layers for re-transmitted packets is greater than 4, say the HARQ-status of first TB is F then during retransmissions, the network can reschedule OT and NT for the two TBS.
+
+When the number of layers for the first transmission <= 4, the number of layers for re-transmitted packets is greater than 4, say the HARQ-status of first TB is F then during retransmissions, the network can reschedule NT and ST for the two TBS. This case arises say the CQI of second CW is better than first codeword as highlighted in yellow.
+
+Table 2 Retransmission Mapping Table when the number of layers for the first transmission is <=4
+
+Transmitted packet | Retransmitted packet
+HARQ-ACK for TB1 | UE reported Rank | ScheduledRank | TB1 | TB2
+P | <=4 | <=4 | NT | -----
+F | <=4 | <=4 | OT | -----
+P | >4 | <=4 | NT | -----
+F | >4 | <=4 | OT | ----
+P | >4 | >4 | NT | NT
+F | >4 | >4 | OT or ---- | NT or ST
+
+It can be observed that we used ST in the tables. What we meant by switched transmission means, the transport block transmitted in one CW (say first), will be transferred to the second CW during retransmissions and vice versa. For example, say MCS= 25, RV= 1 or 2 and toggling of NDI (non-self-decodable LDPC combination) should indicate the UE that is that the TB is mapped to the different codeword from the previous transmission.
+
+Proposal 1: Specification should support switched transmission when one transport block transmitted on one codeword is remapped to another codeword by using a specific combination of MCS, RV and NDI
+
+Conclusions
+
+In this contribution we outlined our views on the codeword to layer mapping. Based on our observations we recommend
+
+Proposal 1: Specification should support switched transmission when one transport block transmitted on one codeword is remapped to another codeword by using a specific combination of MCS, RV and NDI

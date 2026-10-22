@@ -1,0 +1,128 @@
+3GPP TSG RAN WG1 Meeting #93 R1-1806708
+
+Busan, Korea, May 21st – 25th, 2018
+
+Agenda item: 7.1.2.1.1
+
+Source: Samsung
+
+Title: Summary of open issues on codeword mapping
+
+Document for: Discussion and Decision
+
+Issues on codeword mapping and proposed resolutions
+
+In this contribution, a summary of issues on codeword mapping raised in the five submitted contributions for RAN1#93 is given ([1]-[5]). The issues are of three kinds and outlined in Table 1, 2, and 3:
+
+Critical issues: e.g. missing text/components in the specification
+
+Specification refinement: e.g. clarification
+
+Other issues: e.g. new proposals
+
+Table 1 Critical issues
+
+| Issue | Summary of proposal | Companies
+1.1 | Agreement on TB-to-CW mapping not captured in sec 7.3.1.2.2 of TS 38.212 | Two proposals with identical functionalityAlt1. LTE (TS36.212) text + table with re-contextualization Alt2. Concise one-paragraph description | Alt1. Ericsson, Sharp, Huawei, HiSiliconAlt 2. CATT, Ericsson, Samsung
+
+The missing text needs to be addressed as identified by at least 3 companies. From the two functionally identical text proposals, CATT proposal seems to be much more concise without reducing clarity.
+
+Therefore, the following resolution is possible.
+
+Proposal:
+
+Issue 1.1: agree on the TP from CATT for TB-to-CW mapping in sec 7.3.1.2.2 of TS 38.212
+
+Table 2 Specification refinement
+
+| Issue | Summary of proposal | Companies
+2.1 | Clarification on DMRS port (7.3.1.4 and 6.3.1.3 of TS 38.211) | The set of antenna ports [FIG:691f80bf35462e796c5f] shall be determined according to the procedure in [6, TS 38.214]. The antenna ports [FIG:c7f5a7c0fed2a6d4e766] shall be determined according to the ordering of DMRS port(s) given by Tables 7.3.1.2.2-1/2/3/4 in 38.212. | VivoHuawei, HiSilicon: the TP is not needed. Since the related agreement already captured in Section 7.3.1.2.2 of 38.212.The previous wording here is only to say procedure to form the antenna ports, which is described in 38.214. So, no change is needed.
+2.2 | On the term “rate matching” | The term “rate matched” is not defined, hence we suggest replacing it with “not available for PDSCH” to align with section 5.1.4 terminology of TS 38.214 | EricssonHuawei, HiSilicon: It is not an essential issue, rate matching is a clear and well known wording, which already defined in 212. If changed with “Not available RBs” it may be difficult to distinguish the case of “puncture”.
+
+The proposals for resolving issue 2.1 and 2.2 are intended to avoid ambiguities in specification on DMRS port definition and rate matching, respectively. Both proposals seem quite beneficial in improving the clarity of the specification.
+
+Particularly for issue 2.2, while “rate matching around X” is a familiar short-hand terminology in RAN1, it is not a term that clearly describes a UE operation in generating an UL transmission or UE assumption on a DL transmission. This term can also be a misnomer in this particular context. For example, in 38.212, rate matching typically refers to an operation of processing an encoded bit steam via a buffer and truncating it accordingly. It is by no means obvious how this bit-level operation correlates with mapping a symbol stream to a set of available REs (where some REs are to be avoided).
+
+The proposal for issue 2.1 is also supported by Ericsson.
+
+On the other hand, Huawei dissents the necessity of 2.1 and 2.2 as follows:
+
+Issue 2.1: “the TP is not needed. Since the related agreement already captured in Section 7.3.1.2.2 of 38.212. The previous wording here is only to say procedure to form the antenna ports, which is described in 38.214. So, no change is needed.”
+
+Issue 2.2: “It is not an essential issue, rate matching is a clear and well known wording, which already defined in 212. If changed with “Not available RBs” it may be difficult to distinguish the case of “puncture””
+
+Therefore, the following resolution is possible.
+
+Proposal:
+
+Issue 2.1: Briefly discuss if there is another objection on vivo’s text proposal
+
+Issue 2.2: Briefly discuss if there is another objection on Ericsson’s proposal: replace “rate matched” with “not available for PDSCH” to align with section 5.1.4 terminology of TS 38.214
+
+Table 3 Other issues
+
+| Issue | Summary of proposal | Companies
+3.1 | Scrambling sequence initialization | For configured nID, the following holdsapplies only to DCI formats 1_1 and 0_1, otherwise the default is usedIn DCI 1_1, applies for C-RNTI otherwise the default is usedIn DCI 0_1, applies for C-RNTI and SPS-CSI-RNTI, otherwise the default is used. | Ericsson
+3.2 | Dynamic TB-to-CW mapping | Switching of TB-to-CW mapping signalled via MCS-RV-NDI value combination | AT&T
+
+For issue 3.1, the proposal from Ericsson is a reiteration of the non-agreeable components proposed in RAN1#92b (the condition involving CS-RNTI was agreed). The DCI-format-based condition proposal 3.1 is based on a concern that during scrambling seed reconfiguration ambiguity period (due to non-synchronized RRC), or if the RRC reconfiguration message is lost, the UE cannot be reached by any DCI format using C-RNTI.
+
+On the other hand, Huawei, not agreeing to this proposal, argues as follows: “It has been discussed in last meeting, we do not think there is any issue for the configurable ID for data scrambling in current specs. Actually, for DMRS scrambling IDs, it was already agreed with first configured ID in fall back DCIs during last meeting.”
+
+Likewise, issue 3.2 was briefly raised and discussed in RAN1#92b. The LTE-based TB-to-CW mapping was agreed. Therefore, the proposal from AT&T is essentially an extension of the previously agreed scheme.
+
+Therefore, the following resolution is possible.
+
+Proposal:
+
+Issue 3.1: Discuss briefly if there is any new argument regarding the validity of issue 3.1 (building on the discussion in RAN1#92b)
+
+If so, discuss whether Ericsson’s proposal is agreeable
+
+Issue 3.2: Discuss if there is any tangible benefit from dynamic mapping proposal
+
+If so, discuss whether AT&T’s proposal is agreeable
+
+Proposal 3.1 supported by: Ericsson
+
+Suggested TP (if agreed)
+
+Section 7.3.1.4 and 6.3.1.3 of TS38.211
+
+…
+
+The set of antenna ports [FIG:cba7072a721f23a96b88] shall be determined according to the procedure in [6, TS 38.214]. The antenna ports [FIG:98b81d946da6c603cd73] shall be determined according to the ordering of DMRS port(s) given by Tables 7.3.1.2.2-1/2/3/4 in 38.212.
+
+Section 7.3.1.2.2 of TS38.212
+
+…
+
+DMRS sequence initialization – 1 bit if transform precoding is enabled
+
+If both transport blocks are enabled, transport block 1 and 2 are mapped to codeword 0 and 1 respectively. In case one of the transport blocks is disabled as specified in Subclause 5.1.3.2 of [6, TS 38.214], the enabled transport block is mapped to codeword 0.
+
+Section 5.1 of TS38.214
+
+…
+
+If the UE has received no SSB-transmitted through higher layer signalling about SS/PBCH block transmissions in the serving cell, the UE assumes SS/PBCH block transmission according to SSB-transmitted-SIB1, and if the PDSCH resource allocation overlaps with PRBs containing SS/PBCH block transmission resources the UE shall assume that PDSCH is rate matched around these PRBs are not available for PDSCH in the OFDM symbols where SS/PBCH block is transmitted. The UE assumes the periodicity of the SS/PBCH block transmission resources based on SSB-periodicity-serving-cell.
+
+If the UE has received a SSB-transmitted through higher layer signalling about SS/PBCH block transmissions in the serving cell, the UE assumes SS/PBCH block transmission according to the SSB-transmitted, and if the PDSCH resource allocation overlaps with PRBs containing SS/PBCH block transmission resources the UE shall assume that PDSCH is rate matched around these PRBs are not available for PDSCH in the OFDM symbols where SS/PBCH block is transmitted. The UE assumes the periodicity of the SS/PBCH block transmission resources based on SSB-periodicity-serving-cell.
+
+When receiving the PDSCH conveying [SystemInformationBlockType1], a UE shall assume that no SS/PBCH block is transmitted in REs used by the UE for a reception of the PDSCH.
+
+When receiving the PDSCH conveying [RAR, OSI, Paging, Msg4], the UE assumes SS/PBCH block transmission according to SSB-transmitted-SIB1, and if the PDSCH resource allocation overlaps with PRBs containing SS/PBCH block transmission resources the UE shall assume that PDSCH is rate matched around these PRBs are not available for PDSCH in the OFDM symbols where SS/PBCH block is transmitted.
+
+…
+
+References
+
+R1-1806038, Remaining issues on layer mapping, vivo
+
+R1-1806210, Remaining on CW mapping and data scrambling, Ericsson
+
+R1-1806275, Remaining issues on codeword mapping, CATT
+
+R1-1806942, Open issues on codeword mapping, Sharp
+
+R1-1806975, Remaining issues for codeword mapping, AT&T
