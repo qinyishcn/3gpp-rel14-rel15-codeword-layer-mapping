@@ -1,0 +1,75 @@
+3GPP TSG-RAN WG1 #87ah-NR R1-1700744
+
+Spokane, WA, USA, 16th – 20th January, 2017
+
+Source: Ericsson
+
+Title: About the number of codewords
+
+Agenda Item: 5.1.2.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#87bis, the following agreement was made:
+
+Agreements:The number of codeword(s) per one scheduled physical data channel in NR both for DL and ULFor 1-2 MIMO layers – FFS between 1 codeword and 2 codewordsFor 3-8 MIMO layers FFS among Alt 1: 1 codeword Alt 2: 2 codewords Alt 3: >= 3 codewordsStudy the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.Study possible use of different modulations in single codewordStudy the possibility of configurable number of codewords per UE by NWAgreements:The number of codeword(s) per one scheduled physical data channel in NR both for DL and ULFor 1-2 MIMO layers – FFS between 1 codeword and 2 codewordsFor 3-8 MIMO layers FFS among Alt 1: 1 codeword Alt 2: 2 codewords Alt 3: >= 3 codewordsStudy the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.Study possible use of different modulations in single codewordStudy the possibility of configurable number of codewords per UE by NW
+
+Discussion
+
+One of the motivations for supporting two codewords per PDSCH is that codeword-IC type approaches can be used at the UE receiver. In a serial version of this type of receiver (SIC), the first codeword is decoded, and then the soft values at the output of the decoder are used to regenerate the received samples on the layer(s) corresponding to the first codeword. The regenerated signal(s) (inter-layer interference) are then subtracted from the received samples prior to decoding the second codeword. Having two codewords allows for more effective interference cancellation than if only a single codeword was used. This is true since the signal regeneration can be based on decoder output soft values for rather than be constrained to decoder input soft values which are less reliable.
+
+Ideally, if SIC receivers are used at the UE, then the per-codeword rates should be selected to account for the interference cancellation achieved at the UE. This typically results in different code rates for each codeword, with the larger rate typically corresponding to the 2nd codeword. The trade-off is that the UE feedback (CQI and HARQ ACK/NACK) is doubled compared to the case of a single-codeword. The downlink control information (DCI) associated with the scheduled modulation and coding scheme (MCS) for the two codewords is also twice that for a single-codeword.
+
+In LTE, for the case of 2 codewords, the UE feedback overhead (CQI, HARQ ACK/NACK) and downlink control information (modulation, transport block size) is double that for a single codeword.
+
+For NR, these design choices made for LTE must be revisited since at least two aspects of NR are different from LTE:
+
+Potentially shorter transmission durations (slots, minislots)
+
+Potentially shorter HARQ ACK/NACK turnaround times
+
+The former occurs for the case of subcarrier spacings larger than 15 kHz (as in LTE) in the introduction of slot as the scheduling unit and also the mini-slot for low latency, and the latter occurs for the case when the UE is configured to provide an ACK/NACK in the same slot as the data (for TDD systems). This puts a burden on the UE in terms of processing demands which may anyway preclude the use of codeword-IC approaches.
+
+In NR, codeword-IC receivers at the UE may not be practical due to the short slots/mini-slots and fast HARQ ACK/NACK turnaround times.
+
+Due to these constraints, IRC or ML/Reduced Complexity ML receivers are likely candidates for implementation. In both cases, the benefits of being able to separately control the rate on multiple codewords are questionable. Moreover, for 1-2 layer transmission, in most scenarios the two polarizations are utilized, for example in a dual polarized beam and since the UE has multiple receive antennas our basic assumption is that the SINR of the two layers will be very similar. Therefore we propose to use a single CW for both initial and retransmissions in DL.
+
+In UL, the polarizations of a 2 TXRU UE is even more entangled than in the DL, due to the more UE complicated form factor and antenna element placements, hence it is expected also in UL that the two layers are very similar in receive SINR and the use of per layer code word is not well motivated.
+
+For UE that support up to two MIMO layer reception and/or transmission, only a single codeword is used for PUSCH and PDSCH, respectively.
+
+For 3-8 MIMO layers, there may be situations where the SINR per layer is significantly different, such as the distributed MIMO (D-MIMO) case where some layers are transmitted/received at TRP#1 and the remaining layers at TRP#2. Note that RAN1 has made an agreement to support the case when not all DMRS ports are QCL, which targets the D-MIMO use case.
+
+We introduce the notion of a layer group, which are a subset of the layers in a PDSCH or PUSCH.
+
+Divide the layers of a PDSCH or PUSCH into layer groups. Also a single layer group which includes all layers is also supported.
+
+The DMRS ports within a layer group are QCL, while ports across layer groups are non-QCL, either always, or depending on configuration (FFS).
+
+The benefits of link adaptation per layer group should be considered, since the SINR per layer group can be significantly different, particularly in the case of D-MIMO where each layer group is transmitted from different TRxP. This comes at the cost of additional CSI signalling overhead as well as MCS signalling overhead in the DCI, hence the benefits must be carefully studied.
+
+There could also be use cases, such as high rank transmissions where the layers or layer groups have large SINR differences and there could be benefits to adjust the spectral efficiency per layer groups by adapting the MCS.
+
+For UE that support more than two layer transmission/reception, study the benefit of having one code word per layer group in PDSCH/PUSCH compared to having one codeword across all layer groups
+
+A further consideration in the case of distributed MIMO (D-MIMO) is scheduling two PDSCHs/PUSCHs (one per TRP) with a single codeword per PDSCH/PUSCH using independent scheduling control on each PDCCH, in that case there may be an opportunity to relax the inter baseband latency/bandwidth requirements. For example, the UE may detect one PDCCH per PDSCH where each of multiple PDCCH/PDSCH bundles are transmitted from different TRPs.
+
+For this option, the higher layer implications of supporting more than one PDCCH/PDSCH/PUSCH should be studied.
+
+Consider support for the UE to receive/transmit multiple PDCCH/PDSCH/PUSCH in a single slot, targeting the multiple TRxP use case with relaxed backhaul.
+
+Conclusions
+
+Based on the discussion in this contribution we propose the following:
+
+Proposal 1 For UE that support up to two MIMO layer reception and/or transmission, only a single codeword is used for PUSCH and PDSCH, respectively.
+
+Proposal 2 Divide the layers of a PDSCH or PUSCH into layer groups. Also a single layer group which includes all layers is also supported.
+
+Proposal 3 The DMRS ports within a layer group are QCL, while ports across layer groups are non-QCL, either always, or depending on configuration (FFS).
+
+Proposal 4 For UE that support more than two layer transmission/reception, study the benefit of having one code word per layer group in PDSCH/PUSCH compared to having one codeword across all layer groups
+
+Proposal 5 Consider support for the UE to receive/transmit multiple PDCCH/PDSCH/PUSCH in a single slot, targeting the multiple TRxP use case with relaxed backhaul.

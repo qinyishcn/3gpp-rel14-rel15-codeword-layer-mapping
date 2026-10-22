@@ -1,0 +1,120 @@
+3GPP TSG-RAN WG1 NR#2 R1-1709904
+
+Qingdao, China, June 27 – 30, 2017
+
+Source: Xinwei
+
+Title: Discussion on Remaining Details of Codeword Mapping
+
+Agenda Item: 5.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1 #89 meeting in Hangzhou, the following agreements working assumptions are achieved for codeword mapping.
+
+Agreements:For >4-layer transmission, each of the two CWs is mapped to at most 4 layersAgreements:At least support the following layer split for L >4 layer transmission: the 1st [EQ:c54279898a70863e3fb6] layers CW0 and remaining layers CW1For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities The mapping is configured by gNB to the UEFFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNBFFS  whether the UE report the preferred layer mappingWorking assumption:In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)FFS whether the resource is associated with a CW or with a CB groupFFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)If so, details of configuration signalling, e.g. RRC, DCICompanies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenariosAgreements:Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)Aim to make a decision in the next RAN1 meetingAgreements:NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UEFFS detailsAgreements:For >4-layer transmission, each of the two CWs is mapped to at most 4 layersAgreements:At least support the following layer split for L >4 layer transmission: the 1st [EQ:49654e7cc5d407f63374] layers CW0 and remaining layers CW1For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities The mapping is configured by gNB to the UEFFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNBFFS  whether the UE report the preferred layer mappingWorking assumption:In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)FFS whether the resource is associated with a CW or with a CB groupFFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)If so, details of configuration signalling, e.g. RRC, DCICompanies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenariosAgreements:Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)Aim to make a decision in the next RAN1 meetingAgreements:NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UEFFS details
+
+In this contribution, we further discuss and evaluate codeword mapping order.
+
+Discussion on layer mapping order
+
+There are mainly the following kinds of codeword mapping schemes as listed below:
+
+Alt 1: Modulated QAM symbols should be mapped to layer first, then to time/frequency RE resources;
+
+Alt 2: Modulated QAM symbols should be mapped to time/frequency RE resources first, then to different layers;
+
+Alt 3: Modulated QAM symbols should be mapped to subcarrier, then to layer, and lastly to different symbols;
+
+Alt 4: Modulated QAM symbols should be mapped to part of the layers, then to frequency then to time;
+
+Combination of above alternatives:
+
+E.g. for number of layers smaller than or equal to 2, follow Alt 1; for number of layers larger than 2, follow Alt 2.
+
+Latency, performance, UE complexity and eMBB/URLLC multiplexing related aspects could be compared for the above alternatives.
+
+Latency:
+
+For latency aspect, if modulated symbols are firstly mapped to layers then codeblocks could be received fully earlier. Alt 1 and Alt 3 are better from this perspective. However, latency of 1 layer would anyway be tolerated, the reduced latency due to Alt 1 and Alt 3 seems not necessary.
+
+Performance:
+
+For performance aspect, different layers would see different signal to noise ratios. If data symbols could be mapped to layers first, then it is possible to gain full spatial diversity. Alt 1 could achieve such diversity gain.
+
+From system-level performance perspective, the interference UE experiences would have some spatial patterns. Although scattering modulated symbols across multiple layers may bring benefits of diversity, it may also incur severe interference on every transmit block. Mapping to frequency or time first could alleviate such problem by concentrating interference in one TB or CB. This problem is also pointed out by MediaTek. Their proposal is to use CSI feedback to further reduce interference.
+
+Another gain is from successive interference cancellation. If data symbols are mapped to frequency/time domain first, then SIC receivers could be facilitated to achieve such gains. Alt 2 and Alt 3 could achieve such gains. However, SIC receiver may not be used in NR due to its large delay and high complexity.
+
+It is also possible for Alt 2 and Alt 3 to achieve diversity gains. For example, modulated symbols are mapped to RE resources first, but for adjacent REs, layers are mapped alternatively.
+
+UE complexity
+
+There is no large difference between the two schemes if the same receivers are used.
+
+UE may have to buffer more soft LLR value due to longer code blocks for Alt 2, but the difference seems trivial.
+
+eMBB/URLLC multiplexing
+
+URLLC may occupy scheduled resources of eMBB. Typically, the two data streams would be multiplexed in time domain. Under such conditions, Alt 1 and Alt 3 may have higher probability of eMBB demodulation due to more complete code-blocks.
+
+From above analysis, besides the mapping LFT, one of Frequency Layer Time or Layer set 1 Frequency Time Layer set 2 Frequency Time should also be supported. Thus we have the following proposal.
+
+Confirm the working assumption with the following update: Support at least one of the following
+
+Frequency Layer Time (FLT);
+
+Layer set 1 Frequency Time Layer set 2 Frequency Time, where each layer set corresponds to a CB group
+
+Discussion on frequency interleaving
+
+One of the major intention of Layer Frequency Time (LFT) in working assumption is to support low latency demodulation. If per-symbol interleaver is not supported, UE would still need to buffer multiple OFDM symbols for decoding. Then the major benefit of Layer Frequency Time (LFT) would be sacrificed. From this perspective, at least per-OFDM symbol interleaving should be supported.
+
+There are arguments that with high Doppler, multiple-OFDM-symbol interleaver would introduce performance gains. But this is only possible with ideal channel estimation. For high Doppler scenarios, the major performance bottleneck would be channel estimation. In fact, the reason why there are performance gains is that there are more independent dimensions of channels. But the practical channel estimation is typically implemented through linear interpolation of nearby reference signals, which under high Doppler would also introduce poor channel estimation rather than more independent dimensions. Moreover, through HARQ and other retransmission schemes, time domain diversity gain could be exploited to the largest extent, thus such interleaving would provide limited performance gains from system perspective.
+
+Support at least the following frequency interleaving:
+
+Per-OFDM-symbol interleaver;
+
+Evaluation Results
+
+In this section we provide some evaluation results for above proposal.
+
+[FIG:97537f4464ae421837b4] [FIG:357cda9a0221b6a0b173]
+
+The first sets of results mainly shows that with normal linear MMSE receivers, the performance of mapping to layer first is the best. The performance of mapping to frequency then to layer is only slightly worse than mapping to layer first even without layer shift between different subcarriers.
+
+[FIG:827cc0bc0cd7ef5fc576] [FIG:2f52481ccfcc464cafee]
+
+The second sets of results simulate the cases with advanced receivers. It could be seen that mapping across subcarriers first would enable the use of SIC receivers and thus provide some gains. With layer shift across the subcarriers would also achieve the diversity gains.
+
+Conclusions
+
+Based on the discussion in this contribution we propose the following.
+
+Confirm the working assumption with the following update: Support at least one of the following
+
+Frequency Layer Time (FLT);
+
+Layer set 1 Frequency Time Layer set 2 Frequency Time, where each layer set corresponds to a CB group
+
+Support at least the following frequency interleaving:
+
+Per-OFDM-symbol interleaver;
+
+Annex: Simulation Assumptions
+
+Parameters | Values
+Channel model | CDL-A 
+•        delay spread =100ns, 300ns, 1000ns 
+•        UE speed=3km/h.
+Channel estimation | Ideal
+MIMO mode | SU-MIMO
+Receiver | MMSE/SSD/MMES-SIC/SSD-SIC
+BS Antenna configurations | (M,N,P,Mg,Ng) = (2,2,2,1,1). Or (2,1,2,1,1) (dV,dH) = (0.5, 0.5)λ
+UE Antenna configurations | (M,N,P,Mg,Ng) = (1,1,2,1,1). Or (2,1,2,1,1) (dV,dH) = (0.5, 0.5)λ
+BF scheme | Based on ideal SVD
+
+References

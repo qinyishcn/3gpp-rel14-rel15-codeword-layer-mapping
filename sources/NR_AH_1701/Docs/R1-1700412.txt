@@ -1,0 +1,120 @@
+3GPP TSG RAN WG1 NR Ad Hoc Meeting R1-1700412
+
+Spokane, USA, 16th – 20th January 2017
+
+Agenda Item: 5.1.2.1
+
+Source: Huawei, HiSilicon
+
+Title: Number of codewords for physical data channel
+
+Document for: Discussion and decision
+
+Introduction
+
+In RAN1#87 meeting, the following agreements were achieved. [1]
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In this contribution, we provide our views and simulation results on codeword-to-layer mapping of physical data channel.
+
+Discussion on codeword to layer mapping
+
+2 MIMO layers
+
+For the codeword-to-layer mapping of 2 MIMO layers in LTE, 2-to-2 mapping, instead of 1-to-2 mapping, was introduced. Such decision is mainly due to the fact that the performance gain of 2-to-2 mapping is not negligible, although 1-to-2 mapping enjoys low signaling/feedback overhead. With the introduction of more transmit antennas at TRP side in NR, the interference cancellation capability generally becomes stronger, thereby making the performance of 1-to-2 mapping get close to 2-to-2 mapping. However, there are still important scenarios where 2-to-2 mapping outperforms 1-to-2 mapping.
+
+In the following, we provided related simulation results on the different mapping schemes on codewords and transmission layers. The simulation setup is given in Table-1 of Appendix.
+
+In Fig. 1, we show the performance in the scenario with MU-MIMO transmission. As shown in Fig. 1, 2 codewords can achieve up to 28%, 32% and 20% of gain over one codeword for 5% UPT, 50% UPT and mean UPT, respectively, especially in the high RU cases. In this scenario, more accurate link adaptation with 2 codewords plays an important role in outperforming one codeword.
+
+In Fig. 2, we show the performance gain with 2 codewords in NC-JT MU-MIMO with distributed scheduling, which is suitable for non-ideal backhaul. In the simulation, a UE can receive up to 2 MIMO layers transmitted by two TRPs, respectively. The two layers can come from 2 codewords or from one codeword. Compared to single TRP MU-MIMO with 2 codewords, both NC-JT MU-MIMO with 2 codewords and with 1 codeword can achieve significant performance gain. Since there is only distributed precoding on each TRP for NC-JT, interference exists between 2 MIMO layers transmitted from two TRPs, especially for 5% UPT UEs. For such UEs, 2 codewords enables CW-SIC receiver to improve performance over one codeword significantly.
+
+In addition to performance advantage, using 2 codewords can avoid data sharing between TRPs in NC-JT with distributed scheduling, which, however, is necessary for using one codeword.
+
+[FIG:c6089545676257fbb542]
+
+Fig. 1 Performance of different codeword-to-layer mappings for 2 MIMO layers in single-TRP MU-MIMO
+
+[FIG:671f8c318ba56bdf1889]
+
+Fig. 2 Performance of different codeword-to-layer mappings for 2 MIMO layers in NC-JT MU-MIMO
+
+Observation 1: For 2 MIMO layers, two codewords outperform one codeword significantly in both single-TRP MU-MIMO and NC-JT MU-MIMO scenarios.
+
+Proposal 1: NR MIMO should support 2 codewords mapped to 2 MIMO layers in data channel transmission.
+
+3-8 MIMO layers
+
+In this section, we discuss the number of codewords for higher layers transmission cases, and we provided the evaluation results based 4 layers and 8 layers simulation with 1, 2, and 4 codewords. The simulation assumption is given in Table-1.
+
+As shown in Fig. 3, we first compare different codeword-to-layer mapping for 4 MIMO layers, where the baseline is 2 codewords. It can be found that 2 codewords (i.e., 2-to-4 mapping in Fig. 3) outperforms one codeword (up to 20% for mean UPT) and suffers very limited performance loss (up to 1% for mean UPT) compared to 4 codewords (i.e., 4-to-4 mapping in Fig. 3). As a result, 2 codewords is generally a good choice for 4 MIMO layers considering trade-off between performance and signaling/feedback overhead.
+
+The performance of different codeword-to-layer mappings for 8 MIMO layers is shown in Fig. 4, where 4 codewords is the baseline. 8 codewords are not included in the comparison due to its unacceptably high signaling/feedback overhead. It is observed that 1 codeword and 2 codewords suffer significant performance loss of up to 59% and 37% for mean UPT compared to 4 codewords, respectively. The performance advantage and acceptable signaling/feedback overhead make 4 codewords the proper choice for 8 MIMO layers.
+
+[FIG:f2a1a1b83395778dabfd]
+
+Fig. 3 Performance of different codeword-to-layer mappings for 4 MIMO layers in single-TRP SU-MIMO
+
+[FIG:5c9d177d939d283be39c]
+
+Fig. 4 Performance of different codeword-to-layer mappings for 8 MIMO layers in single-TRP SU-MIMO
+
+Based on the aforementioned simulation results for 4 MIMO layers and 8 MIMO layers, it can be easily derived that multiple codewords are the key to achieve high system-level performance. The More MIMO layers, the more performance gain by using more codewords, which is due to the fact that more codewords can achieve better link adaptation results with the increase of MIMO layers.
+
+Observation 2: For 4 and 8 MIMO layers, two and four codewords are good tradeoff between performance and overhead, respectively.
+
+Proposal 2: NR MIMO should support multiple codewords mapped to x ( [FIG:c29fd80fc25421795965] ) MIMO layers in data channel transmission.
+
+Conclusions
+
+The contribution analyzes codeword-to-layer mapping for data channel transmission, based on which the following observations and proposals are made.
+
+Observation 1: For 2 MIMO layers, two codewords outperform one codeword significantly in both single-TRP MU-MIMO and NC-JT MU-MIMO scenarios.
+
+Observation 2: For 4 and 8 MIMO layers, two and four codewords are good tradeoff between performance and overhead, respectively.
+
+Proposal 1: NR MIMO should support 2 codewords mapped to 2 MIMO layers in data channel transmission.
+
+Proposal 2: NR MIMO should support multiple codewords mapped to x ( [FIG:19e1e9f28cc9ecaabe46] ) MIMO layers in data channel transmission.
+
+References
+
+Intel, Ericsson, Qualcomm, Panasonic, “WF on number of CW(s) for NR”, R1-1613109, Reno, NV, USA, Nov. 14–18, 2016.
+
+Appendix
+
+Table 1 Simulation assumption
+
+Parameters | TDD / 57TRPs
+Scenario | Dense urban
+Layout | Single layer: Macro layer: Hex. Grid
+Inter-BS distance | 200m
+Carrier frequency | 4GHz
+Simulation bandwidth | 10MHz
+Channel model | 3D UMa
+BS Tx power | 41dBm
+BS antenna height | 25m
+BS antenna number | (M,N,P,Mg,Ng) = (2,2,2,1,1)
+UE antenna number | (M,N,P,Mg,Ng) = (1,2,2,1,1) or (2,2,2,1,1)
+UE receiver | MMSE-IRC
+MIMO mode | SU-MIMO or MU-MIMO with rank 2, 4, 8
+Traffic model | FTP model 1 with packet size = 0.5M

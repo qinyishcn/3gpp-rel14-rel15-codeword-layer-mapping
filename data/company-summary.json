@@ -1,0 +1,114 @@
+[
+  {
+    "company_group": "AT&T",
+    "simulation": "LLS + SLS",
+    "comparison": "动态双CW层分组 vs 固定分组",
+    "headline": "rank4约+12%；rank8约+18%@20dB / +15%@25dB；SLS sector约+11%",
+    "tdocs": "R1-1702262; R1-1707737",
+    "limits": "另有CW数量/DFT-s评估；LLS常为ideal CE、零控制开销"
+  },
+  {
+    "company_group": "Huawei/HiSilicon",
+    "simulation": "SLS + LLS",
+    "comparison": "双CW vs 单CW；LTF vs LFT",
+    "headline": "rank4 SLS mean +15.04～17.47%；median最高42.32%；高速LTF约1.6～4.5dB",
+    "tdocs": "R1-1705073; R1-1712228",
+    "limits": "原图/正文有42.32/43.2差异；高速dB不是SLS百分比"
+  },
+  {
+    "company_group": "ZTE group",
+    "simulation": "SLS + LLS",
+    "comparison": "双CW vs 单CW；layer-set CBG vs 全层LFT",
+    "headline": "UMi SU mean +3.72～13.33%；layer-set mean +1.44%、edge +11.05%",
+    "tdocs": "R1-1701790; R1-1712284",
+    "limits": "NCJT vs DPS收益另列，不能归因于映射本身"
+  },
+  {
+    "company_group": "Intel",
+    "simulation": "SLS + LLS",
+    "comparison": "单CW vs 双CW；交织/hop映射",
+    "headline": "rank≤2单CW mean +4～7%；rank3/4近同；频交织0.3～0.84dB",
+    "tdocs": "R1-1702187; R1-1704717; R1-1712536",
+    "limits": "后期多CB hopping Option3 1.3～1.8dB，仍偏好覆盖主场景简单方案"
+  },
+  {
+    "company_group": "Ericsson",
+    "simulation": "SLS",
+    "comparison": "最多双CW vs 单CW",
+    "headline": "rank3/4双CW normalized UPT -2～+4%；认为相近",
+    "tdocs": "R1-1705883",
+    "limits": "#88单CW多数情形稍好；结果依赖CSI、LA和rank选择"
+  },
+  {
+    "company_group": "Samsung",
+    "simulation": "SLS + LLS",
+    "comparison": "最多双CW vs 单CW；CW shifting",
+    "headline": "#88双CW mean为单CW的94.9～98.4%；单CW稍稳健",
+    "tdocs": "R1-1702916; R1-1705333; R1-1710642",
+    "limits": "100%=归一化基准；后续CW shifting降低反馈开销且吞吐近同"
+  },
+  {
+    "company_group": "Qualcomm",
+    "simulation": "LLS + CDF推估",
+    "comparison": "SCW分层QAM；频域inter-CB交织",
+    "headline": "分层QAM mmW约1.5/7～8dB；LDPC频交织0.1～>5dB",
+    "tdocs": "R1-1702596; R1-1708579",
+    "limits": "不同问题和分母；约7%系统收益为LLS×几何CDF推估"
+  },
+  {
+    "company_group": "Nokia/Alcatel-Lucent Shanghai Bell",
+    "simulation": "SLS",
+    "comparison": "NCJT/CW组合；多panel CW数量",
+    "headline": "NCJT在部分mean有益、edge不一致；30GHz相干多panel单CW略好",
+    "tdocs": "R1-1703150; R1-1705952",
+    "limits": "NCJT分支还改变接收机/数据流，未给统一纯mapping增益"
+  },
+  {
+    "company_group": "Xinwei",
+    "simulation": "LLS",
+    "comparison": "CW/接收机；FLT vs LFT",
+    "headline": "1CW SSD可优于2CW MMSE-SIC；FLT配SIC可改善，未给统一dB",
+    "tdocs": "R1-1702022; R1-1704661; R1-1709904",
+    "limits": "接收机差异不可算成纯CW增益"
+  },
+  {
+    "company_group": "Lenovo/Motorola Mobility",
+    "simulation": "LLS",
+    "comparison": "联合时频交织 vs 仅频交织",
+    "headline": "AWGN 0.9～2.1dB；后续CDL-A 0.31～3.1dB@CBGER10%",
+    "tdocs": "R1-1710594; R1-1712670",
+    "limits": "两次信道和表值不同；基准含未puncture参考"
+  },
+  {
+    "company_group": "MediaTek",
+    "simulation": "LLS",
+    "comparison": "layer-group CBG映射 vs 全层LFT",
+    "headline": "CLI下同SE所需SNR可差数dB；DFT-s Option1约差1～2dB",
+    "tdocs": "R1-1710815; R1-1718335",
+    "limits": "CSI策略和INR要固定；两个比较不是同一问题"
+  },
+  {
+    "company_group": "NTT DOCOMO",
+    "simulation": "LLS",
+    "comparison": "DFT-s intra-slot hopping Option3 vs Option1",
+    "headline": "多CB约1.5～2dB@BLER10%；单CB相近",
+    "tdocs": "R1-1718187; R1-1720798",
+    "limits": "属于单层上行资源映射，不能计为高秩CW分组收益"
+  },
+  {
+    "company_group": "vivo",
+    "simulation": "LLS",
+    "comparison": "时频交织 vs 无/仅频交织",
+    "headline": "图中BLER改善，正文无统一数字",
+    "tdocs": "R1-1712829",
+    "limits": "保留原文6QAM疑似笔误；不猜读数值"
+  },
+  {
+    "company_group": "ETRI",
+    "simulation": "LLS",
+    "comparison": "LTF/多symbol交织 vs LFT",
+    "headline": "500kmh时图中BLER改善，正文无统一dB",
+    "tdocs": "R1-1710611; R1-1713808",
+    "limits": "30GHz单层、高Doppler/phase noise；非普通多层SLS"
+  }
+]

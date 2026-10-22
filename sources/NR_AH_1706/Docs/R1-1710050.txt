@@ -1,0 +1,97 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1710050
+
+Qingdao, P.R. China, June 27th – 30th, 2017
+
+Source: CATT
+
+Title: On codeword mapping
+
+Agenda Item: 5.1.2.1.1
+
+Document for: Discussion and decision
+
+Introduction
+
+In 3GPP RAN1 #89 meeting, existing candidates for layer mapping schemes have been summarized in [1]. and then the following agreements on number of codeword(s) for NR have been reached [1]:
+
+Agreements:For >4-layer transmission, each of the two CWs is mapped to at most 4 layersAgreements:At least support the following layer split for L >4 layer transmission: the 1st [FIG:a412e46eb3e0b7aa03d1] [FIG:5bd3d18dcff1244cda5d] layers CW0 and remaining layers CW1For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities The mapping is configured by gNB to the UEFFS whether by RRC signaling or DCI or both FFS possible mapping configured by gNBFFS  whether the UE report the preferred layer mappingAgreements:Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)Aim to make a decision in the next RAN1 meetingAgreements:NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UEFFS details
+
+In addition, the following working assumption has been agreed [1]:
+
+Working assumption:In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)FFS whether the resource is associated with a CW or with a CB groupFFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)If so, details of configuration signalling, e.g. RRC, DCICompanies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+In this contribution, we present our consideration on remaining issues of codeword mapping in NR.
+
+Discussion on codeword mapping for NR
+
+Codeword-to-layer mapping
+
+In the last meeting, it’s agreed to support at least the following layer split for L >4 layer transmission: the 1st [FIG:0b32a52d0ee34ac70271] [FIG:6adf5356d827c3682ff0] layers CW0 and remaining layers CW1. In addition to that, it’s agreed to further investigate whether or not to support additional correspondence.
+
+Multi-TRP and multi-panel transmission might be one of the potential use cases for additional correspondence. In such scenarios, as the channels from different TRPs or panels could have quite different propagation properties, the supported number of layers from different TRPs or panels could be different as well. Based on that intuition, in the unbalanced split, each codeword can be mapped to one DMRS group. Alternatively, if one of the two codewords can be mapped onto more than one DMRS groups, we can still support an almost balanced layer split. The above discussed alternatives are illustrated as follows.
+
+Alt 1: unbalanced layer split
+
+Maps each codeword to one DMRS group
+
+Additional indication: codeword-to-DMRS port mapping (for each rank, more than one mappings are possible)
+
+Alt 2: almost balanced layer split
+
+One of the two codewords can be mapped onto more than one DMRS group to balance the number of layers among the two codewords
+
+Additional indication: not needed (mapping between CW and layer is rank dependent)
+
+It’s noted that, the applicability of this alternative depends on the capacity of backhaul
+
+[FIG:d8c6d5ccb923be4d7e56]
+
+Figure 1. Examples of layer split
+
+Proposal 1: Rank dependent codeword-to-layer mapping is preferred, if it can be supported by the backhaul.
+
+Furthermore, for spatial multiplexing, if 2 codewords are transmitted, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Proposal 2: For spatial multiplexing, if 2 codewords are transmitted, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Layer/time/frequency mapping
+
+In LTE, the modulated symbols of each codeword are mapped across layers first. Subsequently, data in each layer is mapped to REs in each symbol. Finally, data is mapped symbol by symbol in each PRB. The following mappings presented in previous meetings other than LTE-style mapping might potentially benefit from frequency/time/spatial diversity gain. However, the complexity and decoding latency with new mapping schemes should also be considered. For instance, if more than one mapping schemes are to be supported, UE will has to implement multiple de-mappers. Moreover, additional control signalling are needed to support the indication of mapping scheme to be used in upcoming transmission. If the modulated symbols are mapped to time domain before frequency domain, depending on channel property, time domain diversity gain might be possible. However, fast decoding and low-latency communication are more challenging. In addition, if data is mapped across layers lastly, to some extent, spatial diversity gain would be lost.
+
+Alt-1: Layer Frequency Time
+
+Alt-2: Frequency Layer Time
+
+Alt-3: Time Frequency Layer
+
+Alt-4: Configurable between
+
+Layer Frequency Time
+
+Layer Time Frequency
+
+Proposal 3: Only support the following mapping order: first across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time).
+
+In [3], frequency interleaving was proposed to obtain additional frequency diversity gain. However, as interleaving has already been done at channel encoder, the frequency diversity gain with extra interleaving at resource mapping part would be questionable.
+
+Proposal 4: Further analysis and evaluations are needed to justify the frequency interleaving.
+
+Conclusions
+
+In this contribution, we discussed the number of codeword(s) and codeword-to-layer mapping in NR. Based on the discussion above, we propose:
+
+Proposal 1: Rank dependent codeword-to-layer mapping is preferred, if it can be supported by the backhaul.
+
+Proposal 2: For spatial multiplexing, if 2 codewords are transmitted, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Proposal 3: Only support the following mapping order: first across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time).
+
+Proposal 4: Further analysis and evaluations are needed to justify the frequency interleaving.
+
+References
+
+R1-1709261, “Summary of Open Issues on Layer Mapping”, Samsung
+
+RAN1 #89 Chairman’s Notes.
+
+R1-1704098, “Frequency interleaving for NR”, Qualcomm, Ericsson, Interdigital

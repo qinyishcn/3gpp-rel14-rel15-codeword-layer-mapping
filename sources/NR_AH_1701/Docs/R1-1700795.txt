@@ -1,0 +1,267 @@
+3GPP TSG-RAN WG1 NR Ad-Hoc R1-1700795
+
+16th - 20th January 2017
+
+Spokane, Washington, USA
+
+Agenda item: 5.1.2.1
+
+Source: Qualcomm Incorporated
+
+Title: Codeword to Layer Mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN1 #86bis [1] and #87 [2], the following agreements regarding the codeword to layer mapping were made:
+
+Agreements:
+
+•       RAN1 to study the following aspects:
+
+–      Codeword-to-layer mapping
+
+–      Number of codewords on a “NR-PDSCH”
+
+–      Other techniques not precluded
+
+Agreements:
+
+The number of codeword(s) per one scheduled physical data channel in NR both for DL and UL
+
+For 1-2 MIMO layers – FFS between 1 codeword and 2 codewords
+
+For 3-8 MIMO layers FFS among
+
+Alt 1: 1 codeword
+
+Alt 2: 2 codewords
+
+Alt 3: >= 3 codewords
+
+Study the above alternatives taking into account performance of NC-JT transmission from two or more beams/TRPs, overhead in DCI/UCI (ACK/NACK, CQI)
+
+Study support of overhead reduction schemes such indication for the maximum number of MIMO layers from TRP, ACK/NACK spatial bundling, etc.
+
+Study possible use of different modulations in single codeword
+
+Study the possibility of configurable number of codewords per UE by NW
+
+In this contribution, we present our views on the codeword to layer mapping that NR should support. In short:
+
+We propose NR to support only single codeword MIMO (SCW) with different modulation order for each layer for SU-MIMO of up to 8 layers.
+
+SCW MIMO with per-layer modulation may achieve similar performance to the case of MCW MIMO while having lower control signalling and lower uplink control channel overhead.
+
+We propose NR to support at least a frequency-domain interleaver for both uplink and downlink to exploit the frequency diversity and the large bandwidth allocations.
+
+Single codeword MIMO (SCW)
+
+Discussion
+
+As one of the most important MIMO transmission techniques, spatial multiplexing generates one or more spatial layers on which multiple data streams can be transmitted in parallel. Those data streams can be either separately or jointly coded before the spatial multiplexing, as shown in Figure 1. The former is often referred to as multi-codeword (MCW) transmission, while in contrast the latter is called single-codeword (SCW) transmission.
+
+[FIG:9fc63f3d4f167857e273]
+
+(a) Multi-codeword transmission
+
+[FIG:e94ebb3ad938fa781806]
+
+(b) Single-codeword transmission
+
+Figure 1. Multi-codeword transmission and single-codeword transmission.
+
+For LTE, neither the SCW (one codeword to all layer mapping) nor MCW (one-to-one codeword-to-layer mapping) schemes is adopted. Instead, a middle-way was chosen, whereby at most two codewords are used, even more than two layers are transmitted. Same MCS is used for the same codeword which may contain multiple code blocks, even if a codeword is mapped to multiple layers. In NR, the codeword to layer mapping in MIMO transmission need to be revisited taken into account NR frame structure, HARQ timeline, etc.
+
+In the extreme case of MCW transmission, a separate codeword can be mapped to each of the spatial layers. The UE may take advantage of such mapping by using successive interference cancellation (SIC) receiver to achieve significant gains. However, the first codeword to be decoded are subjected to higher interference levels compared to later decoded codewords. In order to make SIC receiver work properly, the first codeword to be decoded shall be more robust than the second codeword, and the second codeword shall be more robust than the third codeword, etc. Such differentiation in robustness of different codewords can be achieved by applying different modulation and coding schemes (MCSs) to the different codewords, which is also referred to as per-antenna rate control (PARC). For example, the first codeword to be decoded shall use a lower-order modulation and lower coding rate. The gains brought by SIC receiver with PARC thus may potentially come at the expense of more control signalling, including CQI reporting for each codeword, the per codeword MCS indication in the downlink control information (DCI), and multiple bits to convey HARQ ACK/NACK for each codeword.
+
+For each codeword, subband CQI reporting may be needed for better support of link adaptation in frequency-domain. Furthermore, a UE may be configured to report CQI for multiple CSI-RS resources when the LTE CLASS B type CSI-RS is configured, not to mention cases of multi-TRP transmission and carrier aggregation where multi-fold of reporting may be needed for each TRP and/or each component carrier. All these lead to a significant increase of uplink control overhead.
+
+Observation 1: MCW MIMO transmissions may come at the expense of more control signaling and significant increase of the uplink control overhead.
+
+In contrast, SCW transmission leads to a reduction in the amount of control signalling required for CQI reporting, for HARQ ACK/NACK feedback and potentially for MCS indication in DCI. The single codeword need to be mapped across spatial, frequency, and time-domains. QAM symbols can be mapped first across layers, then across subcarriers, then across OFDM symbols. Then, a code block spans across all spatial layers of a set of consecutive logical subcarriers and can potentially span across two or more consecutive OFDM symbols depending on the RB allocation. Different modulation can be assigned to each layer for a better adaptation to the supportable spectral efficiency of the OFDM symbols to which the code blocks are mapped.
+
+Also, the SCW transmission may generally be more suitable for pipelined decoding and self-contained operation. It is worth noting that less HARQ ACK/NACK bits are not only important for uplink control overhead reduction, but may help transmit pipelining also.
+
+Observation 2: SCW MIMO transmission may have some advantages compared to MCW transmission for pipelined decoding and low latency applications.
+
+Performance evaluation: SCW vs. MCW
+
+We now provide simulation results in which we compare the following approaches:
+
+SCW with per-layer modulation order,
+
+SCW with the same modulation order across layers,
+
+MCW with per-layer modulation order for the layers belonging in a CW. For ranks 2, 4, 8 we use 2 CWs,
+
+MCW with per-layer modulation order for the layers belonging in a CW. For rank 2, 4, 8 we use 2 and 4 and 4 CWs respectively,
+
+for the sub-6GHz Phase-1 calibrated channel model according to [3] and simulation parameters agreed for the DMRS evaluations in [4] and the mmWave channel model.
+
+In short, for sub-6GHz, we assume a 16x8 system with (M,N,P,Mg,Ng) = (8,4,2,1,1) at the BS and (M,N,P,Mg,Ng) = (1,4,2,1,1) at the UE and present spectral efficiency results for a system with SCS of 30 KHz, Doppler spread of 11.11 Hz, 84 PRBs, and realistic DMRS and SRS channel estimation. The slot contains 12 downlink symbols, 1 guard symbol and 1 uplink SRS symbol. The eNB uses the SRS symbols to derive through reciprocity a channel estimate of the downlink channel and use SVD-based precoding vectors across RB bundles of 4 PRBs. The link adaptation has a target of 10% BLER for each CW, and when modulation-per-layer is assumed, then the same coding rate is chosen for all layers in a CW, but potentially a different modulation order is used.
+
+Figures 1-5 show the performance results for rank 2, 4 and rank 8 for CDL-B 100nsec, CDL-C 300nsec when there is realistic SRS channel estimation, which results to imperfect SVD-based beamforming on the downlink. Results for perfect SRS estimation and SVD beamforming appear in Figure 6-8. We observe that for rank 4 and 8 some performance degradation is seen when SCW is used without the option of configurable QAM order per layer, especially for the case of 8 layers. However, most of that loss is being recovered when this feature is enabled even for SU-MIMO rank 8 transmissions.
+
+[FIG:da0a2e67c7b8cc1dca13] [FIG:4ee176334a53601eac01]
+
+Figure 1 CDL-100 nsec, Rank 4 Figure 2 CDL-100 nsec, Rank 8
+
+[FIG:9e2c52695d5e7f11f23e] [FIG:401da1c7ce65c23da25f]
+
+Figure 3 CDL-300 nsec, Rank 2 Figure 4 CDL-300 nsec, Rank 4
+
+[FIG:000499815ce0394c06d2]
+
+Figure 5 CDL-300 nsec, Rank 8
+
+Figures 6-8 present similar results as above but assuming perfect SRS transmission and SVD-based beamforming at the downlink for a similar simulation setup with 48 PRBs allocation. Same as before, we observe that, SCW with modulation order that is different per layer has similar performance with MCW MIMO.
+
+[FIG:35796ecad7026b015323] [FIG:c9445b3b1b3b0f550aa7]
+
+Figure 6 CDL-100 nsec, Rank 4 Figure 7 CDL-100 nsec, Rank 8
+
+Additional results for advanced receiver using an LTE framework and the same MCS per layer for up two layers is shown in the Appendix.
+
+In Figure 8 and Figure 9, we present spectral efficiency results obtained from MMW 30GHz frequency, with 120 kHz subcarrier spacing, 64 RBs with 12 subcarriers each, CDL B/C channel with random angular translation and 3kmh UE speed. Both BS and UE use cross-polarized directional antennas, and the antennas of same polarization on one panel is mapped to 1 port, with analog beamforming based on DFT beam towards the strongest cluster at both BS and UE. The slot contains 12 downlink symbols, 1 guard symbol and 1 uplink SRS symbol. The BS uses the SRS symbols to derive through reciprocity a channel estimate of the downlink channel and use SVD-based precoding vectors across RB bundles of 4 PRBs. The link adaptation has a target of 10% BLER for each CW.
+
+In Figure 8, we assume CDL-C with 300ns delay spread, a 2x2 system with (M,N,P,Mg,Ng) = (4,8,2,1,1) at the BS and (M,N,P,Mg,Ng) = (2,4,2,1,2) at the UE, where the 2 UE panels are of opposite azimuth orientation, which is random across drops, and the panel with higher receive power is selected for each drop to model polarization MIMO, and 2 layer transmission. It can be seen that, in this case, there is about 1.5dB gain of using SCW with per-layer modulation, as compared to SCW with single modulation, even though the two polarizations from the same panel have same average post-beamforming SNR.
+
+In Figure 9, we assume CDL-B with 100ns delay spread, a 4x4 system with (M,N,P,Mg,Ng) = (4,8,2,1,2) at the BS and (M,N,P,Mg,Ng) = (2,4,2,1,2) at the UE, where the 2 UE panels are of opposite azimuth orientation, which is random across drops, and both panels are used to model spatial MIMO, and 4 layer transmission. It can be seen that, in this case, there is about 7~8dB gain of using SCW with per-layer modulation, as compared to SCW with single modulation, as the two panels may see vastly different post-beamforming SNR, depending the UE orientation. The gain of MCW (w. 2CW or 4CW) over SCW in this case is very small.
+
+[FIG:4127a5adb63c33293b3e] [FIG:c72e87a57765c68f8e2f]
+
+Figure 8 CDL-C 300 nsec, 2x2 Rank 2 at 30GHz Figure 9 CDL-B 100 nsec, 4x4 Rank 4 at 30GHz
+
+Observation 3: The performance of a SCW and MCW MIMO transmission scheme with per-layer modulation order can be similar.
+
+Proposal 1: NR supports SCW MIMO as the supported number of CWs for SU-MIMO up to 8 layers with per-layer modulation order.
+
+Frequency Interleaving
+
+Discussion
+
+Even though it is envisioned that NR shall support large bandwidth allocations, a codeblock will span a limited frequency bandwidth, especially in regimes of high spectral efficiency. A simple frequency-based interleaving procedure can be added in the codeword-to-layer mapping step to ensure that the resource elements that carry bits of the same codeblock get additional frequency diversity by spreading them across a larger bandwidth. Note that if allocation is small, and one codeblock already spans the whole or most of the bandwidth of the OFDM symbol, as it was the case of LTE, indeed a frequency interleaving might not provide significant gains.
+
+Supporting at least a frequency interleaver at the resource element level will also provide gains in regimes of bursty subband interference and URLLCC/eMBB dynamic multiplexing. Note also that such a method would allow pipeline decoding at the receiver since the de-interleaving is happening on the resource element level, before the demapper. The LLRs after the demapper are “in-order” and ready for decoding. If the frequency interleaving is happening at the transmitter at the bit level, then the natural choice of the de-interleaving would need to be in the LLR-level, after the demapper, in which case the codeblock decoding for each OFDM symbol would need to start after all the demapping process for that OFDM symbol has been completed.
+
+Row-Column per-OFDM symbol interleaver
+
+We now provide a proposal of a row-column interleaver that is happening at the codeword-to-layer mapping in the resource element level and simulation study that demonstrates the gains that can be expected in scenarios of large allocations compared to the case of no-frequency interleaving.
+
+In the suggested row-column interleaving procedure, after the encoded data bits are mapped into QAM symbols, the latter are mapped across layers sequentially into logical resource elements for each OFDM symbol, and then bundles of K resource elements are interleaved using a row-column procedure before the precoding step and mapping into physical resource elements. A toy example of such procedure is shown in Figure 1 where K=4, each codeblock spans 8 resource elements and there are a total number of 3 codeblocks. Note that such procedure is happening only in the logical resource elements that carry data, and that no interleaving is happening in the control or RS that could be present in an OFDM symbol.
+
+[FIG:25bb29d1c1dd9d10dbc2] [FIG:ff78b1bf3cec720c8269] [FIG:d22579b74a27540df94d]
+
+Figure 1 Toy example of the suggested row-column frequency interleaving procedureFigure 1 Toy example of the suggested row-column frequency interleaving procedure
+
+Simulation results
+
+Sub-6GHz study
+
+We now provide performance results for a sub-6GHz with a SCS of 30 KHz with 170 RBs, each with 12 subcarriers, which results into a bandwidth of 61.2 MHz in a 4x4 system with link and rank adaptation with realistic channel estimation. Detailed simulation parameters are shown in Table 1.
+
+Parameter | Value
+Coding | 3GPP Turbo with 32 entries in the MCS table. Maximum code rate 0.93, and 256-QAM
+Link/Rank adaptation | 10% TBLER Link Adaptation with TTI 500 usec and rank adaptation up to 4 layers
+MIMO | 4 Tx, 4 Rx, Open Loop, SCW
+CE | MMSE Channel estimation – 4 PRB channel estimation
+BW | 61.2 MHz
+SCS | 30 KHz
+HARQ | 1 transmission with 1 bit ACK/NAK
+
+Table 1 Simulation parameters
+
+Figure 2 and 3 present the throughput performance for
+
+[FIG:ae84823b96b28a45402f]
+
+Figure 2 Throughput performance comparison of per-tone (K=1) or per-4-tone (K=4) interleaver compared to no frequency interleaver for a system with BW of 61.2 MHz in a TDL-C 100nsec channel.
+
+[FIG:e45c7f6c8aff3c0c7aae]
+
+Figure 3 Throughput performance comparison of per-tone (K=1) or per-4-tone (K=4) interleaver compared to no frequency interleaver for a system with BW of 61.2 MHz in a TDL-C 300nsec channel.
+
+We observe that in both scenarios significant gains can be exploited by using a frequency-domain interleaver, especially for medium and high geometries.
+
+mmW study
+
+We now provide performance results for a MMW 30GHz with a SCS of 120 KHz with 64 RBs, each with 12 subcarriers, which results into a bandwidth of 92.16 MHz in a 2x2 polarized MIMO system with link and rank adaptation. Detailed simulation parameters are shown in Table 2.
+
+Parameter | Value
+Coding | 3GPP Turbo with 32 entries in the MCS table. Maximum code rate 0.93, and 256-QAM; Wi-Fi LDPC 1944 CB Size and 15 entries in the MCS table. Maximum code rate 0.875, and 256-QAM
+Channel | CDL-B 3kmh 100ns DS and CDL-C 3kmh 300ns DS, no angular translation
+TRP | (M,N,P,Mg,Ng) = (4,64,1,1,2). (dV,dH) = (0.5, 0.5)λ; Orientation (0,0,0), Antenna directivity 8dBi, HPBW=65degree
+UE | (M, N, P, Mg, Ng) = (2, 4, 2, 1, 2); (dV,dH) = (0.5, 0.5)λ; Orientation (180,0,0), Antenna directivity 5dBi, HPBW=90degree
+TxRU Virtualization/ Analog Beamforming | All antennas with the same polarization on one panel is mapped to 1 port, using DFT Beam pointing towards the strongest cluster at both TRP and UE.
+Link/Rank adaptation | 10% TBLER Link Adaptation with TTI 125 usec and rank adaptation up to 2 layers
+MIMO | 2 Tx, 2 Rx, No Digital Beamforming, SCW
+CE | Genie Channel and noise estimation
+BW | 92.16 MHz
+SCS | 120 KHz
+HARQ | 1 transmission with 1 bit ACK/NAK
+
+Table 2 MMW Simulation parameters
+
+Figure 4 and Figure 5 present throughput results with post-BF SNR for:
+
+[FIG:7d3dbec70b7c18c60f10]
+
+Figure 4 Throughput comparison of per-4-tone (K=4) interleaver vs. no frequency interleaver for a system with BW of 91.16 MHz, 120kHz SCS in a CDL-A 100nsec channel with Turbo code, K=2000 bits.
+
+[FIG:30cbd13f1c3cb152841b]
+
+Figure 5 Throughput comparison of per-4-tone (K=4) interleaver vs. no frequency interleaver for a system with BW of 91.16 MHz, 120kHz SCS in a CDL-C 300nsec channel with LDPC code, CB size 1944 bits.
+
+We observe that in both scenarios significant gains can be exploited by using a frequency-domain interleaver for MMW system as well (as long as the CB does not span more than 1 symbol), especially for medium and high geometries. Note that
+
+Observation 3: Significant performance gains are expected in regimes for medium and high spectral efficiencies if a frequency-based interleaver is supported in NR.
+
+Proposal 2: NR supports a frequency-domain per-OFDM-symbol interleaver for both uplink and downlink.
+
+Conclusions
+
+Observation 1: MCW MIMO transmissions come at the expense of more control signaling and significant increase of the uplink control overhead.
+
+Observation 2: SCW MIMO transmission may have some advantages compared to MCW transmission for pipelined decoding and low latency applications.
+
+Observation 3: The performance of an SCW and MCW MIMO transmission can be similar when per-layer modulation is supported
+
+Proposal 1: NR supports SCW MIMO as the supported CW to layer mapping for SU-MIMO up to 8 layers with per-layer modulation order.
+
+Proposal 2: NR supports a frequency-domain per-OFDM-symbol interleaver for both uplink and downlink.
+
+References
+
+RAN1-86bis Chairman’s notes
+
+RAN1-87 Chairman’s notes
+
+R1-1613741, “Way forward on Phase 1 and Phase 2 MIMO calibration for NR”, ZTE, ZTE Microelectronics, Ericsson, LG Electronics, Spreadtrum Communications
+
+R1- 1700480 “Summary of [87-29] Simulation assumption for NR DMRS,” LG Electronics, 3GPP TSG-RAN WG1 NR Ad-Hoc, Spokane, Washington, USA
+
+Appendix
+
+Simulation parameters
+
+The slot structure and the DMRS pattern is shown in Figure 3. Data and DMRS can be FDM-ed when a comb is not used for DMRS.
+
+[FIG:0f8bd1715e2496196e00] [FIG:b41cde47e054d1a2d38d]
+
+Figure 1: Slot and DMRS pattern chosen in the simulation study shown in Section 5.
+
+Simulation results for advanced receiver and LTE frame structure
+
+In the appendix we present throughput evaluation results that also appeared in a previous contribution [2] but are added here for reference. In this study, we simulate an LTE frame structure and numerology in a 2x2 system with channel estimation, advanced receiver, LTE Turbo coding with 4 Re-Tx and IR and an MCS table with 29 entries where the following two scenarios are compared:
+
+Only SCW for both rank 1 and rank 2 transmissions
+
+Rank 1 is transmitted with SCW, whereas rank 2 uses 2-CW transmission
+
+We provide two examples in which SCW and MCW demonstrate similar performance:
+
+[FIG:feea9e4505429656a8f0] [FIG:15aaf92a5d679bcbadc5]
+
+We observe that on both these scenarios the performance loss due to SCW compared to MCW is small. Note that in these results in the SCW case the same modulation is being used for both layers. Adjusting the modulation per layer could potentially be a more robust approach for the SCW case especially in the geometries where the transition from Rank 1 to Rank 2 is happening. Further studies are needed to identify for which scenarios MCW does not provide a considerable gain over the SCW approach.

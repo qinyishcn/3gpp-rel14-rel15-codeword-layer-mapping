@@ -1,0 +1,85 @@
+3GPP TSG RAN WG1 NR Ad-Hoc#2 R1-1710275
+
+Qingdao, P.R. China 27th – 30th June 2017
+
+_____________________________________________________________
+
+Agenda Item: 5.1.2.1.1
+
+Source: LG Electronics
+
+Title: Discussion on codeword mapping
+
+Document for: Discussion/Decision
+
+Introduction
+
+In the last RAN1 meeting, the following agreement regarding CW to layer mapping were made:
+
+Agreements:
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:70a2134a2493995fe34a] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS  whether the UE report the preferred layer mapping
+
+In this contribution, we have discussed flexible codeword to layer mapping, and data RE mapping order and some remaining issues.
+
+Discussion
+
+According to the last meeting agreement on codeword-to-layer mapping, LTE codeword-to-layer mapping for more than 4 layers is supported and other flexible codeword-to-layer mapping is FFS. Also, the support of mapping 2-CW to 3 layers and 2-CW to 4 layers is FFS. In our view, especially for NCJT with single DCI, flexible codeword-to-layer mapping and 2-CW for 3, 4 layers are beneficial to reflect different channel characteristics of multiple TRPs.
+
+Specifically, regarding 2-CW for 3, 4 layers, given that independent layers from different 2 TRPs are transmitted through very different multi-path, it causes performance degradation to set one MCS for multiple layers from different TRPs. In order to properly reflect geometry difference between 2 TRPs into MCS, 2-CW for 3, 4 layers is necessary.
+
+Proposal 1: Support 2-CW for 3 and 4 layers for NCJT with single DCI.
+
+In addition, since there are many combinations of transmission rank among NCJT TRPs, multiple CW to layer mapping should be supported. For example, assuming total transmission rank is 5 and 2 TRP independent layer JT with single DCI, the optimal rank of each TRP can be one of 1+4, 4+1, 2+3, or 3+2. If 2 layers for CW1 and 3 layers for CW 2 are only supported, which is the same as LTE, multiple layers from different TRPs can be mapped to a single CW and, as a result, can be scheduled with a single MCS. In this case, given that propagation characteristics of different TRPs can be different, link adaptation for these multiple layers is inefficient. On the other hand, with flexible codeword-to-layer mapping e.g. including (1,4), (4,1), (2,3) and (3,2), each TRP can transmit different CW with different MCS so that it provides potential performance gain with better link adaption.
+
+To support flexible codeword-to-layer mapping, we consider spec impact in terms of CSI feedback and data reception. First, in terms of CSI feedback, UE reports RI and PMI per TRP and reports composite CQI assuming ILJT. For example, if UE reports RI1 for TP1 and RI2 for TP2 and RI1+RI2 > 4, UE assumes RI1 layers for CW1 and RI2 layers for CW2 and calculates CQI for each CW. In this case, UE lets TRP know preferred codeword to layer mapping by reporting RI1 and RI2. In terms of data reception, UE is configured with 2 DMRS port groups; port group 1 indicates DMRS ports for CW1 and port group 2 indicates DMRS ports for CW2. This provides codeword to layer mapping to UE.
+
+In addition, we can take an example of 3 TRP independent layer JT with single DCI. With limitation of maximum 2 codewords, two TRPs transmit data layers for one codeword and one TRP transmits data layers for another codeword. In other words, the first codeword is mapped to spatial layers of 2 TRPs with similar propagation environments, and the second codeword is used to transmit layers of 1 TRP with entirely different propagation characteristics from previous TRPs. Regarding spec impact on CSI feedback, UE reports RI1, RI2, and RI 3 corresponding to 3 TRPs and if RI1+RI2+RI3 > 4 UE additionally reports RI to CW mapping such as RI1 and RI2 mapped to CW1 and RI3 mapped to CW2. CQI is reported per CW.
+
+Proposal 2: Flexible codeword-to-layer mapping should be supported especially for independent layer joint transmission with single DCI.
+
+Proposal 3: In CSI feedback stage, UE reports multiple RIs for multiple TPs to indicate preferred CW2layer mapping.
+
+Proposal 4: In DL data reception stage, gNB configures 2 DMRS port groups to indicate CW2layer mapping.
+
+Regarding data to RE mapping, we need to take into account several aspects such as waveform and DMRS pattern. To be specific, DFT-S-OFDM case, each data symbol is spreaded over scheduled RBs because of DFT spreading, the need of frequency first mapping seems not strong. Also, considering a front loaded DMRS pattern in DFT-S-OFDM case, frequency first mapping is not preferable since consecutive data symbols can be failed which is difficult to recover by channel coding, considering code blocks located far from DMRS suffer from low channel estimation performance. Furthermore, By using time first mapping, each code block can achieve not only frequency diversity coming from DFT spreading but also time domain channel diversity. It is true that frequency first mapping can provide the benefit of fast decoding. However, gNB generally has a high computation power to reduce decoding time, and time first mapping ensures that each code block achieves the same level of time and frequency diversity and channel estimation accuracy. Therefore, like LTE, time first mapping should be supported in UL DFT-S-OFDM case.
+
+Proposal 5: Layer-time-frequency mapping should be supported in UL DFT-S-OFDM case.
+
+In CP OFDM case, there is no such frequency diversity effect coming from DFT spreading so that frequency first mapping can provide frequency diversity gain. Also, low decoding latency can be achieved. The issues of frequency first mapping in this case are DMRS channel estimation and URLLC puncturing. First, For example, if there is only a front loaded DMRS OFDM symbol in a slot, channel estimation performance for the OFDM symbol far from the DMRS is low so that frequency first mapping may have a negative performance impact. If additional DMRS is used, this negative performance impact of frequency first mapping will be reduced. Secondly, in URLLC puncturing case, some code blocks allocated to a mini slot, i.e., 1 or 2 OFDM symbol(s), can be fully punctured, resulting in increasing initial NACK probability. CBG level HARQ can be helpful in efficient retransmission, but it depends on CBG granularity.
+
+Observation 1: In CP OFDM case, frequency first mapping provides frequency diversity gain and fast decoding benefit while certain code block(s) can suffer from low channel estimation performance and URLLC puncturing.
+
+Regarding the number of MCS fields in DL DCI, UE can determine it based on its MIMO capability and the number of CSIRS ports without additional explicit signalling. Specifically, the minimum of MIMO capability and the number of CSIRS ports is less than 5, UE assumes single MCS field in DL DCI. Given that, in NR, CSIRS can be used for many purposes such as beam management and CSI acquisition, it should be determined based on CSIRS for CSI acquisition and if multiple CSIRS resources are configured the maximum number of ports of those CSIRS resources is used to determine the number of MCS fields.
+
+In case of UL DCI, if the maximum number of SRS ports is 4 only one MCS field is needed for UL DCI.
+
+Proposal 6: The number of MCS fields in DL DCI should be determined in an implicit way based on MIMO capability and the number of CSIRS ports.
+
+Conclusion
+
+In this contribution, we have discussed flexible codeword to layer mapping and resource mapping order, and proposed as following:
+
+Proposal 1: Support 2-CW for 3 and 4 layers for NCJT with single DCI.
+
+Proposal 2: Flexible codeword-to-layer mapping should be supported especially for independent layer joint transmission with single DCI.
+
+Proposal 3: In CSI feedback stage, UE reports multiple RIs for multiple TPs to indicate preferred CW2layer mapping.
+
+Proposal 4: In DL data reception stage, gNB configures 2 DMRS port groups to indicate CW2layer mapping.
+
+Proposal 5: Layer-time-frequency mapping should be supported in UL DFT-S-OFDM case.
+
+Observation 1: In CP OFDM case, frequency first mapping provides frequency diversity gain and fast decoding benefit while certain code block(s) can suffer from low channel estimation performance and URLLC puncturing.
+
+Proposal 6: The number of MCS fields in DL DCI should be determined in an implicit way based on MIMO capability and the number of CSIRS ports.

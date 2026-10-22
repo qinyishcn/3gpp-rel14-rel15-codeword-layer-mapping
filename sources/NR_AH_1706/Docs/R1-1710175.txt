@@ -1,0 +1,189 @@
+3GPP TSG RAN WG1 Ad-Hoc#2 R1-1710175
+
+Qingdao, P.R. China 27th – 30th June 2017
+
+Source: ZTE
+
+Title: Codeword to resource mapping and interleaving
+
+Agenda Item: 5.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#89 meeting, the CW to resource mapping is discussed, the following agreements and working assumption have been achieved:
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+Considering the above progress, more details on CW to resource mapping and interleaving are discussed. Both system and link level simulation results are provided for analysis.
+
+Resource Mapping in a codeword
+
+In order to satisfy various use cases in NR, the factors including performance, processing latency, URLLC puncturing, UL waveform, cross-link interference, and characteristics of transmission scheme, e.g., CoMP, should be considered for choosing the resource mapping scheme. In addition to the agreed resource mapping order: layer--> frequency-->time, as listed in Table 1, total six basic schemes with corresponding sub-types are proposed based on a set of design criteria for mapping scheme summarized in [2]. More specifically, two schemes, e.g., Alt-1a and Alt-2 are further analyzed in this contribution.
+
+Table 1 Potential schemes for CB to resource mapping
+
+Basic schemes | Sub-type
+Alt-1: Layer Frequency Time | Alt-1a: Layer set 1 FrequencyTimeLayer set2Frequency Time;
+ | Alt-1b: Layer Frequency set 1Time Frequency set 2 Time;
+Alt-2: Layer Time Frequency | Alt-2a: Layer set 1 TimeFrequency Layer set2 Time Frequency;
+ | Alt-2b: Layer Time set 1 Frequency Time set 2 Frequency;
+Alt-3: Frequency Time Layer | Alt-3a: Frequency set1 Time LayerFrequency set2 Time Layer
+ | Alt-3b:Frequency Time set1 Layer Time set2 Layer
+Alt-4: Frequency Layer Time | Alt-4a:Frequency set1 Layer Time Frequency set2 Layer Time
+ | Alt-4b:Frequency Layer set1 Time Layer set2 Time
+Alt-5: Time Frequency Layer | Alt-5a:Time set 1 Frequency Layer Time set2 Frequency Layer;
+ | Alt-5b:Time Frequency set1 Layer Frequency set2 Layer;
+Alt-6: Time Layer Frequency | Alt-6a:Time set 1 LayerFrequency Time set2 Layer Frequency;
+ | Alt-6b:Time Layer set1 Frequency Layer set2 Frequency;
+
+Alt-1a : Layer set 1 FrequencyTimeLayer set2Frequency Time;
+
+According to the agreement [1], in case of multiple TRP transmission, the following transmission scheme is supported:
+
+Single N R-PDCCH schedules single NR-PDSCH where separate layers are transmitted from separate TRPs
+
+In this case, especially with lower rank (e.g., rank <= 4), a CW is mapped across multiple TRPs (e.g., 2). However, due to different channel properties between each TRP to UE, different ranks and reception conditions per link can be expected. Another case is different interference levels are experienced in different layer sets depending on how beamforming is done in interfering cells in interference limited scenarios. For enhancing the transmission under these situations, the following mapping scheme can be considered:
+
+Layer set 1 FrequencyTimeLayer set2Frequency Time
+
+More specifically, the first and second part of CW (e.g., two CBGs) will be mapped to layer set 1 and layer set 2, respectively. In this way, ACK/NACK feedback can be assigned per layer set. It can be expected to minimize the re-transmission of whole CW since independent error probability can be achieved in per layer set manner based on different channel condition. In addition, ACK/NACK based outer loop link adaptation can be done per layer set.
+
+In order to verify the above analysis, the corresponding system simulation has been conducted in indoor scenario. In this simulation, the baseline scheme refers to the agreed mapping order. More detailed configuration about the simulation can be found in Table 2. Performance comparison between the proposed scheme and baseline scheme are shown in Table 2. It can be observed that the proposed scheme outperforms the baseline scheme in the case with varying interference. More specifically, more than 10% gain is achieved for cell-edge UE since the transmission to these UEs is more sensitive to varying interference. Similar performance is obtained for both schemes for 95%-tile UE.
+
+Table 2 Comparison of simulation results (RU=80%)
+
+Simulation scheme | Mean UPT | 5% UPT | 50% UPT | 95% UPT | RU
+Baseline scheme | 13.2834 | 0.6889 | 5.3763 | 54.7945 | 0.7728
+Alt-1a | 13.4752 | 0.765 | 5.7061 | 54.6316 | 0.7716
+Gain | 1.44% | 11.05% | 6.13% | -0.3% | 0.16%
+
+Observation 1: The proposed mapping scheme (Alt-1a i.e. Layer set 1 FrequencyTimeLayer set2Frequency Time) outperforms the agreed Alt1 baseline in the case with varying interference.
+
+Alt-2 - Layer Time Frequency
+
+Since dynamic TDD and URLLC are considered in NR, the quality of received data may be different per symbol. For example, transmitted eMBB data is punctured once URLLC traffic arrives with higher priority. Since frequency resources within several OFDM symbols can be pre-empted by URLLC, decoding of CBs in a CBG will be affected if one CB is only mapped to single symbol. In another example as shown in Figure 1, the last few symbols of downlink data transmitted from TRP 1 to UE1 is interfered by uplink data from UE2 to TRP2. More specifically, since different types of frame structure are used at different time in dynamic TDD scenarios, varying interference is experienced by different symbol within PDSCH received by UE1.
+
+UE1UE2TRP1TRP2 [FIG:67997e637b79b4245d41]
+
+Figure 1 Illustration of cross link interference
+
+In the above cases, for achieving better performance with time diversity, the data should be mapped to time domain as much as possible, and the following mapping scheme can be considered:
+
+Layer Time Frequency
+
+In order to verify the above analysis, the corresponding link level simulation has been conducted with CDL-A model. In this simulation, the last symbol of PDSCH is assumed to experience additional interference, and the strength of this interference is denoted as SIR. More detailed simulation assumption can be found in Table 2. Moreover, the baseline scheme refers to the agreed mapping order. Performance comparison between the proposed scheme and baseline scheme are shown in Figure 2. It can be found that in both cases (SIR = 3 and 0 dB), significant performance gain can be observed for the proposed mapping scheme (Alt-2) due to time diversity. More specifically, when SIR = 0, due to the large additional inference in last symbol, the UE fails to decode the bits within this symbol. Since the contiguous bits are mapped in this symbol in case of the usage of baseline scheme, the whole CW fails naturally.
+
+[FIG:2729a613278ad9b45691]
+
+Figure 2 Performance comparison between two mapping schemes when SIR= 3dB
+
+[FIG:e7c3089da1b784893577]
+
+Figure 3 Performance comparison between two mapping schemes when SIR= 0dB
+
+Observation 2: The proposed mapping scheme (Alt-2 i.e. Layer Time Frequency) outperforms in the case with varying interference.
+
+According to the analysis above, it can be found that single resource mapping scheme cannot fully satisfy various applications in NR under different conditions. However, it should be highlighted that all these requirements may not exist in one scenario simultaneously. For example, URLLC and cross link interference may not exist in all scenarios. Significant diversity gain can be achieved for lower code rate case but only limited gain are expected for high-code rate. Meanwhile, the tight requirement on processing latency is only critical in the case with self-contained case, but it can be loosen for other applications. Consequently, for achieving promising performance in different cases, configurable mapping scheme should be considered for NR based on case-specific requirements.
+
+Proposal 1：Configurability among multiple mapping schemes should be supported in NR. Additional schemes Alt 1-a (i.e. Layer set 1->Frequency->Time->Layer set2->Frequency->Time) and Alt 2 (i.e. layer->frequency->time) are supported in configurable multiple mapping schemes.
+
+Discussion on interleaving
+
+During the implementation of data to resource mapping based on proposed scheme above, if one CB cannot fully occupy the allocated resources in certain domain and various channel/interference condition/puncturing probability is observed in that domain, interleaving in that domain can provide extra diversity gain for transmission. Moreover, introduction of interleaving can be adopted to minimize the difference of BER among CBs within one CBG. Although more diversity gain could be introduced if joint interleaving in two domains is supported, a lot of standardization work is required.
+
+According to application of data to resource mapping, the non-fully occupied case will be more frequently occurs in the domain which has the lower priority in the mapping schemes, e.g., frequency and time domain in Alt-1, frequency domain in Alt-2/6. Moreover, the factors, e.g., size of CB, code rate and MCS have also impacts on the resource occupation in certain domain. In order to achieve the interleaving gain under different mapping schemes, configurable interleaving schemes should be supported in NR.
+
+With Alt1, it makes sense to support at least interleaving in frequency domain considering the usual case that larger bandwidth will be assigned to each UE in NR. Therefore, we have the following proposal:
+
+Proposal 2： Configurability among multiple interleaving schemes should be supported in NR. At least frequency domain interleaving is supported in NR.
+
+Note that other interleaving schemes can be selected together with the mapping scheme.
+
+Conclusion
+
+In this contribution, we discuss codeword to resource mapping and interleaving schemes. Based on the analysis, the following observations and proposals are reached:
+
+Observation 1: The proposed mapping scheme (Alt-1a i.e. Layer set 1 FrequencyTimeLayer set2Frequency Time) outperforms the agreed Alt1 baseline in the case with varying interference.
+
+Observation 2: The proposed mapping scheme (Alt-2 i.e. Layer Time Frequency) outperforms in the case with varying interference.
+
+Proposal 1：Configurability among multiple mapping schemes should be supported in NR. Additional schemes Alt- 1a (i.e. Layer set 1->Frequency->Time->Layer set2->Frequency->Time) and Alt-2 (i.e. layer->frequency->time) are supported in configurable multiple mapping schemes.
+
+Proposal 2 Configurability among multiple interleaving schemes should be supported in NR. At least frequency domain interleaving is supported in NR.
+
+References
+
+RAN1#89 Chairman’s Notes
+
+RAN1#88bis Chairman’s Notes
+
+R1-1706647, “Layer Mapping Candidates”, Samsung
+
+R1-1702597, “Frequency domain interleaving” , Qualcomm Incorporated
+
+Appendix
+
+Table 3 Configurations for system level simulation
+
+Parameter | Values used for evaluation
+Carrier Frequency | 3.5 GHz
+Duplex Mode | FDD
+System Band | 10 MHz
+Carrier Number | 1
+Network Synchronization | Synchronized
+Antenna Configuration | Transmitter: 2Tx cross-polarized antennaReceiver: 2Rx and 4Rx at UE(cross-polarized antenna with 0.5λ antenna spacing)
+Tx Power | 24 dBm
+eNB antenna height | 6m
+UE antenna height | 1.5m
+Number of small cells | 8
+Minimum distance (2D distance) | Small cell-small cell: 20m
+ | Small cell-UE: 3m
+Traffic model | FTP Model 1 with packet size 0.5 Mbytes, RU = 80%
+Handover margin | 3dB
+UE attachment | Based on RSRP (formula) from CRS port 0
+Metrics | Mean, 5%, 50%,95% UPT
+UE Speed | 3km/h
+CQI/PMI reporting interval and frequency granularity | 5ms for CQI/PMI, 6RB
+Feedback scheme | Rel-12 enhanced CSI feedback, PUSCH mode 3-22Tx codebook, 16Tx FD-MIMO codebookCQI, PMI and RI reporting triggered per 5msFeedback delay is 5 ms
+Transmission scheme | Non-coherent JT with single PDCCH/PDSCH
+Scheduler | Proportional Fair
+Overhead | 3 symbols for DL CCHs, 2 CRS ports and DM-RS with 12 REs per PRB
+Backhual | Ideal backhaul
+Receiver | MMSE-IRC and SIC
+HARQ Scheme | Chase Combining
+Maximum number of retransmissions | 3
+Channel estimation | Non-ideal modeling of channel estimation error modeling [FIG:e26a05d2e57ce729b154] is used,based on CSI-RS for channel measurements, based on DMRS for data demodulation, based on IMR for interference measurement
+
+Table 4 Configurations for link level simulation
+
+Configurations | Value
+Number of PRB | 100
+Channel Model | CDL-A
+Antenna configuration | 4Tx, 2Rx
+Carrier frequency | 4 GHz
+Subcarrier space | 15 kHz
+MCS | (1/2, 64QAM)
+Number of symbol for Control | 2
+Number of Layer | 2
+DM-RS pattern | [FIG:289f39d92c6c0c4424a4]
+UE velocity | 3 km/h
