@@ -1,0 +1,100 @@
+3GPP TSG RAN WG1 Meeting #94 R1-1809493
+
+Gothenburg, Sweden, August 20th – 24th, 2018
+
+Agenda item: 7.1.2.1
+
+Source: Samsung
+
+Title: Summary of codeword mapping
+
+Document for: Discussion and Decision
+
+Issue on codeword mapping and proposed resolution
+
+This contribution summarizes the (only) issue raised in the two submitted contributions for RAN1#94 ([1]-[2]).
+
+In RAN1#93, it was agreed that when the UE is configured with a maximum of two CWs (thereby enabling two-CW transmission), one of the two TBs (TB0 or TB1) can be disabled by DCI format 1_1 if (IMCS, rvid) = (26,1) for the corresponding TB. In this case, the enabled TB is mapped to CW0.
+
+However, since a combination of (IMCS, rvid) = (26,1) is not invalid, it can cause some potential ambiguity for the following scenarios:
+
+Case 1: maxNrofCodeWordsScheduledByDCI = 2, two TBs are scheduled with (IMCS, rvid) = (26,1)
+
+Huawei and AT&T agree that Case 1 is problematic
+
+Case 2: maxNrofCodeWordsScheduledByDCI = 1, the TB is scheduled with (IMCS, rvid) = (26,1)
+
+Only Huawei mentions this scenario
+
+AT&T notes that although the combination of (IMCS, rvid) = (26,1) is valid, it is not practical for initial transmission since the TB is not self-decodable. In other words, for retransmissions, (IMCS, rvid) = (26,1) can still be assigned and of value. Therefore, both Case 1 and Case 2 are valid. Furthermore, the two scenarios can be addressed with the same solution (UE behaviour).
+
+The following alternatives have been mentioned/proposed in [1]-[2] on how to treat Case 1 and/or Case 2:
+
+Alt 1 [1]: Treated as an invalid case
+
+Alt 2 [1]: The TB related information should be ignored, SRS request field in DCI are still valid
+
+Alt 3 [1]: The case is valid and need to decode
+
+Alt 4 [2]: When maxNrofCodeWordsScheduledByDCI=2, one of the two TBs is disabled if (IMCS, rvid) = (26,1) for that TB designated for initial transmission
+
+Initial transmission is indicated via the New Data Indicator (NDI) DCI field, i.e. a condition involving NDI toggled is added on (IMCS, rvid) = (26,1). Therefore, the condition for TB disabling is refined.
+
+Presumably Case 1 and Case 2 are considered valid, i.e. Alt 3.
+
+Alt 5: Revise the TB disabling condition to (IMCS, rvid) = (0,1)
+
+Table 1 Solution
+
+Alt | How to treat Case 1 and 2 | Companies
+1 | Treated as an invalid case | Qualcomm
+2 | The TB related information should be ignored, SRS request field in DCI are still valid | Huawei, HiSilicon
+3 | The case is valid and need to decode | Samsung (2nd preference)
+4 | Alt 3 + refinement on TB disabling condition: “NDI toggled, (IMCS, rvid) = (26,1)” | AT&T, Samsung (1st preference), NTT Docomo
+5 | Revise the TB disabling condition to “IMCS=0 and rvid=1 | LG
+
+As evident, Alt 1 and Alt3 (as is) are the simpler alternatives.
+
+Alt 3 allows the use of (IMCS, rvid) = (26,1) for DL assignment except when maxNrofCodeWordsScheduledByDCI=2, two TBs are scheduled, and only one of the two TBs is “assigned” with (IMCS, rvid) = (26,1).
+
+Alt 1, on the other hand, renders (IMCS, rvid) = (26,1) unusable for DL assignment thereby resulting in a loss of MCS-RV combination (as argued by AT&T and LG). However, since the DL assignment granularity is typically fine (taking into account PRB allocation), such loss in MCS-RV combination is unlikely to cause significant performance loss. The advantage of Alt 1 over Alt 3 is unclear.
+
+Alt 2 is an extension of Alt 1. However, requiring the UE to decode SRS request field in an ignored DL assignment can be perceived as not only unnatural, but also marginal optimization for aperiodic SRS. The benefit is therefore less clear.
+
+Alt 4 refines the previous agreement with the NDI toggling thereby also allowing the use of (IMCS, rvid) = (26,1) for only one TB when maxNrofCodeWordsScheduledByDCI=2 with two TBs scheduled (hence the full use of (IMCS, rvid) = (26,1) for DL assignment). Huawei pointed out a problem with two consecutive DCIs disabling one TB for the retransmission of the other TB. If the first DCI is missed (i.e. DTX), the second NDI toggling will be recognized as no toggling (hence a retransmission rather than TB disabling). However, typical gNB implementation includes DTX detection capability which makes this less of an issue (as argued by AT&T). LG further argued that DTX is reported as NAK in case of aggregated HARQ-ACK for multiple DCI. In this case, the gNB cannot distinguish DTX from NAK.
+
+Compared to the original agreement, Alt 5 replaces IMCS = 26 with 0. There is no tangible benefit from such replacement as (IMCS, rvid) = (0,1) is also a valid combination.
+
+It should be noted that if there is no further agreement on this issue, Alt 3 becomes the default solution. In this case, (IMCS, rvid) = (26,1) is still mostly useable for DL assignment except for the setup/configuration used for TB disabling.
+
+Observation:
+
+Without any further agreement, Alt 3 becomes the default solution, i.e. (IMCS, rvid) = (26,1) is usable for DL assignment except when maxNrofCodeWordsScheduledByDCI=2, two TBs are scheduled, and only one of the two TBs is “assigned” with (IMCS, rvid) = (26,1).
+
+There is no substantial benefit from:
+
+changing (IMCS, rvid) = (26,1) to (0,1) for TB disabling [Alt 5];
+
+making (IMCS, rvid) = (26,1) invalid for DL assignment, nor is there any substantial performance loss [Alt 1]
+
+enforcing a UE to decode aperiodic SRS request field of an invalid DCI [Alt 2 relative to Alt 1]
+
+Alt 4 allows (IMCS, rvid) = (26,1) to be usable for DL assignment in all cases.
+
+The use of NDI toggling may result in faulty inference when DTX occurs in a previous DCI reception. This is not an issue if DTX detection at the gNB is possible.
+
+Therefore, the following resolution is possible.
+
+Proposal:
+
+For potentially refining the previous agreement on TB disabling, briefly discuss Alt 1 vs. Alt 4 based on the above analysis
+
+If an alternative is agreed, a CR for section 5.1.3.2 of TS38.214 is needed
+
+If there is no agreement, Alt 3 becomes the default solution and no CR is needed
+
+References
+
+R1-1808146, Remaining issues on multi-antenna schemes, Huawei, HiSilicon
+
+R1-1809052, Text proposal for MIMO codeword mapping, AT&T
