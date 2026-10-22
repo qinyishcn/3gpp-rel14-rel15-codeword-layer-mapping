@@ -1,0 +1,87 @@
+3GPP TSG RAN WG1 Meeting #90bis R1-1717416
+
+Prague,CZ, 9th – 13th , October 2017
+
+Source: ZTE, Sanechips
+
+Title: Remaining details of codeword mapping
+
+Agenda Item: 7.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+For the UL transmission with DFT-S-OFDM, the following agreements have been achieved in RAN1 NR Ad-hoc #3 meeting [1]:
+
+For RE mapping for DFT-S-OFDM without frequency hopping:
+
+Option 1
+
+For RE mapping for DFT-S-OFDM with frequency hopping, downselect between the following alternatives in RAN1#90bis:
+
+Option 1
+
+Option 3
+
+As a revised contribution from R1-1715430, more details on CW to resource mapping for UL with DFT-S-OFDM are elaborated with updated simulation results.
+
+Resource Mapping in a codeword
+
+In order to satisfy various use cases in NR, the factors including performance, processing latency, cross-link interference and characteristics of application scenarios, e.g., high speed train, should be considered for choosing the resource mapping scheme.
+
+More specifically, with the introduction of dynamic TDD in NR, the quality of received data will be different per symbol as the example as shown in Figure 1. In this case, the last few symbols of downlink data transmitted from TRP 1 to UE1 are interfered by uplink data from UE2 to TRP2. Since different types of frame structure are used at different time in dynamic TDD scenarios, varying interference is expected to be experienced by different symbol within PUSCH received by UE2. More specifically, due to the lack of prior information about the scheduling of dynamic TDD, the influence cannot be well alleviated by CBG-based methods, e.g., CBG-based HARQ.
+
+Moreover, in the application case with high speed, e.g., high speed train scenario, the decoding of data within one symbol (e.g., one or multiple CBs) will be affected by fast fading in time domain.
+
+In the above cases, for achieving better performance with time diversity, the data should be mapped to time domain as much as possible. Considering the candidate schemes listed in the agreement above, which are illustrated in Figure 2, option 3 (subcarriers in the 1st hop, then subcarriers in the 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop) is preferred since more time diversity can be harvested.
+
+UE1UE2TRP1TRP2 [FIG:72129754db429307c228]
+
+Figure 1 Illustration of cross link interference
+
+In order to verify the above analysis, the corresponding link level evaluations have been conducted with CDL-D model in high speed scenario (i.e., V = 120 or 500 km/h) for these two schemes. Performance for data transmission with three allocated RBs (e.g., 10/30/50 RBs) is investigated with system bandwidth configured to 100 RBs. More detailed simulation assumption can be found in Table 2.
+
+[FIG:ecf5098a103f5f9adab8]
+
+Figure 2 CW to resource mapping schemes used in simulation
+
+[FIG:6bf94ede507cba5e7d51]
+
+Figure 3 Performance comparison when number of RB = 10/30/50
+
+Performance comparison for each mapping order is shown in Figure 2. It can be found that in the case of 10 RB, similar performance is achieved for these three mapping orders. The reason is that in this case, only single CB is transmitted, diversity gains in both time and frequency domains can be well harvested for this CB. With increasing number of RBs, performance of option 3 is better than option 1 with up to 20% gain. The reason is that for option 1, when the number of allocated RBs is increased, the number of CBs increases and the number of symbols for each CB decreases which results in less diversity gain in time domain.
+
+Observation 1: Option 3 with intra-slot hopping outperforms Option 1 in high speed scenario.
+
+Proposal 1：Option 3, in which CW is mapped to subcarriers in the 1st hop, then subcarriers in the 2nd hop with repetition of the mapping by starting from the subsequent OFDM symbol in the 1st hop, should be supported for UL transmission with DFT-S-OFDM.
+
+Conclusion
+
+In this contribution, the details related to codeword to resource mapping for UL with DFT-S-OFDM are discussed. Based on the analysis, the following observation and proposal are reached:
+
+Observation 1: Option 3 with intra-slot hopping outperforms in high speed scenario.
+
+Proposal 1：The option 3, in which CW is mapped to subcarriers in 1st hop, then subcarriers in 2nd hop with repetition of the mapping by starting from the subsequent OFDM symbol in the 1st hop , should be supported for UL transmission with DFT-S-OFDM;
+
+References
+
+RAN1 NR Ad-hoc#3 Chairman’s Notes
+
+Appendix
+
+Table 2 Configuration for link level simulation
+
+Configuration | Value
+System bandwidth | 20MHz
+Number of PRBs | 10/30/50 PRBs with hopping
+Channel Model | CDL-D
+Waveform | DFT-S-OFDM
+Antenna configuration | 1Tx, 1Rx
+Carrier frequency | 4 GHz
+Subcarrier space | 15 kHz
+MCS | (1/2, 16QAM)
+UE velocity | 120/500km
+Number of symbols for Control | 2
+Number of Layer | 1
+DM-RS pattern | [FIG:2245bf27f3496c804d2e]
