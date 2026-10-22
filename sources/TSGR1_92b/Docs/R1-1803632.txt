@@ -1,0 +1,99 @@
+3GPP TSG RAN WG1 Meeting #92bis R1-1803632
+
+Sanya, China, April 16th –20th, 2018
+
+Agenda Item: 7.1.2.1.1
+
+Source: Huawei, HiSilicon
+
+Title: Remaining issues on CW mapping
+
+Document for: Discussion and decision
+
+Introduction
+
+After previous meetings [1]-[3], most aspects of CW mapping have been finished and also captured in specifications. This contribution considers the transport block to codeword mapping and DMRS ports ordering for 2 CWs case. Our view on these remaining issues is also provided to complete the specification and improve its quality.
+
+Transport block to codeword mapping
+
+In NR, the mapping between transport block (TB) and codeword (CW) is not defined, which, however, is ensessial to complete the spec. In the following, the mapping between TB and CW will be discussed for the case of two TBs are both enabled and the case of one TB is disabled, respectively.
+
+Transport block to codeword mapping for two TBs enabled case
+
+For the case of both TBs are enabled, the following two schemes can be considered.
+
+LTE-like scheme: the transport block to codeword mapping is specified according to the following table, where the transport block to codeword swap flag is indicated by DCI. In this way, the retransmitted TB can be mapped to the CW with better channel quality, providing better performance. However, it needs to introduce a new DCI indication for the swap flag.
+
+Table 1: Transport block to codeword mapping 
+(two transport blocks enabled)
+
+transport block
+to codeword
+swap flag value | codeword 0
+(enabled) | codeword 1
+(enabled)
+0 | transport block 1 | transport block 2
+1 | transport block 2 | transport block 1
+
+Fixed mapping scheme: TB1 is mapped to CW0 and TB2 is mapped to CW1 respectively. Compared to the LTE-like scheme, this scheme is simpler but suffers from performance loss due to less flexibility.
+
+Proposal 1: The TB to CW mapping in the case of two TBs are both enabled should be specified and the LTE-like scheme or the fixed mapping scheme can be considered.
+
+Transport block to codeword mapping for one TB disabled case
+
+Transport block to codeword mapping for one TB disabled case is ensessial, especially for the retransmission. For example, two transport blocks are transmitted in a new transmission, and one of them is not detected correctly which would be retransmitted in the later transmission. Furthermore, we can consider the case of only one codeword (CW0) in the retransmission. In this case, if the incorrectly detected TB is TB1 in the previous new transmission, TB1 should be mapped to CW0 in the retransmission as shown in Case 1 of Fig.1, due to the new transmission and the retransmission should use the same TB for data combination, which is the requirement of the HARQ process. Similarly, if TB2 is not successfully received in the new transmission, TB2 should be mapped to CW0 as shown in Case 2 of Fig.1. So the mapping between TB and CW is needed to ensure the correct HARQ process management in the above case.
+
+[FIG:f1d3ce09e05b0aebf6b9]
+
+Fig1. Examples of TB to codeword mapping in the case of one TB disabled
+
+Therefore, in order to ensure the retransmission function in NR, the LTE approach of transport block to codeword mapping, i.e., CW0 can dynamically map between TB1 and TB2 in the case of one TB disabled, should be specified in NR spec. Hence, we have the following text proposals for TS38.212 [4] and TS38.214 [5], respectively.
+
+Proposal 2: For the case of one TB disabled, the LTE-like TB to codeword mapping should be specified, i.e., CW0 can dynamically map between TB1 and TB2.
+
+Text Proposal-1: For Section 7.3.1.2.2 of 38.212------------------------------------------ Start of Text Proposal --------------------------------------------7.3.1.2.2 Format 1_1< Unchanged parts are omitted >- CBG transmission information (CBGTI) – 0, 2, 4, 6, or 8 bits as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter maxCodeBlockGroupsPerTransportBlock for the PDSCH.- CBG flushing out information (CBGFI) – 0 or 1 bit as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter codeBlockGroupFlushIndicator.- DMRS sequence initialization – 1 bit for [FIG:130c235b1572b3a41d5b] selection defined in Subclause 7.4.1.1.1 of [4, TS38.211].The following information is transmitted by means of the DCI format 1_1 with CRC scrambled by CS-RNTI: - XXX – x bitIn case the higher layer parameter Number-MCS-HARQ-DL-DCI equals 2, and one of the transport blocks is disabled as specified in section 5.1.3.2 of [6, TS38.214], the transport block to codeword mapping is specified according to Table X.X.Table X.X: Transport block to codeword mapping
+(one transport block enabled)transport block 1transport block 2codeword 0
+(enabled)codeword 1
+(disabled)enableddisabledtransport block 1-disabledenabledtransport block 2-------------------------------------------- End of Text Proposal -------------------------------------------For Section 5.1.3.2 of 38.214------------------------------------------- Start of Text Proposal -------------------------------------------5.1.3.2 Transport block size determination In DCI format 1_1, a transport block is disabled if [FIG:8979b90dd131c8e29b7d]  and if [EQ:79cf8ce35e6328c0e452] for the corresponding transport block, otherwise the transport block is enabled.For the PDSCH assigned by a PDCCH with DCI format 1_0 or format 1_1 with CRC scrambled by C-RNTI, TC-RNTI, CS-RNTI, SI-RNTI, RA-RNTI, or P-RNTI, if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' and [FIG:032d8db62e5960301e65] [EQ:fe3403121b3c32c4bffb] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' and [FIG:0683fe3bf72796a7fe3e] [EQ:69424f079a8bb3086460] , the UE shall, except if the transport block is disabled in DCI format 1_1, first determine the TBS as specified below:< Unchanged parts are omitted >------------------------------------------- End of Text Proposal -------------------------------------------
+
+DMRS ports ordering for 2 CWs case
+
+In RAN1#92 meeting [3], the following agreement was achieved for the DMRS ordering of one-CW transmission. However, the DMRS ordering of two-CW transmission is still open.
+
+Agreement
+
+For NR Rel-15, DMRS port ordering is performed as follows for one-CW transmission (DL)
+
+Simple ordering with increasing index (port number)
+
+One straightforward way is to reuse the agreed DMRS ordering for the case of one-CW to the case of two-CW, which, however, will limit the performance of multiple-TRP/panel applications. In specific, for rank>4 transmissions with two-CW, the non-QCLed DMRS ports would be grouped within one CW if the abovementioned increasing ordering principle is adopted.
+
+For example, if DMRS pattern type-1 with DMRS ports of {0,1,2,3,4} are configured for rank-5 transmission, according to the agreed rule of CW to layer mapping, DMRS ports of {0,1} and {2,3,4} would be configured for CW0 and CW1 respectively. Thus DMRS ports of {2, 3, 4} within CW1 would share the same MCS. However, if DMRS ports of {2, 3} and {4} are non-QCLed and have totally different channel qualities, it is difficult for network to choose an appropriate MCS for CW1 and the system performance would degrades accordingly. In fact, for multiple-TRP scenarios, the best performance will be achieved only if each TRP has a separate CW, which ensures the QCL-ed DMRS ports (from the same TRP) share a same MCS. Therefore, we have the following proposal for TS38.211 [6] and TS38.212.
+
+Proposal 3: For DMRS port ordering of DL two-CW transmission, the Text Proposal-2 for Section 7.3.1.4 of TS38.211 and Section 7.3.1.2.2 of TS38.212 can be supported.
+
+Text Proposal-2: For Section 7.3.1.4 of 38.211------------------------------------------ Start of Text Proposal --------------------------------------------7.3.1.4 Antenna port mappingThe block of vectors [FIG:f9cb7703b8cee25fa75b] , [FIG:c6afa620be3d3649a4f4] shall be mapped to antenna ports according to [FIG:365243d25bcf8cfdf875] where [FIG:279bd82d6f49cda87c7d] , [FIG:f9002d9e5387a5e1ed53] . The set of antenna ports [FIG:98109d2ff55cd3fa5fae] shall be determined according to the procedure in [4, TS 38.212]. ------------------------------------------- End of Text Proposal -------------------------------------------For Section 7.3.1.2.2 of 38.212------------------------------------------- Start of Text Proposal -------------------------------------------7.3.1.2.2 Format 1_1< Unchanged parts are omitted >- Antenna port(s) – 4, 5, or 6 bits as defined by Tables 7.3.1.2.2-1/2/3/4, where the number of CDM groups without data of values 1, 2, and 3 refers to CDM groups {0}, {0,1}, and {0, 1,2} respectively. The antenna ports [FIG:3ef33ce887d61b21c34a] shall be determined according to the ordering of DMRS port(s) given by Tables 7.3.1.2.2-1/2/3/4.< Unchanged parts are omitted >Table 7.3.1.2.2-2: Antenna port(s) (1000 + DMRS port), DL-DMRS-config-type=1, DL-DMRS-max-len=2One Codeword:Codeword 0 enabled,Codeword 1 disabledTwo Codewords:Codeword 0 enabled,Codeword 1 enabledValueNumber of DMRS CDM group(s) without dataDMRS port(s)Number of front-load symbolsValueNumber of DMRS CDM group(s) without dataDMRS port(s)Number of front-load symbols0101022,3,0,1,421111120,1,4,2,3,62210,11222,3,6,0,1,4,523201320,1,4,5,2,3,6,7242114-31reservedreservedreserved52216231720,11822,31920-211020-311120,2112202132121422215232162421725218262192722020,122122,322224,522326,722420,422522,622620,1,422722,3,622820,1,4,522922,3,6,723020,2,4,6231ReservedReservedReserved< Unchanged parts are omitted >Table 7.3.1.2.2-4: Antenna port(s) (1000 + DMRS port), DL-DMRS-config-type=2, DL-DMRS-max-len=2One codeword:Codeword 0 enabled,Codeword 1 disabledTwo Codewords:Codeword 0 enabled,Codeword 1 enabledValueNumber of DMRS CDM group(s) without dataDMRS port(s)Number of front-load symbolsValueNumber of DMRS CDM group(s) without dataDMRS port(s)Number of front-load symbols0101030-411111130-51210,11222,3,0,1,623201320,1,6,2,3,824211422,3,8,0,1,6,725221520,1,6,7,2,3,8,9262316-63ReservedReservedReserved720,11822,31920-211020-311130112311133211433115341163511730,111832,311934,512030-212133-512230-312320,21243022531226322273322834229352303623137232382333923431023531123630,123732,323834,523936,724038,9241310,1124230,1,624332,3,824434,5,1024530,1,6,724632,3,8,924734,5,10,112481024911250162511725210,125316,725420,125522,325626,725728,9258-63ReservedReservedReserved< Unchanged parts are omitted >------------------------------------------- End of Text Proposal -------------------------------------------
+
+Conclusions
+
+This contribution discusses the agreements that are missing or not captured incorrectly in current TS version, and some remaining issues that needs to be resolved. The following proposals are achieved.
+
+Proposal 1: The TB to CW mapping in the case of two TBs are both enabled should be specified and the LTE-like scheme or the fixed mapping scheme can be considered.
+
+Proposal 2: For the case of one TB disabled, the LTE-like TB to codeword mapping should be specified, i.e., CW0 can dynamically map between TB1 and TB2.
+
+Proposal 3: For DMRS port ordering of DL two-CW transmission, the Text Proposal-2 for Section 7.3.1.4 of TS38.211 and Section 7.3.1.2.2 of TS38.212 can be supported.
+
+References
+
+3GPP, “RAN1 #91 meeting Chairman’s Notes”, Reno, USA, Nov.27-Dec.1, 2017.
+
+3GPP, “RAN1 AH 1801 meeting Chairman’s Notes”, Vancouver, Canada, 22-26 Jan. 2018.
+
+3GPP, “RAN1 #92 meeting Chairman’s Notes”, Athens, Greece, February 26th – March 2nd, 2018.
+
+3GPP TS 38.212 v15.0.1: "NR; Multiplexing and channel coding ".
+
+3GPP TS 38.214 v15.0.0: "NR; Physical layer procedures for data ".
+
+3GPP TS 38.211 v15.0.0: "NR; Physical channels and modulation ".

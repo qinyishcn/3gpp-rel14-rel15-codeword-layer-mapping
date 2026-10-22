@@ -1,0 +1,53 @@
+3GPP TSG RAN WG1 Meeting #92b R1-1803811
+
+Sanya, China, February 16th – March 20th, 2018
+
+Source: vivo
+
+Title: Remaining Issues on Codeword Mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In previous meetings, there are issues raised on layer to port mapping and the following agreement is achieved. In this paper, we further discuss aspects related to these two issues.
+
+Agreement
+
+For NR Rel-15, DMRS port ordering is performed as follows for one-CW transmission (DL)
+
+Simple ordering with increasing index (port number)
+
+Layer to port mapping
+
+Currently there is no explicit indication of layer to port mapping in the spec. In our understanding, the simplest way is to map each layer to each antenna port one to one in increasing order of layer index and increasing order of DMRS port index.
+
+For two codeword case, it is argued that for multi-TRP scenarios, re-grouping DMRS ports according to which codeword the ports belong to could bring some benefits for codeword level AMC. But such benefits are marginal since the basic logic for NR R15 codeword to layer mapping is not designed to optimize such scenarios. There are cases like 2/4 split between two TRPs and the corresponding codeword mapping and DMRS regrouping could not be adapted per TRP.
+
+Proposal 1: For two CW case, each layer is mapped to each antenna port in increasing order of layer index and increasing order of DMRS port index.
+
+----Text Proposal for TS 38.211------------------------------------------------------------------
+
+< Unchanged parts are omitted >
+
+7.3.1.4 Antenna port mapping
+
+The block of vectors [FIG:5df3c1d380a8ac6194fb] , [FIG:0056faa53e444b428e4c] shall be mapped to antenna port according to
+
+[FIG:66dd4c3ad94e1042f4ce]
+
+where [FIG:22f2c028d49b997ec17e] , [FIG:890b9ef7854749bc266b] . The set of antenna ports [FIG:ac8a2bbe3d1f8a9b6b2a] shall be determined according to the procedure in [6, TS 38.214] and is in increasing order from [FIG:5419e5b9791ed65d620d] to [FIG:94370590dc513c565bb5] .
+
+< Unchanged parts are omitted >
+
+Conclusion
+
+In this contribution, the following proposals are given related to layer mapping:
+
+Proposal 1: For two CW case, each layer is mapped to each antenna port in increasing order of layer index and increasing order of DMRS port index.
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 Meeting #92
