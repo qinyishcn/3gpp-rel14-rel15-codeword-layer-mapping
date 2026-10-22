@@ -1,0 +1,2515 @@
+6 Downlink
+
+6.1 Overview
+
+The smallest time-frequency unit for downlink transmission is denoted a resource element and is defined in clause 6.2.2.
+
+A subset of the downlink subframes in a radio frame can be configured as MBSFN subframes by higher layers. Each MBSFN subframe is divided into a non-MBSFN region and an MBSFN region.
+
+- For subframes using [FIG:00d02544916c7052e850] , the non-MBSFN region spans the first one or two OFDM symbols in an MBSFN subframe where the length of the non-MBSFN region is given according to Subclause 6.7.
+
+- For subframes using [FIG:1634f9c233ec97f9887f] or [FIG:d46cd3d393f01882cb15] , the non-MBSFN region is of zero size.
+
+- The MBSFN region in an MBSFN subframe is defined as the OFDM symbols not used for the non-MBSFN region.
+
+For an MBMS-dedicated cell, subframes where PSS/SSS/PBCH or PDSCH carrying system information are transmitted with [FIG:d5ba3118f38f89f2d94d] are non-MBSFN subframes.
+
+For frame structure type 3, MBSFN configuration shall not be applied to downlink subframes in which at least one OFDM symbol is not occupied or discovery signal is transmitted.
+
+Unless otherwise specified, transmission in each downlink subframe shall use the same cyclic prefix length as used for downlink subframe #0.
+
+6.1.1 Physical channels
+
+A downlink physical channel corresponds to a set of resource elements carrying information originating from higher layers and is the interface defined between 3GPP TS 36.212 [3] and the present document 3GPP TS 36.211. 
+The following downlink physical channels are defined:
+
+- Physical Downlink Shared Channel, PDSCH
+
+- Physical Broadcast Channel, PBCH
+
+- Physical Multicast Channel, PMCH
+
+- Physical Control Format Indicator Channel, PCFICH
+
+- Physical Downlink Control Channel, PDCCH
+
+- Physical Hybrid ARQ Indicator Channel, PHICH
+
+- Enhanced Physical Downlink Control Channel, EPDCCH
+
+- MTC Physical Downlink Control Channel, MPDCCH
+
+6.1.2 Physical signals
+
+A downlink physical signal corresponds to a set of resource elements used by the physical layer but does not carry information originating from higher layers. The following downlink physical signals are defined:
+
+- Reference signal
+
+- Synchronization signal
+
+- Discovery signal
+
+6.2 Slot structure and physical resource elements
+
+6.2.1 Resource grid
+
+The transmitted signal in each slot is described by one or several resource grids of [FIG:8442c3a34d6040680b0f] subcarriers and [FIG:44c6b56015e6cd9053fb] OFDM symbols. The resource grid structure is illustrated in Figure 6.2.2-1. The quantity [FIG:774b5ea63b4b0979af25] depends on the downlink transmission bandwidth configured in the cell and shall fulfil
+
+[FIG:81d08de9c812fd0a7c7c]
+
+where [FIG:301f258cb4aaa4e2587b] and [FIG:ce86f89f44603534e079] are the smallest and largest downlink bandwidths, respectively, supported by the current version of this specification.
+
+The set of allowed values for [FIG:89cf62dc6b987fff5c96] is given by 3GPP TS 36.104 [6]. The number of OFDM symbols in a slot depends on the cyclic prefix length and subcarrier spacing configured and is given in Table 6.2.3-1.
+
+An antenna port is defined such that the channel over which a symbol on the antenna port is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed. For MBSFN reference signals, positioning reference signals, UE-specific reference signals associated with PDSCH and demodulation reference signals associated with EPDCCH, there are limits given below within which the channel can be inferred from one symbol to another symbol on the same antenna port. There is one resource grid per antenna port. The set of antenna ports supported depends on the reference signal configuration in the cell:
+
+- Cell-specific reference signals support a configuration of one, two, or four antenna ports and are transmitted on antenna ports [FIG:c08f2f98739a0d012f21] , [FIG:ca683335f072909e6887] , and [FIG:4d3e92d5c192eed6ff3d] , respectively.
+
+- MBSFN reference signals are transmitted on antenna port [FIG:bfafe53f47f84bf47b5f] . The channel over which a symbol on antenna port [FIG:53a1430e8b23fd3a361d] is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed only if the two symbols correspond to subframes of the same MBSFN area.
+
+- UE-specific reference signals associated with PDSCH intended for non-BL/CE UE are transmitted on antenna port(s) [FIG:f8039a02ed5abf71355b] , [FIG:f4c9403b50a89364b3d8] , [FIG:74f68db98346c527796e] , or one or several of [FIG:3637b5cfceea20efe5f1] . The channel over which a symbol on one of these antenna ports is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed only if the two symbols are within the same subframe and in the same PRG when PRB bundling is used or in the same PRB pair when PRB bundling is not used.
+
+- - UE-specific reference signals associated with PDSCH intended for BL/CE UE are transmitted on one or several of antenna port(s) [FIG:a833d5b3c522dae0da3c] . The channel over which a symbol on one of these antenna ports is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed only if the two symbols are in the same set of [FIG:fd7a914de63745fc5319] consecutive subframes and have the same PRB index.
+
+- Demodulation reference signals associated with EPDCCH are transmitted on one or several of [FIG:1573ed8606a8092657e9] . The channel over which a symbol on one of these antenna ports is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed only if the two symbols are in the same PRB pair.
+
+- - Demodulation reference signals associated with MPDCCH are transmitted on one or several of [FIG:8bd5ed8b9bd47c9abbae] . The channel over which a symbol on one of these antenna ports is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed only if the two symbols are in the same set of [FIG:c88c7da2e0b6559a31cc] consecutive subframes and have the same PRB index.
+
+- Positioning reference signals are transmitted on antenna port [FIG:93158089097dcf23d9ab] . The channel over which a symbol on antenna port [FIG:3f59675c7c1e167d2282] is conveyed can be inferred from the channel over which another symbol on the same antenna port is conveyed only within one positioning reference signal occasion consisting of [FIG:bae9cffac87d30a3b0bc] consecutive downlink subframes, where [FIG:4fa9b7c493f761767a85] is configured by higher layers.
+
+- CSI reference signals support a configuration of 1, 2, 4, 8, 12, 16, 20, 24, 28, or 32 antenna ports and are transmitted on antenna ports [FIG:29be34d5f4762a360372] , [FIG:7e05a1ed4458da5c65f7] , [FIG:bff8b537258fee88d7b2] , [FIG:d3b35b68da641d08dd5b] , [FIG:f14de53bb0d69a282649] , [FIG:578b9c390ddf6c6e7afe] , [FIG:4c17151b224cf4683621] , [FIG:83eaafb98dabccfd85d1] , [FIG:39f2d86877e7b3adb306] and [FIG:ca46b0f1d67d470ce8f7] , respectively.
+
+Two antenna ports are said to be quasi co-located if the large-scale properties of the channel over which a symbol on one antenna port is conveyed can be inferred from the channel over which a symbol on the other antenna port is conveyed. The large-scale properties include one or more of delay spread, Doppler spread, Doppler shift, average gain, and average delay.
+
+6.2.2 Resource elements
+
+Each element in the resource grid for antenna port [FIG:31ab837576436fb75322] is called a resource element and is uniquely identified by the index pair [FIG:0f0cc5f18fe8e9a3dd31] in a slot where [FIG:372de40ba9b63ab564d2] and [FIG:95ba3fa29f1824ac0ad0] are the indices in the frequency and time domains, respectively. Resource element [FIG:bdc4ee40d390b010b3a6] on antenna port [FIG:f60cecf7925415205c5b] corresponds to the complex value [FIG:d76baf708311d1152ad9] . 
+When there is no risk for confusion, or no particular antenna port is specified, the index [FIG:16ab3b6af6403b40dc6d] may be dropped.
+
+[FIG:7dbafd6a013918ac593d]
+
+Figure 6.2.2-1: Downlink resource grid
+
+6.2.3 Resource blocks
+
+Resource blocks are used to describe the mapping of certain physical channels to resource elements. Physical and virtual resource blocks are defined.
+
+A physical resource block is defined as [FIG:fbbe553314e5c88af915] consecutive OFDM symbols in the time domain and [FIG:c3095ae011c09cec71ee] consecutive subcarriers in the frequency domain, where [FIG:822399f0997eab743e3f] and [FIG:5f5f63c9ddc24954b89e] are given by Table 6.2.3-1. A physical resource block thus consists of [FIG:cc94d8a49758ac2074a3] resource elements, corresponding to one slot in the time domain and 180 kHz in the frequency domain.
+
+Physical resource blocks are numbered from 0 to [FIG:392cea1f8320d661f5e4] in the frequency domain. The relation between the physical resource block number [FIG:0ef1fdab44366e718575] in the frequency domain and resource elements [FIG:56ef4fd735368eb2a797] in a slot is given by
+
+[FIG:2c4f770c97fc2f9c123f]
+
+Table 6.2.3-1: Physical resource blocks parameters
+
+Configuration | [FIG:2400e2d783e1fa0b4586] | [FIG:a30910385bf4546c5983]
+Normal cyclic prefix | [FIG:d2986bcc54503c19df20] | 12 | 7
+Extended cyclic prefix | [FIG:9a078e5a0f772a40217d] |  | 6
+ | [FIG:515f7ed6a5db956c155f] | 24 | 3
+ | [FIG:27909c7ea47fc8009a09] | 144 | 1
+
+A physical resource-block pair is defined as the two physical resource blocks in one subframe having the same physical resource-block number [FIG:db8cac923a3e3214975b] .
+
+A virtual resource block is of the same size as a physical resource block. Two types of virtual resource blocks are defined:
+
+- Virtual resource blocks of localized type
+
+- Virtual resource blocks of distributed type
+
+For each type of virtual resource blocks, a pair of virtual resource blocks over two slots in a subframe is assigned together by a single virtual resource block number, [FIG:c95b5bd226194e3373aa] .
+
+6.2.3.1 Virtual resource blocks of localized type
+
+Virtual resource blocks of localized type are mapped directly to physical resource blocks such that virtual resource block [FIG:f42fb7e7ff019c160a15] corresponds to physical resource block [FIG:7349dcc6d9fdeb32f647] . Virtual resource blocks are numbered from 0 to [FIG:21689fea13c731af7d11] , where [FIG:cc05809c5650fb7012a4] .
+
+6.2.3.2 Virtual resource blocks of distributed type
+
+Virtual resource blocks of distributed type are mapped to physical resource blocks as described below.
+
+Table 6.2.3.2-1: RB gap values
+
+System BW ( [FIG:8210089227185076279a] ) | Gap ( [FIG:8e7e30ce38a0fd5dd3fe] )
+ | 1st Gap ( [FIG:4c882a9e4ffc230669ba] ) | 2nd Gap ( [FIG:9b0f362aac19fe1aee42] )
+6-10 | [FIG:10ea31faaeb2ec7fbbfc] | N/A
+11 | 4 | N/A
+12-19 | 8 | N/A
+20-26 | 12 | N/A
+27-44 | 18 | N/A
+45-49 | 27 | N/A
+50-63 | 27 | 9
+64-79 | 32 | 16
+80-110 | 48 | 16
+
+The parameter [FIG:09459da2c3f25006b1b9] is given by Table 6.2.3.2-1. For [FIG:f767fbe8de16d76a1687] , only one gap value [FIG:0582dd8da442ad1d5704] is defined and [FIG:57bf497114ba6ac82f77] . For [FIG:be30fa57c52fcb22b152] , two gap values [FIG:1e8f5ca3b6a464599b3b] and [FIG:74eac1fbbd4254caa617] are defined. Whether [FIG:96f8398cc0f66ceab5e4] or [FIG:32e18b52e855eafdc0a8] is signaled as part of the downlink scheduling assignment as described in 3GPP TS 36.212 [3].
+
+Virtual resource blocks of distributed type are numbered from 0 to [FIG:2e19148ec6daf1c8e9fe] , where [FIG:62e29ab917f1346397ef] for [FIG:0d194b0b4061bbfd6fab] and [FIG:e392ab8961a1882d72c9] for [FIG:d356125592b45943dc0b] .
+
+Consecutive [FIG:a727ce35d3375d28f18b] VRB numbers compose a unit of VRB number interleaving, where [FIG:336284b643cb9a500369] for [FIG:dbf54f33568a1ac2881b] and [FIG:dc4854065d9293eb7a38] for [FIG:3f8eb826932fa3a808c4] . Interleaving of VRB numbers of each interleaving unit is performed with 4 columns and [FIG:96add2d01a3ded051064] rows, where [FIG:a5285fd0c7634f10bf22] , and [FIG:337648d582adb177dbb6] is RBG size as described in 3GPP TS 36.213 [4]. VRB numbers are written row by row in the rectangular matrix, and read out column by column. [FIG:e09e2b0973b69a760d46] nulls are inserted in the last [FIG:117bc9cbc2786ac4ceed] rows of the 2nd and 4th column, where [FIG:9c4d2844d983cb57f922] . Nulls are ignored when reading out. The VRB numbers mapping to PRB numbers including interleaving is derived as follows:
+
+For even slot number [FIG:288befe5b143523ce623] ;
+
+[FIG:774a8588ca3e2198cdd1] ,
+
+where [FIG:78cbcd79f37e00006d46] ,
+
+and [FIG:71a81d2b290ffb9dde89] ,
+
+where [FIG:f2a95df7cb68fccf5811] and [FIG:1f7f642a510b1aca9e4c] is obtained from the downlink scheduling assignment as described in 3GPP TS 36.213 [4].
+
+For odd slot number [FIG:80b8cc0de93f10a9ab05] ;
+
+[FIG:d0427c3c2d0e8e021954]
+
+Then, for all [FIG:cf6df7007a9c103578de] ;
+
+[FIG:5f7c1d9ca14bd96b33f8] .
+
+Virtual resource blocks of distributed type are not applicable to BL/CE UEs.
+
+6.2.4 Resource-element groups
+
+Resource-element groups are used for defining the mapping of control channels to resource elements.
+
+A resource-element group is represented by the index pair [FIG:40bc20cbf08cd4bdaf6e] of the resource element with the lowest index [FIG:72e9f710ac7353f72c3e] in the group with all resource elements in the group having the same value of [FIG:b9ac24ac38da1b162d56] . The set of resource elements [FIG:c4b0a3f3983f33252408] in a resource-element group depends on the number of cell-specific reference signals configured as described below with [FIG:8a77773bd4ab30db341a] , [FIG:f5cfc85b70c9321a93e2] .
+
+- In the first OFDM symbol of the first slot in a subframe the two resource-element groups in physical resource block [FIG:eec82eb2c3850913c83d] consist of resource elements [FIG:81c8893f4f6ef8d83a55] with [FIG:f160cff3a6f909c2e263] and [FIG:2d3c162456ac06ad92aa] , respectively.
+
+- In the second OFDM symbol of the first slot in a subframe in case of one or two cell-specific reference signals configured, the three resource-element groups in physical resource block [FIG:7fdecc983aa8c6b644fa] consist of resource elements [FIG:7146cebe76201a320b98] with [FIG:a6cc679f2109ec116dc1] , [FIG:6ec6932f3d9d190f86f1] and [FIG:c1e5a721d3906b88e612] , respectively.
+
+- In the second OFDM symbol of the first slot in a subframe in case of four cell-specific reference signals configured, the two resource-element groups in physical resource block [FIG:23a7eb6a672b23c203a5] consist of resource elements [FIG:9ee720735ce92a576fa4] with [FIG:84536372b633e4524598] and [FIG:5d089015f0cf5cb3e642] , respectively.
+
+- In the third OFDM symbol of the first slot in a subframe, the three resource-element groups in physical resource block [FIG:583ef7a967caa7e5a438] consist of resource elements [FIG:12875cb491763ab0da70] with [FIG:5d8b76a296724109c68f] , [FIG:90f928a59c0f43478eed] and [FIG:8cc1fac3c6e4c8df8355] , respectively.
+
+- In the fourth OFDM symbol of the first slot in a subframe in case of normal cyclic prefix, the three resource-element groups in physical resource block [FIG:d63108a732acdb8dfcee] consist of resource elements [FIG:4c8e84c422cceb7b63c0] with [FIG:076b5f39a651c4867cf6] , [FIG:2623764ca14ba24cf937] and [FIG:fbd9864d7a61fb2592df] , respectively.
+
+- In the fourth OFDM symbol of the first slot in a subframe in case of extended cyclic prefix, the two resource-element groups in physical resource block [FIG:c051d80beed6976fc894] consist of resource elements [FIG:d58ef6be0367b4187e43] with [FIG:3145c1be851d0a408ce8] and [FIG:e48daa37b1bd8f143564] , respectively.
+
+Mapping of a symbol-quadruplet [FIG:a411c28a247b742988e0] onto a resource-element group represented by resource-element [FIG:47c651aa7971e96b411b] is defined such that elements [FIG:b72ba4310735c3fa9b6c] are mapped to resource elements [FIG:afd2fec5e9b047b59c97] of the resource-element group not used for cell-specific reference signals in increasing order of [FIG:67f4a8240093823210d9] and [FIG:6bc26eb2636ad4f2947d] . In case a single cell-specific reference signal is configured, cell-specific reference signals shall be assumed to be present on antenna ports 0 and 1 for the purpose of mapping a symbol-quadruplet to a resource-element group, otherwise the number of cell-specific reference signals shall be assumed equal to the actual number of antenna ports used for cell-specific reference signals. The UE shall not make any assumptions about resource elements assumed to be reserved for reference signals but not used for transmission of a reference signal.
+
+For frame structure type 3, if the higher layer parameter subframeStartPosition indicates ‘s07’ and the downlink transmission starts in the second slot of a subframe, the above definition applies to the second slot of that subframe instead of the first slot.
+
+6.2.4A Enhanced Resource-Element Groups (EREGs)
+
+EREGs are used for defining the mapping of enhanced control channels to resource elements.
+
+There are 16 EREGs, numbered from 0 to 15, per physical resource block pair. Number all resource elements, except resource elements carrying DM-RS for antenna ports [FIG:daca1fe5c6f8b3f7f0f2] for normal cyclic prefix or [FIG:fbc68d4db638319e6787] for extended cyclic prefix, in a physical resource-block pair cyclically from 0 to 15 in an increasing order of first frequency, then time. All resource elements with number [FIG:3b267276ddd942051ca6] in that physical resource-block pair constitutes EREG number [FIG:42a4f21ecd0b35d98e57] .
+
+For frame structure type 3, if the higher layer parameter subframeStartPosition indicates ‘s07’ and the downlink transmission starts in the second slot of a subframe, the above definition applies to the second slot of that subframe instead of the first slot.
+
+6.2.5 Guard period for half-duplex FDD operation
+
+For type A half-duplex FDD operation, a guard period is created by the UE by
+
+- not receiving the last part of a downlink subframe immediately preceding an uplink subframe from the same UE.
+
+For type B half-duplex FDD operation, guard periods, each referred to as a half-duplex guard subframe, are created by the UE by
+
+- not receiving a downlink subframe immediately preceding an uplink subframe from the same UE, and
+
+- not receiving a downlink subframe immediately following an uplink subframe from the same UE.
+
+6.2.6 Guard Period for TDD Operation
+
+For frame structure type 2, the GP field in Figure 4.2-1 serves as a guard period.
+
+6.2.7 Narrowbands and widebands
+
+A narrowband is defined as six non-overlapping consecutive physical resource blocks in the frequency domain. The total number of downlink narrowbands in the downlink transmission bandwidth configured in the cell is given by
+
+[FIG:08bcd2ba636722c548b5]
+
+The narrowbands are numbered [FIG:d07c0b53cb879d345a27] in order of increasing physical resource-block number where narrowband [FIG:580b61cf96531c5f4f6e] is composed of physical resource-block indices
+
+[FIG:e790e053d1ea550c46a8]
+
+where
+
+[FIG:7af0dcf75ecc17648c40]
+
+If [FIG:86a6dd22fb4b14edeb77] , a wideband is defined as four non-overlapping narrowbands in the frequency domain. The total number of downlink widebands in the downlink transmission bandwidth configured in the cell is given by
+
+[FIG:890ab9f80bd1f6c2088a]
+
+and the widebands are numbered [FIG:bddb673d756260235d41] in order of increasing narrowband number where wideband [FIG:0d9de5f1445d45b965d1] is composed of narrowband indices [FIG:8de7222aac8e18f47c09] where [FIG:b5a65ee12919309edbab] .
+
+If [FIG:c69b5cc6e8fc8860fae1] , then [FIG:229984cce5d8d232425a] and the single wideband is composed of the [FIG:f4df7bfad65831d22e60] non-overlapping narrowband(s).
+
+6.2.8 Guard period for narrowband and wideband retuning
+
+For BL/CE UEs, a guard period of at most [FIG:9011437852ca8bad1dbd] OFDM symbols is created for Rx-to-Rx and Tx-to-Rx frequency retuning between two consecutive subframes. If the higher layer parameter ce-RetuningSymbols is set, then [FIG:76146e6b7fc637d175cd] equals ce-RetuningSymbols, otherwise [FIG:d383f7ee0a2010c3a500] . If the higher layer parameter ce-pdsch-maxBandwidth-config is set to 5 MHz, then the rules for guard period creation defined in the remainder of this clause apply not for retuning between narrowbands but for retuning between widebands and for transmissions involving multiple widebands.
+
+- If the UE retunes from a first downlink narrowband to a second downlink narrowband with a different center frequency, a guard period is created by the UE not receiving at most [FIG:9abda70bb81a9f5a0598] OFDM symbols in the second narrowband.
+
+- If the UE retunes from a first uplink narrowband to a second downlink narrowband with a different center frequency for frame structure type 2, a guard period is created by the UE not receiving at most [FIG:9a8e227108de3c17b046] OFDM symbols in the second narrowband.
+
+Furthermore, for BL/CE UEs configured with the higher layer parameter srs-UpPtsAdd, a guard period of at most [FIG:203e9fc25c7b65263108] OFDM or SC-FDMA symbols is created for Rx-to-Tx frequency retuning within a special subframe for frame structure type 2. Primarily, the TDD guard period (GP) specified in clause 4.2 serves as the guard period for narrowband retuning, and if GP is not sufficient then additional guard period is created by the UE according to:
+
+- If SRS is configured to be transmitted in the first UpPTS symbol, the additional guard period is created by the UE not receiving at most [FIG:0fbca9cdfbf739221ce8] DwPTS symbols in the first narrowband.
+
+- If SRS is configured to be transmitted in the second UpPTS symbol but not in the first UpPTS symbol, the additional guard period is created by the UE primarily by not transmitting the first UpPTS symbol and (if [FIG:f6013a138a0eeaf464d3] ) secondarily by not receiving the last DwPTS symbol.
+
+6.3 General structure for downlink physical channels
+
+This clause describes a general structure, applicable to more than one physical channel.
+
+The baseband signal representing a downlink physical channel is defined in terms of the following steps:
+
+- scrambling of coded bits in each of the codewords to be transmitted on a physical channel
+
+- modulation of scrambled bits to generate complex-valued modulation symbols
+
+- mapping of the complex-valued modulation symbols onto one or several transmission layers
+
+- precoding of the complex-valued modulation symbols on each layer for transmission on the antenna ports
+
+- mapping of complex-valued modulation symbols for each antenna port to resource elements
+
+- generation of complex-valued time-domain OFDM signal for each antenna port
+
+[FIG:120486a1cfc25998bda7]
+
+Figure 6.3-1: Overview of physical channel processing
+
+6.3.1 Scrambling
+
+For each codeword [FIG:0fc98b7093216569c94a] , the block of bits [FIG:700b5ed002f259f388b2] , where [FIG:f62294730b9509a67b3c] is the number of bits in codeword [FIG:04de0bc7ff92d5312628] transmitted on the physical channel in one subframe, shall be scrambled prior to modulation, resulting in a block of scrambled bits [FIG:8317b22d08c5d1799325] according to
+
+[FIG:8f2c2a493032d75f324e]
+
+where the scrambling sequence [FIG:d04d028616596a3b619e] is given by clause 7.2. The scrambling sequence generator shall be initialised at the start of each subframe, where the initialisation value of [FIG:12f518cb4785319c7d44] depends on the transport channel type according to
+
+[FIG:c66fad078dd3ab1ff4f7]
+
+where [FIG:5c4eddf5dec486e364a9] corresponds to the RNTI associated with the PDSCH transmission as described in clause 7.1 3GPP TS 36.213 [4].
+
+For BL/CE UEs, the same scrambling sequence is applied per subframe to PDSCH for a given block of [FIG:7992b9f906bfc60345b5] subframes. For the [FIG:c10199c3f910111edd54] block of [FIG:f6ae420abba63b533d75] subframes, the scrambling sequence generator shall be initialised with
+
+[FIG:1b3b123bb66f82fb7a76]
+
+where
+
+[FIG:aa6567764175d44e66d0]
+
+and [FIG:86c2e42dc17b55a5aaa1] is the absolute subframe number of the first downlink subframe intended for PDSCH. The PDSCH transmission spans [FIG:3946350d5e57ee7eec1f] consecutive subframes including non-BL/CE DL subframes where the PDSCH transmission is postponed.
+
+For BL/CE UEs,
+
+- if the PDSCH is carrying SIB1-BR
+
+- [FIG:a1edb00203938c1ba775]
+
+- else if the PDSCH is carrying SI message (except for SIB1-BR) or if the PDSCH transmission is associated with P-RNTI or SC-RNTI:
+
+- [FIG:69310d529df82b65533b] for frame structure type 1 and [FIG:3ddbcbe7f9bc464d0e3f] for frame structure type 2
+
+- otherwise
+
+- [FIG:349abf710f138e7a3846] for UEs assuming CEModeA (according to the definition in Clause 12 of [4]) or configured with CEModeA
+
+- [FIG:a772b7a4a40d7c490177] for frame structure type 1 and [FIG:ae0ef21074b29bb8c20d] for frame structure type 2 for UEs assuming CEModeB (according to the definition in Clause 12 of [4]) or configured with CEModeB
+
+Up to two codewords can be transmitted in one subframe, i.e., [FIG:eb4667594ad56526f631] . In the case of single codeword transmission, [FIG:2a44e9069248b157cf0b] is equal to zero.
+
+6.3.2 Modulation
+
+For each codeword [FIG:bbd3b7c3f343ec6f6f43] , the block of scrambled bits [FIG:edfb2e371681279b9498] shall be modulated as described in clause 7.1 using one of the modulation schemes in Table 6.3.2-1, resulting in a block of complex-valued modulation symbols [FIG:906654d0f4044e08d5cc] .
+
+Table 6.3.2-1: Modulation schemes
+
+Physical channel | Modulation schemes
+PDSCH | QPSK, 16QAM, 64QAM, 256QAM
+PMCH | QPSK, 16QAM, 64QAM, 256QAM
+
+6.3.3 Layer mapping
+
+The complex-valued modulation symbols for each of the codewords to be transmitted are mapped onto one or several layers. Complex-valued modulation symbols [FIG:2072b5c9136517f2c390] for codeword [FIG:e773373acd286e5e57fa] shall be mapped onto the layers [FIG:f4a4a1dafd40d952cf2d] , [FIG:f535c9e9a615251b2540] where [FIG:33be717ca4ef7710f628] is the number of layers and [FIG:2e84bb79339ab324ee34] is the number of modulation symbols per layer, unless [FIG:a5162742b199d5a30a66] and “MUST interference presence and power ratio (MUSTIdx)” signalled in the associated DCI is ‘00’ for only one codeword in which case [FIG:3491e8eca2a1f77d3bfb] , where [FIG:65007f7125a4ef6d59c3] for the layer [FIG:4b243c590768e1e637d2] for which MUSTIdx is ‘00’, and [FIG:7df527b5984902301ab6] for the layer [FIG:58327685f10da6eecf3f] for which MUSTIdx is not '00’. The value of [FIG:26fc5a4faa051faaff47] is determined from Table 6.3.3-1 using MUSTIdx and the modulation order of the codeword for which MUSTIdx is not ‘00’.
+
+Table 6.3.3-1: Values for [FIG:36c0b91d64bfd8d283ed]
+
+MUSTIdx | Modulation order
+ | QPSK | 16QAM | 64QAM
+01 | 8/10 | 32/42 | 128/170
+10 | 50/58 | 144.5/167 | 40.5/51
+11 | 264.5/289 | 128/138 | 288/330
+
+6.3.3.1 Layer mapping for transmission on a single antenna port
+
+For transmission on a single antenna port, a single layer is used, [FIG:3b7d89eabf44902ae0db] , and the mapping is defined by
+
+[FIG:14eca9b8746fee36ed34]
+
+with [FIG:73739c096078f65a52cf] .
+
+6.3.3.2 Layer mapping for spatial multiplexing
+
+For spatial multiplexing, the layer mapping shall be done according to Table 6.3.3.2-1. The number of layers [FIG:e3a5a1a62d421da08ce0] is less than or equal to the number of antenna ports [FIG:8281224de17990861f4f] used for transmission of the physical channel. The case of a single codeword mapped to multiple layers is only applicable when the number of cell-specific reference signals is four or when the number of UE-specific reference signals is two or larger.
+
+Table 6.3.3.2-1: Codeword-to-layer mapping for spatial multiplexing
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:f6a38c564507a26bcc24]
+1 | 1 | [FIG:bdbe728c71b56ee97e1b] | [FIG:99f8ca91786c04b87643]
+2 | 1 | [FIG:5d16af8cbb617e15aa33] | [FIG:58ad5e9c2e65ada8416d]
+2 | 2 | [FIG:c697dbb323b469ffde5f] | [FIG:cbfe862efbdf512a1f52]
+ |  | [FIG:3360dbf7ca2b78daddae] | 
+3 | 1 | [FIG:3b2183cc331dbe0bdff1] | [FIG:7160e4675fd170eb62b5]
+3 | 2 | [FIG:238f742529494dd91325] | [FIG:00f6c5c0ca404728c2e6]
+ |  | [FIG:a988c1cc7c9faf1dba0c] | 
+4 | 1 | [FIG:eb68d56dbd49c511c1ac] | [FIG:c31d0b7fd94f5b66eff4]
+4 | 2 | [FIG:76559984dae0295a85ee] | [FIG:c6c5c7609506ff317714]
+ |  | [FIG:b18a1167fde9dd22e8a2] | 
+5 | 2 | [FIG:10b78202eebd5d663d9f] | [FIG:05d4ab23dca4f8f50ed6]
+ |  | [FIG:9bb7ef07090cce6dd98c] | 
+6 | 2 | [FIG:b0636d06b98a8152fa1f] | [FIG:8b924475ed67bae56cdb]
+ |  | [FIG:270665fccd56c17fc20e] | 
+7 | 2 | [FIG:9cf1922d1d8ed32a07d0] | [FIG:505d5021ac4a89a01c9b]
+ |  | [FIG:842f431a43a75583146b] | 
+8 | 2 | [FIG:ac2941b67d6d25c9f69a] | [FIG:ef3d3bd1e484dea9e59d]
+ |  | [FIG:0f0b9b1f3bd664008ca0] |
+
+6.3.3.3 Layer mapping for transmit diversity
+
+For transmit diversity, the layer mapping shall be done according to Table 6.3.3.3-1. There is only one codeword and the number of layers [FIG:6dbf1cf2c68e2c6b3f13] is equal to the number of antenna ports [FIG:ac9119bf9b8ad8cc9bd8] used for transmission of the physical channel.
+
+Table 6.3.3.3-1: Codeword-to-layer mapping for transmit diversity
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:19e05fc60f730daf51e8]
+2 | 1 | [FIG:5248e50485e88fe079eb] | [FIG:c71353c5f95f32038e75]
+4 | 1 | [FIG:524a38755cdf56ccc5d7] | [FIG:0c9aebdb6e6cd5537673] If [FIG:93acafc0b8f5a1c9ceed] two null symbols shall be appended to [FIG:f8cc233a5b3207299cdb]
+
+6.3.4 Precoding
+
+The precoder takes as input a block of vectors [FIG:6b4e56a3a14398751bf9] , [FIG:624dce3e16e06a8ff749] from the layer mapping and generates a block of vectors [FIG:9fbf056c7d05a612d95d] , [FIG:ea339dcb4a4982bd4c10] to be mapped onto resources on each of the antenna ports, where [FIG:748fcc4d5879deb8503c] represents the signal for antenna port [FIG:56d1465d2022e34c6f6b] .
+
+6.3.4.1 Precoding for transmission on a single antenna port
+
+For transmission on a single antenna port, precoding is defined by
+
+[FIG:605632c8e58d6a01c8a5]
+
+where [FIG:2bc88175f4a0fa4083eb] is the number of the single antenna port used for transmission of the physical channel and [FIG:d0841be5155c540167da] , [FIG:8e98745cd105e9cfd72f] .
+
+6.3.4.2 Precoding for spatial multiplexing using antenna ports with cell-specific reference signals
+
+Precoding for spatial multiplexing using antenna ports with cell-specific reference signals is only used in combination with layer mapping for spatial multiplexing as described in clause 6.3.3.2. Spatial multiplexing supports two or four antenna ports and the set of antenna ports used is [FIG:236af18e3f8a9530ede9] or [FIG:7880db7aad24b53448a7] , respectively.
+
+6.3.4.2.1 Precoding without CDD
+
+Without Cyclic Delay Diversity (CDD), precoding for spatial multiplexing is defined by
+
+[FIG:1c063cb1b534fb6b62f3]
+
+where the precoding matrix [FIG:48ea8d145bfffb07fa1a] is of size [FIG:a5a645fdf3318f7c66e1] and [FIG:9acec581b1710eb51a4f] , [FIG:9d5f35859d573efab5bd] .
+
+For spatial multiplexing, the values of [FIG:48fc7ac11b184005c82f] shall be selected among the precoder elements in the codebook configured in the eNodeB and the UE. The eNodeB can further confine the precoder selection in the UE to a subset of the elements in the codebook using codebook subset restrictions. The configured codebook shall be selected from Table 6.3.4.2.3-1 or 6.3.4.2.3-2.
+
+6.3.4.2.2 Precoding for large delay CDD
+
+For large-delay CDD, precoding for spatial multiplexing is defined by
+
+[FIG:6d877a998b68d0f3f7db]
+
+where the precoding matrix [FIG:a64d537ede772eab3c44] is of size [FIG:f19b9021538f32a9a3da] and [FIG:fbe60a6fb02a917bf1e8] , [FIG:c0189443e8536fdb6e1c] . The diagonal size- [FIG:705801b82a97c1ab0945] matrix [FIG:0ae5b4147c042c8b2376] supporting cyclic delay diversity and the size- [FIG:3e9acdca81dbabb4b44b] matrix [FIG:4de515ccfeccf8c7d6b7] are both given by Table 6.3.4.2.2-1 for different numbers of layers [FIG:4918743fecde4575bc67] .
+
+The values of the precoding matrix [FIG:1b714a76fbb8d0a054ab] shall be selected among the precoder elements in the codebook configured in the eNodeB and the UE. The eNodeB can further confine the precoder selection in the UE to a subset of the elements in the codebook using codebook subset restriction. The configured codebook shall be selected from Table 6.3.4.2.3-1 or 6.3.4.2.3-2.
+
+For 2 antenna ports, the precoder is selected according to [FIG:48d6cdf221010bfde405] where [FIG:48ce8d23a48852288e15] denotes the precoding matrix corresponding to precoder index 0 in Table 6.3.4.2.3-1.
+
+For 4 antenna ports, the UE may assume that the eNodeB cyclically assigns different precoders to different vectors [FIG:2847ad52b2a910b2557f] on the physical downlink shared channel as follows. A different precoder is used every [FIG:7cdf408d026a3d8968bb] vectors, where [FIG:770e0a455a082e36741a] denotes the number of transmission layers in the case of spatial multiplexing. In particular, the precoder is selected according to [FIG:6a0bd47f234cf9663f54] , where [FIG:d3eb8c62c05c9ec1d9ef] is the precoder index given by [FIG:0ac3efa8e85849e59530] and [FIG:0a32ff6899477af88228] denote precoder matrices corresponding to precoder indices 12,13,14 and 15, respectively, in Table 6.3.4.2.3-2.
+
+Table 6.3.4.2.2-1: Large-delay cyclic delay diversity
+
+Number of layers [FIG:6ebc6a1577782535674f] | [FIG:99f9eb491fbef598c1e3] | [FIG:e486bcf9679935202510]
+2 | [FIG:5de9d717579fcf65237e] | [FIG:3a1fc9759959e3ae01bf]
+3 | [FIG:3871d3418598ea6af2ac] | [FIG:7d399204e6eeb3186b17]
+4 | [FIG:a8de1c767dc86ba4c34a] | [FIG:941aa460ea92c7033997]
+
+6.3.4.2.3 Codebook for precoding and CSI reporting
+
+For transmission on two antenna ports, [FIG:76bdf2b7d93d08ef8af5] , and for the purpose of CSI reporting based on two antenna ports [FIG:8ca06661234df6a6b746] or [FIG:388c1fb57ad2d297844d] , the precoding matrix [FIG:87131735807b1b58c4f0] shall be selected from Table 6.3.4.2.3-1 or a subset thereof. For the closed-loop spatial multiplexing transmission mode defined in 3GPP TS 36.213 [4], the codebook index 0 is not used when the number of layers is [FIG:a892bcf60c060e098fc3] .
+
+Table 6.3.4.2.3-1: Codebook for transmission on antenna ports [FIG:09a75b4136c628bfffae] and for CSI reporting based on antenna ports [FIG:185125a80f69c804b96d] or [FIG:9dbd089645f226215aa3]
+
+Codebook index | Number of layers [FIG:710e7906a397b3d10381]
+ | 1 | 2
+0 | [FIG:a7ea9c8e7d3cf1ba8451] | [FIG:065d9d2dce04b5d7e956]
+1 | [FIG:85fe72822f9004bb6a42] | [FIG:11b9cf12222dade1986b]
+2 | [FIG:2404f56cb689671c5ba3] | [FIG:741b9429b06884fc39c5]
+3 | [FIG:6ff8d25ffb229e4c25e6] | -
+
+For transmission on four antenna ports, [FIG:82f053ddc45fd5f435e6] , the precoding matrix [FIG:4f60ec2fd093766560e9] shall be selected from Table 6.3.4.2.3-2 or a subset thereof. For the purpose of CSI reporting based on four antenna ports [FIG:d4b7ea5b7830b276e642] or [FIG:ae0e0ac5ec89abd082e3] , the precoding matrix [FIG:6dfd2d3f0cc9d4bc3352] shall be selected from Table 6.3.4.2.3-2 or a subset thereof except for alternativeCodeBookEnabledFor4TX -r12 =TRUE in which case the precoding matrix [FIG:cebc9f8432b99842d82f] shall be selected from Tables 7.2.4-0A, 7.2.4-0B, 7.2.4-0C, 7.2.4-0D in [4] or a subset thereof, and except for advancedCodebookEnabled = TRUE in which case the precoding matrix [FIG:89bb4ac7139c99627f86] shall be selected from Table XX in [4] or a subset thereof. The quantity [FIG:3b4f623c323968bcc904] denotes the matrix defined by the columns given by the set [FIG:c0e6f1c3d54e76e06c8b] from the expression [FIG:300daaa864e5b318967f] where [FIG:9565672e9d4d3f5e38f4] is the [FIG:2c4e3de097879247d23a] identity matrix and the vector [FIG:16c65267dd5da62bb21a] is given by Table 6.3.4.2.3-2.
+
+Table 6.3.4.2.3-2: Codebook for transmission on antenna ports [FIG:347b9a37ed015a1655c1] and for CSI reporting based on antenna ports [FIG:11d97baf0ede5e7ed4b7] or [FIG:e6ad395414a1fc86e781]
+
+Codebook index | [FIG:647505f357dc58087a28] | Number of layers [FIG:d07c469614ae3851e563]
+ |  | 1 | 2 | 3 | 4
+0 | [FIG:5fef54771d8555cd7db7] | [FIG:c7d226fc765083f80808] | [FIG:222db18cbe1d84ce842b] | [FIG:3a452de181e4e5212fbb] | [FIG:43d605cfb7bdea8155f4]
+1 | [FIG:aa450640093e02f0363e] | [FIG:25144c4028a255317f31] | [FIG:b05e1319790acec385e3] | [FIG:3bdad7eb6205662057a5] | [FIG:a288dcd0dbce0ef9ed58]
+2 | [FIG:d6da9673afa3346aebac] | [FIG:f88267a0d058fee22a88] | [FIG:56f44eb32727e6458316] | [FIG:d940482634b0a2daa7ee] | [FIG:f95a3bf91b597a87173e]
+3 | [FIG:05f05c0e804439286355] | [FIG:5bf1c3362612c2da697e] | [FIG:10ab173af0593e04fd26] | [FIG:0a4c02471a9531656a00] | [FIG:183f8d46643b1453d3d4]
+4 | [FIG:27e52008d55a02178273] | [FIG:90c868de94d218045fb0] | [FIG:c06202fe7174847c0d63] | [FIG:8f8a8900a4ff13ef274f] | [FIG:7bb2e4639967ed64a841]
+5 | [FIG:10347b323aa49f6e572b] | [FIG:7d826075dda8a0792a51] | [FIG:47b79d8dbbafd0f3b218] | [FIG:24e0f7619d80634826d6] | [FIG:10e2eb937734b02ed20c]
+6 | [FIG:58a4f00392d56c5dc46a] | [FIG:27f0a697634d87a4218b] | [FIG:a7d3fa5af560dae3c8a2] | [FIG:44b22de9526241831cc3] | [FIG:8ea38d2bc6e9e145611c]
+7 | [FIG:013325198728fca6f6dc] | [FIG:7e12ab81908ee5080802] | [FIG:21477422250ca1e2db70] | [FIG:4e7e502ecdfed91fe2b6] | [FIG:7b9fc1643779252bd6d7]
+8 | [FIG:e115c02ee54df9812371] | [FIG:1bdf94ff4ca607cec3ff] | [FIG:5be00fb7eb569e6f9b12] | [FIG:b68cb3fbc602c009d06e] | [FIG:fdd10fd017c15ac52627]
+9 | [FIG:d6fd072c3080aef58923] | [FIG:0619719d22638f3b977c] | [FIG:b0bf2a323d557a6af64b] | [FIG:fa62355a4443a6f2861d] | [FIG:320fd051fcda085f5f68]
+10 | [FIG:8714d81e9e1a3f23524e] | [FIG:542909948c7e5a6191bd] | [FIG:404a5d011dafa013a265] | [FIG:e98460c88849f3131541] | [FIG:7bc986b59014f4928d3a]
+11 | [FIG:f317a0ab0a4db67acb66] | [FIG:886fd9931f76f8190ded] | [FIG:342f276f4e88bcca2760] | [FIG:4c6ef834d0826c652718] | [FIG:fd9d34e8f6ee8221dd4d]
+12 | [FIG:6271d0c7a643d07a57e7] | [FIG:78b53e41436cf88b00fa] | [FIG:57750e8193dc2cf11fe5] | [FIG:dd5e4b9b015bc9c821ec] | [FIG:153109b38e2917eacb11]
+13 | [FIG:58d931d3b37ff7f7284e] | [FIG:37a99c6c5b9799768419] | [FIG:a2734b34df03890db7fb] | [FIG:35b3bd77d34ff4830509] | [FIG:d491519c0428809a84a0]
+14 | [FIG:b9432586db65a3f18bb7] | [FIG:5a43584549933d2c1835] | [FIG:d3b44419d622a80501b0] | [FIG:45b33a4838a6962ad8ab] | [FIG:689af266826a3336caac]
+15 | [FIG:831c01fb15955c65c27e] | [FIG:7b35bc206662e30b841f] | [FIG:390492f98020f53a252a] | [FIG:83e65e4496d05f0b343f] | [FIG:5480ab3deea2829615fa]
+
+For the purpose of CSI reporting for 8, 12, 16, 20, 24, 28, and 32 CSI reference signals the codebooks are given in clause 7.2.4 of 3GPP TS 36.213 [4].
+
+6.3.4.3 Precoding for transmit diversity
+
+Precoding for transmit diversity is only used in combination with layer mapping for transmit diversity as described in clause 6.3.3.3. The precoding operation for transmit diversity is defined for two and four antenna ports.
+
+For transmission on two antenna ports, [FIG:1369633eba3cedb21cb7] , the output [FIG:9af31fc5dd2241bb4e71] , [FIG:2794c1358f6394f33e07] of the precoding operation is defined by
+
+[FIG:84069453e8f609d66558]
+
+for [FIG:727ed758104ed7308856] with [FIG:f95bf3a868adce394996] .
+
+If the higher-layer parameter semiOpenLoop is set, for rank=1 transmission on two antenna ports, [FIG:bb4ccd6566c60c58436f] , the output [FIG:99c8f004ad1f1ecba0dc] , [FIG:3e7aabe37d374b5031d7] of the precoding operation is defined by
+
+[FIG:9702908dcf4d55ce3425]
+
+where [FIG:61c3c34221666b518808] .
+
+For transmission on four antenna ports, [FIG:632b6f4f2b05a35cb71a] , the output [FIG:42b8c6a798726a9fa58d] , [FIG:2bbcc089b24a1c27f245] of the precoding operation is defined by
+
+[FIG:ba129be42db5c1056dc9]
+
+for [FIG:834f4208269cc145a5d2] with [FIG:6bd14c91cbe56590a8c5] .
+
+6.3.4.4 Precoding for spatial multiplexing using antenna ports with UE-specific reference signals
+
+Precoding for spatial multiplexing using antenna ports with UE-specific reference signals is only used in combination with layer mapping for spatial multiplexing as described in clause 6.3.3.2. Spatial multiplexing using antenna ports with UE-specific reference signals supports up to eight antenna ports.
+
+If the higher-layer parameter dmrs-tableAlt is set to 1 and the set of antenna ports [FIG:7ec5e94f98b53c6e177e] is used for two layers transmission, the precoding operation for transmission on the two antenna ports is defined by
+
+[FIG:50ead1b051cfbd4e18a5]
+
+where [FIG:fe0d506c2086af705c91] , [FIG:e15b1c9622cec0887e56] .
+
+If the higher-layer parameter semiOpenLoop is set to 1 and the set of antenna ports [FIG:a06e5bbe2637b0100d08] is used for rank=2 transmission, the precoding operation for transmission on the two antenna ports is defined by
+
+[FIG:33811a9917519fb4f78a]
+
+where [FIG:6eca06c007fde5f9bf79] and [FIG:67d6d70bcde182b0deeb] .
+
+Otherwise, the set of antenna ports used is [FIG:16ea81945d1a02eb0919] and the precoding operation for transmission on [FIG:4db2d72b51e29c64bc8a] antenna ports is defined by
+
+[FIG:cee240d1ef779713e5de]
+
+where [FIG:063e12c1dfe4e88fc7d5] , [FIG:a27cc0e63b5d89c6658e] .
+
+6.3.5 Mapping to resource elements
+
+For each of the antenna ports used for transmission of the physical channel, the block of complex-valued symbols [FIG:beed21d6605d53a54606] shall conform to the downlink power allocation specified in clause 5.2 in 3GPP TS 36.213 [4] and be mapped in sequence starting with [FIG:1925b1dca59c86ac5b95] to resource elements [FIG:17650257235e915eb4b0] which meet all of the following criteria in the current subframe:
+
+- they are in the physical resource blocks corresponding to the virtual resource blocks assigned for transmission, and
+
+- they are not used for transmission of the core part of PBCH, synchronization signals, and
+
+- they are assumed by the UE not to be used for cell-specific reference signals, where the positions of the cell-specific reference signals are given by clause 6.10.1.2 with the number of antenna ports for and the frequency shift of cell-specific reference signals derived as described in clause 6.10.1.2 4, and
+
+The mapping to resource elements [FIG:7db299531d24a5f0b2be] on antenna port [FIG:f297bac61d5c7493ca2c] not reserved for other purposes shall be in increasing order of first the index [FIG:cf880cb4c3962dd67700] over the assigned physical resource blocks and then the index [FIG:0e58e044bc424d611084] , starting with the first slot in a subframe.
+
+6.4 Physical downlink shared channel
+
+The physical downlink shared channel shall be processed and mapped to resource elements as described in clause 6.3 with the following additions and exceptions:
+
+- In resource blocks in which UE-specific reference signals are not transmitted, the PDSCH shall be transmitted on the same set of antenna ports as the PBCH, which is one of [FIG:cf699568b15c184b5323] , [FIG:a76ab065f3628bbc9fa7] , or [FIG:3d1514bcb2fbf002747f] .
+
+- In resource blocks in which UE-specific reference signals are transmitted, the PDSCH shall be transmitted on antenna port(s) [FIG:41028309ad9c3a2b3fff] , [FIG:5005b15f6f8d1e02cef7] , [FIG:dcf6466b45eb9a7bc000] , [FIG:2fac178d0af696c05c13] , [FIG:55951c4967cfdd03090f] , or [FIG:1bd104772acf7aa7c5f4] , where [FIG:8ff8327078b8c6ac14ef] is the number of layers used for transmission of the PDSCH.
+
+- If PDSCH is transmitted in MBSFN subframes as defined in 3GPP TS 36.213 [4], the PDSCH shall be transmitted on one or several of antenna port(s) [FIG:3ff9e1b0ec87841dc5e8] , where [FIG:7f1442920dcfa05c4441] is the number of layers used for transmission of the PDSCH.
+
+- PDSCH is not mapped to resource elements used for UE-specific reference signals associated with PDSCH
+
+- In mapping to resource elements, the positions of the cell-specific reference signals are given by clause 6.10.1.2 with the number of antenna ports and the frequency shift of the cell-specific reference signals derived as described in clause 6.10.1.2, unless other values for these parameters are provided by clause 7.1.9 in 3GPP TS 36.213 [4], in which case these values are used in the resource blocks indicated by the relevant DCI.
+
+- If the DCI associated with the PDSCH uses the C-RNTI or semi-persistent C-RNTI, the PDSCH is not mapped to resource elements assumed by the UE to be used for transmission of:
+
+- zero-power CSI reference signals, where the positions of the CSI reference signals are given by clause 6.10.5.2.The configuration for zero power CSI reference signals is
+
+- obtained as described in clause 6.10.5.2, unless other values for these parameters are provided by clause 7.1.9 in 3GPP TS 36.213 [4], in which case these values are used in the resource blocks indicated by the relevant DCI, and
+
+- obtained by higher-layer configuration of up to five reserved CSI-RS resources as part of the discovery signal configuration following the procedure for zero-power CSI-RS in clause 6.10.5.2.
+
+- non-zero-power CSI reference signals for CSI reporting, where the positions of the non-zero-power CSI reference signals for CSI reporting are given by clause 6.10.5.2. The configuration for non-zero power CSI reference signals is obtained as described in clause 6.10.5.2.
+
+- PDSCH is not mapped to any physical resource-block pair(s) carrying an EPDCCH associated with the PDSCH.
+
+- PDSCH on antenna port 7, 8, 9, 10, 11, 12, 13 or 14 is not mapped to any physical resource-block pair(s) carrying PBCH or synchronization signals.
+
+- Frame structure type 1, PDSCH on antenna port 5 is not mapped to any physical resource-block pair(s) carrying PBCH or synchronization signals.
+
+- Frame structure type 2, PDSCH on antenna port 5 is not mapped to any physical resource-block pair(s) carrying PBCH.
+
+- For frame structure type 1 and 2, the index [FIG:4c756f604b2ea0ca4a82] in the first slot in a subframe fulfils [FIG:2b08111354f2483643f5] where [FIG:19fa4bf4a46c87f7b371] is given by clause 7.1.6.4 of 3GPP TS 36.213 [4].
+
+- For frame structure type 3,
+
+- if the higher layer parameter subframeStartPosition indicates ‘s07’ and the downlink transmission starts in the second slot of a subframe
+
+- the index [FIG:53c896b73c792d7489e7] in the second slot in a subframe fulfils [FIG:53b7fa0e91cfff29ed84] where [FIG:fd033a5e1e123d9cad34] is given by clause 7.1.6.4 of 3GPP TS 36.213  [4],
+
+- otherwise
+
+- the index [FIG:d8187b68642f0e3e49de] in the first slot in a subframe fulfils [FIG:0ebba892f9d459050ac5] where [FIG:3665871f68654e10614a] is given by clause 7.6.1.4 of 3GPP TS 36.213  [4],
+
+- In mapping to resource elements, if the DCI associated with the PDSCH uses the C-RNTI or semi-persistent C-RNTI, and transmit diversity according to clause 6.3.4.3 is used, and if the higher-layer parameter semiOpenLoop is not set, resource elements in an OFDM symbol assumed by the UE to contain CSI-RS shall be used in the mapping if and only if all of the following criteria are fulfilled:
+
+- there is an even number of resource elements for the OFDM symbol in each resource block assigned for transmission, and
+
+- the complex-valued symbols [FIG:4509293b4524536f378f] and [FIG:b4c44867b9b0021e9051] , where [FIG:ae5284f184942870767f] is an even number, can be mapped to resource elements [FIG:a0a83cc3fa193bdd668b] and [FIG:ee9efa2278b28383037e] in the same OFDM symbol with [FIG:e6b844a1dd6243ca9987] .
+
+- In mapping to resource elements, if the DCI associated with the PDSCH uses C-RNTI or semi-persistent C-RNTI and if the higher-layer parameter semiOpenLoop is set, a pair of resource elements [FIG:d5cab0b45b04be700d0a] , [FIG:b63684e92a9c8fdedf10] shall be used in the mapping if and only if
+
+- the complex-valued symbols [FIG:f8b3c07fbc08929b5c3e] and [FIG:8205fc86215a8f718f07] can be mapped to resource elements [FIG:9a07af9dfa28f53123a0] and [FIG:eee35caead6e0f877003] in the same OFDM symbol and the same PRB with [FIG:34bcf0242c55672b5d4d] , where [FIG:c2a9a2eb3c9581e70596] is an even number and [FIG:92b156b2283394d11fe5] starts from 0 at the lowest subcarrier of the PRB.
+
+6.4.1 Physical downlink shared channel for BL/CE UEs
+
+For BL/CE UEs, the following additions and exceptions hold in addition to those in clause 6.4:
+
+- The maximum number of allocatable PRBs for PDSCH is restricted as follows:
+
+- If the PDSCH is associated with C-RNTI or SPS C-RNTI and the higher layer parameter ce-pdsch-maxBandwidth-config is set,
+
+- if the higher layer parameter ce-pdsch-maxBandwidth-config is set to 20 MHz, the maximum number of allocatable PRBs for PDSCH is 96 PRBs restricted to the narrowbands defined in clause 6.2.7;
+
+- if the higher layer parameter ce-pdsch-maxBandwidth-config is set to 5 MHz, the maximum number of allocatable PRBs for PDSCH is 24 PRBs restricted to no more than four of the narrowbands defined in clause 6.2.7.
+
+- If the PDSCH is associated with G-RNTI and the higher layer parameter pdsch-MaxBandwidth-SC-MTCH is set to 24 PRBs, the maximum number of allocatable PRBs for PDSCH is 24 PRBs restricted to no more than four of the narrowbands defined in clause 6.2.7.
+
+- For all other cases, the maximum number of allocatable PRBs for PDSCH is 6 PRBs restricted to one of the narrowbands defined in clause 6.2.7.
+
+- Resource elements occupied by CSI reference signals shall be counted in the PDSCH mapping but not used for transmission of the PDSCH.
+
+- Resource elements belonging to synchronization signals, the core part of PBCH, PBCH repetitions, or resource elements reserved for reference signals in the mapping operation of PBCH but not used for transmission of reference signals, shall be counted in the PDSCH mapping but not used for transmission of the PDSCH.
+
+For BL/CE UEs in CEModeB configured in transmission mode 9, in MBSFN subframe(s), resource elements that correspond to the positions of cell-specific reference signals as in subframe #0 shall not be counted in the PDSCH mapping and not used for transmission of the PDSCH.
+
+For BL/CE UEs, if the PDSCH is not carrying SIB1-BR the PRB resources for PDSCH transmission in the first subframe are obtained from the DCI as described in clauses 5.3.3.1.12, 5.3.3.1.13, and 5.5.1.3.14 in [3], or provided by higher layers. The PDSCH is transmitted with [FIG:f4aec89a7cc2bb13345a] repetitions, spanning [FIG:ffb523ad6abe8ecebc84] consecutive subframes, including non-BL/CE DL subframes where the the PDSCH transmission is postponed.
+
+- If frequency hopping is not enabled for PDSCH, all PDSCH repetitions are located at the same PRB resources, and
+
+- if frequency hopping is enabled for PDSCH, the PDSCH shall be transmitted in subframe [FIG:33f287d51cd557c5c037] within the [FIG:81ff190c206083cf8d67] consecutive downlink subframes using the same PRB resources within each narrowband
+
+[FIG:b8696d1e85ca5487a60d]
+
+where [FIG:e5b7271ebe6e36c2321b] is the absolute subframe number of the first downlink subframe intended for PDSCH and [FIG:db86fec18183285fa0ec] , [FIG:1d499e0e82aa9b189efa] and [FIG:87ef237b9f6131f3cd05] are cell-specific higher-layer parameters. For PDSCH carrying SI other than SIB1-BR and for PDSCH associated with P-RNTI, if interval-DlHoppingConfigCommonModeB is signalled in SIB1-BR, then the frequency hopping granularity [FIG:399491c30547128c749a] is set to interval-DlHoppingConfigCommonModeB; otherwise, [FIG:f6b7df6ae418f2a76b31] is set to interval-DlHoppingConfigCommonModeA signalled in SIB1-BR.
+
+For BL/CE UE in CEModeA, frequency hopping of PDSCH associated with C-RNTI or SPS C-RNTI is enabled when higher layer parameter mpdcch-pdsch-HoppingConfig is set and the frequency hopping flag in DCI format 6-1A indicates frequency hopping, otherwise, frequency hopping of is not enabled. For BL/CE UE in CEModeB, frequency hopping of PDSCH associated with C-RNTI or SPS-RNTI is enabled when higher layer parameter mpdcch-pdsch-HoppingConfig is set, otherwise, frequency hopping of is not enabled.
+
+The UE shall not expect PDSCH in subframe [FIG:6af7055f90265c4e8810] if it is not a BL/CE DL subframe.
+
+For BL/CE UEs, if the PDSCH carries SIB1-BR, the PDSCH transmission is repeated periodically in every period of 8 radio frames, where a period starts with a radio frame with [FIG:8b74eb227fd0be996c0c] where [FIG:2eaf6789bc1e7579500d] is the system frame number. The PDSCH is transmitted [FIG:ee5d3bae2d4bdb9916cb] times in each period of 8 frames, Let [FIG:05de813a77b11d7aca90] be the set of narrowbands, excluding narrowbands overlapping with the 72 center subcarriers for [FIG:dd57410f4a910318094a] , and ordered in increasing order of narrowband index. The PDSCH transmission cycles through the set [FIG:82da77f1aa46b101b947] of narrowbands in increasing order of [FIG:51f3767c8c5a83254e58] , starting with [FIG:4c3cb3e221013d28f4e7] for the first subframe, according to
+
+[FIG:2b56c519e4851fcd8436]
+
+where [FIG:630b8c02f2c0d3eb8bcb] is the number of narrowbands in the set [FIG:af652a0ef1a7f24f09b2] .
+
+The set of frames and subframes used for SIB1-BR transmission in each period are given by Tables 6.4.1-1 and 6.4.1-2.
+
+Table 6.4.1-1: The set of frames and subframes for SIB1-BR for [FIG:57246e9dd809859d8b26] .
+
+[FIG:3468503e6b196135c6ee] | [FIG:c4fef56f95208e5b1622] | Frame structure type 1 | Frame structure type 2
+ |  | [FIG:2e815fff9e3f67244928] | [FIG:cb8d520fa281f2eb0382] | [FIG:feb4eb92cdb92c9f86c8] | [FIG:a3651753182e831e2b2a]
+4 | 0 | 0 | 4 | 1 | 5
+ | 1 | 1 | 4 | 1 | 5
+
+Table 6.4.1-2: The set of frames and subframes for SIB1-BR for [FIG:b82c56dc66ddf26be46f] .
+
+[FIG:06137640893e89b5e01f] | [FIG:27bedf5d7e9b8d732305] | Frame structure type 1 | Frame structure type 2
+ |  | [FIG:381be88f368077757d8b] | [FIG:29e1c47a48d5b813a7bd] | [FIG:4380c8c62970280811ce] | [FIG:73f8d8abadec8d849c62]
+4 | 0 | 0 | 4 | 1 | 5
+ | 1 | 1 | 4 | 1 | 0
+8 | 0 | 0, 1 | 4 | 0, 1 | 5
+ | 1 | 0, 1 | 9 | 0, 1 | 0
+16 | 0 | 0, 1 | 4, 9 | 0, 1 | 0, 5
+ | 1 | 0, 1 | 0, 9 | 0, 1 | 0, 5
+
+BL/CE UEs may assume the same precoding matrix being used for a PRB across a block of [FIG:4d83c9031361b4bc219a] consecutive subframes when UE-specific reference signals are transmitted together with the PDSCH.
+
+For PDSCH transmission associated with SI-RNTI or P-RNTI to BL/CE UEs, frequency hopping of the PDSCH is enabled when higher layer parameter si-HoppingConfigCommon is set.
+
+For PDSCH transmission associated with RA-RNTI or temporary C-RNTI to BL/CE UEs, frequency hopping of the PDSCH is enabled when higher layer parameter rar-HoppingConfig is set. Further
+
+- if PRACH CE level 0 or 1 is used for the last PRACH attempt, [FIG:aa1bc8c136d231c1dadb] is set to the higher layer parameter interval-DlHoppingConfigCommonModeA;
+
+- if PRACH CE level 2 or 3 is used for the last PRACH attempt, [FIG:5bcf73ec39283749b159] is set to the higher layer parameter interval-DlHoppingConfigCommonModeB.
+
+For PDSCH transmission associated with SC-RNTI to BL/CE UEs, frequency hopping of the PDSCH is enabled when higher layer parameter mpdcch-pdsch-HoppingConfig-SC-MCCH is set. Further
+
+- if mpdcch-pdsch-HoppingConfig-SC-MCCH is set to CEModeA, [FIG:154f4ba295da368149fc] is set to the higher layer parameter interval-DlHoppingConfigCommonModeA;
+
+- if mpdcch-pdsch-HoppingConfig-SC-MCCH is set to CEModeB, [FIG:a85d394b0bd3abeee7f5] is set to the higher layer parameter interval-DlHoppingConfigCommonModeB.
+
+For PDSCH transmission associated with G-RNTI to BL/CE UEs,
+
+- if the higher layer parameter mpdcch-pdsch-CEmodeConfig-SC-MTCH is set to CEModeA,
+
+- if the higher layer parameter mpdcch-pdsch-HoppingConfig-SC-MTCH is set and the frequency hopping flag in DCI format 6-1A indicates frequency hopping, then frequency hopping of the PDSCH is enabled and [FIG:cfcdeb24e606b06974ac] is set to the higher layer parameter interval-DlHoppingConfigCommonModeA, otherwise frequency hopping is not enabled;
+
+- if the higher layer parameter mpdcch-pdsch-CEmodeConfig-SC-MTCH is set to CEModeB,
+
+- if the higher layer parameter mpdcch-pdsch-HoppingConfig-SC-MTCH is set, then frequency hopping of the PDSCH is enabled and [FIG:e2693048301b87843ea4] is set to the higher layer parameter interval-DlHoppingConfigCommonModeB, otherwise frequency hopping is not enabled.
+
+6.5 Physical multicast channel
+
+The physical multicast channel shall be processed and mapped to resource elements as described in clause 6.3 with the following exceptions:
+
+- No transmit diversity scheme is specified.
+
+- Layer mapping and precoding shall be done assuming a single antenna port and the transmission shall use antenna port 4.
+
+- The PMCH can only be transmitted in the MBSFN region of an MBSFN subframe. The index [FIG:17834d0bee819606d0a8] in the first slot in the MBSFN subframe fulfils [FIG:0a73bedbb5eea3ada297] where [FIG:ce2a35c61cebcb1455d3] is equal to the value given by the higher layer parameter non-MBSFNregionLength [9].
+
+- The PMCH shall use extended cyclic prefix.
+
+- The PMCH is not mapped to resource elements used for transmission of MBSFN reference signals.
+
+6.6 Physical broadcast channel
+
+The PBCH is not transmitted for frame structure type 3.
+
+6.6.1 Scrambling
+
+The block of bits [FIG:840aed6b5db61228e6d6] , where [FIG:93712c034a614d9bfdac] , the number of bits transmitted on the physical broadcast channel, equals 1920 for normal cyclic prefix and 1728 for extended cyclic prefix, shall be scrambled with a cell-specific sequence prior to modulation, resulting in a block of scrambled bits [FIG:1a68da24b7fe1c007ff3] according to
+
+[FIG:a6de0c6c11bf3700097b]
+
+where the scrambling sequence [FIG:4e695546a4bf5ec063d3] is given by clause 7.2. The scrambling sequence shall be initialised with [FIG:da47917311d8fa3e840a] in each radio frame fulfilling [FIG:3bc6980784dd688cad1b] . For an MBMS-dedicated cell, the scrambling sequence shall be initialised with [FIG:b5c5aa8d800490a50bf0] in each radio frame fulfilling [FIG:fcb3a381413284dd053b] .
+
+6.6.2 Modulation
+
+The block of scrambled bits [FIG:f09f6c4ca423cff2dba2] shall be modulated as described in clause 7.1, resulting in a block of complex-valued modulation symbols [FIG:5d33750a4e517955bd14] . Table 6.6.2-1 specifies the modulation mappings applicable for the physical broadcast channel.
+
+Table 6.6.2-1: PBCH modulation schemes.
+
+Physical channel | Modulation schemes
+PBCH | QPSK
+
+6.6.3 Layer mapping and precoding
+
+The block of modulation symbols [FIG:e101eba2dcafa7b68e61] shall be mapped to layers according to one of clauses 6.3.3.1 or 6.3.3.3 with [FIG:314aaef48f6d9f29348f] and precoded according to one of clauses 6.3.4.1 or 6.3.4.3, resulting in a block of vectors [FIG:daa4ac745e02870789be] , [FIG:cf84fa66d2f72315957e] , where [FIG:3f9fad3f7952a89e8087] represents the signal for antenna port [FIG:711fdcd21f8a73233396] and where [FIG:796939b24d9fef05967b] and the number of antenna ports for cell-specific reference signals [FIG:9d03fc906870d8f365cc] .
+
+6.6.4 Mapping to resource elements
+
+The block of complex-valued symbols [FIG:b5d858f35083fcb04800] for each antenna port shall
+
+- for an MBMS-dedicated cell, be transmitted during 4 consecutive radio frames fulfilling [FIG:c02881186d86d8eb03ef] , starting in each radio frame fulfilling [FIG:3e67609fc0acd2c94aad] , and
+
+- otherwise, be transmitted during 4 consecutive radio frames, starting in each radio frame fulfilling [FIG:e40baf7579e4021a85ea] .
+
+The block of complex-valued symbols shall be mapped in sequence starting with [FIG:55de57d37cd392f8f3e3] to resource elements [FIG:b8eba8b84dba5bd472a3] constituting the core set of PBCH resource elements. The mapping to resource elements [FIG:647fae9fe5cc0c4b896b] not reserved for transmission of reference signals shall be in increasing order of first the index [FIG:6b92316e3ed4d97c19e1] , then the index [FIG:dde64b4326b5d9b2879d] in slot 1 in subframe 0 and finally the radio frame number. The resource-element indices are given by
+
+[FIG:fa0e3cd91513fbe6a965]
+
+where resource elements reserved for reference signals shall be excluded. The mapping operation shall assume cell-specific reference signals for antenna ports 0-3 being present irrespective of the actual configuration. The UE shall assume that the resource elements assumed to be reserved for reference signals in the mapping operation above but not used for transmission of reference signal are not available for PDSCH or MPDCCH transmission. The UE shall not make any other assumptions about these resource elements.
+
+If a cell is configured with repetition of the physical broadcast channel
+
+- symbols mapped to core resource element [FIG:61587ae8e92ef73510e8] in slot 1 in subframe 0 within a radio frame [FIG:4792f78fc7ff93d01922] according to the mapping operation above, and
+
+- cell-specific reference signals in OFDM symbols [FIG:d6bc7519714c42822287] in slot 1 in subframe 0 within a radio frame [FIG:c87e50b5fb2627285cdd] with [FIG:65c6d853250e83311100] according to the mapping operation above
+
+shall additionally be mapped to resource elements [FIG:d6d4891b0e6eea21e1ae] in slot number [FIG:33e6f46ce4f126051e22] within radio frame [FIG:fa6735b37a193ca6b231] unless resource element [FIG:c1974333291883ed93c2] is used by CSI reference signals.
+
+For frame structure type 1, [FIG:5ea9e75d1ebf96b15c3d] , [FIG:f1b0b981f5a968b847df] , and [FIG:ee62ad908dc5158b1451]  are given by Table 6.6.4-1.
+
+For frame structure type 2,
+
+- if [FIG:33517ea0ab52d9b7b9ad] , [FIG:62df4757fc23792bbabc] and [FIG:cbf997b0f068cf6902c2] are given by Table 6.6.4-2 and [FIG:b5297f35bae3c7d1272a] ;
+
+- if [FIG:a64f9178ef40253e6886] , [FIG:7f52bf013ca7c7ae654f] and [FIG:7646ab0eab0621b6ec83] are given by Table 6.6.4-2 and [FIG:658dc75b09f986490fd3] , except that repetitions with [FIG:52d5db33531a5c48ed98] and [FIG:b32e0a3977e74999b2b6] are not applied.
+
+For both frame structure type 1 and frame structure type 2, repetition of the physical broadcast channel is not applicable if [FIG:abe397cf41a1657d5b55] .
+
+Resource elements already used for transmission of cell-specific reference signals in absence of repetition shall not be used for additional mapping of cell-specific reference signals.
+
+Table 6.6.4-1: Frame offset, slot and symbol number triplets for repetition of PBCH for frame structure type 1.
+
+[FIG:0c12e982c124b178c216] | Frame offset, slot and symbol number triplets [FIG:6c34beab1395227f5084]
+ | Normal cyclic prefix | Extended cyclic prefix
+0 | (1,18,3), (1,19,0), (1,19,4), (0,0,4) | (1,18,3), (1,19,0), (1,19,5)
+1 | (1,18,4), (1,19,1). (1,19,5), (0,1,4) | (1,18,4), (1,19,1). (0,0,3)
+2 | (1,18,5), (1,19,2), (1,19,6), (0,1,5) | (1,18,5), (1,19,2), (0,1,4)
+3 | (1,18,6), (1,19,3), (0,0,3), (0,1,6) | (1,19,3), (1,19,4), (0,1,5)
+
+Table 6.6.4-2: Slot and symbol number pairs for repetition of PBCH for frame structure type 2.
+
+[FIG:073ddd6b2e8f31e51534] | Slot and symbol number pairs [FIG:50fceb76148cc3781311]
+ | Normal cyclic prefix | Extended cyclic prefix
+0 | (0,3), (1,4), (10,3), (11,0), (11,4) | (0,3), (10,3), (11,0)
+1 | (0,4), (1,5), (10,4), (11,1), (11,5) | (0,4), (10,4), (11,1)
+2 | (0,5), (10,5), (11.2) | (0,5), (10,5), (11.2)
+3 | (0,6), (10,6), (11.3) | (1,4), (11,3), (11.4)
+
+6.7 Physical control format indicator channel
+
+The physical control format indicator channel carries information about the number of OFDM symbols used for transmission of PDCCHs in a subframe. The set of OFDM symbols possible to use for PDCCH in a subframe is given by Table 6.7-1.
+
+Table 6.7-1: Number of OFDM symbols used for PDCCH
+
+Subframe | Number of OFDM symbols for PDCCH when [FIG:d7ad4497083a96a46ec0] | Number of OFDM symbols for PDCCH when [FIG:452f989ca6ff64b21bb3]
+Subframe 1 and 6 for frame structure type 2 or a subframe for frame structure type 3 with the same duration as the DwPTS duration of a special subframe configuration | 1, 2 | 2
+MBSFN subframes with [FIG:d71bff1bca620f4b444b] and configured with 1 or 2 cell-specific antenna ports | 1, 2 | 2
+MBSFN subframes with [FIG:7ef041ee38c0323d19a3] and configured with 4 cell-specific antenna ports | 2 | 2
+MBSFN subframes with [FIG:14ade9d22e7fef442810] or [FIG:a7e2bcaafb00ac8fa379] | 0 | 0
+Non-MBSFN subframes (except subframe 6 for frame structure type 2) configured with positioning reference signals | 1, 2, 3 | 2, 3
+All other cases | 1, 2, 3 | 2, 3, 4
+
+The UE may assume the PCFICH is transmitted when the number of OFDM symbols for PDCCH is greater than zero unless stated otherwise in [4, clause 12].
+
+6.7.1 Scrambling
+
+The block of bits [FIG:82e892e3231c48f6bd17] transmitted in one subframe shall be scrambled with a cell-specific sequence prior to modulation, resulting in a block of scrambled bits [FIG:6aaba2a72a5eac7f3796] according to
+
+[FIG:17f332ffb4a0c19e6970]
+
+where the scrambling sequence [FIG:c9cbd647eba4922670dd] is given by clause 7.2. The scrambling sequence generator shall be initialised with [FIG:2551dbbccec742984426] at the start of each subframe.
+
+6.7.2 Modulation
+
+The block of scrambled bits [FIG:b181048ec2e8a4bf2a65] shall be modulated as described in clause 7.1, resulting in a block of complex-valued modulation symbols [FIG:30336d8d262daa9e1014] . Table 6.7.2-1 specifies the modulation mappings applicable for the physical control format indicator channel.
+
+Table 6.7.2-1: PCFICH modulation schemes
+
+Physical channel | Modulation schemes
+PCFICH | QPSK
+
+6.7.3 Layer mapping and precoding
+
+The block of modulation symbols [FIG:8e8b69556e86bf9d4ff7] shall be mapped to layers according to one of clauses 6.3.3.1 or 6.3.3.3 with [FIG:db362b52ef467251e3be] and precoded according to one of clauses 6.3.4.1 or 6.3.4.3, resulting in a block of vectors [FIG:40875db045fbec1b931e] , [FIG:e754eebf1ab5d96c3054] , where [FIG:1aa5693cb877a7fc9f1f] represents the signal for antenna port [FIG:3cccbaf2b136a10e72b1] and where [FIG:5f4e8aef2c8c6900b782] and the number of antenna ports for cell-specific reference signals [FIG:b9670608091f034bcfb1] . The PCFICH shall be transmitted on the same set of antenna ports as the PBCH.
+
+6.7.4 Mapping to resource elements
+
+The mapping to resource elements is defined in terms of quadruplets of complex-valued symbols. Let [FIG:b127a169255f14aad6a2] denote symbol quadruplet [FIG:51f1c40c604f9d438b2c] for antenna port [FIG:9a9200a5c9f03cf8f983] . For each of the antenna ports, symbol quadruplets shall be mapped in increasing order of [FIG:a396890aca4a9aa00168] to the four resource-element groups in the first OFDM symbol in a downlink subframe or DwPTS with the representative resource-element as defined in clause 6.2.4 given by
+
+[FIG:021f45090ff4fa6c06ce]
+
+where the additions are modulo [FIG:6966152e044e7147cd34] ,
+
+[FIG:790c8b3a9569aeb6914b]
+
+and [FIG:32b2a7d963de9d704558] is the physical-layer cell identity as given by clause 6.11.
+
+6.8 Physical downlink control channel
+
+6.8.1 PDCCH formats
+
+The physical downlink control channel carries scheduling assignments and other control information. A physical control channel is transmitted on an aggregation of one or several consecutive control channel elements (CCEs), where a control channel element corresponds to 9 resource element groups. The number of resource-element groups not assigned to PCFICH or PHICH is [FIG:0a2b44b12172c0dcbbd3] . The CCEs available in the system are numbered from 0 to [FIG:12a6d624a476f330083f] , where [FIG:ef8c634484212affd11c] . The PDCCH supports multiple formats as listed in Table 6.8.1-1. A PDCCH consisting of [FIG:a4fcb032ffdd4215c72b] consecutive CCEs may only start on a CCE fulfilling [FIG:d69a836eaac15c3dc0bd] , where [FIG:77fae2cb523ac4f3f0b6] is the CCE number.
+
+Multiple PDCCHs can be transmitted in a subframe.
+
+Table 6.8.1-1: Supported PDCCH formats
+
+PDCCH format | Number of CCEs | Number of resource-element groups | Number of PDCCH bits
+0 | 1 | 9 | 72
+1 | 2 | 18 | 144
+2 | 4 | 36 | 288
+3 | 8 | 72 | 576
+
+6.8.2 PDCCH multiplexing and scrambling
+
+The block of bits [FIG:6762ea9a3e6f837a9634] on each of the control channels to be transmitted in a subframe, where [FIG:2940e2c02d5e40c1d79d] is the number of bits in one subframe to be transmitted on physical downlink control channel number [FIG:4554c064f6efba4152da] , shall be multiplexed, resulting in a block of bits [FIG:a571b179986c3e49c62c] , where [FIG:d956eb1cb180646b004a] is the number of PDCCHs transmitted in the subframe.
+
+The block of bits [FIG:2099d920414f333ac97d] shall be scrambled with a cell-specific sequence prior to modulation, resulting in a block of scrambled bits [FIG:cb5ccdb5f9cf4b9d44f7] according to
+
+[FIG:44a2581aadaf685c401c]
+
+where the scrambling sequence [FIG:bcfc814756ae8f4d4050] is given by clause 7.2. The scrambling sequence generator shall be initialised with [FIG:c22390370739ee3b721c] at the start of each subframe.
+
+CCE number [FIG:d767ea44bb9f2083f4c9] corresponds to bits [FIG:7f3997a1199d6e259a6a] . If necessary, <NIL> elements shall be inserted in the block of bits prior to scrambling to ensure that the PDCCHs starts at the CCE positions as described in 3GPP TS 36.213 [4] and to ensure that the length [FIG:dbd61f0942ecd7e7bd4e] of the scrambled block of bits matches the amount of resource-element groups not assigned to PCFICH or PHICH.
+
+6.8.3 Modulation
+
+The block of scrambled bits [FIG:af93af3c268f9e8c1594] shall be modulated as described in clause 7.1, resulting in a block of complex-valued modulation symbols [FIG:f95d7cc7d394e44a910e] . Table 6.8.3-1 specifies the modulation mappings applicable for the physical downlink control channel.
+
+Table 6.8.3-1: PDCCH modulation schemes
+
+Physical channel | Modulation schemes
+PDCCH | QPSK
+
+6.8.4 Layer mapping and precoding
+
+The block of modulation symbols [FIG:726ce6e23cd3d6a54e50] shall be mapped to layers according to one of clauses 6.3.3.1 or 6.3.3.3 with [FIG:5f805d1791d3522a3a43] and precoded according to one of clauses 6.3.4.1 or 6.3.4.3, resulting in a block of vectors [FIG:a7b5cc3fdeb8bb0e406f] , [FIG:b551e4a87d2d9034c117] to be mapped onto resources on the antenna ports used for transmission, where [FIG:bd3a039bef5fa30d9758] represents the signal for antenna port [FIG:a70e90943dfbcf625f57] . The PDCCH shall be transmitted on the same set of antenna ports as the PBCH.
+
+6.8.5 Mapping to resource elements
+
+The mapping to resource elements is defined by operations on quadruplets of complex-valued symbols. Let [FIG:db9982b42949000f221d] denote symbol quadruplet [FIG:ffa5c369bdc64d43577d] for antenna port [FIG:76ecca20403cf4a05933] .
+
+The block of quadruplets [FIG:ea8839539d03b89e228d] , where [FIG:3f3ebb1c7096ebeb8881] , shall be permuted resulting in [FIG:29728a04314f264fac54] . The permutation shall be according to the sub-block interleaver in clause 5.1.4.2.1 of 3GPP TS 36.212 [3] with the following exceptions:
+
+the input and output to the interleaver is defined by symbol quadruplets instead of bits
+
+interleaving is performed on symbol quadruplets instead of bits by substituting the terms "bit", "bits" and "bit sequence" in clause 5.1.4.2.1 of 3GPP TS 36.212 [3] by "symbol quadruplet", "symbol quadruplets" and "symbol-quadruplet sequence", respectively
+
+<NULL> elements at the output of the interleaver in 3GPP TS 36.212 [3] shall be removed when forming [FIG:2f6c97c2482501a4721e] . Note that the removal of <NULL> elements does not affect any <NIL> elements inserted in clause 6.8.2.
+
+The block of quadruplets [FIG:75f72fbba6b588dae430] shall be cyclically shifted, resulting in [FIG:4fc24e388471c9a0f430] where [FIG:65c21d931ffc9c58ce77] .
+
+Mapping of the block of quadruplets [FIG:f06b3f5287b7121a1925] is defined in terms of resource-element groups, specified in clause 6.2.4, according to steps 1–10 below:
+
+1) Initialize [FIG:79d95674557061c2febb] (resource-element group number)
+
+2) Initialize [FIG:23f3e5364975779bb89b]
+
+3) Initialize [FIG:c74eb7f96a6c3299bdef]
+
+4) If the resource element [FIG:cb65d4c41756eac5d02d] represents a resource-element group and the resource-element group is not assigned to PCFICH or PHICH then perform step 5 and 6, else go to step 7
+
+5) Map symbol-quadruplet [FIG:c3050a719d45dfff829b] to the resource-element group represented by [FIG:d3d354564e43a4b4263f] for each antenna port [FIG:01a131e4f43d006c5357]
+
+6) Increase [FIG:b7c9109f2ab7a1838d96] by 1
+
+7) Increase [FIG:516455b36b48e6ef471b] by 1
+
+8) Repeat from step 4 if [FIG:fed55642093f57810be8] , where [FIG:1957876009a7a3087083] corresponds to the number of OFDM symbols used for PDCCH transmission as indicated by the sequence transmitted on the PCFICH
+
+9) Increase [FIG:df9ee28929af94289930] by 1
+
+10) Repeat from step 3 if [FIG:0c1853f004cc88af6ef9]
+
+PDCCHs shall not be transmitted in MBSFN subframes with zero-size non-MBSFN region.
+
+6.8A Enhanced physical downlink control channel
+
+For frame structure type 3, for a subframe with the same duration as the DwPTS duration of a special subframe configuration, the enhanced physical downlink control channel is defined the same as that for the corresponding special subframe configuration.
+
+6.8A.1 EPDCCH formats
+
+The enhanced physical downlink control channel (EPDCCH) carries scheduling assignments. An enhanced physical downlink control channel is transmitted using an aggregation of one or several consecutive enhanced control channel elements (ECCEs) where each ECCE consists of multiple enhanced resource element groups (EREGs), defined in clause 6.2.4A. The number of ECCEs used for one EPDCCH depends on the EPDCCH format as given by Table 6.8A.1-2 and the number of EREGs per ECCE is given by Table 6.8A.1-1.Both localized and distributed transmission is supported.
+
+An EPDCCH can use either localized or distributed transmission, differing in the mapping of ECCEs to EREGs and PRB pairs.
+
+A UE shall monitor multiple EPDCCHs as defined in 3GPP TS 36.213 [4]. One or two sets of physical resource-block pairs which a UE shall monitor for EPDCCH transmissions can be configured. All EPDCCH candidates in EPDCCH set [FIG:1ead9d2e19374ff4770d] use either only localized or only distributed transmission as configured by higher layers. Within EPDCCH set [FIG:7d23077d406f23070cca] in subframe [FIG:a388827d829a9f39cf24] , the ECCEs available for transmission of EPDCCHs are numbered from 0 to [FIG:8ef472166a52619ce854] and ECCE number [FIG:4b5313e6ada71c566d4c] corresponds to
+
+- EREGs numbered [FIG:0b96d539d93ee63d9f9c] in PRB index [FIG:1129ea431d99ad202a29] for localized mapping, and
+
+- EREGs numbered [FIG:e9997b4bf614dadcba84] in PRB indices [FIG:22dd76a7857ccc5d3d24] for distributed mapping,
+
+where [FIG:ffa769766a699e57c3b3] , [FIG:4ac9ec80fe5e30561a96] is the number of EREGs per ECCE, and [FIG:d20ba9ae49487aa4c80f] is the number of ECCEs per resource-block pair. The physical resource-block pairs constituting EPDCCH set [FIG:3d74d5211823ffc1e7d6] are in this paragraph assumed to be numbered in ascending order from 0 to [FIG:259ab5fe60eac04eb6f8] .
+
+Table 6.8A.1-1: Number of EREGs per ECCE, [FIG:8e929995e04181cdb07c]
+
+Normal cyclic prefix | Extended cyclic prefix
+Normal subframe | Special subframe, configuration 3, 4, 8 | Special subframe, configuration 1, 2, 6, 7, 9, 10 | Normal subframe | Special subframe, configuration 1, 2, 3, 5, 6
+4 | 8
+
+Table 6.8A.1-2: Supported EPDCCH formats
+
+EPDCCH format | Number of ECCEs for one EPDCCH, [FIG:cfbc742724bec74b0588]
+ | Case A | Case B
+ | Localized transmission | Distributed transmission | Localized transmission | Distributed transmission
+0 | 2 | 2 | 1 | 1
+1 | 4 | 4 | 2 | 2
+2 | 8 | 8 | 4 | 4
+3 | 16 | 16 | 8 | 8
+4 | - | 32 | - | 16
+
+Case A in Table 6.8A.1-2 is used when the conditions corresponding to case 1 in clause 9.1.4 of 3GPP TS 36.213 [4] are satisfied, otherwise case B is used. The quantity [FIG:1c32cffe284dce26e1ef] for a particular UE and referenced in 3GPP TS 36.213 [4] is defined as the number of downlink resource elements [FIG:fa02f5b0ad4efb97e901] available for EPDCCH transmission in a physical resource-block pair configured for possible EPDCCH transmission of EPDCCH set [FIG:2dd01750fb52b2db234c] and fulfilling all of the following criteria:
+
+- they are part of any one of the 16 EREGs in the physical resource-block pair, and
+
+- they are assumed by the UE not to be used for cell-specific reference signals, where the positions of the cell-specific reference signals are given by clause 6.10.1.2 with the number of antenna ports for and the frequency shift of cell-specific reference signals derived as described in clause 6.10.1.2 unless other values for these parameters are provided by clause 9.1.4.3 in 3GPP TS 36.213 [4], and-
+
+- they are assumed by the UE not to be used for transmission of CSI reference signals, where the positions of the CSI reference signals are given by clause 6.10.5.2 with the configuration for zero power CSI reference signals obtained as described in clause 6.10.5.2 unless other values are provided by clause 9.1.4.3 in 3GPP TS 36.213 [4], and with the configuration for non-zero power CSI reference signals obtained as described in clause 6.10.5.2, and
+
+- for frame structure type 1 and 2, the index [FIG:c852ea0d5492fc96c5d9] in the first slot in a subframe fulfils [FIG:f65c5d9b1bc55dd2d3e0] where [FIG:114f2577fde125048fd4] is given by clause 9.1.4.1 of 3GPP TS 36.213 [4], and
+
+- for frame structure type 3,
+
+- if the higher layer parameter subframeStartPosition indicates ‘s07’ and if the downlink transmission starts in the second slot of a subframe
+
+- the index [FIG:0311e81231ecf1c07b6b] in the second slot in the subframe fulfils [FIG:129809005abeacaebb3a] where [FIG:362a1a6e34e4d3c1082b] is given by clause 9.1.4.1 of 3GPP TS 36.213  [4],
+
+- otherwise
+
+- the index [FIG:6c8f0c380435dde13e12] in the first slot in the subframe fulfils [FIG:b9275abb92b9735281a7] where [FIG:2068e993ae4256b13d75] is given by clause 9.1.4.1 of 3GPP TS 36.213  [4].
+
+6.8A.2 Scrambling
+
+The block of bits [FIG:0936c1cbb4aba1735e71] to be transmitted on an EPDCCH in a subframe shall be scrambled, resulting in a block of scrambled bits [FIG:41881294f06cfbd67470] according to
+
+[FIG:4fdcf4a8405e4b301a40]
+
+where the UE-specific scrambling sequence [FIG:67888d48364f58d5cbab] is given by clause 7.2. The scrambling sequence generator shall be initialized with [FIG:733bf6f58725dfed21c3] where [FIG:9f031d2782bc3bf03dea] is the EPDCCH set number.
+
+6.8A.3 Modulation
+
+The block of scrambled bits [FIG:974dbddf4aedfc69a2a9] shall be modulated as described in clause 7.1, resulting in a block of complex-valued modulation symbols [FIG:3f7bededea7ed316daf7] . Table 6.8A.3-1 specifies the modulation mappings applicable for the enhanced physical downlink control channel.
+
+Table 6.8A.3-1: EPDCCH modulation schemes
+
+Physical channel | Modulation schemes
+EPDCCH | QPSK
+
+6.8A.4 Layer mapping and precoding
+
+The block of complex-valued modulation symbols shall be mapped to a single layer and precoded according to 6.3.4.1 as for [FIG:52b58764738c96b13c21] , [FIG:5c0d4b59352d8a44c620] .
+
+6.8A.5 Mapping to resource elements
+
+The block of complex-valued symbols [FIG:b15e7ac0fa382ed70143] shall be mapped in sequence starting with [FIG:709701f0bdae6fe1dcf0] to resource elements [FIG:b2d60a3732bd7e5423ea] on the associated antenna port which meet all of the following criteria:
+
+- they are part of the EREGs assigned for the EPDCCH transmission, and
+
+- they are assumed by the UE not to be used for cell-specific reference signals, where the positions of the cell-specific reference signals are given by clause 6.10.1.2 with the number of antenna ports for and the frequency shift of cell-specific reference signals derived as described in clause 6.10.1.2 unless other values for these parameters are provided by clause 9.1.4.3 in 3GPP TS 36.213 [4], and
+
+- they are assumed by the UE not to be used for transmission of:
+
+- zero-power CSI reference signals, where the positions of the CSI reference signals are given by clause 6.10.5.2. The configuration for zero power CSI reference signals is
+
+- obtained as described in clause 6.10.5.2 unless other values are provided by clause 9.1.4.3 in 3GPP TS 36.213 [4], and
+
+- obtained by higher-layer configuration of up to five reserved CSI-RS resources as part of the discovery signal configuration following the procedure for zero-power CSI-RS in clause 6.10.5.2.
+
+- non-zero-power CSI reference signals for CSI reporting with the configuration for non-zero power CSI reference signals for CSI reporting obtained as described in clause 6.10.5.2, and
+
+- for frame structure type 1 and 2, the index [FIG:7c7e72528b8dce89917a] in the first slot in a subframe fulfils [FIG:745bc8e9c9118410d152] where [FIG:ffe8d5a6c3f3f392da24] is given by clause 9.1.4.1 of 3GPP TS 36.213 [4], and
+
+- for frame structure type 3,
+
+- if the higher layer parameter subframeStartPosition indicates ‘s07’ and if the downlink transmission starts in the second slot of a subframe
+
+- the index [FIG:cfc2bb3c878f4dfdad23] in the second slot in the subframe fulfils [FIG:67545fd26fdf11882436] where [FIG:371f6d6508d350a26d11] is given by clause 9.1.4.1 of 3GPP TS 36.213  [4],
+
+- otherwise
+
+- the index [FIG:035444c5a8552af2e2c8] in the first slot in the subframe fulfils [FIG:a6c2c5539cb09bf4c69a] where [FIG:4992828060ce9ba360cb] is given by clause 9.1.4.1 of 3GPP TS 36.213  [4].
+
+The mapping to resource elements [FIG:ef1b61a31000398408f0] on antenna port [FIG:d6921528d8b74d254516] meeting the criteria above shall be in increasing order of first the index [FIG:269808986d9ed7a8ac04] and then the index [FIG:657e17d1b0a33d0ad2f7] , starting with the first slot and ending with the second slot in a subframe.
+
+For localized transmission, the single antenna port [FIG:8600e02e23153ca7f5df] to use is given by Table 6.8A.5-1 with
+
+[FIG:5597790d7d3ed222ba9a]
+
+where [FIG:975ec74477e74171fbe9] is the lowest ECCE index used by this EPDCCH transmission in the EPDCCH set, [FIG:98813198ac3807923c30] equals the C-RNTI, and [FIG:538f93aa3bacd1dcee70] is the number of ECCEs used for this EPDCCH.
+
+Table 6.8A.5-1: Antenna port to use for localized EPDCCH transmission
+
+[FIG:59a0a77bd8746626ad0c] | Normal cyclic prefix | Extended cyclic prefix
+ | Normal subframes,Special subframes,
+configurations 3, 4, 8 | Special subframes, 
+configurations 1, 2, 6, 7, 9, 10 | Any subframe
+0 | 107 | 107 | 107
+1 | 108 | 109 | 108
+2 | 109 | - | -
+3 | 110 | - | -
+
+For distributed transmission, each resource element in an EREG is associated with one out of two antenna ports in an alternating manner, starting with antenna port 107, where [FIG:17f92dab1339215e521f] for normal cyclic prefix and [FIG:3e4d4b07bcab4a915a84] for extended cyclic prefix.
+
+6.8B MTC physical downlink control channel
+
+6.8B.1 MPDCCH formats
+
+The MPDCCH formats are defined as in Clause 6.8A.1 with the following exceptions:
+
+- The term EPDCCH is replaced by MPDCCH.
+
+- The MTC physical downlink control channel carries downlink control information and is transmitted across [FIG:133f5f3d376f116693f9] consecutive BL/CE DL subframes. Within each of the [FIG:b3a338ddc3d919d9bd46] BL/CE DL subframes an MPDCCH is transmitted using an aggregation of one or several consecutive enhanced control channel elements (ECCEs) where each ECCE consists of multiple enhanced resource element groups (EREGs), defined in clause 6.2.4A.
+
+- For frame structure type 2,
+
+- If repetition is not configured for the MPDCCH, the number of EREGs per ECCE is given by Table 6.8A.1-1. If repetition is configured for the MPDCCH, the number of EREGs per ECCE is given by Table 6.8B.1-1.
+
+- For those special subframes where the MPDCCH is not supported, these special subframes are considered BL/CE DL subframes for both MPDCCH and PDSCH transmission, only if they are indicated as BL/CE DL subframe by higher layer signalling.
+
+- For an MPDCCH associated with 2 or 4 PRBs, if repetition is not configured for the MPDCCH, the supported MPDCCH formats are given by Table 6.8A.1-2. Otherwise, the supported MPDCCH formats are given by Table 6.8B.1-2. However, for MPDCCH format 5, the equation defining the relation between ECCE index and EREG index does not apply and the number of ECCEs refers to the MPDCCH mapping to the REs of the 2+4 PRB set as defined in Subclause 6.8B.5.
+
+Table 6.8B.1-1: Number of EREGs per ECCE, [FIG:709cddea136f3bef52b4] , for frame structure type 2.
+
+Normal cyclic prefix | Extended cyclic prefix
+Normal subframe | Special subframe, configuration 3, 4, 8 | Normal subframe | Special subframe, configuration 1, 2, 3, 5, 6
+4 | 8
+
+Table 6.8B.1-2: Supported MPDCCH formats
+
+MPDCCH format | Number of ECCEs in a subframe for one MPDCCH, [FIG:578f9f0154486681f737]
+ | [FIG:ee653762a6371879c786] =4 | [FIG:2ed3994ea4f6073890e6] =8
+ | Localized transmission | Distributed transmission | Localized transmission | Distributed transmission
+0 | 2 | 2 | 1 | 1
+1 | 4 | 4 | 2 | 2
+2 | 8 | 8 | 4 | 4
+3 | 16 | 16 | 8 | 8
+4 | - | - | - | -
+5 | 24 | 24 | 12 | 12
+
+6.8B.2 Scrambling
+
+Scrambling shall be perfomed according to Clause 6.8A.2 with EPDCCH replaced by MPDCCH except that the same scrambling sequence is applied per subframe to MPDCCH for a given block of [FIG:13f5925f262a1b57d211] subframes and [FIG:a5283c71343639159fad] is the MPDCCH set number. For MPDCCH format 5, [FIG:4f4cfdc9e8c8ac1ee1e0] is used to generate the scrambling sequence for mapping to REs in 6 PRBs.
+
+For the [FIG:04f64070e3fe100114f3] block of [FIG:61391014cf16791347e1] subframes, the scrambling sequence generator shall be initialised with
+
+[FIG:cdbf67e8e22fb1c53f50]
+
+where
+
+[FIG:1bda8d93234c80d4acb7]
+
+and [FIG:a33856f7b49cab9bb686] is the absolute subframe number of the first downlink subframe intended for the MPDCCH. The MPDCCH transmission spans [FIG:8a4c026dd87790644f4e] consecutive subframes, including non-BL/CE DL subframes where the MPDCCH transmission is postponed.
+
+For BL/CE UEs,
+
+- if the MPDCCH transmission is associated with P-RNTI or SC-RNTI:
+
+- [FIG:becc71ba47a5e11a5a75] for frame structure type 1 and [FIG:f106233933bdfb4fc8fd] for frame structure type 2
+
+- otherwise
+
+- [FIG:065ceedd321c8b2a8e5e] for UEs assuming CEModeA (according to the definition in Clause 12 of [4]) or configured with CEModeA:
+
+- [FIG:8f45fe837e4f11c2d4aa] for frame structure type 1 and [FIG:aaf805d16b16141c01a9] for frame structure type 2 for UEs assuming CEModeB (according to the definition in Clause 12 of [4]) or configured with CEModeB.
+
+6.8B.3 Modulation
+
+Modulation shall be performed according to 6.8A.3 with EPDCCH replaced by MPDCCH.
+
+6.8B.4 Layer mapping and precoding
+
+Layer mapping and precoding shall be done according to Clause 6.8A.4 with EPDCCH replaced by MPDCCH.
+
+6.8B.5 Mapping to resource elements
+
+Mapping to resource elements shall be done according to Clause 6.8A.5with the following exceptions:
+
+- The term EPDCCH shall be replaced by MPDCCH.
+
+- The mapping shall be repeated across each of the [FIG:3596be621d9926b166a4] BL/CE DL subframes.
+
+- [FIG:29a811fbc64fa0a8399d] is the number of ECCEs used for this MPDCCH in the first of the [FIG:b563e30aadb3a8e1e729] subframes.
+
+- For an MPDCCH associated with a 2+4 PRB set as defined in [4], the mapping to resource elements [FIG:a7e6e45b3fe503a079b5] on antenna port [FIG:c5158faea83ba6eb682b] shall be in increasing order of first the index [FIG:a275f8fe0f6dbba15db0] and then the index [FIG:adc6909ad0d2352430c1] over the 6 PRBs for MPDCCH format 5 and over the 2 or 4 PRBs for the other MPDCCH formats.
+
+- For localized transmission and MPDCCH format 5, the single antenna port [FIG:4365ff07eead62a34fba] to use is given by Table 6.8A.5-1 with
+
+[FIG:d62057d9760ff04156e6]
+
+- Resource elements occupied by CSI reference signals shall be counted in the MPDCCH mapping but not used for transmission of the MPDCCH.
+
+- A BL/CE UE not configured with higher layer parameter ce-pdsch-maxBandwidth-config may assume there is no MPDCCH transmission which uses overlapping sets of subframes as PDSCH transmissions to that UE, where the MPDCCH is located at a different narrowband than the PDSCH.
+
+- A BL/CE UE configured with higher layer parameter ce-pdsch-maxBandwidth-config may assume that there is no MPDCCH transmission which uses overlapping sets of subframes as PDSCH transmissions to that UE, where the MPDCCH transmission and PDSCH transmission in any of the overlapping subframes span a PRB region larger than X contiguous PRBs where X=25 if ce-pdsch-maxBandwidth-config is set to 5 MHz and X=100 if ce-pdsch-maxBandwidth-config is set to 20 MHz.
+
+For BL/CE UEs in CEModeB, in MBSFN subframe(s), resource elements that correspond to the positions of cell-specific reference signals as in subframe #0 shall not be counted in the MPDCCH mapping and not used for transmission of the MPDCCH.
+
+- Resource elements belonging to synchronization signals, the core part of PBCH, PBCH repetitions, or resource elements reserved for reference signals in the mapping operation of PBCH but not used for transmission of reference signals, shall be counted in the MPDCCH mapping but not used for transmission of the MPDCCH.
+
+- In the subframes where an MPDCCH or its associated PDSCH is transmitted in response to a physical random access transmission initiated by a PDCCH order, the UE shall receive the MPDCCH or its associated PDSCH, and assume no other UE-specific reception is needed.
+
+- For MPDCCH transmission associated with C-RNTI or SPS C-RNTI, frequency hopping of the MPDCCH is enabled when higher layer parameter mpdcch-pdsch-HoppingConfig is set.
+
+- For MPDCCH transmission associated with RA-RNTI or temporary C-RNTI, frequency hopping of the MPDCCH is enabled when higher layer parameter rar-HoppingConfig is set. Further
+
+- if PRACH CE level 0 or 1 is used for the last PRACH attempt, [FIG:b05fd43e8839a839ec28] is set to the higher layer parameter interval-DlHoppingConfigCommonModeA;
+
+- if PRACH CE level 2 or 3 is used for the last PRACH attempt, [FIG:4fb96aeb896e9ca2570d] is set to the higher layer parameter interval-DlHoppingConfigCommonModeB.
+
+- For MPDCCH transmission associated with SC-RNTI, frequency hopping of the MPDCCH is enabled when higher layer parameter mpdcch-pdsch-HoppingConfig-SC-MCCH is set. Further
+
+- if mpdcch-pdsch-HoppingConfig-SC-MCCH is set to CEModeA, [FIG:f86fe4bb0ac9c022a2b5] is set to the higher layer parameter interval-DlHoppingConfigCommonModeA;
+
+- if mpdcch-pdsch-HoppingConfig-SC-MCCH is set to CEModeB, [FIG:28ed619085a1f788ee88] is set to the higher layer parameter interval-DlHoppingConfigCommonModeB.
+
+- For MPDCCH transmission associated with G-RNTI, frequency hopping of the MPDCCH is enabled when higher layer parameter mpdcch-pdsch-HoppingConfig-SC-MTCH is set. Further
+
+- if mpdcch-pdsch-CEmodeConfig-SC-MTCH is set to CEModeA, [FIG:ed4d7e412877b99f4301] is set to the higher layer parameter interval-DlHoppingConfigCommonModeA;
+
+- if mpdcch-pdsch-CEmodeConfig-SC-MTCH is set to CEModeB, [FIG:34d800b2e2a957cb4443] is set to the higher layer parameter interval-DlHoppingConfigCommonModeB.
+
+- The narrowband [FIG:429c6b20a5979bc45a91] for MPDCCH transmission in the first subframe of MPDCCH search space is provided by higher layers. Starting subframe configuration of a search space where UE monitors an MPDCCH is also provided by higher layers. The MPDCCH search space uses [FIG:b0a29a93e2e263631ee4] subframes, spanning [FIG:8e77cafc15321e1e3c9d] consecutive subframes, including non-BL/CE DL subframes where the MPDCCH transmission is postponed.
+
+- If frequency hopping is not enabled for MPDCCH, the repetitions of an MPDCCH candidate are located at the same PRB resources in the same narrowband [FIG:e8b9302342e62cb35569] , and
+
+- if frequency hopping is enabled for MPDCCH, an MPDCCH candidate shall be transmitted in absolute subframe [FIG:7269873d53e246d46397] using the same PRB resources within each narrowband [FIG:7a5d92be4cd9405df9a8]
+
+[FIG:6328e97f745cf6d1bb7e]
+
+where [FIG:2970e253d4c8eaaea5d8] is the absolute subframe number of the first downlink subframe of MPDCCH search space, and [FIG:db4f101b7a69194fa4a4] , [FIG:2b031cf1895155d471f9] and [FIG:c6cc26d0bce546719e35] are cell-specific higher-layer parameters. The UE shall not expect MPDCCH transmission in absolute subframe [FIG:c43e63f2c1b194e681f0] if it is not a BL/CE DL subframe.
+
+- The UE may assume the same precoding matrix being used for a PRB across a block of [FIG:07f94562d9b02291b124] consecutive subframes for MPDCCH.
+
+The UE may assume that an MPDCCH associated with the P-RNTI is transmitted on the set [FIG:b7ef1e6eac4cdabce779] of narrowbands where [FIG:e9355abae4ed19447bed] is defined in Subclause 6.4.1. For a UE monitoring an MPDCCH associated with the P-RNTI, the first MPDCCH narrowband is given by [FIG:2497d846334de49b4cee] where [FIG:e3ab7960c49e4908b9b6] , [FIG:2e7a9fd8cc7450458072] is the Paging Narrowband (PN) obtained according to [10], and [FIG:a9978e1d5c0e449b8fc9] is the higher-layer parameter paging-narrowBands.
+
+- If the higher-layer parameter si-HoppingConfigCommon disables frequency hopping for an MPDCCH associated with P-RNTI, each MPDCCH candidate shall be located in the same PRB in narrowband [FIG:dda9d47c3ed82bc3ea33] where [FIG:c686c06f167466696cad] .
+
+- If the higher-layer parameter si-HoppingConfigCommon enables frequency hopping for an MPDCCH with P-RNTI, an MPDCCH candidate shall be located in narrowband [FIG:a201cd371ed3b9935f0e] in absolute subframe [FIG:6406965dffed62c1f169] using the same PRB resources within each narrowband [FIG:c42d3f0d03e113ce1dbb] where
+
+[FIG:6de82916ea40251c46e6]
+
+[FIG:af97240e34f0cdb71b31]
+
+where [FIG:37f45e9fc1c73aedfe08] is the absolute subframe number of the first downlink subframe of MPDCCH search space according to locations of paging opportunity subframes, and [FIG:27c62ebcb4049967e9c8] , [FIG:04814af3534c15e338e8] and [FIG:f6612b49c71ed6e78b10] are cell-specific higher-layer parameters. For MPDCCH associated with P-RNTI, if interval-DlHoppingConfigCommonModeB is signalled in SIB1-BR, then the frequency hopping granularity [FIG:13912d61b86634041dd6] is set to interval-DlHoppingConfigCommonModeB; otherwise, [FIG:ba0c29c273d1eca1d378] is set to interval-DlHoppingConfigCommonModeA signalled in SIB1-BR.
+
+The UE shall not expect MPDCCH transmission in absolute subframe [FIG:1f319a1a241e3ed89b1c] if it is not a BL/CE DL subframe.
+
+6.9 Physical hybrid ARQ indicator channel
+
+The PHICH carries the hybrid-ARQ ACK/NACK. Multiple PHICHs mapped to the same set of resource elements constitute a PHICH group, where PHICHs within the same PHICH group are separated through different orthogonal sequences. A PHICH resource is identified by the index pair [FIG:343b9bdc634f4e753dd6] , where [FIG:f1f2168ac33e2bc46213] is the PHICH group number and [FIG:45675a491a9e37e34ad6] is the orthogonal sequence index within the group.
+
+For frame structure type 1 and type 3, the number of PHICH groups [FIG:bc79b940f49ad012fb6d] is constant in all subframes and given by
+
+[FIG:63cf259d9635cdcd6a6d]
+
+where [FIG:98872a8f95e545de6984] is provided by higher layers. The index [FIG:2e000ec998deb5e8a054] ranges from [FIG:b431ac2696bb47d3dd12] to [FIG:84fd31b2bfbf12c4841a] .
+
+For frame structure type 2, the number of PHICH groups may vary between subframes and is given by [FIG:7681b0aba8d1ae140d02] where [FIG:b8bd8902c46b9850f52c] is given by the expression above and [FIG:b4532a29f5512a623884] is given by Table 6.9-1 with the uplink-downlink configuration provided by the higher-layer parameter subframeAssignment. The index [FIG:357f4988695f7638f2a9] in a subframe with non-zero PHICH resources ranges from [FIG:d3882cebe8100a2f9c11] to [FIG:8578f7cdb64d5d7b7107] .
+
+Table 6.9-1: The factor [FIG:28a174b987a16f6821c1] for frame structure type 2
+
+Uplink-downlink
+configuration | Subframe number [FIG:229e5b8b27e9ad3c8f6d]
+ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+0 | 2 | 1 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0
+1 | 0 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 1
+2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0
+3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1
+4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1
+5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0
+6 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 1
+
+6.9.1 Modulation
+
+The block of bits [FIG:4f9975b64131b7db2632] transmitted on one PHICH in one subframe shall be modulated as described in clause 7.1, resulting in a block of complex-valued modulation symbols [FIG:4094f453537dc3a1e496] , where [FIG:cc6a121146bb2d8113a3] . Table 6.9.1-1 specifies the modulation mappings applicable for the physical hybrid ARQ indicator channel.
+
+Table 6.9.1-1: PHICH modulation schemes.
+
+Physical channel | Modulation schemes
+PHICH | BPSK
+
+The block of modulation symbols [FIG:cb743845233e73c0ed46] shall be symbol-wise multiplied with an orthogonal sequence and scrambled, resulting in a sequence of modulation symbols [FIG:7dd14a4196be9e8ab797] according to
+
+[FIG:138e8322648a2e27198d]
+
+where
+
+[FIG:3db37f4539f3a10f6825]
+
+and [FIG:b59461edbfd3ed8ad7dd] is a cell-specific scrambling sequence generated according to clause 7.2. The scrambling sequence generator shall be initialised with [FIG:774f207c5002e70931b6] at the start of each subframe.
+
+The sequence [FIG:53d3ddff66643788be50] is given by Table 6.9.1-2 where the sequence index [FIG:2f648fe8c6fd51ec1fe1] corresponds to the PHICH number within the PHICH group.
+
+Table 6.9.1-2: Orthogonal sequences [FIG:b045acfca3c1bb893923] for PHICH
+
+Sequence index | Orthogonal sequence
+[FIG:8e50550432f17b2eac2b] | Normal cyclic prefix [FIG:b8ebdeb399c7d952ac67] | Extended cyclic prefix [FIG:f5a2434591b4d0f8e024]
+0 | [FIG:4f2a18f80083925884e9] | [FIG:8d9ff0c9b749a8fc252a]
+1 | [FIG:918a957490bfe76126be] | [FIG:131c1cb3e9f7da9f411a]
+2 | [FIG:c9984245c439996b08a3] | [FIG:558496c243dfbae7a39f]
+3 | [FIG:f99dced7125f71f0d2e2] | [FIG:9105096f4de6d46990d2]
+4 | [FIG:599a151ef7edd3b089d0] | -
+5 | [FIG:941bc5e27ab8507199cb] | -
+6 | [FIG:691cf185e1d7ea02cd35] | -
+7 | [FIG:dc677f11f478c40c8f67] | -
+
+6.9.2 Resource group alignment, layer mapping and precoding
+
+The block of symbols [FIG:7a8111e4cbdc1d119d0f] should be first aligned with resource element group size, resulting in a block of symbols [FIG:fcd7571199793b3f9dbc] , where [FIG:4c9f3079149f8940e797] for normal cyclic prefix; and [FIG:b7097c0ab143335b8555] for extended cyclic prefix.
+
+For normal cyclic prefix, [FIG:1fea723de9ddd9a110a4] , for [FIG:a310dd4f9e7707585ecc] .
+
+For extended cyclic prefix,
+
+[FIG:28a813b47c5d606e3e3d]
+
+for [FIG:a205184dbff813cdcb4c] .
+
+The block of symbols [FIG:bf28f92f43f1a893cce0] shall be mapped to layers and precoded, resulting in a block of vectors [FIG:2fa8db5403661f1ca880] , [FIG:1898628910cc0218ac85] , where [FIG:62432321ba0cc32740e1] represents the signal for antenna port [FIG:556f494c837a9ba9f3ef] , [FIG:55578e3b811c81f32de8] and the number of cell-specific reference signals [FIG:542de811ae95954d4d4b] . The layer mapping and precoding operation depends on the cyclic prefix length and the number of antenna ports used for transmission of the PHICH. The PHICH shall be transmitted on the same set of antenna ports as the PBCH.
+
+For transmission on a single antenna port, [FIG:0c7371368d6fa202b4b1] , layer mapping and precoding are defined by clauses 6.3.3.1 and 6.3.4.1, respectively, with [FIG:136be11fc66813a33ffa] .
+
+For transmission on two antenna ports, [FIG:6933971dcd3cb1e3fe91] , layer mapping and precoding are defined by clauses 6.3.3.3 and 6.3.4.3, respectively, with [FIG:cd84b78539a5b63a67da] .
+
+For transmission on four antenna ports, [FIG:54f32ab8779969f4f9ad] , layer mapping is defined by clause 6.3.3.3 with [FIG:995a154c39e87e70f26e] and precoding by
+
+[FIG:596c56e82a6cd2d71c04]
+
+if [FIG:9cfcae6ed44102594820] for normal cyclic prefix, or [FIG:dfd855f2dec6b5349f9b] for extended cyclic prefix, where [FIG:8a282f7cc26d32f6e160] is the PHICH group number and [FIG:88f0af43be92532c2607] , and by
+
+[FIG:8a26fcf96853fd38e654]
+
+otherwise for [FIG:025caaef9245ccf009c6] .
+
+6.9.3 Mapping to resource elements
+
+The sequence [FIG:e5f91e83c93495f13e0f] for each of the PHICH groups is defined by
+
+[FIG:bd3ab943171b6734a3da]
+
+where the sum is over all PHICHs in the PHICH group and [FIG:c353124ddb404bdfd291] represents the symbol sequence from the [FIG:c1c376280dc864b23df3] :th PHICH in the PHICH group.
+
+PHICH groups are mapped to PHICH mapping units.
+
+For normal cyclic prefix, the mapping of PHICH group [FIG:907902e2f5b27849c44b] to PHICH mapping unit [FIG:89036849a85239017049] is defined by
+
+[FIG:78c364e019f46692733f]
+
+where
+
+[FIG:0e3f2817593fa5b20252] ,
+
+and where [FIG:363cb96a5ead4cd6bd73] is given by Table 6.9-1.
+
+For extended cyclic prefix, the mapping of PHICH group [FIG:b8cab29760c7f65879b3] and [FIG:7ceadebb5b31fadcfef8] to PHICH mapping unit [FIG:85e5252065d9a1e9f0a8] is defined by
+
+[FIG:e4395358d078f4897d9c]
+
+where
+
+[FIG:f71043c3444befc969b7]
+
+[FIG:b443767e81389c490cde]
+
+and where [FIG:67bc71cc1899b5d7bd85] is given by Table 6.9-1.
+
+Let [FIG:492dc8b7ce1eec4b7006] , [FIG:410f7e7734cccdb004e1] denote symbol quadruplet [FIG:b81d5ef21c346acaabce] for antenna port [FIG:6ff21b3a0c4e5f542708] . Mapping to resource elements is defined in terms of symbol quadruplets according to steps 1–10 below:
+
+1) For each value of [FIG:94b65a35346c09d9ae55]
+
+2) Let [FIG:a7c2852fe4f14c36fbfd] denote the number of resource element groups not assigned to PCFICH in OFDM symbol [FIG:fd23992742bff78623c0]
+
+3) Number the resource-element groups not assigned to PCFICH in OFDM symbol [FIG:0a365a724d82bdd5f8f9] from 0 to [FIG:3555d8626ec736ac86b2] , starting from the resource-element group with the lowest frequency-domain index.
+
+4) Initialize [FIG:813a4a9747d5a39520a8] (PHICH mapping unit number)
+
+5) For each value of [FIG:8c46254cc496e2a0eb2f]
+
+6) Symbol-quadruplet [FIG:1e9b3f8e453a6079706a] from PHICH mapping unit [FIG:6525025a59359f2034a0] is mapped to the resource-element group represented by [FIG:bf6792d9e8d39c83d6b0] as defined in clause 6.2.4 where the indices [FIG:047fece3d08e81cae047] and [FIG:fe6c0fb69da8e1ef41a7] are given by steps 7 and 8 below:
+
+7) The time-domain index [FIG:445487e09e71a68bd147] is given by
+
+[FIG:1871590901812ced3b94]
+
+8) Set the frequency-domain index [FIG:0a4a11c5397f1843f5f9] to the resource-element group assigned the number [FIG:27abe2a70d7a82574f61] in step 3 above, where [FIG:7f56963179bd7eb94378] is given by
+
+[FIG:2027292cd22d7984009a]
+
+in case of extended PHICH duration in MBSFN subframes, or extended PHICH duration in subframes 1 and 6 for frame structure type 2, or extended PHICH duration in subframe with the same duration as the DwPTS duration of a special subframe configuration in frame structure type 3 and by
+
+[FIG:3a0fd1eb054f7ec6f422]
+
+otherwise.
+
+9) Increase [FIG:450ca8ee1d5841954906] by 1.
+
+10) Repeat from step 5 until all PHICH mapping units have been assigned.
+
+The PHICH duration is configurable by higher layers according to Table 6.9.3-1.
+
+The PHICH shall not be transmitted in MBSFN subframes with zero-size non-MBSFN region.
+
+Table 6.9.3-1: PHICH duration in MBSFN and non-MBSFN subframes
+
+PHICH duration | Non-MBSFN subframes | MBSFN subframes
+ | Subframes 1 and 6 in case of frame structure type 2 | Subframe with the same duration as the DwPTS duration of a specifial subframe configuration in case of frame structure type 3 | All other cases | 
+Normal | 1 | 1 | 1 | 1
+Extended | 2 | 2 | 3 | 2
+
+6.10 Reference signals
+
+Six types of downlink reference signals are defined:
+
+- Cell-specific Reference Signal (CRS)
+
+- MBSFN reference signal
+
+- UE-specific Reference Signal (DM-RS) associated with PDSCH
+
+- DeModulation Reference Signal (DM-RS) associated with EPDCCH or MPDCCH
+
+- Positioning Reference Signal (PRS)
+
+- CSI Reference Signal (CSI-RS)
+
+There is one reference signal transmitted per downlink antenna port.
+
+6.10.1 Cell-specific Reference Signal (CRS)
+
+The UE may assume cell-specific reference signals are, unless otherwise stated in [4, clause 12], transmitted in
+
+- all downlink subframes for frame structure type 1,
+
+- all downlink subframes and DwPTS for frame structure type 2,
+
+- non-empty subframes for frame structure type 3
+
+in a cell supporting PDSCH transmission.
+
+Cell-specific reference signals are transmitted on one or several of antenna ports 0 to 3.
+
+Cell-specific reference signals are transmitted in subframes where [FIG:f16eaffa2e91d4952a49] only.
+
+6.10.1.1 Sequence generation
+
+The reference-signal sequence [FIG:30314ed39c366b436150] is defined by
+
+[FIG:b3e9fbb79ec49706f6cb]
+
+where [FIG:8e1391238aa2297aa5e7] is the slot number within a radio frame and [FIG:965826d84d9ed2bdfc52] is the OFDM symbol number within the slot. The pseudo-random sequence [FIG:16b818c13e9048f04b14] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with [FIG:2a0b7b0ef81a6f49ae78] at the start of each OFDM symbol where
+
+[FIG:4ec102899260b3bff70f]
+
+6.10.1.2 Mapping to resource elements
+
+The reference signal sequence [FIG:e596ea71679fb5e98fc0] shall be mapped to complex-valued modulation symbols [FIG:9de7a403c0253397e82c] used as reference symbols for antenna port [FIG:d5ff92166903b365f667] in slot [FIG:6281f5c770917ff9e2c9] according to
+
+[FIG:8729786d1988c0c68f60]
+
+where
+
+[FIG:4c651dc3fbb4328b472f]
+
+The variables [FIG:08e0ad5694aaf3eb837f] and [FIG:d13086e5f9eed8047c08] define the position in the frequency domain for the different reference signals where [FIG:f8197f427ee1af353a59] is given by
+
+[FIG:6d9687d42df706c63869]
+
+The cell-specific frequency shift is given by [FIG:8a5af81412d1f4b68341] .
+
+Resource elements [FIG:46560a0618254d0e27f7] used for transmission of cell-specific reference signals on any of the antenna ports in a slot shall not be used for any transmission on any other antenna port in the same slot and set to zero.
+
+In an MBSFN subframe, cell-specific reference signals shall only be transmitted in the non-MBSFN region of the MBSFN subframe.
+
+Figures 6.10.1.2-1 and 6.10.1.2-2 illustrate the resource elements used for reference signal transmission according to the above definition. The notation [FIG:7157216b7f808cd59271] is used to denote a resource element used for reference signal transmission on antenna port [FIG:618a748c8b3476e87e69] .
+
+[FIG:9fc4e581caebf72548f0]
+
+Figure 6.10.1.2-1. Mapping of downlink reference signals (normal cyclic prefix)
+
+[FIG:ee1e6c77c377f256fb8b]
+
+Figure 6.10.1.2-2. Mapping of downlink reference signals (extended cyclic prefix)
+
+6.10.2 MBSFN reference signals
+
+MBSFN reference signals shall be transmitted in the MBSFN region of MBSFN subframes only when the PMCH is transmitted. MBSFN reference signals are transmitted on antenna port 4.
+
+MBSFN reference signals are defined for extended cyclic prefix only.
+
+6.10.2.1 Sequence generation
+
+6.10.2.1.1 Sequence generation for 15 kHz and 7.5 kHz subcarrier spacing
+
+The MBSFN reference-signal sequence [FIG:a6974ed92c8126d31ea0] is defined by
+
+[FIG:051c5266996610bbbcbc]
+
+where [FIG:45676209d6e1753f336c] is the slot number within a radio frame and [FIG:d265077a4a785f8f7be0] is the OFDM symbol number within the slot. The pseudo-random sequence [FIG:dcfa213e93a979a70810] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with [FIG:474d9df3c49cd6b640fa] at the start of each OFDM symbol.
+
+6.10.2.1.2 Sequence generation for 1.25 kHz subcarrier spacing
+
+The MBSFN reference-signal sequence [FIG:55a8b1fa7e12cf2d5490] is defined by
+
+[FIG:4493e857750f5736a394]
+
+where [FIG:b80e96136ac09aa0f51b] is the subframe number within a radio frame and [FIG:c8b868a7f8d66f4989d2] is the OFDM symbol number within the subframe. The pseudo-random sequence [FIG:32aec922c19df94b33a7] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with [FIG:e11c623e60adf73e6518] at the start of each OFDM symbol.
+
+6.10.2.2 Mapping to resource elements
+
+6.10.2.2.1 Mapping to resource elements for 15 kHz and 7.5 kHz subcarrier spacing
+
+The reference-signal sequence [FIG:1896a6e469246319ca2d] in OFDM symbol [FIG:d6bf5d4c1a827a76dd92] shall be mapped to complex-valued modulation symbols [FIG:4a4acac0585ce9a8c7d1] with [FIG:7a238c3336ac660d2f27] according to
+
+[FIG:1014242803172e46c885]
+
+where
+
+[FIG:4eb5a36e3a242a5c7346]
+
+Figure 6.10.2.2-1 illustrates the resource elements used for MBSFN reference signal transmission in case of [FIG:76a1923e8e21841ee065] . In case of [FIG:15b5906b0f1c827170a8] , the MBSFN reference signal shall be mapped to resource elements according to Figure 6.10.2.2-3. The notation [FIG:fbbcafd01865c07c6800] is used to denote a resource element used for reference signal transmission on antenna port [FIG:799930d5ee985d4f4fdc] .
+
+[FIG:662d42729021e79f9217]
+
+Figure 6.10.2.2-1: Mapping of MBSFN reference signals (extended cyclic prefix, [FIG:961c66a46a0d7c68cb28] )
+
+[FIG:8160ef70843d960f9142]
+
+Figure 6.10.2.2-3: Mapping of MBSFN reference signals (extended cyclic prefix, [FIG:954b3898dfb715dff916] )
+
+6.10.2.2.1 Mapping to resource elements for 1.25 kHz
+
+The reference-signal sequence [FIG:18c5f4935505f7793296] in OFDM symbol [FIG:718c9c419cc67c39a3bf] shall be mapped to complex-valued modulation symbols [FIG:6c92236c8cf82ade937d] with [FIG:7ebb19fbb0962b94c619] according to
+
+[FIG:2cb70fbea995efb59409]
+
+where
+
+[FIG:a87d5c9009026a86d4cc]
+
+6.10.3 UE-specific reference signals associated with PDSCH
+
+UE-specific reference signals associated with PDSCH
+
+- are transmitted on antenna port(s) [FIG:deca0742747f51328167] , [FIG:0123331dfe868669ddbf] , [FIG:1345999bf498632622a0] , [FIG:107159a89aecdaa8846c] , [FIG:4f83b46f6610a252354f] , [FIG:295e53f16e90aaf791c3] or [FIG:cf616e1ef79e06c83aad] , where [FIG:3e888813b884f2b14c68] is the number of layers used for transmission of the PDSCH;
+
+- are present and are a valid reference for PDSCH demodulation only if the PDSCH transmission is associated with the corresponding antenna port according to clause 7.1 of 3GPP TS 36.213 [4];
+
+- are transmitted only on the physical resource blocks upon which the corresponding PDSCH is mapped.
+
+A UE-specific reference signal associated with PDSCH is not transmitted in resource elements [FIG:9256d7d1d590d9b5c83d] in which one of the physical channels or physical signals other than the UE-specific reference signals defined in 6.1 are transmitted using resource elements with the same index pair [FIG:fb89844701829f38e4ab] regardless of their antenna port [FIG:5c87bf402363a1f7e9cf] .
+
+For frame structure type 3, for PDSCH in a subframe with the same duration as the DwPTS duration of a special subframe configuration, the UE-specific reference signals are defined the same as that for the corresponding special subframe configuration.
+
+6.10.3.1 Sequence generation
+
+For antenna port 5, the UE-specific reference-signal sequence [FIG:3b709df2307bcf1249ea] is defined by
+
+[FIG:4ecd609076523226175d]
+
+where [FIG:51049173bb6e0ce0ac01] denotes the assigned bandwidth in resource blocks of the corresponding PDSCH transmission. The pseudo-random sequence [FIG:9e9f7c1d5ce7dfb42b7f] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with [FIG:c9b7088e9dfa658ba0a8] at the start of each subframe where [FIG:39ae8b250da1e703f8b4] is as described in clause 7.1 3GPP TS 36.213 [4].
+
+For any of the antenna ports [FIG:44ec778146f87cf67184] , the reference-signal sequence [FIG:36fadf9dc00a50d10a3e] is defined by
+
+[FIG:ee088856159e5041aae9] .
+
+The pseudo-random sequence [FIG:308287895c6ae3d4a291] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with
+
+[FIG:26a022cc1d11d7df5e4f]
+
+at the start of each subframe.
+
+For BL/CE UEs, the same scrambling sequence is applied per subframe to the UE-specific reference-signal sequence for a given block of [FIG:7b96275cd5fdd9eb9e96] subframes. For the [FIG:fd1a06688abbbc660119] block of [FIG:c9abeb2bd83616f1221e] subframes, the scrambling sequence generator shall be initialised with
+
+[FIG:b6165ea3b32334fe4768]
+
+where
+
+[FIG:585db8e05f2288dd8a6c]
+
+and [FIG:0befa4f5c8e051f44586] is the absolute subframe number of the first downlink subframe intended for PDSCH. The PDSCH transmissions span [FIG:662d4f72cd41cab2c5f3] consecutive subframes, including non-BL/CE DL subframes where the PDSCH transmission is postponed. For a BL/CE UE configured in CEModeA, [FIG:f25b24b6aeaf3910b03f] . For a BL/CE UE configured with CEModeB, [FIG:e0c65440ef510580ccdb] for frame structure type 1 and [FIG:8b4bbf398d8fad7ab472] for frame structure type 2.
+
+The quantities [FIG:ec520d55ecc616e78374] , [FIG:a5b4aca0519bb636cb5b] , are given by
+
+- [FIG:61d2869ea3b801b071fc] if no value for [FIG:0ddb083ca671504dc828] is provided by higher layers or if DCI format 1A, 2B or 2C is used for the DCI associated with the PDSCH transmission
+
+- [FIG:6a7e0c82d53f4bfbd7c9] otherwise
+
+The value of [FIG:35401bb46f1c413cb666] is zero unless specified otherwise. For a PDSCH transmission on ports 7 or 8, [FIG:24c469fa6d4aded84a4e] is given by the DCI format 2B, 2C, 2D or 6-1A in 3GPP TS 36.212 [3] associated with the PDSCH transmission. 
+In the case of DCI format 2B, [FIG:b35fb7541a71e1a05175] is indicated by the scrambling identity field according to Table 6.10.3.1-1. In the case of DCI format 2C or 2D, [FIG:6b9044a6abac0c71d5ba] is given by Table 5.3.3.1.5C-1 or Table 5.3.3.1.5C-2 in 3GPP TS 36.212 [3]. For a PDSCH transmission on ports 11 or 13, [FIG:870d73a572f6db2fb223] is given by the DCI format 2C or 2D in 3GPP TS 36.212 [3] associated with the PDSCH transmission where [FIG:b22e5533c2b275bf37c9] is given by Table 5.3.3.1.5C-2 in 3GPP TS 36.212 [3].
+
+Table 6.10.3.1-1: Mapping of scrambling identity field in DCI format 2B to [FIG:3a671d5fb5267daeb3b6] values for antenna ports 7 and 8
+
+Scrambling identity field in DCI format 2B (3GPP TS 36.212 [3]) | [FIG:e4ad2621f46e85262ad6]
+0 | 0
+1 | 1
+
+6.10.3.2 Mapping to resource elements
+
+For antenna port 5, in a physical resource block with frequency-domain index [FIG:847823aa3f68800242bd] assigned for the corresponding PDSCH transmission, the reference signal sequence [FIG:440d672a616209fdb50c] shall be mapped to complex-valued modulation symbols [FIG:f9496f819a68ba6687ed] with [FIG:55c3fbae512211ef9f5e] in a subframe according to:
+
+Normal cyclic prefix:
+
+[FIG:84a55e78c4a93789538f]
+
+[FIG:183e7f30b11ee5228c88]
+
+Extended cyclic prefix:
+
+[FIG:8c2956dc5f461108e64a]
+
+[FIG:fd5fcdfdb2747012e963]
+
+where [FIG:7ab9690d47e3c6c83318] is the counter of UE-specific reference signal resource elements within a respective OFDM symbol of the PDSCH transmission.
+
+The cell-specific frequency shift is given by [FIG:62e86e57cd7674b2aac4] .
+
+The mapping shall be in increasing order of the frequency-domain index [FIG:39c7817e7dd44a8d8f48] of the physical resource blocks assigned for the corresponding PDSCH transmission. The quantity [FIG:ad0f5f1a5ae42da8f806] denotes the assigned bandwidth in resource blocks of the corresponding PDSCH transmission.
+
+Figure 6.10.3.2-1 illustrates the resource elements used for UE-specific reference signals for normal cyclic prefix for antenna port 5.
+
+Figure 6.10.3.2-2 illustrates the resource elements used for UE-specific reference signals for extended cyclic prefix for antenna port 5.
+
+The notation [FIG:4763cfe1af05392f6203] is used to denote a resource element used for reference signal transmission on antenna port [FIG:e36f19f23dac8d15d98a] .
+
+[FIG:b58a26ef9455b507ed74]
+
+Figure 6.10.3.2-1: Mapping of UE-specific reference signals, antenna port 5 (normal cyclic prefix)
+
+[FIG:356fd0534b3b9d9f597f]
+
+Figure 6.10.3.2-2: Mapping of UE-specific reference signals, antenna port 5 (extended cyclic prefix)
+
+For antenna ports [FIG:23abe75db44f08c0f95e] , [FIG:4bb9e7ba810a8f3ea081] , [FIG:3de71dcbf411eac27cf7] , [FIG:55daa765c5fad29022f8] , [FIG:6f5b8c01e2c7a073b81e] or [FIG:0b7d84e0db045553b058] , in a physical resource block with frequency-domain index [FIG:dfad89a98ac9ba5847dc] assigned for the corresponding PDSCH transmission, a part of the reference signal sequence [FIG:cfef3aee0962942bdd8a] shall be mapped to complex-valued modulation symbols [FIG:9218b1400a920c9bbe15] in a subframe according to
+
+Normal cyclic prefix:
+
+[FIG:8b33d3f9a8f7fec73084]
+
+where
+
+[FIG:61d893273b35d08ef6f1]
+
+The sequence [FIG:3258f060cc130f06f11f] is given by Table 6.10.3.2-1.
+
+Table 6.10.3.2-1: The sequence [FIG:689877e6dcda0580e2ed] for normal cyclic prefix
+
+Antenna port [FIG:83b19cce7923a38bfc32] | [FIG:6d1c283bb02f3d61efad]
+7 | [FIG:355474d9c3e3543a5756]
+8 | [FIG:507ba3ab0b534a13837c]
+9 | [FIG:3e5eb0573f82b2a0d255]
+10 | [FIG:d81938ccdab8e6ab6e1c]
+11 | [FIG:146e6c97a5af17149c48]
+12 | [FIG:08dc65cf94535ef2b17a]
+13 | [FIG:b9854669bf877d51daef]
+14 | [FIG:6c19e13085331e37bd42]
+
+Extended cyclic prefix:
+
+[FIG:deca178f567c5fe130a2]
+
+where
+
+[FIG:79850023f324c60925da]
+
+The sequence [FIG:32fe5176f0817f29d5e8] is given by Table 6.10.3.2-2.
+
+Table 6.10.3.2-2: The sequence [FIG:9bdf9beb9fcde05794df] for extended cyclic prefix
+
+Antenna port [FIG:49fcfe6e2cfce90e159a] | [FIG:a8b2f67f5f43f6b7c1c0]
+7 | [FIG:afae60c485b9ac969fcb]
+8 | [FIG:bee68c5140e2742468a4]
+
+For extended cyclic prefix, UE-specific reference signals are not supported on antenna ports 9 to 14.
+
+Resource elements [FIG:98ed9792eb30422e3c6c] used for transmission of UE-specific reference signals to one UE on any of the antenna ports in the set [FIG:ebbd582e8d5eafaa966d] , where [FIG:a8ad29a2d00fa86214df] or [FIG:cc9650bd630247499178] shall
+
+- not be used for transmission of PDSCH on any antenna port in the same slot, and
+
+- not be used for UE-specific reference signals to the same UE on any antenna port other than those in [FIG:b3aa0a650f9a136e34ef] in the same slot.
+
+Figure 6.10.3.2-3 illustrates the resource elements used for UE-specific reference signals for normal cyclic prefix for antenna ports 7, 8, 9 and 10. Figure 6.10.3.2-4 illustrates the resource elements used for UE-specific reference signals for extended cyclic prefix for antenna ports 7, 8.
+
+[FIG:fc3c23fa2ffd5adf09e2]
+
+Figure 6.10.3.2-3: Mapping of UE-specific reference signals, antenna ports 7, 8, 9 and 10 (normal cyclic prefix)
+
+[FIG:4088f5d962748fc63076]
+
+Figure 6.10.3.2-4: Mapping of UE-specific reference signals, antenna ports 7 and 8 (extended cyclic prefix)
+
+6.10.3A Demodulation reference signals associated with EPDCCH or MPDCCH
+
+The demodulation reference signal associated with EPDCCH/MPDCCH
+
+- is transmitted on the same antenna port [FIG:6b2a65f7bc9905820ac7] as the associated EPDCCH/MPDCCH physical resource;
+
+- is present and is a valid reference for EPDCCH/MPDCCH demodulation only if the EPDCCH/MPDCCH transmission is associated with the corresponding antenna port;
+
+- is transmitted only on the physical resource blocks upon which the corresponding EPDCCH/MPDCCH is mapped.
+
+A demodulation reference signal associated with EPDCCH/MPDCCH is not transmitted in resource elements [FIG:f97a04573176e0ce9692] in which one of the physical channels or physical signals other than the demodulation reference signals defined in 6.1 are transmitted using resource elements with the same index pair [FIG:1b9279b76d33f66b500f] regardless of their antenna port [FIG:1c1d8258fa0999e82581] .
+
+6.10.3A.1 Sequence generation
+
+For any of the antenna ports [FIG:66ab51b01f944564a628] , the reference-signal sequence [FIG:0a2ce12208f68f94847e] is defined by
+
+[FIG:d15e2dfb763104189800] .
+
+For non-BL/CE UEs, the pseudo-random sequence [FIG:61ef48c0cab8e6409002] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with
+
+[FIG:2183b5d037ef096c636b]
+
+at the start of each subframe where [FIG:c0a3e99fa81229971803] and [FIG:fbf4a99fb02d8fb3967d] is configured by higher layers. The EPDCCH set to which the EPDCCH associated with the demodulation reference signal belong is denoted [FIG:40c97dfa51ff0fa27d36] .
+
+For BL/CE UEs, the same scrambling sequence is applied per subframe to the demodulation reference signal associated with MPDCCH for a given block of [FIG:a4f2cae99fa5725df56c] subframes. For the [FIG:016a852abee00f7e8601] block of [FIG:9071dd3f6da93d87cdc0] subframes, the scrambling sequence generator shall be initialised with
+
+[FIG:805f5788a90e6fb7a861] where
+
+[FIG:eb8a4d9cc6ccd1239c76]
+
+and [FIG:e737fc68a5f59c655afb] is the absolute subframe number of the first downlink subframe intended for MPDCCH. The MPDCCH transmissions span [FIG:3a8bfe822f76cb0ce7c1] consecutive subframes, including non-BL/CE DL subframes where the MPDCCH transmission is postponed.
+
+For BL/CE UEs,
+
+- if the MPDCCH transmission is associated with P-RNTI or SC-RNTI:
+
+- [FIG:e72358b11caa57736de1] for frame structure type 1 and [FIG:2e2a618df83097c6dfcb] for frame structure type 2
+
+- otherwise
+
+- [FIG:ed327727264d8a433137] for UEs assuming CEModeA (according to the definition in Clause 12 of [4]) or configured with CEModeA.
+
+- [FIG:fb5d5e848b2c6691dc2d] for frame structure type 1 and [FIG:df3b58999d1b3037d2f9] for frame structure type 2 for UEs assuming CEModeB (according to the definition in Clause 12 of [4]) or configured with CEModeB.
+
+The quantities [FIG:aa3d673f3c69ef1190ba] and [FIG:4a8f751925c792f59192] are configured by higher layers. The MPDCCH set to which the MPDCCH associated with the demodulation reference signal belong is denoted [FIG:ca52d15d590c0935929a] . For an MPDCCH associated with a 2+4 PRB set as defined in [4], [FIG:af8bcb332735c437fe39] is used to generate the scrambling sequence for the 6 PRBs as well as for the 2 PRBs and 4 PRBs.
+
+6.10.3A.2 Mapping to resource elements
+
+For the antenna port [FIG:478aa6d87a506320f987] in a physical resource block [FIG:77274a04fd0bc1601d4d] assigned for the associated EPDCCH/MPDCCH, a part of the reference signal sequence [FIG:07d29aa217d550339369] shall be mapped to complex-valued modulation symbols [FIG:0fb011cc2d951ab5db99] in a subframe according to
+
+Normal cyclic prefix:
+
+[FIG:0c50825705933610f806]
+
+where
+
+[FIG:8dc45360ab3c10ed14e5]
+
+The sequence [FIG:610ba7cf46439dc9fafb] is given by Table 6.10.3A.2-1.
+
+Table 6.10.3A.2-1: The sequence [FIG:50c3e28ae6abb41f03f6] for normal cyclic prefix
+
+Antenna port [FIG:99b01e406813d5d84d73] | [FIG:913800afe223841b7e03]
+107 | [FIG:9d66588421c2f9b0ab1a]
+108 | [FIG:d08891a8d1a6a20e7a61]
+109 | [FIG:16e240221f124795a169]
+110 | [FIG:900e7def14ecc1220543]
+
+Extended cyclic prefix:
+
+[FIG:25ce390edbe816fcb4e1]
+
+where
+
+[FIG:3f9bc9be47a37e10e006]
+
+The sequence [FIG:d8a19c1581dd8574ba09] is given by Table 6.10.3A.2-2.
+
+Table 6.10.3A.2-2: The sequence [FIG:971014071ae295ca018c] for extended cyclic prefix
+
+Antenna port [FIG:745da5d1046c8a7d2206] | [FIG:4ea24c6a0cd6c097ef06]
+107 | [FIG:f72f83842cc9742bb0a6]
+108 | [FIG:b6c53cb32bd235d52775]
+
+For extended cyclic prefix, demodulation reference signals are not supported on antenna ports 109 to 110.
+
+Resource elements [FIG:59eb7c3902a7066f5b4d] used for transmission of demodulation reference signals to one UE on any of the antenna ports in the set [FIG:fef0b58e759a755d018a] , where [FIG:c4245829bbd7d99df4e2] or [FIG:846f51ed11f63b7e78c3] shall
+
+- not be used for transmission of EPDCCH/MPDCCH on any antenna port in the same slot, and
+
+- not be used for demodulation reference signals to the same UE on any antenna port other than those in [FIG:4826244aa7e08ffb055e] in the same slot.
+
+Replacing antenna port numbers 7 – 10 by 107 – 110 in Figure 6.10.3.2-3 provides an illustration of the resource elements used for demodulation reference signals associated with EPDCCH/MPDCCH for normal cyclic prefix. Replacing antenna port numbers 7 – 8 by 107 – 108 in Figure 6.10.3.2-4 provides an illustration of the resource elements used for demodulation reference signals associated with EPDCCH/MPDCCH for extended cyclic prefix.
+
+For frame structure type 3, for EPDCCH in a subframe with the same duration as the DwPTS duration of a special subframe configuration, the mapping of the demodulation reference signals to the resource elements is the same as that for the corresponding special subframe configuration.
+
+6.10.4 Positioning reference signals
+
+Positioning reference signals shall only be transmitted in resource blocks in downlink subframes configured for positioning reference signal transmission. If both normal and MBSFN subframes are configured as positioning subframes within a cell, the OFDM symbols in a MBSFN subframe configured for positioning reference signal transmission shall use the same cyclic prefix as used for subframe #0. If only MBSFN subframes are configured as positioning subframes within a cell, the OFDM symbols configured for positioning reference signals in the MBSFN region of these subframes shall use extended cyclic prefix length. In a subframe configured for positioning reference signal transmission, the starting positions of the OFDM symbols configured for positioning reference signal transmission shall be identical to those in a subframe in which all OFDM symbols have the same cyclic prefix length as the OFDM symbols configured for positioning reference signal transmission.
+
+Positioning reference signals are transmitted on antenna port 6.
+
+The positioning reference signals shall not be mapped to resource elements [FIG:7bc9dcc2d7291548a25c] allocated to the core part of the PBCH, PSS or SSS regardless of their antenna port [FIG:b70e0350afc6f7e85b9a] .
+
+Positioning reference signals are defined for [FIG:efc62a838d39a4087121] only.
+
+6.10.4.1 Sequence generation
+
+The reference-signal sequence [FIG:3806238a930a510386c0] is defined by
+
+[FIG:0ba28170c761135131fc]
+
+where [FIG:8b7178584f02f1aacdac] is the slot number within a radio frame, [FIG:d05ad0c599ffc28a3e92] is the OFDM symbol number within the slot. The pseudo-random sequence [FIG:8a94cfc4a61691c9472f] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with [FIG:8b16bc9cdee0f36f353d] at the start of each OFDM symbol where [FIG:02caac94e72d06bf0460] equals [FIG:30c073921224f3b5ba37] unless configured by higher layers and where
+
+[FIG:b2151041d6268d092b0b]
+
+6.10.4.2 Mapping to resource elements
+
+If PRS frequency hopping is not configured by higher layers, the reference signal sequence [FIG:94234e31e202be4c248f] shall be mapped to complex-valued modulation symbols [FIG:d18e5c6ec07c7d969537] used as reference signal for antenna port [FIG:e7cf2a5d562ecedc4f4b] in slot [FIG:ba04017b58cfe83aa36b] according to
+
+[FIG:935e32d57e2d35867282]
+
+where
+
+Normal cyclic prefix:
+
+[FIG:45ad3be24c7609a9c331]
+
+Extended cyclic prefix:
+
+[FIG:79f5f6da252dd9870ef7]
+
+The bandwidth for positioning reference signals [FIG:de2e3c0a7d1f767c44d2] is configured by higher layers and the cell-specific frequency shift is given by [FIG:690d3d66217f101d312d] where [FIG:48e797678764cd37a7f3] if no value for [FIG:496a470004e03e0f22d4] is configured by higher layers.
+
+If PRS frequency hopping is configured by higher layers, a PRS frequency hopping configuration provided by higher layers contains the following:
+
+- The length of the PRS occasion group, [FIG:752366063b4b880a6e96]
+
+- Number of PRS frequency hopping bands, [FIG:f6dc701b4ce68820fb36]
+
+- [FIG:f31c373fae30a666bde0] defined as twice the starting PRB index of PRS frequency hopping band [FIG:5adee9561472450a0b1a] where
+
+- [FIG:a522c65e54df37828a70] if [FIG:1eb0a056ffc9e5f4b6c4] ,
+
+- [FIG:3034e5b9f4e08d0ac882] where [FIG:2e8e30690fa4d0f77d2a] is the index of the first PRB in the PRS frequency hopping narrowband configured by higher layers if [FIG:efa2ad9f53d3b101f4c9]
+
+If PRS frequency hopping is configured by higher layers, the reference signal sequence [FIG:fc8d1ed4d11772c15b81] in the PRS occasion [FIG:d302820532042268e114] , [FIG:158e53ccac1aa4ad816f] , in the PRS occasion group shall be mapped to complex-valued modulation symbols [FIG:069744c8f2739193a7c4] used as reference signal for antenna port [FIG:63fdb513f2b547b384bc] in slot [FIG:d7034c50dd19b5304c6c] according to
+
+[FIG:fc965152018c98a756f2]
+
+where
+
+- for normal cyclic prefix
+
+[FIG:b5eef9a0c41639861de4]
+
+- for extended cyclic prefix
+
+[FIG:1a68661ab1fca4cf8826]
+
+[FIG:53572310432708443a45]
+
+Figure 6.10.4.2-1: Mapping of positioning reference signals (normal cyclic prefix)
+
+[FIG:ab494a3d12bac6dcd08e]
+
+Figure 6.10.4.2-2: Mapping of positioning reference signals (extended cyclic prefix)
+
+6.10.4.3 Positioning reference signal subframe configuration
+
+The subframe configuration period [FIG:2de613e261529a1e3c19] and the subframe offset [FIG:3f766a026b7875771674] for the transmission of positioning reference signals are listed in Table 6.10.4.3-1. The PRS configuration index [FIG:14ff0c6482401b27e182] is configured by higher layers. Positioning reference signals are transmitted only in configured DL subframes. Positioning reference signals shall not be transmitted in DwPTS. Positioning reference signals shall be transmitted in [FIG:27d0917afb2faa884c6b] consecutive downlink subframes, where [FIG:26871b0541d6b34fe65e] is configured by higher layers.
+
+The positioning reference signal instances, for the first subframe of the [FIG:a2470253765377d3ec2d] downlink subframes, shall satisfy [FIG:68c7b299da292d12d18e] .
+
+Table 6.10.4.3-1: Positioning reference signal subframe configuration
+
+PRS configuration Index [FIG:a17dcd2b72469d5519f8] | PRS periodicity [FIG:ec75744955a6902d7ac6] (subframes) | PRS subframe offset [FIG:ac963f3c5c81282635dc] (subframes)
+0 – 159 | 160 | [FIG:d72a74144af1d92a291c]
+160 – 479 | 320 | [FIG:e1bdd363fdbd68b66507]
+480 – 1119 | 640 | [FIG:c35d92c3793d4d93a961]
+1120 – 2399 | 1280 | [FIG:dce38b8b6676b1f3c1e3]
+2400 – 2404 | 5 | [FIG:aed529648a52a94a6b92]
+2405 – 2414 | 10 | [FIG:4720f868cc4ddebb13e8]
+2415 – 2434 | 20 | [FIG:6055eb8f481ab1dd136c]
+2435 – 2474 | 40 | [FIG:6f006ebaf7ab6a7bb727]
+2475 – 2554 | 80 | [FIG:41eef37d5aab29c35839]
+2555-4095 | Reserved
+
+6.10.5 CSI reference signals
+
+CSI reference signals are transmitted on 1, 2, 4, 8, 12, 16, 20, 24, 28, or 32 antenna ports using [FIG:801989fc35f696356b68] , [FIG:6819cadafe54687a8fe0] , [FIG:cce3e1a212c0361efebc] , [FIG:46397dcef909c12c3f8d] , [FIG:824089d9f95bceed1cf6] , [FIG:bca934fd03dbdc8ba98a] , [FIG:b6d5c7b8cd2d897cf180] , [FIG:77c4e805a9959228524a] , [FIG:5da30fb9e42d76819900] and [FIG:5217a3dacf4fb5228e97] , respectively.
+
+For CSI reference signals using more than eight antenna ports, [FIG:aa84555d0f2b6ddb7e7c] CSI-RS configurations in the same subframe, numbered from 0 to [FIG:bd7ec90c0e1315735152] , where value 0 corresponds to the configured resourceConfig-r11 or resourceConfig-r10 and value k (k>0) corresponds to the configured k-th entry of nzp-resourceConfigList-r13, are aggregated to obtain [FIG:195b41527a27996ef92e] antenna ports in total. Each CSI-RS configuration in such an aggregation corresponds to [FIG:2f099e207a113b38dc3f] antenna ports and one of the configurations in Table 6.10.5.3-1 or 6.10.5.2-1 for normal cyclic prefix, and one of the configurations in Table 6.10.5.3-1 or 6.10.5.2-2 for extended cyclic prefix. The supported configurations of aggregated CSI-RS configurations are shown in Table 6.10.5-1. If the higher layer parameter NZP-TransmissionComb is not configured, [FIG:3dc0f83bcc337a76bf80] unique CSI-RS configurations from Table 6.10.5.2-1 for normal cyclic prefix and from Table 6.10.5.2-2 for extended cyclic prefix are aggregated to form 12, 16, 20, 24, 28, or 32 antenna ports.
+
+For CSI reference signals using more than sixteen antenna ports, when higher layer parameter NZP-TransmissionComb is configured, the number of unique CSI-RS configurations from Table 6.10.5.2-1 for normal cyclic prefix and from Table 6.10.5.2-2 for extended cyclic prefix that are aggregated to form 20, 24, 28, or 32 antenna ports can be less than or equal to [FIG:d0bf95eda902cf785ccd] . The number of antenna ports within each such unique CSI-RS resource configuration is an integer multiple of [FIG:41d2b93209703e93cd1f] .
+
+CSI reference signals are defined for [FIG:38310ef550953d7aafe6] only.
+
+Table 6.10.5-1: Aggregation of CSI-RS configurations.
+
+Total number of 
+antenna ports
+ [FIG:71084d0845d55fc6941b] | Number of antenna ports per CSI-RS configuration
+ [FIG:4d1915846606a17fd66a] | Number of CSI-RS configurations
+ [FIG:933b265d29a4e88585a2]
+12 | 4 | 3
+16 | 8 | 2
+20 | 4 | 5
+24 | 8 | 3
+28 | 4 | 7
+32 | 8 | 4
+
+6.10.5.1 Sequence generation
+
+The reference-signal sequence [FIG:9b2d79a34bb643b43551] is defined by
+
+[FIG:9750769b0fc294a57f53]
+
+where [FIG:2ea0e9613d4b7322032d] is the slot number within a radio frame and [FIG:ff61cf8ccfaee251b4c1] is the OFDM symbol number within the slot. The pseudo-random sequence [FIG:33749de65dc67528fa9f] is defined in clause 7.2. The pseudo-random sequence generator shall be initialised with [FIG:e00f4df7552927cd9e3b] at the start of each OFDM symbol where
+
+[FIG:04ff38ad22cc0f6dbd6e]
+
+The quantity [FIG:9043b0130cbe761a5d17] equals [FIG:55c0451a087cb5e236da] unless configured by higher layers.
+
+6.10.5.2 Mapping to resource elements
+
+In subframes configured for CSI reference signal transmission, the reference signal sequence [FIG:faa0a8e7ea4901dd2d05] shall be mapped to complex-valued modulation symbols [FIG:d4759993c78bd3b3b6b1] used as reference symbols on antenna port [FIG:b7180927567e39252f99] . The mapping depends on the higher-layer parameter CDMType.
+
+For the case of CDMType is not configured or is configured to CDM2:
+
+[FIG:a6730c6368b8ddcc3766]
+
+where
+
+[FIG:0be9fe2850ece267fcfb]
+
+For the case of CDMType equal to CDM4:
+
+[FIG:9c78e1218cbeed0d4210]
+
+where
+
+[FIG:d9c3c912f842e5fbf0b5]
+
+and where [FIG:93ac4b1b988fe722b7b4] is given by Table 6.10.5.2-0.
+
+Table 6.10.5.2-0: The sequence [FIG:7c65cc623b1b240801fc] for CDM4.
+
+[FIG:4fc682fc96951540b73e] | [FIG:243cf952159c0b1268b8]
+[FIG:7aa7f8743e36d7287b0f] | [FIG:fefb17b42c38744e90a4] | 
+15 | 15,17 | [FIG:0f15944a7fec5ac6f7c4]
+16 | 16,18 | [FIG:a13e9a5f54abdb900a1a]
+17 | 19,21 | [FIG:f99108d331ceb53c5b4c]
+18 | 20,22 | [FIG:d27d9e4bca7639589e45]
+
+If neither of the higher-layer parameters NZP-FrequencyDensity and NZP-TransmissionComb are configured, [FIG:aa6f0200d8fdd5c94411] .
+
+If the UE is configured with one or more of the parameters NZP-FrequencyDensity and NZP-TransmissionComb,
+
+- if either NZP-FrequencyDensity equals 1, [FIG:feb7121f71605c8a1f44]
+
+- if NZP-FrequencyDensity equals 1/2 and NZP-TransmissionComb equals 0, [FIG:efc1b824c83e252f4a3b]
+
+- if NZP-FrequencyDensity equals 1/2 and NZP-TransmissionComb equals 1, [FIG:b4fd1eacc3f1ca0c0f0a]
+
+- if NZP-FrequencyDensity equals 1/3 and NZP-TransmissionComb equals 0, [FIG:e7d822514f287c4bef8d]
+
+- if NZP-FrequencyDensity equals 1/3 and NZP-TransmissionComb equals 1, [FIG:6689adfbe916a4517d08]
+
+- if NZP-FrequencyDensity equals 1/3 and NZP-TransmissionComb equals 2, [FIG:f873a6e45b7379b92f36]
+
+The quantity [FIG:580619e4ad5a1260814e] and the necessary conditions on [FIG:d4f4ae2806a5f4a74e1a] are given by Tables 6.10.5.2-1 and 6.10.5.2-2 for normal and extended cyclic prefix, respectively.
+
+The relation between the antenna port number [FIG:690b965becfdd8174068] and the quantity [FIG:b7ec22954e8f3c176056] depends on the number of CSI-RS antenna ports:
+
+- for CSI reference signals using up to eight antenna ports, [FIG:b29569e428be67fec43a]
+
+- for CSI reference signals using more than eight antenna ports when the higher-layer parameter CDMType equals CDM2
+
+[FIG:3a839e569aa2459222b1]
+
+where [FIG:35ed54dac0cdab75cbb4] is the CSI-RS resource number.
+
+- for CSI reference signals using more than eight antenna ports when the higher-layer parameter CDMType equals CDM4, antenna port number [FIG:c284e6cae062eba7db75] where [FIG:406b8b9f7e1f3042ef9e] for CSI-RS resource number [FIG:745f4b44bf96a31ba229] .
+
+For the case of CDMType equal to CDM8 and the number of CSI-RS antenna ports equal to 32:
+
+[FIG:8692714a1576d51ca4d0]
+
+where
+
+[FIG:ed3d4d9d85838fc9db66]
+
+The resource elements for the [FIG:32d58ec883651041bdac] CDM8 pattern, where [FIG:e0565313162b62cb2cf4] , are determined by aggregating pairs of resource elements [FIG:298e1ee931869856e325] satisfying [FIG:cbf4e68573d195be1157] from the [FIG:1bc0443decb5058e61ee] aggregated CSI-RS configurations, where at most one pair of resource elements is drawn from each of the [FIG:fc96c7ca089a0fc2791a] aggregated CSI-RS configurations. For the case of CDMType equal to CDM8 and the number of CSI-RS antenna ports equal to 32, the aggregated CSI-RS configurations from Table 6.10.5.2-1 for normal cyclic prefix and from Table 6.10.5.2-2 for extended cyclic prefix are restricted to one of [FIG:5f3675a4927691487fef] , [FIG:1e952b78b239db4f3fb9] , or [FIG:0188f7f26d353cf98a99] . Antenna port number [FIG:20e291da00aba35f1992] where [FIG:5813d7255e3a3f8d1dea] for CSI-RS resource number [FIG:81f95d612ab450bb7709] . The sequence [FIG:f4c5e4bf3febe9830f76] is given by Table 6.10.5.2-0A.
+
+Table 6.10.5.2-0A: The sequence [FIG:3f4544698f9d3393b276] for CDM8 with 32 CSI-RS antenna ports.
+
+[FIG:5570a95dbf87a362342a] | [FIG:189918897a34bb5172a2]
+15, 17, 19, 21 | [FIG:5e54c283818ffe2deda6]
+16, 18, 20, 22 | [FIG:ae65152c4a8dc4548124]
+23, 25, 27, 29 | [FIG:7360e77e9fc87318cd1c]
+24, 26, 28, 30 | [FIG:4ad250b62dcc3c892e80]
+31, 33, 35, 37 | [FIG:bd7a6549adfc6e0af61d]
+32, 34, 36, 38 | [FIG:44cca41a1fcb8295288f]
+39, 41, 43, 45 | [FIG:9d6453c648a2b1e7128e]
+40, 42, 44, 46 | [FIG:46a34f7526b682c89401]
+
+For the case of CDMType equal to CDM8 and the number of CSI-RS antenna ports equal to 24:
+
+[FIG:e20c5f4ebe4d27b69a92]
+
+where
+
+[FIG:b66c34d036a7d5b12723]
+
+For the case of CDMType equal to CDM8 and the number of CSI-RS antenna ports equal to 24, the aggregated CSI-RS configurations from Table 6.10.5.2-1 for normal cyclic prefix are restricted to [FIG:d8513c0369169fc575e3] in that order. Resource elements for CDM8 patterns are determined as follows:
+
+- Aggregating resource element quadruplet [FIG:bc74748985f98757e0c6] satisfying [FIG:126212132b3049b394d0] from CSI-RS configuration 1 with resource element quadruplet [FIG:20b2a27ee7e9572c8bcc] satisfying [FIG:690d377cfa62c0b1cf38] from CSI-RS configuration 2
+
+- Aggregating resource element quadruplet [FIG:f6fd5bc2e274e5b0c94f] satisfying [FIG:d26929d2e86376e0d164] from CSI-RS configuration 3 with resource element quadruplet [FIG:4f0d3db5895e24c81f72] satisfying [FIG:43665417392eac4d0546] from CSI-RS configuration 1
+
+- Aggregating resource element quadruplet [FIG:82d967c601980f84a86d] satisfying [FIG:81bde648f730ddeb44d0] from CSI-RS configuration 2 with resource element quadruplet [FIG:cc782a4eca435634c893] satisfying [FIG:709cffd45f69f1b8b6d2] from CSI-RS configuration 3
+
+Antenna port number [FIG:227e9cbbabcb01eecced] where [FIG:7bb9e276ac231d56eea1] for CSI-RS resource number [FIG:90745c337e797cfdbff6] . The sequence [FIG:acb669ffa50033edc868] is given by Table 6.10.5.2-0B.
+
+Table 6.10.5.2-0B: The sequence [FIG:98efb482a73bb0d8bea7] for CDM8 with 24 CSI-RS antenna ports.
+
+[FIG:a3a0f723f8ea44154794] | [FIG:fa4f4c13e2e29cd8a5f4]
+15, 25, 31 | [FIG:7d99c633f0099ac70b03]
+16, 26, 32 | [FIG:6cf26417c67758c3a3ee]
+19, 29, 35 | [FIG:d3d63dd03b0b04baa965]
+20, 30, 36 | [FIG:7a571e8e54bb7b5ce5ed]
+17, 23, 33 | [FIG:16b4367823ff288632d5]
+18, 24, 34 | [FIG:1da2f09d674e7d903e18]
+21, 27, 37 | [FIG:5b95be5026138624c86b]
+22, 28, 38 | [FIG:f5d225ba6d8ad0343214]
+
+Multiple CSI reference signal configurations can be used in a given cell. A UE can be configured with multiple sets of CSI reference signals,
+
+- one or more configurations for CSI reporting for which the UE shall assume non-zero transmission power for the CSI-RS, and
+
+- zero or more configurations for which the UE shall assume zero transmission power, and
+
+- zero or more configurations valid across the system downlink bandwidth as part of the discovery signals for which the UE shall assume non-zero transmission power for the CSI-RS.
+
+The CSI-RS configurations for which the UE shall assume non-zero transmission power are provided by higher layers.
+
+The CSI-RS configurations for which the UE shall assume zero transmission power in a subframe are given by a bitmap derived according to clause 7.2.7 in 3GPP TS 36.213 [4]. For each bit set to one in the 16-bit bitmap, the UE shall assume zero transmission power for the resource elements corresponding to the four CSI reference signal column in Tables 6.10.5.2-1 and 6.10.5.2-2 for normal and extended cyclic prefix, respectively, except for resource elements that overlap with those for which the UE shall assume non-zero transmission power CSI-RS as configured by higher layers. The most significant bit corresponds to the lowest CSI reference signal configuration index and subsequent bits in the bitmap correspond to configurations with indices in increasing order.
+
+CSI reference signals not corresponding to higher layer configured parameters csi-RS-ConfigNZP-ApList or csi-RS-ConfigZP-Ap can only occur in
+
+- downlink slots where [FIG:b31478b1cb754194ce5e] fulfils the condition in Tables 6.10.5.2-1 and 6.10.5.2-2 for normal and extended cyclic prefix, respectively, and
+
+- where the subframe number fulfils the conditions in clause 6.10.5.3.
+
+CSI reference signals corresponding to either higher layer configured parameter csi-RS-ConfigNZP-ApList or csi-RS-ConfigZP-Ap can only occur in
+
+- downlink slots where [FIG:82710e62d6e59f2b4437] fulfils the condition in Tables 6.10.5.2-1 and 6.10.5.2-2 for normal and extended cyclic prefix, respectively.
+
+The UE shall assume that CSI reference signals are not transmitted
+
+- in the DwPTS for special subframe configuration 0, 5, 9 and 10 for normal cyclic prefix and special subframe configuration 0, 4 and 7 for extended cyclic prefix, in case of frame structure type 2,
+
+- in the DwPTS for normal CP for the case of CDMType equal to CDM8 and the number of CSI-RS antenna ports equal to 24,
+
+- in subframes where PDSCH/EPDCCH transmission starts in the second slot of a subframe for frame structure type 3,
+
+- in subframes where PDSCH/EPDCCH transmission ends prior to the end of a subframe for frame structure type 3,
+
+- in an empty subframe where there is no PDSCH or discovery signal transmission for frame structure type 3,
+
+- in subframes where transmission of a CSI-RS would collide with SystemInformationBlockType1 messages,
+
+- in the primary cell in subframes configured for transmission of paging messages in the primary cell for any UE with the cell-specific paging configuration.
+
+For special subframe configuration {1, 2, 6, or 7}, a UE does not expect to be configured with one of CSI-RS configurations {1, 2, 3, 4, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17} in DwPTS for normal CP.
+
+The UE shall assume that none of the CSI reference signals corresponding to a CSI reference signal configuration are transmitted in subframes where transmission of any of those CSI reference signals would collide with transmission of synchronization signals or the core part of PBCH.
+
+Resource elements [FIG:3475dbe52aaf6afe6e3b] used for transmission of CSI reference signals on any of the antenna ports in the set [FIG:895c0f3eeb0dbe26fcaa] , where [FIG:bea318901e2dc3f04391] , [FIG:2e6ede163a69178c3265] , [FIG:5e7d7efd17dd0dfd37d3] , [FIG:b2adec27429c83446395] , [FIG:0c2abd4f0e3298f03727] , [FIG:8d0fdd36aff686238638] , [FIG:e2c70030b321346a1c7b] , [FIG:3f944c08edbf322f1b4f] , [FIG:dc26dbe1f270992f7ee0] , [FIG:02582372cc4e49921b31] , [FIG:8f130adb40926caf31f3] , [FIG:7c20c05a0bd9733a46f9] , [FIG:987cc1df4ac338f92a4b] , [FIG:5aa5c8f5a68067826d15] , [FIG:185f120b5f0375eeeb34] , [FIG:80ae684d1b672b39bac6] or [FIG:ccff6b331bd8a40e708b] shall not be used for transmission of PDSCH on any antenna port in the same slot if higher layer parameter CDMType is not configured, or is configured to CDM2.
+
+Resource elements [FIG:2ef41778a14a039baf89] used for transmission of CSI reference signals on any of the antenna ports in the set [FIG:94291e73bd0056a69475] , where
+
+- [FIG:75bd3c44ae02180c70ef] , [FIG:a602e7abc1cd4377babf] or [FIG:2c32c4986e5d8012d180] for CSI reference signals on 12 ports, or
+
+- [FIG:649cdf7768eed2610b03] , [FIG:eb8eef15339a0c1978c1] , [FIG:374c19993dfbcf4b2d41] or [FIG:f057ff6de75facb2a905] for CSI reference signals on 16 ports, or
+
+- [FIG:3dfdddf4103c0247013a] , [FIG:3e9f49e2e6345bcd5910] , [FIG:c3367c07740c28f1cc79] , [FIG:81ef209985976c2c774a] or [FIG:069fe8027e2cd4fb1783] for CSI reference signals on 20 ports, or
+
+- [FIG:81751418d3a55b60ab9d] , [FIG:c68ef066bdfa6cbead8d] , [FIG:b491fb89c6fed505330b] , [FIG:92f06f24ff449d009979] , [FIG:268538a8edc83e7af7ed] or [FIG:051066584a50ecf869c0] for CSI reference signals on 24 ports, or
+
+- [FIG:2948a36dc18d45e00170] , [FIG:955096ceff7d5f329270] , [FIG:5191cffd1fb2fcb2e2bf] , [FIG:382b456f2df9921b208b] , [FIG:b3e7454ff7a28047eff4] , [FIG:b2c184a07992d130ed4d] or [FIG:4147824c0c4294939357] for CSI reference signals on 28 ports, or
+
+- [FIG:7eb7b7a23e8e52feb82e] , [FIG:6316947d9348ddcfcb01] , [FIG:e54c77db20be86216f51] , [FIG:9a3f116fb5e83a47900b] , [FIG:fa6728eb54b97c5d5ea3] , [FIG:c314982f22da97b76f44] , [FIG:12e50386c03b7e3d85b2] or [FIG:5eee64089f4d69e392c6] for CSI reference signals on 32 ports
+
+shall not be used for transmission of PDSCH on any antenna port in the same slot if higher layer parameter CDMType is configured to CDM4.
+
+Resource elements [FIG:63b657fc2fd66f30d093] used for transmission of CSI reference signals on any of the antenna ports in the set [FIG:a237b732287ebd4bd003] , where
+
+- [FIG:c1104f8ac2f2a5fb88f4] , [FIG:d4808b536b9bdc7132a9] or [FIG:81e7b31a48f33a086f56] for CSI reference signals on 24 ports, or
+
+- [FIG:8e996bf1483e26179251] , [FIG:6306afdc70fa5f6f524d] , [FIG:c889e1582da4aa3c40eb] or [FIG:f5604f20bc97ea6bf8aa] for CSI reference signals on 32 ports
+
+shall not be used for transmission of PDSCH on any antenna port in the same slot if higher layer parameter CDMType is configured to CDM8.
+
+The mapping for CSI reference signal configuration 0 is illustrated in Figures 6.10.5.2-1 and 6.10.5.2-2.
+
+Table 6.10.5.2-1: Mapping from CSI reference signal configuration to [FIG:70df7b2386e4843520e7] for normal cyclic prefix
+
+CSI-RS
+config. | Number of CSI reference signals configured
+ | 1 or 2 | 4 | 8
+ | Normal subframe | Special subframe | Normal subframe | Special subframe | Normal subframe | Special subframe
+ | [FIG:3a46980199860a6eb4e4] | [FIG:052b5c3af33f8c2250ea] | [FIG:50f7416197f9347d7260] | [FIG:73710c121a1dfcedb6a9] | [FIG:bead76acb3b3fe8efecf] | [FIG:48b6f40a43a48d074706] | [FIG:146b15c7f86f87bfd9b5] | [FIG:d87217796b60f4c9a617] | [FIG:f8752f65d561d101ef62] | [FIG:5969fb82e187cbf7485d] | [FIG:55b044da9ca4ddbf4423] | [FIG:d945b5f26175cdeed751]
+0 | (9,5) | 0 | (9,5) | 0 | (9,5) | 0 | (9,5) | 0 | (9,5) | 0 | (9,5) | 0
+1 | (11,2) | 1 | (11,5) | 0 | (11,2) | 1 | (11,5) | 0 | (11,2) | 1 | (11,5) | 0
+2 | (9,2) | 1 | (9,2) | 1 | (9,2) | 1 | (9,2) | 1 | (9,2) | 1 | (9,2) | 1
+3 | (7,2) | 1 | (7,5) | 0 | (7,2) | 1 | (7,5) | 0 | (7,2) | 1 | (7,5) | 0
+4 | (9,5) | 1 |  |  | (9,5) | 1 |  |  | (9,5) | 1 |  | 
+5 | (8,5) | 0 | (8,5) | 0 | (8,5) | 0 | (8,5) | 0 |  |  |  | 
+6 | (10,2) | 1 | (10,5) | 0 | (10,2) | 1 | (10,5) | 0 |  |  |  | 
+7 | (8,2) | 1 | (8,2) | 1 | (8,2) | 1 | (8,2) | 1 |  |  |  | 
+8 | (6,2) | 1 | (6,5) | 0 | (6,2) | 1 | (6,5) | 0 |  |  |  | 
+9 | (8,5) | 1 |  |  | (8,5) | 1 |  |  |  |  |  | 
+10 | (3,5) | 0 | (3,5) | 0 |  |  |  |  |  |  |  | 
+11 | (2,5) | 0 | (2,5) | 0 |  |  |  |  |  |  |  | 
+12 | (5,2) | 1 | (5,5) | 0 |  |  |  |  |  |  |  | 
+13 | (4,2) | 1 | (4,5) | 0 |  |  |  |  |  |  |  | 
+14 | (3,2) | 1 | (3,2) | 1 |  |  |  |  |  |  |  | 
+15 | (2,2) | 1 | (2,2) | 1 |  |  |  |  |  |  |  | 
+16 | (1,2) | 1 | (1,5) | 0 |  |  |  |  |  |  |  | 
+17 | (0,2) | 1 | (0,5) | 0 |  |  |  |  |  |  |  | 
+18 | (3,5) | 1 |  |  |  |  |  |  |  |  |  | 
+19 | (2,5) | 1 |  |  |  |  |  |  |  |  |  | 
+20 | (11,1) | 1 |  |  | (11,1) | 1 |  |  | (11,1) | 1 |  | 
+21 | (9,1) | 1 |  |  | (9,1) | 1 |  |  | (9,1) | 1 |  | 
+22 | (7,1) | 1 |  |  | (7,1) | 1 |  |  | (7,1) | 1 |  | 
+23 | (10,1) | 1 |  |  | (10,1) | 1 |  |  |  |  |  | 
+24 | (8,1) | 1 |  |  | (8,1) | 1 |  |  |  |  |  | 
+25 | (6,1) | 1 |  |  | (6,1) | 1 |  |  |  |  |  | 
+26 | (5,1) | 1 |  |  |  |  |  |  |  |  |  | 
+27 | (4,1) | 1 |  |  |  |  |  |  |  |  |  | 
+28 | (3,1) | 1 |  |  |  |  |  |  |  |  |  | 
+29 | (2,1) | 1 |  |  |  |  |  |  |  |  |  | 
+30 | (1,1) | 1 |  |  |  |  |  |  |  |  |  | 
+31 | (0,1) | 1 |  |  |  |  |  |  |  |  |  |
+
+Note: [FIG:bfa049a607bd762eac81] . Configurations 0 – 19 for normal subframes are available for frame structure types 1, 2 and 3. Configurations 20 – 31 and configurations for special subframes are available for frame structure type 2 only.
+
+Table 6.10.5.2-2: Mapping from CSI reference signal configuration to [FIG:6c4e7fa25ac7488e750c] for extended cyclic prefix.
+
+CSI-RS
+config. | Number of CSI reference signals configured
+ | 1 or 2 | 4 | 8
+ | Normal subframe | Special subframe | Normal subframe | Special subframe | Normal Subframe | Special subframe
+ | [FIG:ba469ed11002f25c9245] | [FIG:27e985722de233af62c4] | [FIG:afbc4624cff6ce7376d2] | [FIG:9e192e911afe89d68c25] | [FIG:b1548a99d722e24f2733] | [FIG:76612502d1c6a99fb0a0] | [FIG:e0db8dc7aca73916ada4] | [FIG:e6576fb3f438e7500da4] | [FIG:3160bcf01550143654ac] | [FIG:65d3ae924ed14baacc7d] | [FIG:a8cc395ac3595122d739] | [FIG:fe58884d6b178ab88b2a]
+0 | (11,4) | 0 | (11,4) | 0 | (11,4) | 0 | (11,4) | 0 | (11,4) | 0 | (11,4) | 0
+1 | (9,4) | 0 | (9,4) | 0 | (9,4) | 0 | (9,4) | 0 | (9,4) | 0 | (9,4) | 0
+2 | (10,4) | 1 |  |  | (10,4) | 1 |  |  | (10,4) | 1 |  | 
+3 | (9,4) | 1 |  |  | (9,4) | 1 |  |  | (9,4) | 1 |  | 
+4 | (5,4) | 0 | (5,4) | 0 | (5,4) | 0 | (5,4) | 0 |  |  |  | 
+5 | (3,4) | 0 | (3,4) | 0 | (3,4) | 0 | (3,4) | 0 |  |  |  | 
+6 | (4,4) | 1 |  |  | (4,4) | 1 |  |  |  |  |  | 
+7 | (3,4) | 1 |  |  | (3,4) | 1 |  |  |  |  |  | 
+8 | (8,4) | 0 | (8,4) | 0 |  |  |  |  |  |  |  | 
+9 | (6,4) | 0 | (6,4) | 0 |  |  |  |  |  |  |  | 
+10 | (2,4) | 0 | (2,4) | 0 |  |  |  |  |  |  |  | 
+11 | (0,4) | 0 | (0,4) | 0 |  |  |  |  |  |  |  | 
+12 | (7,4) | 1 |  |  |  |  |  |  |  |  |  | 
+13 | (6,4) | 1 |  |  |  |  |  |  |  |  |  | 
+14 | (1,4) | 1 |  |  |  |  |  |  |  |  |  | 
+15 | (0,4) | 1 |  |  |  |  |  |  |  |  |  | 
+16 | (11,1) | 1 | (11,1) | 1 | (11,1) | 1 | (11,1) | 1 | (11,1) | 1 | (11,1) | 1
+17 | (10,1) | 1 | (10,1) | 1 | (10,1) | 1 | (10,1) | 1 | (10,1) | 1 | (10,1) | 1
+18 | (9,1) | 1 | (9,1) | 1 | (9,1) | 1 | (9,1) | 1 | (9,1) | 1 | (9,1) | 1
+19 | (5,1) | 1 | (5,1) | 1 | (5,1) | 1 | (5,1) | 1 |  |  |  | 
+20 | (4,1) | 1 | (4,1) | 1 | (4,1) | 1 | (4,1) | 1 |  |  |  | 
+21 | (3,1) | 1 | (3,1) | 1 | (3,1) | 1 | (3,1) | 1 |  |  |  | 
+22 | (8,1) | 1 | (8,1) | 1 |  |  |  |  |  |  |  | 
+23 | (7,1) | 1 | (7,1) | 1 |  |  |  |  |  |  |  | 
+24 | (6,1) | 1 | (6,1) | 1 |  |  |  |  |  |  |  | 
+25 | (2,1) | 1 | (2,1) | 1 |  |  |  |  |  |  |  | 
+26 | (1,1) | 1 | (1,1) | 1 |  |  |  |  |  |  |  | 
+27 | (0,1) | 1 | (0,1) | 1 |  |  |  |  |  |  |  |
+
+Note: [FIG:f67e03feccd8f8b0e6b1] . Configurations 0 – 15 for normal subframes are available for both frame structure type 1 and type 2. Configurations 16 – 27 and configurations for special subframes are available for frame structure type 2 only.
+
+[FIG:4ce92fd26520868f0c90]
+
+Figure 6.10.5.2-1: Mapping of CSI reference signals (CSI configuration 0, normal cyclic prefix)
+
+[FIG:029d7b19dbed6eb23927]
+
+Figure 6.10.5.2-2: Mapping of CSI reference signals (CSI configuration 0, extended cyclic prefix)
+
+6.10.5.3 CSI reference signal subframe configuration
+
+The subframe configuration period [FIG:c77a9d64b1d39b233f96] and the subframe offset [FIG:027d7fbdfd0223175dee] for the occurence of CSI reference signals are listed in Table 6.10.5.3-1. The parameter [FIG:0e8a7e7798f089778747] can be configured separately for CSI reference signals for which the UE shall assume non-zero and zero transmission power. Subframes containing CSI reference signals that do not correspond to either higher layer configured parameter csi-RS-ConfigNZP-ApList or csi-RS-ConfigZP-Ap shall satisfy [FIG:7bb146281971d1c0d035] .
+
+Table 6.10.5.3-1: CSI reference signal subframe configuration
+
+CSI-RS-SubframeConfig [FIG:fcab30aede77ce804dad] | CSI-RS periodicity [FIG:9fa4d5399ac79fca62a4] (subframes) | CSI-RS subframe offset [FIG:48ea1bf2b65a27541d22] (subframes)
+0 – 4 | 5 | [FIG:0dd6ac7dd810878ca962]
+5 – 14 | 10 | [FIG:f850ead183d056ef0e5e]
+15 – 34 | 20 | [FIG:87f21113fe871072724f]
+35 – 74 | 40 | [FIG:6ab8cb65f0b562e994f0]
+75 – 154 | 80 | [FIG:380916ea06a24cda327c]
+
+6.11 Synchronization signals
+
+There are 504 unique physical-layer cell identities. The physical-layer cell identities are grouped into 168 unique physical-layer cell-identity groups, each group containing three unique identities. The grouping is such that each physical-layer cell identity is part of one and only one physical-layer cell-identity group. A physical-layer cell identity [FIG:26515b8266c45e6276d5] is thus uniquely defined by a number [FIG:17db58d6f8cc907f31d1] in the range of 0 to 167, representing the physical-layer cell-identity group, and a number [FIG:74a0767773a39fc9d16c] in the range of 0 to 2, representing the physical-layer identity within the physical-layer cell-identity group.
+
+6.11.1 Primary synchronization signal (PSS)
+
+6.11.1.1 Sequence generation
+
+The sequence [FIG:254f59ab1c375f0186db] used for the primary synchronization signal is generated from a frequency-domain Zadoff-Chu sequence according to
+
+[FIG:d32b42f7bfa79a291b9c]
+
+where the Zadoff-Chu root sequence index [FIG:61ef6d56b38c077a1e24] is given by Table 6.11.1.1-1.
+
+Table 6.11.1.1-1: Root indices for the primary synchronization signal
+
+[FIG:a1bcf6dd7a4875ef53f4] | Root index [FIG:3ecadd6005037dc062a2]
+0 | 25
+1 | 29
+2 | 34
+
+6.11.1.2 Mapping to resource elements
+
+The mapping of the sequence to resource elements depends on the frame structure. The UE shall not assume that the primary synchronization signal is transmitted on the same antenna port as any of the downlink reference signals. The UE shall not assume that any transmission instance of the primary synchronization signal is transmitted on the same antenna port, or ports, used for any other transmission instance of the primary synchronization signal.
+
+The sequence [FIG:e24c47c1757ec7d364ca] shall be mapped to the resource elements according to
+
+[FIG:9130b9daaacdd5db0f88]
+
+For frame structure type 1, the primary synchronization signal shall be mapped to the last OFDM symbol in slots 0 and 10.
+
+For frame structure type 2, the primary synchronization signal shall be mapped to the third OFDM symbol in subframes 1 and 6. Resource elements [FIG:b09e258451b04d6c1377] in the OFDM symbols used for transmission of the primary synchronization signal where
+
+[FIG:581f5e8c7b3177dd66a8]
+
+are reserved and not used for transmission of the primary synchronization signal.
+
+For frame structure type 3, the primary synchronization signal shall be mapped according to frame structure type 1 with the following exceptions:
+
+- the primary synchronization signal shall be transmitted only if the corresponding subframe is non-empty and at least 12 OFDM symbols are transmitted,
+
+- a primary synchronization signal being part of a discovery signal shall be transmitted in the last OFDM symbol of the first slot of a discovery signal occasion.
+
+For an MBMS-dedicated cell, the primary synchronization signal shall be mapped according to frame structure type 1 with following exception:
+
+- the primary synchronization signal shall be transmitted in slot 0 in subframes fulfilling [FIG:b8f9edb34e4bad056c9c] only,
+
+6.11.2 Secondary synchronization signal (SSS)
+
+6.11.2.1 Sequence generation
+
+The sequence [FIG:01bf20f09cf789c4a360] used for the second synchronization signal is an interleaved concatenation of two length-31 binary sequences. The concatenated sequence is scrambled with a scrambling sequence given by the primary synchronization signal.
+
+The combination of two length-31 sequences defining the secondary synchronization signal differs between subframes according to
+
+[FIG:45bb2a54bab2d557c230]
+
+where [FIG:485ca65b1d188fb3924c] . The indices [FIG:892e1db895c05f4c85e2] and [FIG:434bc09e83c366b716f0] are derived from the physical-layer cell-identity group [FIG:64db2288af4c6724967d] according to
+
+[FIG:46cc140a3432ccb2bbd7]
+
+where the output of the above expression is listed in Table 6.11.2.1-1.
+
+The two sequences [FIG:2db29bb1ab045af552ee] and [FIG:36c1a6ed43434fc5e4d0] are defined as two different cyclic shifts of the m-sequence [FIG:d22310faa6d76e28a45b] according to
+
+[FIG:d86dfee4b05342c13a52]
+
+where [FIG:44f87decb3907b8fc51a] , [FIG:da822af218da0695d8a2] , is defined by
+
+[FIG:d2970164efd979bfbf42]
+
+with initial conditions [FIG:362cf461c0d0353f4baa] .
+
+The two scrambling sequences [FIG:16d0500dabe5f0874bfc] and [FIG:4ceb5af2e19bc749f312] depend on the primary synchronization signal and are defined by two different cyclic shifts of the m-sequence [FIG:069242db5aed541cd9c6] according to
+
+[FIG:cdd14c00b2285258bdf0]
+
+where [FIG:feb80b130c098d5a3718] is the physical-layer identity within the physical-layer cell identity group [FIG:031644645101084ef82c] and [FIG:686f7903aa1b2f827fcc] , [FIG:dbd9792b081196f114eb] , is defined by
+
+[FIG:c8cdd2d2512d5fc6a744]
+
+with initial conditions [FIG:61368261473e02949aaa] .
+
+The scrambling sequences [FIG:bd1fa63d4bf78e3b20c6] and [FIG:0097ef2fcd0ea92e5300] are defined by a cyclic shift of the m-sequence [FIG:60b50d4197ad38691daa] according to
+
+[FIG:d10767f8dd2ee83f6146]
+
+[FIG:7a5368502c55e94a0580]
+
+where [FIG:75842d85416833558f3b] and [FIG:74855b049dd26d71270a] are obtained from Table 6.11.2.1-1 and [FIG:f44b9dc7a3bd2b525edf] , [FIG:f9bc792d04aab390c8ec] , is defined by
+
+[FIG:d73b3bdbc916bafefdc6]
+
+with initial conditions [FIG:9f9ab2e6b2ecf03f8139] .
+
+Table 6.11.2.1-1: Mapping between physical-layer cell-identity group [FIG:c805c3081c55feb10258] and the indices [FIG:1dee92352e561df51b08] and [FIG:6accabe8f07a943825bd]
+
+[FIG:65d9d4c2742b15f34c20] | [FIG:ecb9a91036be8b7a9c6b] | [FIG:309d21ae3a1a5271d0ad] | [FIG:f54368a640a6dceed453] | [FIG:e6cd0fe1dbcd71e169aa] | [FIG:2d7a9923892b68199562] | [FIG:b3a31467ef1699780f2d] | [FIG:0dc9a7d1af8f4bd0bb7a] | [FIG:fae10aa3809009373613] | [FIG:3cfc5549f487fc1de361] | [FIG:28df7c4b986aa89006b8] | [FIG:f152a09ff5537a91285f] | [FIG:d7eaa11fbe7639f26832] | [FIG:badc1a32fcd70dbaeaf3] | [FIG:65743b0162aa13ccfff5]
+0 | 0 | 1 | 34 | 4 | 6 | 68 | 9 | 12 | 102 | 15 | 19 | 136 | 22 | 27
+1 | 1 | 2 | 35 | 5 | 7 | 69 | 10 | 13 | 103 | 16 | 20 | 137 | 23 | 28
+2 | 2 | 3 | 36 | 6 | 8 | 70 | 11 | 14 | 104 | 17 | 21 | 138 | 24 | 29
+3 | 3 | 4 | 37 | 7 | 9 | 71 | 12 | 15 | 105 | 18 | 22 | 139 | 25 | 30
+4 | 4 | 5 | 38 | 8 | 10 | 72 | 13 | 16 | 106 | 19 | 23 | 140 | 0 | 6
+5 | 5 | 6 | 39 | 9 | 11 | 73 | 14 | 17 | 107 | 20 | 24 | 141 | 1 | 7
+6 | 6 | 7 | 40 | 10 | 12 | 74 | 15 | 18 | 108 | 21 | 25 | 142 | 2 | 8
+7 | 7 | 8 | 41 | 11 | 13 | 75 | 16 | 19 | 109 | 22 | 26 | 143 | 3 | 9
+8 | 8 | 9 | 42 | 12 | 14 | 76 | 17 | 20 | 110 | 23 | 27 | 144 | 4 | 10
+9 | 9 | 10 | 43 | 13 | 15 | 77 | 18 | 21 | 111 | 24 | 28 | 145 | 5 | 11
+10 | 10 | 11 | 44 | 14 | 16 | 78 | 19 | 22 | 112 | 25 | 29 | 146 | 6 | 12
+11 | 11 | 12 | 45 | 15 | 17 | 79 | 20 | 23 | 113 | 26 | 30 | 147 | 7 | 13
+12 | 12 | 13 | 46 | 16 | 18 | 80 | 21 | 24 | 114 | 0 | 5 | 148 | 8 | 14
+13 | 13 | 14 | 47 | 17 | 19 | 81 | 22 | 25 | 115 | 1 | 6 | 149 | 9 | 15
+14 | 14 | 15 | 48 | 18 | 20 | 82 | 23 | 26 | 116 | 2 | 7 | 150 | 10 | 16
+15 | 15 | 16 | 49 | 19 | 21 | 83 | 24 | 27 | 117 | 3 | 8 | 151 | 11 | 17
+16 | 16 | 17 | 50 | 20 | 22 | 84 | 25 | 28 | 118 | 4 | 9 | 152 | 12 | 18
+17 | 17 | 18 | 51 | 21 | 23 | 85 | 26 | 29 | 119 | 5 | 10 | 153 | 13 | 19
+18 | 18 | 19 | 52 | 22 | 24 | 86 | 27 | 30 | 120 | 6 | 11 | 154 | 14 | 20
+19 | 19 | 20 | 53 | 23 | 25 | 87 | 0 | 4 | 121 | 7 | 12 | 155 | 15 | 21
+20 | 20 | 21 | 54 | 24 | 26 | 88 | 1 | 5 | 122 | 8 | 13 | 156 | 16 | 22
+21 | 21 | 22 | 55 | 25 | 27 | 89 | 2 | 6 | 123 | 9 | 14 | 157 | 17 | 23
+22 | 22 | 23 | 56 | 26 | 28 | 90 | 3 | 7 | 124 | 10 | 15 | 158 | 18 | 24
+23 | 23 | 24 | 57 | 27 | 29 | 91 | 4 | 8 | 125 | 11 | 16 | 159 | 19 | 25
+24 | 24 | 25 | 58 | 28 | 30 | 92 | 5 | 9 | 126 | 12 | 17 | 160 | 20 | 26
+25 | 25 | 26 | 59 | 0 | 3 | 93 | 6 | 10 | 127 | 13 | 18 | 161 | 21 | 27
+26 | 26 | 27 | 60 | 1 | 4 | 94 | 7 | 11 | 128 | 14 | 19 | 162 | 22 | 28
+27 | 27 | 28 | 61 | 2 | 5 | 95 | 8 | 12 | 129 | 15 | 20 | 163 | 23 | 29
+28 | 28 | 29 | 62 | 3 | 6 | 96 | 9 | 13 | 130 | 16 | 21 | 164 | 24 | 30
+29 | 29 | 30 | 63 | 4 | 7 | 97 | 10 | 14 | 131 | 17 | 22 | 165 | 0 | 7
+30 | 0 | 2 | 64 | 5 | 8 | 98 | 11 | 15 | 132 | 18 | 23 | 166 | 1 | 8
+31 | 1 | 3 | 65 | 6 | 9 | 99 | 12 | 16 | 133 | 19 | 24 | 167 | 2 | 9
+32 | 2 | 4 | 66 | 7 | 10 | 100 | 13 | 17 | 134 | 20 | 25 | - | - | -
+33 | 3 | 5 | 67 | 8 | 11 | 101 | 14 | 18 | 135 | 21 | 26 | - | - | -
+
+6.11.2.2 Mapping to resource elements
+
+The mapping of the sequence to resource elements depends on the frame structure. In a subframe for frame structure type 1 and 3 and in a half-frame for frame structure type 2, the same antenna port as for the primary synchronization signal shall be used for the secondary synchronization signal.
+
+The sequence [FIG:331d12b189c5feab9dbb] shall be mapped to resource elements according to
+
+[FIG:4839cc1838ef81ac955c]
+
+Resource elements [FIG:b2e1f98f19276ba3c4aa] where
+
+[FIG:5b82ee86f3a7aedce1e3]
+
+are reserved and not used for transmission of the secondary synchronization signal.
+
+6.11A Discovery signal
+
+A discovery signal occasion for a cell consists of a period with a duration of
+
+- one to five consecutive subframes for frame structure type 1
+
+- two to five consecutive subframes for frame structure type 2
+
+- 12 OFDM symbols within one non-empty subframe for frame structure type 3
+
+where the UE in the downlink subframes may assume presence of a discovery signal consisting of
+
+- cell-specific reference signals on antenna port 0 in all downlink subframes and in DwPTS of all special subframes in the period for frame structure type 1 and 2
+
+- cell specific reference signals on antenna port 0 when higher layer parameters indicate only one configured antenna port for cell specific reference signals for a serving cell using frame structure type 3
+
+- cell specific reference signals on antenna port 0 and antenna port 1 when higher layer parameters indicate at least two configured antenna ports for cell specific reference signals for a serving cell using frame structure type 3
+
+- cell specific reference signals on antenna port 0 and antenna port 1 when higher layer configured parameter presenceAntennaPort1 is signalled to be 1, for a neighbour cell when using frame structure type 3
+
+- primary synchronization signal in the first subframe of the period for frame structure types 1 and 3 or the second subframe of the period for frame structure type 2,
+
+- secondary synchronization signal in the first subframe of the period, and
+
+- non-zero-power CSI reference signals in zero or more subframes in the period. The configuration of non-zero-power CSI reference signals part of the discovery signal is obtained as described in clause 6.10.5.2
+
+For frame structures 1 and 2 the UE may assume a discovery signal occasion once every dmtc-Periodicity.
+
+For frame structure type 3, the UE may assume a discovery signal occasion may occur in any subframe within the discovery signals measurement timing configuration in clause 5.5.2.10 of [9].
+
+For frame structure type 3, simultaneous transmission of a discovery signal and PDSCH/PDCCH/EPDCCH may occur in subframes 0 and 5 only.
+
+For frame structure type 3, the UE may assume that a discovery signal occasion occurs in the first subframe containing a primary synchronization signal, secondary synchronization signal and cell-specific reference signals within the discovery measurement timing configuration in clause 5.5.2.10 of [9].
+
+6.12 OFDM baseband signal generation
+
+The time-continuous signal [FIG:a15c706863442e22b404] on antenna port [FIG:968d9bcece33699ae5cf] in OFDM symbol [FIG:ee6afcdb83592e5bc967] in a downlink slot is defined by
+
+[FIG:571895899278ab3a0310]
+
+for [FIG:c0e5addbb04dce5a1939] where [FIG:c350816c561325c6ab1e] and [FIG:de15a596b9f18148a629] . The variable [FIG:c4cc301a3663133ca181] equals 2048 for [FIG:ff4b3797a4a5d811f963] subcarrier spacing, 4096 for [FIG:ee435fef8cfdb1e8163f] subcarrier spacing, and 24576 for [FIG:9b954b91c036fffa82ef] subcarrier spacing.
+
+The OFDM symbols in a slot shall be transmitted in increasing order of [FIG:3b5724b722263b0bc736] , starting with [FIG:e1ce297299c98f51a346] , where OFDM symbol [FIG:d3c3466a2dc4ea267bc9] starts at time [FIG:0d43350a87f6df62387c] within the slot. In case the first OFDM symbol(s) in a slot use normal cyclic prefix and the remaining OFDM symbols use extended cyclic prefix, the starting position the OFDM symbols with extended cyclic prefix shall be identical to those in a slot where all OFDM symbols use extended cyclic prefix. Thus there will be a part of the time slot between the two cyclic prefix regions where the transmitted signal is not specified. For [FIG:8a02c159e40ae7911ee1] , there is one OFDM symbol per slot and one slot per subframe.
+
+Table 6.12-1 lists the value of [FIG:71d6cce1b6dbd0951bb0] that shall be used. Note that different OFDM symbols within a slot in some cases have different cyclic prefix lengths.
+
+In case NB-IoT is supported, the OFDM baseband signal generation is defined in subclause 10.2.8.
+
+Table 6.12-1: OFDM parameters
+
+Configuration | Cyclic prefix length [FIG:ceff559033c09553ce52]
+Normal cyclic prefix | [FIG:ebb67c085438f47d7a28] | [FIG:1c5e18e063cf9ab9e1e7] [FIG:afe7a4461991e8755383]
+Extended cyclic prefix | [FIG:6bb9119222102eaf3eab] | [FIG:2b944a3da88862fc26a5]
+ | [FIG:e7b5ca93d4763f9520a3] | [FIG:aee8fab4fdedfb1f17d2]
+ | [FIG:b3d4e3c21fcdb5d51708] | [FIG:6481059d7d2c188f7511]
+
+6.13 Modulation and upconversion
+
+Modulation and upconversion to the carrier frequency of the complex-valued OFDM baseband signal for each antenna port is shown in Figure 6.13-1. The filtering required prior to transmission is defined by the requirements in 3GPP TS 36.104 [6].
+
+[FIG:a44d94c9283dd76f5dc7]
+
+Figure 6.13-1: Downlink modulation
+
+7 Generic functions
+
+7.1 Modulation mapper
+
+The modulation mapper takes binary digits, 0 or 1, as input and produces complex-valued modulation symbols, x as output.
+
+7.1.1 BPSK
+
+In case of BPSK modulation, a single bit, [FIG:e098318a6b1c6a205ef2] , is mapped to a complex-valued modulation symbol x=I+jQ according to Table 7.1.1-1.
+
+Table 7.1.1-1: BPSK modulation mapping
+
+[FIG:e5ce6e788e9b3efdf761] | I | Q
+0 | [FIG:6eb1dd625a1a167d7e56] | [FIG:85e94c80a78261c0602b]
+1 | [FIG:56b2a6ed7a12ca049a20] | [FIG:c2baa4e2ec928f8aa917]
+
+7.1.2 QPSK
+
+In case of QPSK modulation, pairs of bits, [FIG:f375008f658399b6bf3a] , are mapped to complex-valued modulation symbols x according to Table 7.1.2-1 where [FIG:2e24d7826ac1702bbba3] unless “MUST interference presence and power ratio (MUSTIdx)” is signalled in the associated DCI and is not ‘00’ in which case [FIG:3d4c9beb6d40f0aae364] where [FIG:d1e3001f70c706bbf286] and [FIG:c3d1f57b4f008f53b1ad] are determined from MUSTIdx using Table 7.1.2-2, and each [FIG:223a0955e9a57a35fe4e] is selected by eNB independently of [FIG:81070ddd26dc6ae92dda] .
+
+Table 7.1.2-1: QPSK modulation mapping
+
+[FIG:f4dd2a544595ac68c4e5] | I | Q
+00 | [FIG:81988a0f5b5b23e28e5d] | [FIG:93a547f1ac1c55bcbb81]
+01 | [FIG:0c3efbce0568b671d298] | [FIG:9a356401aa08b9632856]
+10 | [FIG:478a0297a059fd04a7fc] | [FIG:b269be5eadda034e7c76]
+11 | [FIG:94d36084baff26dc67b6] | [FIG:9c175e33d3239f7a057b]
+
+Table 7.1.2-2: Values for [FIG:d39573e2cbc20b1aee69] and [FIG:bcd596f5da4aebd6d914] for QPSK
+
+MUSTIdx | [FIG:2a749fe27773310fc454] | [FIG:680a56778af55352ffee]
+01 | [FIG:531279535c963cf3a75b] | [FIG:0bff1ff21509d3dda588]
+10 | [FIG:8fcc85c92da7d8ec5273] | [FIG:b586d884576ccd1fdabc]
+11 | [FIG:51c62ca2df9d799676c8] | [FIG:cb677e063024955b8ae8]
+
+7.1.3 16QAM
+
+In case of 16QAM modulation, quadruplets of bits, [FIG:fb2a7821c64e65db772d] , are mapped to complex-valued modulation symbols x according to Table 7.1.3-1 where [FIG:1a008d17560527cd5dd9] unless “MUST interference presence and power ratio (MUSTIdx)” is signalled in the associated DCI and is not ‘00’ in which case [FIG:c8d5396fa616b354e5b9] where [FIG:b8a8d835e4abbb8aaffd] and [FIG:7c978c0cf99c9f0c00a5] are determined from MUSTIdx using Table 7.1.3-2, and each [FIG:3973499f8eb8a2040e15] is selected by eNB independently of [FIG:0bddfae362613e3076ad] .
+
+Table 7.1.3-1: 16QAM modulation mapping
+
+[FIG:ab4d7420f5fc622b9b21] | I | Q
+0000 | [FIG:17a3ee6cbf0e634b96da] | [FIG:7eff820de3f158a953fe]
+0001 | [FIG:5bb88e9eaecc89057494] | [FIG:4f572fc81f2a505459ca]
+0010 | [FIG:c339e72cb31709a00325] | [FIG:144c45c0ebb2c822a5b7]
+0011 | [FIG:28d40e4f1b1d22bf61c3] | [FIG:3897ecb092ad885b5c48]
+0100 | [FIG:1144ae74d53c31b8e2c3] | [FIG:354d154f174ca217adaa]
+0101 | [FIG:eab6d40381793fca8ca3] | [FIG:e96e304607cabfa4e060]
+0110 | [FIG:dc607e49e5c02f849334] | [FIG:86aae9147beae13a3454]
+0111 | [FIG:a9b14f89fc6f5be259b4] | [FIG:87ef2afdd2c206a2a7f2]
+1000 | [FIG:c84e7fb2b902132fdeb3] | [FIG:20c23d67ae3a17edfeb7]
+1001 | [FIG:3bdcab3cf4f6a3f04456] | [FIG:409d2c0317de837e2eba]
+1010 | [FIG:af7777dcc0d57b99ef4f] | [FIG:22328af3af2d0a4d4f2a]
+1011 | [FIG:4e36e3f5ab7ec0935146] | [FIG:ad4f4dc6feefc102949d]
+1100 | [FIG:90c93db6df828ddf59bb] | [FIG:e1746d3e439ccf3639be]
+1101 | [FIG:995a5b8c3bf8cc47b7a8] | [FIG:1704683527964d63b1a2]
+1110 | [FIG:ada184fb5196679f1e0e] | [FIG:47dcbf90000ffbf66f36]
+1111 | [FIG:20117d998b3ec9e325d1] | [FIG:30e986c066efc4fd47ca]
+
+Table 7.1.3-2: Values for [FIG:c084456986343abc03d4] and [FIG:acfd1af238e83e08e161] for 16QAM
+
+MUSTIdx | [FIG:924f446aa7bb707a9164] | [FIG:2ea995477aae6252bee7]
+01 | [FIG:2392a454377d8842977c] | [FIG:4e5b0c2b2d481aa242de]
+10 | [FIG:d1cda628c813fe73822f] | [FIG:16116b1638a581ab14e8]
+11 | [FIG:76989d898d5094896aa9] | [FIG:1a629a6fa48d1492ecc7]
+
+7.1.4 64QAM
+
+In case of 64QAM modulation, hextuplets of bits, [FIG:18b18c5e756a5da7e845] , are mapped to complex-valued modulation symbols x according to Table 7.1.4-1 where [FIG:4393c0e5ba6c09155564] unless “MUST interference presence and power ratio (MUSTIdx)” is signalled in the associated DCI and is not ‘00’ in which case [FIG:3919b16f03443c0b24e5] where [FIG:f4b6038417971921e014] and [FIG:433653206b23d958e61b] are determined from MUSTIdx using Table 7.1.4-2, and each [FIG:da746beb39f2ca1b9e0c] is selected by eNB independently of [FIG:970b9d2bcb15942d6e47] .
+
+Table 7.1.4-1: 64QAM modulation mapping
+
+[FIG:34c3c7293e1aa2dec921] | I | Q | [FIG:9242affde0b8014f4a8a] | I | Q
+000000 | [FIG:e5d3f7f2238e190623d8] | [FIG:e08bcc903f7165d0e1aa] | 100000 | [FIG:208992e579436a14fccf] | [FIG:dea42afca112332cc2e2]
+000001 | [FIG:1d12d4dd002ceba5b1a9] | [FIG:8248c71b7ebf6d1bbf6c] | 100001 | [FIG:514a260a904a85876217] | [FIG:ec4d9c4d649b0b87b4d3]
+000010 | [FIG:ad020a1758eeffe6f24c] | [FIG:22b8d50146d762716b9e] | 100010 | [FIG:fb0ecb32a65b74c2c5c3] | [FIG:3866f8b5ee2dfd2d9cb4]
+000011 | [FIG:f1acf94fc18666f01d93] | [FIG:ff4fe42908ee78ca515f] | 100011 | [FIG:bf650e330665bb09a055] | [FIG:db29f0b4758d83af9cdb]
+000100 | [FIG:2c734c72455533fbc92c] | [FIG:6eb20140dd229b9d954f] | 100100 | [FIG:865e4ab14307763a54f5] | [FIG:9aecc06d839d70338b92]
+000101 | [FIG:61622a27fc1f4dadfedf] | [FIG:88a607e6c7422bfa99c6] | 100101 | [FIG:76b8ef1ecfba2d8c7ef1] | [FIG:7a28582f658fd706eb7f]
+000110 | [FIG:28ece7daa3f6a3dc15cc] | [FIG:b5360ce16bd8c96118f6] | 100110 | [FIG:35a9e393da596319bf22] | [FIG:806a7db37c382d98b69c]
+000111 | [FIG:58b357acccfae081bd25] | [FIG:e72bee6c6d28a44a3c1b] | 100111 | [FIG:9c69f7d37ac9aab7b1a8] | [FIG:a8053bc3746cdec018d4]
+001000 | [FIG:c8599b02e4971d78d528] | [FIG:52d8f06855a383c5644a] | 101000 | [FIG:e21431221c25fa086425] | [FIG:108ca55a24b107094f23]
+001001 | [FIG:0ff30d3f47efe91bc0d6] | [FIG:f011f9cbea594af5003d] | 101001 | [FIG:bbddfcb83c3163697166] | [FIG:5767216006ae55c05f0a]
+001010 | [FIG:4efa2b14e22e7a79dc13] | [FIG:131d3bd3e61ae7e90728] | 101010 | [FIG:85212931101dde4cf66f] | [FIG:393ef143b51f434348b1]
+001011 | [FIG:4840ca98dae2bbd5d854] | [FIG:c9779d2cf5c71c3286a1] | 101011 | [FIG:5de70ec9a6a0b452454b] | [FIG:a62b1f8fef3ff2503b5e]
+001100 | [FIG:d8bbb0627fa56694d5d9] | [FIG:f1ef90b2dc29030d727a] | 101100 | [FIG:fed320edec28398450b8] | [FIG:20319fc4fd9c1aa5b713]
+001101 | [FIG:45cae9802bbcee713d67] | [FIG:68a650927044bffe0a7e] | 101101 | [FIG:10d80847fa4eccbaa096] | [FIG:5f3d1133d6bb2a9a48e8]
+001110 | [FIG:25f253ede1c919deb61b] | [FIG:f69464fa051414efc2ec] | 101110 | [FIG:cdf7b27c3abc4ca3a3a4] | [FIG:04d24c1f54e845e74185]
+001111 | [FIG:30f67a28212c8169d9a1] | [FIG:a0b2e5132908252e5e6b] | 101111 | [FIG:f45e2c2f54125002a3f3] | [FIG:8f6fcc8c3b01f8e544d0]
+010000 | [FIG:8a5b8ee24fa7c202fa98] | [FIG:22a80cc0b3e45ff674c3] | 110000 | [FIG:1136eb40dadbb7ed3b5f] | [FIG:ecb4c9977e87d2df7936]
+010001 | [FIG:50bbc50471d2e26a04ca] | [FIG:9b5673a3ad1ed367c401] | 110001 | [FIG:e14ac7e49ee323f159cf] | [FIG:df80f591677d360ba26a]
+010010 | [FIG:8033082943163e013d5c] | [FIG:a573dc46f4599d68befa] | 110010 | [FIG:639ee8c9df2d83f130c1] | [FIG:7fa40cb7e97de0c1b47d]
+010011 | [FIG:886ca60c3d9a8e3ecd5a] | [FIG:b9bcbce2286290278cf4] | 110011 | [FIG:a3723dcd388b24846c4a] | [FIG:27f9522eadf763b3d576]
+010100 | [FIG:54f614fb43f26f1b4598] | [FIG:2f36a8e789b7d2d338f4] | 110100 | [FIG:14e935a0bf25a79a84d0] | [FIG:d566cc3eb3180c8edbac]
+010101 | [FIG:2f3641c8a2da7a095deb] | [FIG:7682143394096ffe4a87] | 110101 | [FIG:fa7d864d5c46fbb0e436] | [FIG:ee8da913e3fc2d3927f3]
+010110 | [FIG:a02c242235cbace4655d] | [FIG:e709b4950ec2518dfaf3] | 110110 | [FIG:6c96a8e000f46e35f4e2] | [FIG:46ccb4f0f23ff314f7f7]
+010111 | [FIG:b2ad08fdc42d25aabe74] | [FIG:5cd80126f5e4c2151f75] | 110111 | [FIG:bacde9a549ec621d5a25] | [FIG:54e23e93de900bc0e009]
+011000 | [FIG:9e1379d113657861a1fd] | [FIG:eeba983bb57f583a5357] | 111000 | [FIG:2d23fa16b67ae74cf9f3] | [FIG:482d08208df0f224ccad]
+011001 | [FIG:3806ee7d6d8fc3c70562] | [FIG:826588300f177ed561b3] | 111001 | [FIG:1e0b70f478c7032cdccb] | [FIG:0335cc467fed07ca6d13]
+011010 | [FIG:db45d6b6a60c2ded9c6e] | [FIG:62b8e3ab1e33788a910a] | 111010 | [FIG:629e8a0efa7d036e7253] | [FIG:a86ee6f7611d72ce7658]
+011011 | [FIG:0e9ce5ed3e242308c4d1] | [FIG:dd7ce8b9feb17bb1fb22] | 111011 | [FIG:35c254176a237fc13301] | [FIG:af9fd2f112cca48fed04]
+011100 | [FIG:ef7ca9300c9254d94717] | [FIG:4cc1e19706bea8a73ad5] | 111100 | [FIG:594545a8ae7cc979aa4d] | [FIG:a1b71c447f69ff743e04]
+011101 | [FIG:d2f693f788e109baf376] | [FIG:8118b5bf91b54731dd76] | 111101 | [FIG:cfed188349e4cbe7023c] | [FIG:2f4258a5666512ed07bf]
+011110 | [FIG:5e32e477fd78c863061a] | [FIG:97ddb0f91198b78bc5f6] | 111110 | [FIG:89c3dab4897c332ce27d] | [FIG:2a5d524ca20095e8e619]
+011111 | [FIG:4731a7c04ffafb76eb8f] | [FIG:7ee5b1ad4a9095fb78dd] | 111111 | [FIG:c8c38c89e5386db3ec88] | [FIG:70e88a15d004c38dd243]
+
+Table 7.1.4-2: Values for [FIG:5dc9428b70314ff220a7] and [FIG:218d028f3d96f9b890b3] for 64QAM
+
+MUSTIdx | [FIG:b76b68a50d4e364f4141] | [FIG:f92006fc244775bb29ce]
+01 | [FIG:b91e87424d0b672d1da7] | [FIG:096c12f1f7429d8e4d14]
+10 | [FIG:e7c2199a4591d5a5f5ac] | [FIG:f639be92b47ac566594e]
+11 | [FIG:11c116847ab5c8ad93c0] | [FIG:a637aff8620b96ca5734]
+
+7.1.5 256QAM
+
+In case of 256QAM modulation, octuplets of bits, [FIG:d9c28dd646b158b095d1] , are mapped to complex-valued modulation symbols [FIG:158c8621bb77d0c5c86c] according to Table 7.1.5-1.
+
+Table 7.1.5-1: 256QAM modulation mapping
+
+[FIG:c21d53e5f9ba8925c527] | I | Q | [FIG:ee382d8e3cacb4917c9b] | I | Q | [FIG:3a33d86674c05ecc9f4a] | I | Q | [FIG:88d06464621b5b91d62e] | I | Q
+00000000 | 5 | 5 | 01000000 | 5 | -5 | 10000000 | -5 | 5 | 11000000 | -5 | -5
+00000001 | 5 | 7 | 01000001 | 5 | -7 | 10000001 | -5 | 7 | 11000001 | -5 | -7
+00000010 | 7 | 5 | 01000010 | 7 | -5 | 10000010 | -7 | 5 | 11000010 | -7 | -5
+00000011 | 7 | 7 | 01000011 | 7 | -7 | 10000011 | -7 | 7 | 11000011 | -7 | -7
+00000100 | 5 | 3 | 01000100 | 5 | -3 | 10000100 | -5 | 3 | 11000100 | -5 | -3
+00000101 | 5 | 1 | 01000101 | 5 | -1 | 10000101 | -5 | 1 | 11000101 | -5 | -1
+00000110 | 7 | 3 | 01000110 | 7 | -3 | 10000110 | -7 | 3 | 11000110 | -7 | -3
+00000111 | 7 | 1 | 01000111 | 7 | -1 | 10000111 | -7 | 1 | 11000111 | -7 | -1
+00001000 | 3 | 5 | 01001000 | 3 | -5 | 10001000 | -3 | 5 | 11001000 | -3 | -5
+00001001 | 3 | 7 | 01001001 | 3 | -7 | 10001001 | -3 | 7 | 11001001 | -3 | -7
+00001010 | 1 | 5 | 01001010 | 1 | -5 | 10001010 | -1 | 5 | 11001010 | -1 | -5
+00001011 | 1 | 7 | 01001011 | 1 | -7 | 10001011 | -1 | 7 | 11001011 | -1 | -7
+00001100 | 3 | 3 | 01001100 | 3 | -3 | 10001100 | -3 | 3 | 11001100 | -3 | -3
+00001101 | 3 | 1 | 01001101 | 3 | -1 | 10001101 | -3 | 1 | 11001101 | -3 | -1
+00001110 | 1 | 3 | 01001110 | 1 | -3 | 10001110 | -1 | 3 | 11001110 | -1 | -3
+00001111 | 1 | 1 | 01001111 | 1 | -1 | 10001111 | -1 | 1 | 11001111 | -1 | -1
+00010000 | 5 | 11 | 01010000 | 5 | -11 | 10010000 | -5 | 11 | 11010000 | -5 | -11
+00010001 | 5 | 9 | 01010001 | 5 | -9 | 10010001 | -5 | 9 | 11010001 | -5 | -9
+00010010 | 7 | 11 | 01010010 | 7 | -11 | 10010010 | -7 | 11 | 11010010 | -7 | -11
+00010011 | 7 | 9 | 01010011 | 7 | -9 | 10010011 | -7 | 9 | 11010011 | -7 | -9
+00010100 | 5 | 13 | 01010100 | 5 | -13 | 10010100 | -5 | 13 | 11010100 | -5 | -13
+00010101 | 5 | 15 | 01010101 | 5 | -15 | 10010101 | -5 | 15 | 11010101 | -5 | -15
+00010110 | 7 | 13 | 01010110 | 7 | -13 | 10010110 | -7 | 13 | 11010110 | -7 | -13
+00010111 | 7 | 15 | 01010111 | 7 | -15 | 10010111 | -7 | 15 | 11010111 | -7 | -15
+00011000 | 3 | 11 | 01011000 | 3 | -11 | 10011000 | -3 | 11 | 11011000 | -3 | -11
+00011001 | 3 | 9 | 01011001 | 3 | -9 | 10011001 | -3 | 9 | 11011001 | -3 | -9
+00011010 | 1 | 11 | 01011010 | 1 | -11 | 10011010 | -1 | 11 | 11011010 | -1 | -11
+00011011 | 1 | 9 | 01011011 | 1 | -9 | 10011011 | -1 | 9 | 11011011 | -1 | -9
+00011100 | 3 | 13 | 01011100 | 3 | -13 | 10011100 | -3 | 13 | 11011100 | -3 | -13
+00011101 | 3 | 15 | 01011101 | 3 | -15 | 10011101 | -3 | 15 | 11011101 | -3 | -15
+00011110 | 1 | 13 | 01011110 | 1 | -13 | 10011110 | -1 | 13 | 11011110 | -1 | -13
+00011111 | 1 | 15 | 01011111 | 1 | -15 | 10011111 | -1 | 15 | 11011111 | -1 | -15
+00100000 | 11 | 5 | 01100000 | 11 | -5 | 10100000 | -11 | 5 | 11100000 | -11 | -5
+00100001 | 11 | 7 | 01100001 | 11 | -7 | 10100001 | -11 | 7 | 11100001 | -11 | -7
+00100010 | 9 | 5 | 01100010 | 9 | -5 | 10100010 | -9 | 5 | 11100010 | -9 | -5
+00100011 | 9 | 7 | 01100011 | 9 | -7 | 10100011 | -9 | 7 | 11100011 | -9 | -7
+00100100 | 11 | 3 | 01100100 | 11 | -3 | 10100100 | -11 | 3 | 11100100 | -11 | -3
+00100101 | 11 | 1 | 01100101 | 11 | -1 | 10100101 | -11 | 1 | 11100101 | -11 | -1
+00100110 | 9 | 3 | 01100110 | 9 | -3 | 10100110 | -9 | 3 | 11100110 | -9 | -3
+00100111 | 9 | 1 | 01100111 | 9 | -1 | 10100111 | -9 | 1 | 11100111 | -9 | -1
+00101000 | 13 | 5 | 01101000 | 13 | -5 | 10101000 | -13 | 5 | 11101000 | -13 | -5
+00101001 | 13 | 7 | 01101001 | 13 | -7 | 10101001 | -13 | 7 | 11101001 | -13 | -7
+00101010 | 15 | 5 | 01101010 | 15 | -5 | 10101010 | -15 | 5 | 11101010 | -15 | -5
+00101011 | 15 | 7 | 01101011 | 15 | -7 | 10101011 | -15 | 7 | 11101011 | -15 | -7
+00101100 | 13 | 3 | 01101100 | 13 | -3 | 10101100 | -13 | 3 | 11101100 | -13 | -3
+00101101 | 13 | 1 | 01101101 | 13 | -1 | 10101101 | -13 | 1 | 11101101 | -13 | -1
+00101110 | 15 | 3 | 01101110 | 15 | -3 | 10101110 | -15 | 3 | 11101110 | -15 | -3
+00101111 | 15 | 1 | 01101111 | 15 | -1 | 10101111 | -15 | 1 | 11101111 | -15 | -1
+00110000 | 11 | 11 | 01110000 | 11 | -11 | 10110000 | -11 | 11 | 11110000 | -11 | -11
+00110001 | 11 | 9 | 01110001 | 11 | -9 | 10110001 | -11 | 9 | 11110001 | -11 | -9
+00110010 | 9 | 11 | 01110010 | 9 | -11 | 10110010 | -9 | 11 | 11110010 | -9 | -11
+00110011 | 9 | 9 | 01110011 | 9 | -9 | 10110011 | -9 | 9 | 11110011 | -9 | -9
+00110100 | 11 | 13 | 01110100 | 11 | -13 | 10110100 | -11 | 13 | 11110100 | -11 | -13
+00110101 | 11 | 15 | 01110101 | 11 | -15 | 10110101 | -11 | 15 | 11110101 | -11 | -15
+00110110 | 9 | 13 | 01110110 | 9 | -13 | 10110110 | -9 | 13 | 11110110 | -9 | -13
+00110111 | 9 | 15 | 01110111 | 9 | -15 | 10110111 | -9 | 15 | 11110111 | -9 | -15
+00111000 | 13 | 11 | 01111000 | 13 | -11 | 10111000 | -13 | 11 | 11111000 | -13 | -11
+00111001 | 13 | 9 | 01111001 | 13 | -9 | 10111001 | -13 | 9 | 11111001 | -13 | -9
+00111010 | 15 | 11 | 01111010 | 15 | -11 | 10111010 | -15 | 11 | 11111010 | -15 | -11
+00111011 | 15 | 9 | 01111011 | 15 | -9 | 10111011 | -15 | 9 | 11111011 | -15 | -9
+00111100 | 13 | 13 | 01111100 | 13 | -13 | 10111100 | -13 | 13 | 11111100 | -13 | -13
+00111101 | 13 | 15 | 01111101 | 13 | -15 | 10111101 | -13 | 15 | 11111101 | -13 | -15
+00111110 | 15 | 13 | 01111110 | 15 | -13 | 10111110 | -15 | 13 | 11111110 | -15 | -13
+00111111 | 15 | 15 | 01111111 | 15 | -15 | 10111111 | -15 | 15 | 11111111 | -15 | -15
+
+7.2 Pseudo-random sequence generation
+
+Pseudo-random sequences are defined by a length-31 Gold sequence. The output sequence [FIG:ed92d860ee317b7014b3] of length [FIG:add4efa85d39bb2ee8fd] , where [FIG:3c0ba069f0445fe20739] , is defined by
+
+[FIG:f6acb9f47fd197b5b053]
+
+where [FIG:e41522dd8dd544d204d4] and the first m-sequence shall be initialized with [FIG:c181e41055c077073a9d] . The initialization of the second m-sequence is denoted by [FIG:3f276cb2bba28edaa6e9] with the value depending on the application of the sequence.
+
+8 Timing
+
+8.1 Uplink-downlink frame timing
+
+Transmission of the uplink radio frame number [FIG:e638a87132612e8c16c1] from the UE shall start [FIG:bd007586db722cee31c9] seconds before the start of the corresponding downlink radio frame at the UE, where [FIG:c1c63e1ab91e8ba9bf4f] if the UE is configured with a SCG and [FIG:a40ce58050b1a43edc01] otherwise. For frame structure type 1 [FIG:25286eaa207c64899549] and for frame structure type 2 [FIG:538c0c1fc13a5e38f3e7] unless stated otherwise in [4]. Note that not all slots in a radio frame may be transmitted. One example hereof is TDD, where only a subset of the slots in a radio frame is transmitted.
+
+[FIG:7b9bfc1244ce800cc23c]
+
+Figure 8.1-1: Uplink-downlink timing relation
