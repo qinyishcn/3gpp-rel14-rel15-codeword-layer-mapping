@@ -1,0 +1,109 @@
+3GPP TSG RAN WG1 NR-AH3 R1-1716663
+
+Nagoya, Japan, 18th – 21st September 2017
+
+Agenda item: 6.2.1.1
+
+Source: Samsung
+
+Title: Finalizing Layer Mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+There are only two remaining issues on layer mapping for NR [1]:
+
+Agreements:… FFS for DFT-s-OFDM uplink with and without frequency hopping Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+Strictly speaking, the second issue (“layer” mapping for DFT-SOFDM) is not MIMO-related since it has been agreed that DFT-SOFDM is only applicable for single-layer transmission. A better terminology for this is therefore RE mapping (wherein only time and frequency dimensions are involved).
+
+In this contribution, Samsung’s views on the highlighted parts are presented:
+
+Correspondence between 2 CWs and L layers
+
+Mapping order
+
+Support for frequency interleaver
+
+This contribution is a revision of R1-1715926.
+
+CW-to-layer correspondence
+
+A fixed correspondence between 2 CWs and L>4 layers used in LTE is the simplest alternative. A fully flexible correspondence adds onto the fixed correspondence the following features:
+
+Feature 1: For a given number of layers L (>4), each of the 2 CWs can correspond to different number of layers. Without any constraint, the second column of Table 2 outlines all possible combinations of (L0,L1) where Ln denotes the number of layers associated with CW-n. The boldfaced blue highlighted combinations are the ones used for LTE fixed correspondence. Therefore, for a given value of L, there are (L – 1) possibilities.
+
+Feature 2: For a given number of layers for CW-n Ln which can take value from {1, 2, 3, 4, 5, 6, 7}, the set of layers associated with CW-n, along with its permutations, can also vary. Therefore, for a given L and L0, there are [EQ:954289a8cc6325b62081] possibilities.
+
+Table 2 All possible number of layers for each of the 2 CWs
+
+L | All possible combinations of (L0, L1) | Reduced possible combinations of (L0, L1)
+5 | (1,4), (2,3), (3,2), (4,1) | (1,4), (2,3), (3,2), (4,1)
+6 | (1,5), (2,4), (3,3), (4,2), (5,1) | (2,4), (3,3), (4,2)
+7 | (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) | (3,4), (4,3)
+8 | (1,7), (2,6), (3,5), (4,4), (5,3), (6,2), (7,1) | (4,4)
+
+Thus, for a given value of L, the total number of possible correspondences is [EQ:b33e2f10c827290c0044] . This results in 205, 1236, 8659, and 69280 possibilities for L=5, 6, 7, and 8, respectively. As this correspondence needs to be signaled in DCI (DL) and/or CSI repotting (UL), it requires up to 17-bit signaling field.
+
+As pointed out in previous discussions, flexible correspondence is beneficial when one PDCCH is used for multi-TRP transmissions regardless whether it offers some performance gain for single-TRP scenarios. In this case, the number of possibilities can be reduced by the following considerations:
+
+Any functionality of the features which deals with ordering across layers (as in scheme 2 and 6) can be removed since it is expected that such functionality, if beneficial, is taken care of by precoding (i.e. ordering/permutation is a special case of phase rotation). This is a reasonable assumption as long as the codebooks are designed with sufficiently high spatial resolution.
+
+To ensure that no new layer mapping scheme (mapping of one CW to ≥1 layers) is introduced, possibilities that require Ln>4 should be removed. If this condition is observed, flexible correspondence can be further assessed without affecting the completion of other NR components (such as channel coding, TBS table design, UL control design).
+
+If the above two criteria are applied to designing a scheme for flexible correspondence, the remaining possible combinations of (L0, L1) are outlined in the third column of Table 2. This leaves us with [EQ:020712a90360d1919fa0] combinations for a given value of L. In addition, feature 2 disappears, resulting in the total number of possibilities of [EQ:8acc61544696459042eb] for a given value of L (which requires at most 2 bits). This variable correspondence scheme can be described as follows:
+
+The 1st [EQ:42f1b14f99ef5a6f575e] layers CW0, where [EQ:0f260ba87548b409b88c]
+
+Remaining [EQ:e58b59e0afc4bf31976b] layers CW1
+
+Proposal: In addition to the agreed fixed correspondence where the first [EQ:6179fb2cbd172f38050d] layers are mapped to CW0 while the remaining [EQ:7f4a10bfe0e3ab792437] layers to CW1, extend the agreement from [EQ:677749dc8523fc7c9e9d] to [EQ:c7e0339193516c4124f0] where [EQ:d34b9ad5d6f3fd51f730] is signaled via DCI
+
+RE mapping for DFT-SOFDM
+
+For DFT-SOFDM, a few alternatives are available when frequency hopping is not used:
+
+Alt 1.1 TF (time first): the modulated symbols are first mapped across DFT-SOFDM symbols, then across sub-carriers
+
+Alt 1.2 FT (frequency first): the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols
+
+Just as the case for CP-OFDM, the main benefit of time-first RE mapping appears in scenarios where the following events occur at the same time:
+
+Small CB size;
+
+High UE speed;
+
+RA with small number of localized/adjacent PRBs and/or channel lacking frequency selectivity
+
+In such scenarios, each CB benefits from time diversity. It can be argued, however, that this is a corner case. For example, some time diversity also exists with frequency-first mapping. The difference in mapping is significant only when a small CB size (in the order of 14 – the number of symbols per slot) is used. Therefore, considering the corner-case benefits and the use of HARQ which will practically negate any UE-specific gains (from a system perspective, there are no gains) following the consideration for CP-OFDM and for simplicity, Alt 1.2 (FT) is preferred.
+
+When frequency hopping across two sub-slots is used, the number of alternatives increases since an additional dimension is available for RE mapping: sub-slot. As the same argument holds when comparing time-first and frequency-first RE mapping (hence FT mapping is preferred), two alternatives are considered. Here SS refers to sub-slot.
+
+Alt 2.1 FTSS: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+Alt 2.2 FSST: the modulated symbols are first mapped across sub-carriers, the across sub-slots (occupying different sets of PRBs), then across DFT-SOFDM symbols within a sub-slot
+
+Compared to Alt 2.1 (which seems more natural), Alt 2.2 offers some time-frequency diversity gain in scenarios similar to those previously described. That is, for small CB size and high UE speed, each CB can benefit from the time-frequency diversity offered by frequency hopping especially for smaller RA size and/or frequency non-selective channels. Nevertheless, for the cases where DFT-SOFDM is envisioned to apply, SINR is low and the gains from frequency diversity (when any) from frequency hopping are expected to be offset by the loss in channel estimation as DMRS interpolation is not possible. Further, in case of a single CB (likely for coverage limited UEs using DFT-SOFDM), there is no difference between time-first or frequency-first mapping. Therefore, Alt 2.1 seems sufficient and preferred for its simplicity and natural extension of Alt 1.2.
+
+Proposal: The RE mapping order scheme for DFT-SOFDM can be defined as follows:
+
+With no frequency hopping, frequency-first mapping order is used: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols (FT)
+
+With frequency hopping, frequency-first mapping followed by time and sub-slot is used: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+Conclusions
+
+In this contribution, Samsung’s view on remaining issues on layer mapping is presented. Our proposal can be summarized as follows:
+
+In addition to the agreed fixed correspondence where the first [EQ:ae2985555801b4bb95d7] layers are mapped to CW0 while the remaining [EQ:05dc9e268ba463bc9a5b] layers to CW1, extend the agreement from [EQ:6689213478c4c2668008] to [EQ:9e95e991aef56e7254d8] where [EQ:0b9b188b1f55104b99ce] is signaled via DCI
+
+The RE mapping order scheme for DFT-SOFDM can be defined as follows:
+
+With no frequency hopping, frequency-first mapping order is used: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols (FT)
+
+With frequency hopping, frequency-first mapping followed by time and sub-slot is used: the modulated symbols are first mapped across sub-carriers, then across DFT-SOFDM symbols within a sub-slot, then across sub-slots (occupying different sets of PRBs)
+
+References
+
+3GPP, RAN1#90, Chairman’s Notes

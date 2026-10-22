@@ -1,0 +1,154 @@
+3GPP TSG RAN WG1 Meeting NR#3 R1-1716284
+
+Nagoya, Japan, 18th – 21st, September 2017
+
+Source: Intel Corporation
+
+Title: Remaining details of CW-to-MIMO layer mapping
+
+Agenda item: 6.2.1.1
+
+Document for: Discussion and Decision
+
+1 Introduction
+
+In RAN1-AH#2 and RAN1#90 meetings, the following agreements were reached regarding CW-to-MIMO layer mapping for NR [1][2]:
+
+Agreements: NR supports higher layer signaling for the maximum number of MCS/RV/NDI in DCI for PDSCHFFS HARQ ID Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layersNR supports higher layer signaling for the maximum number of CQIs in UCIUnless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI reportFFS subband CQIFFS Whether or not the actual number of CQIs is also RI dependentNote: This higher layer signaling can be the other signaling related to RI/PMI reporting (e.g. RI restriction)FFS applicability on single/multi TRP Agreements: For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR: First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time) For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL No frequency and/or time interleaving is supported in Rel-15 NR FFS for DFT-s-OFDM uplink with and without frequency hopping Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+In this contribution we address the following remaining issues of CW-to-MIMO layer mapping schemes:
+
+Support of the additional correspondence between MIMO layers and CWs
+
+Support for frequency first mapping for DFT-s-OFDM
+
+Discussion
+
+Evaluation of different RE mapping options for DFT-s-OFDM
+
+According to WF in [3], companies were encouraged to perform link-level evaluation of PUSCH CW-to-RE mapping schemes for DFT-s-OFDM with and without frequency hopping for the following options, which are also illustrated in Figure 1:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:b599508311278eff767e]
+
+Figure 1 Illustration of different RE mapping options
+
+Simulations were performed using configuration provided in Table 1.
+
+Table 1 Link-Level Parameters [4]
+
+[FIG:a74ed6e2618635b80c2f]
+
+Figure 2 plots the BLER performance simulation results for the different MCS and RE mapping options.
+
+[FIG:bc3b18bec0234e280ed2] [FIG:2b0884b8809da27be202]
+
+Figure 2 BLER vs SNR for different MCS(Table 3) and Map Options(Table 2)
+
+The performance gains of options 2/3 over option 1 at BLER=0.1 are tabulated in Table 3.
+
+Table 3 SNR Gain (dB) over Option 1
+
+| QPSK | 16QAM | 64QAM
+PRB 10 | 0 dB
+ 
+(Num. CB=1)
+TBS=1544 | 0 dB
+
+(Num. CB=1)
+TBS=2856 | 1.6 dB (Opt2)
+1.8 dB (Opt3)
+(Num. CB=2)
+TBS=6968
+PRB 50 | 1.3 dB
+(Num. CB=2)
+TBS=6968 | 1.3 dB
+(Num. CB=2)
+TBS=14112 | 1.4 dB
+(Num. CB=6)
+TBS=35160
+
+Observations:
+
+When number CB >=2, interleaving a CB over multiple slots provides ~1.3-1.8dB gain
+
+Option 2 and 3 has very similar performance. Option 3 provides slightly better performance only in one case (64QAM, 10PRB) due to more frequency diversity (each CB occupy all assigned frequency).
+
+Support for frequency first mapping for DFT-s-OFDM (Option 1)
+
+Option 1: advantages:
+
+On the UE, it can reduce buffer and timing requirements.
+
+On the gNB, it can also reduce the buffer requirements as well as processing delay.
+
+Option 2/3 advantages:
+
+When the number CB >=2 in a PUSCH subframe, there is gain obtained when each CB is mapped to different slots to get frequency hopping gain. This is seen in the gains in Option 2/3 over option 1.
+
+It should be noted that DFT-s-OFDM was introduced to address cell coverage limitation imposed by limited UE power. In this UE uplink power limited scenario, the dominant use case is low order modulation with small number of PRB allocation. Here the UE output power and Maximum Power Reduction requirements specified in TS36.101 Section 6.2.3 (Table 4) can be used as guidance. Specifically cell edge cases, without application of MPR, require QPSK modulation with maximum allocation up to 18 PRBs (5184bits). This always results in 1 CB per subframe, and all options considered have the same performance.
+
+Table 4 MPR table from TS36.101 Table 6.2.3-1.
+
+[FIG:0295072c8a801a2fa571]
+
+Table 5 lists the maximum PRB allocation which results 1 CB per subframe for different modulation and coding rates, as well as the additional SNR required for the higher order modulation. It can be seen that as the modulation order increases, the required SNR quickly increases and the cell area which it can effectively serve similarly decreases. This further illustrates the fact that QPSK is the desired modulation format near the cell edge, considering both the power requirements and the number of PRBs that can be allocated to one user.
+
+Table 5 Max PRB with 1 CB / subframe + additional SNR required over QPSK
+
+TBS | 8448 | Rate | 1/3 | 1/2 | 3/4 | ~1
+SNR(dB) over QPSK | MPR(dB) | Mod. | Max PRB size with 1CB/subframe
+0 | 0 ~ 1 | 2 | 88 | 58 | 39 | 29
+>6 | 1 ~ 2 | 4 | 44 | 29 | 19 | 14
+>12 | 2 ~ 3 | 6 | 29 | 19 | 13 | 9
+>18 | 5 | 8 | 22 | 14 | 9 | 7
+
+Proposal:
+
+NR supports frequency first mapping (Option 1) as baseline for DFT-s-OFDM. Additional mapping are optional with preference for Option 3 followed by Option 2.
+
+Support of additional correspondence between MIMO layers and CWs
+
+Similar to LTE, NR for more than four MIMO layers supports almost equal split of MIMO layers between two CWs. However, in some scenarios, it would be useful to additionally support unequal MIMO layer split among CWs. In order to avoid introduction of the new CW-to-MIMO layer mapping schemes, we propose to reuse already agreed multiple DCIs based for PDSCH scheduling for multi TRP for that purpose. In particular, simultaneous transmission of one or more DCIs from the same TRP can be used to achieve new MIMO layer mapping schemes to CWs. For example, for two DCIs with maximum of four MIMO layers in each PDSCH, the following combinations can be supported by NR (see Table 5). It can be seen that for four, five and six MIMO layers, the addition mapping of {1,3}, {1,4} and {2,4} can be provided. In this approach, two RI reporting for the two PDSCH can be used to indicate the preferred MIMO layer splitting across two CWs.
+
+Table 5: Supported number of MIMO layers combination for two DCI transmissions
+
+Total number of MIMO layers | Number of MIMO layers indicated in DCIs (1st DCI, 2nd DCI)
+2 | {2}, {1,1}
+3 | {3}, {1,2}
+4 | {4}, {1,3}, {2,2}
+5 | {1,4}, {2,3}
+6 | {2,4}, {3,3}
+7 | {3,4}
+8 | {4,4}
+
+Proposal:
+
+NR supports additional CW-to-MIMO layer correspondence schemes in addition to almost equal split by using multiple DCIs framework adopted for multi TRP operation
+
+Reporting of two RIs can be used to indicate the preferred MIMO layer splitting across two CWs
+
+Summary
+
+In this contribution we discuss the remaining details of supporting multiple CWs. The following proposals were made:
+
+NR supports frequency first mapping (Option 1) as baseline for DFT-s-OFDM. Additional mapping are optional with preference for Option 3 followed by Option 2.
+
+NR supports additional CW-to-MIMO layer correspondence schemes in addition to almost equal split by using multiple DCIs framework adopted for multi TRP operation
+
+Reporting of two RIs can be used to indicate the preferred MIMO layer splitting across two CWs
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 NR Ad-Hoc#2, Qingdao, P.R. China, 27th – 30th June 2017.
+
+Chairman’s notes for 3GPP TSG RAN WG1 NR 90, Prague, Czech Republic, 21st – 25th August 2017.
+
+R1-1715161, “WF on RE mapping”, NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm.
+
+R1-1714598, “Details on Resource Element Mapping”, NTT DOCOMO.

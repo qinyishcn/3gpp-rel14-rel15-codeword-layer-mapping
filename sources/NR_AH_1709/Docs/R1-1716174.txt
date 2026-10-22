@@ -1,0 +1,337 @@
+3GPP TSG RAN WG1 Meeting AH_NR#3 R1-1716174
+
+Nagoya, Japan, 18th – 21st, September 2017
+
+Agenda item: 6.2.1.1
+
+Source: AT&T
+
+Title: Codeword to layer mapping for DL and UL data channels
+
+Document for: Discussion/Decision
+
+Introduction
+
+In RAN #71, a new study item New Radio (NR) Access Technology was approved. In RAN1 # 89 the following agreement was reached on the number of Codewords.
+
+Agreements:
+
+For >4-layer transmission, each of the two CWs is mapped to at most 4 layers
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:b1896203f601a3df8534] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS  whether the UE report the preferred layer mapping
+
+In RAN1 #90, regarding the codeword to layer mapping within a codeword the following working assumption was made.
+
+Agreements:
+
+For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR:
+
+First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL
+
+No frequency and/or time interleaving is supported in Rel-15 NR
+
+FFS for DFT-s-OFDM uplink with and without frequency hopping
+
+Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+For uplink data transmission with DFT-S-OFDM waveform, the following agreements were made.
+
+Agreements:
+
+Companies are encouraged to perform link-level evaluation of PUSCH CW-to-RE mapping schemes for DFT-s-OFDM with and without frequency hopping.
+
+Possible examples include
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+In this contribution, we analyze the following aspects on layer mapping options and provide our views on layer mapping for both downlink and uplink waveforms with simulation results.
+
+Codeword to layer mapping for DFT-S-OFDM waveform
+
+Dynamic Layer mapping with Multiple codewords
+
+Codeword to Layer Mapping Scheme for Uplink DFT-S-OFDM
+
+For uplink data transmission using DFT-S-OFDM, the codeword to layer mapping can be done similar to CP-OFDM, i.e. the modulated symbols after the channel encoder and modulation mapper ar4e mapped first to the subcarriers then OFDM symbols. However, it was pointed out in [1], if the layer mapping order is reversed, then gains can be achieved when the number of code block levels are high. For verifying these observations, we performed link simulations. The link simulations assumptions are given in Table 1. In our simulations, we considered two options. The options are
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Assumptions | Value
+Carrier frequency | 4.0 GHz
+Duplex | FDD
+System Bandwidth | 20 MHz
+Slot length | 14 OFDM symbols
+Subcarrier spacing | 15KHz
+Guard time interval | 4.7us (interval of LTE normal CP) as baseline
+FFT size | 2048
+Data transmission bandwidth | 5 and 50 RB for 15 KHZ spacing
+Antenna configuration | (1, 2)
+Number of codewords | 1
+Channel encoder | LTE turbo code
+MCS | QPSK ½ , 16-QAM ½
+Control Overhead | Zero
+Channel estimation | Practical
+UE speed | 3Kmph
+Channel Model | TDL-A
+
+2.1 Simulation Results without Frequency Hopping
+
+Figure 1 shows the performance of two options with QPSK modulation and with 5 RB allocation. Note that we define the spectral efficiency as
+
+Spectral efficiency = TBS*(1-BLER)/ (T*BW)
+
+Where, TBS is the transport block size in bits, BLER is the block error rate, T is the time duration of one subframe, and BW is the actual bandwidth used for data transmission. It can be observed from figure that is the spectral efficiency is same with the both the options. Similarly we observed the same phenomena for 16 QAM modulations. Note that in this case, the number of RB is equal to 5. This implies only one code block is transmitted.
+
+[FIG:2ed263e7cfe55ce75857]
+
+Figure 1 Spectral efficiency comparison with 5 PRB allocation with QPSK modulation
+
+[FIG:c5aa7a03b71f91f79f6b]
+
+Figure 2 Spectral efficiency comparison with 5 PRB allocation with 16 QAM modulation
+
+Figure 3-4 shows the performance with 50 RB allocation. In this case, the number of code blocks are greater than 1. With QPSK and 16 QAM modulations the performance of Option 1 is better.
+
+[FIG:a6639673578310bd922a]
+
+Figure 3 Spectral efficiency comparison with 50 PRB allocation with QPSK modulation
+
+[FIG:190efff946a631167980]
+
+Figure 4 Spectral efficiency comparison with 50 PRB allocation with 16 QAM modulation
+
+2.2 Simulation Results with Frequency Hopping
+
+Figure 5 shows the performance the two options with frequency hopping with 50 RB allocation. In this case too we observed the performance of option 1 is better compared to options 2. However, with the 16 QAM modulation, we observed option 2 is better compared to option 1. Note that the number of code blocks is higher in 16 QAM case. Note that we used 3 kmph channel in our simulations and the allocated bandwidth is 20 MHz. Hence the gains with frequency hopping are small. Since in majority of the cases, the performance of option 1 is better compared to option 2, we prefer to use Option 1 for uplink codeword to layer mapping.
+
+[FIG:bd4dc9086ddcb8ad5b3e]
+
+Figure 5 Spectral efficiency comparison with 50 PRB allocation with QPSK modulation with frequency hopping
+
+[FIG:de43f285ab30694ed51f]
+
+Figure 6 Spectral efficiency comparison with 50 PRB allocation with 16 QAM modulation with frequency hopping
+
+Proposal 1: For DFT-S-OFDM, the modulated symbols are first mapped to subcarriers then OFDM symbols
+
+Dynamic Layer Mapping for Multi Codeword PDSCH
+
+The second aspect is how the layer mapping should work with multiple codewords for PDSCH. In MIMO systems, layer mapping is needed, when the number of codewords are less than the number of layers. In this contribution, we consider two design options for layer mapping with two codewords.
+
+Option 1: Use fixed layer mapping as in LTE
+
+Option 2: Use dynamic layer mapping
+
+In the existing LTE system the layer mapping table is fixed. However, it should be noted that if the number of codewords are less than the number of layers, then the CQI of each codeword is controlled by the minimum of SINR of the layers mapped to that codeword. This implies that even though some of the layers have the high SINR, the UE can’t indicate the CQI of these layers and the network can’t schedule higher modulation on these layers. To overcome this drawback, we recommend the UE should recommend the preferred layer mapping within a codeword as part of CSI. For example, the UE can choose those layers which have the same SINR and map them to a layer. Similar to the other scheduling decisions, the network may or mayn’t obey this layer mapping table recommendation. The design options are
+
+Fixed layer mapping: If we assume the layers are spilt such that 1st [EQ:4e1f8361ded85585ad5d] layers CW0 and remaining layers CW1, then the coded symbols are mapped from a pre-defined fixed mapping table similar to LTE. i.e. as shown in Table 1. Note that for NR, the current agreement 1st [EQ:c8fd980d20781f540222] layers CW0 and remaining layers CW1. Hence in this option, the transmitter and receiver knows which layers needs to be mapped to the codword apriori. For example, take the case of 8 layer transmission, in this case, the coded symbols from layers 1-4 are mapped to the first codeword and coded symbols from layers 5-8 are mapped to the second codeword.
+
+Number of layers | Number of codewords | Codeword-to-layer mapping [FIG:d9d72a62469ffe6f6112]
+1 | 1 | [FIG:390b1b981e49b41cc664] | 
+2 | 1 | [FIG:e2ed2b483b167c2e60af] | 
+ |  | [FIG:b5b5919d3a6b6dca0a73] | 
+3 | 1 | [FIG:e3754b06836c6957942d] | 
+ |  | [FIG:891c0dab99850a7e09a7] | 
+4 | 1 | [FIG:c14b8919371268718fc2] | 
+ |  | [FIG:0d59d67f2898addd90d1] | 
+5 | 2 | [FIG:a20b99172f915002cada] [FIG:77bb76ece6446b089dfa] | 
+ |  | [FIG:ac1eaef76f18437c378c] | 
+6 | 2 | [FIG:c4cdf850bc1f19888f55] | 
+ |  | [FIG:83cae8322e66cd4f9241] [FIG:222839024f845b04ee4a] | 
+7 | 2 | [FIG:c5f02450da3d284faafd] [FIG:1b40d2966fb09f1f13c3] | 
+ |  | [FIG:74bf406956f120d41b83] [FIG:d6a57738ef88ffbcd83d] | 
+8 | 2 | [FIG:f91b2e97f4baf0f25fbb] | 
+ |  | [FIG:1e094fda7f344defa45d] [FIG:f9a1b12eba16c9fb0ecc] [FIG:390eacbb8758a5da8cef] |
+
+Table 1 Fixed layer mapping
+
+Dynamic layer mapping: In this option, the mapping of codeword to layers is dynamic for a given rank. As shown in Table 2a-2d for 5-8 layer transmission.
+
+Table 2a Layer mapping combinations for 8 layer transmission
+
+Index | 8 layer transmission
+ | Codeword 1 | Codeword 2
+1234567891011121314151617181920212223242526272829303132333435 | 12341235123612371238124512461247124812561257125812671268127813451346134713481356135713581367136813781456145714581467146814781567156815781678 | 56784678457845684567367835783568356734783468346734583457345626782578256825672478246824672458245724562378236823672358235723562348234723462345
+ |  |
+
+Table 2b Layer mapping combinations for 7 layer transmission
+
+Index | 7 layer transmission
+ | Codeword 1 | Codeword 2
+1234567891011121314151617181920212223242526272829303132333435 | 12341235123612371245124612471256125712671345134613471356135713671456145714671567234523462347235623572367245624572467256734563457346735674567 | 567467457456345346347356357367234235236237245246247256257267167157156147146145137136135134127126125124123
+
+Table 2C Layer mapping combinations for 6 layer transmission
+
+Index | 6 layer transmission
+ | Codeword 1 | Codeword 2
+123456789101112131415 | 123412351236124512461256134513461356145623452346235624563456 | 5646453635342625242316151413125646
+
+Table 2d Layer mapping combinations for 5 layer transmission
+
+Index | 5 layer transmission
+ | Codeword 1 | Codeword 2
+12345 | 12341235124513452345 | 54321
+
+Note that the above dynamic layer mapping table assumes 1st [EQ:a134d5e4e15b9b9e727a] layers CW0 and remaining layers CW1. However the same principle can be used if we assume 1st [EQ:987d1406d6712d0c16b9] layers CW0 and remaining layers CW1.
+
+It is worthwhile to notice that the layer to codeword also correspond to single or multiple TRPs transmission. For example, in two TRP transmission case, each TRP may have only one codeword, each is mapping to one or multiple layers. UE can be configured with CSI-RS from both TRPs, then UE may recommend a CW to layer mapping based on the channel measurement. The recommended CW to layer mapping actually implies UE’s preference for single or multiple TRP transmission, as well as the ranks on each TRP.
+
+3.1 CQI distribution with Fixed and Dynamic Layer Mapping
+
+Note that with dynamic layer mapping the CQI is fed by the UE at any instance is better than the fixed layer mapping. Let’s define the CQI efficiency for two codeword MIMO as
+
+CQI efficiency = (Number bits per modulation symbol*Code rate in CW0) + (Number bits per modulation symbol*Code rate in CW1)
+
+Figures 7 shows the CDF distribution of CQI efficiency with rank information is equal to 8. It can be observed from figure that the CQI efficiency is always better than the fixed layer mapping. Figure 8-9 shows the CDF plots for rank information is equal to 7 and 6 respectively. Figure 10 shows the CDF distribution with dynamic rank adaptation. In all the cases, the dynamic layer mapping gives gains compared to fixed layer mapping.
+
+[FIG:02cb23997c061e65d339]
+
+Figure 7 CDF distribution of CQI efficiency with RI = 8
+
+[FIG:0dabbcd01df0accc47c2]
+
+Figure 8 CDF distribution of CQI efficiency with RI = 7
+
+[FIG:c493f2162f110642fc9c]
+
+Figure 9 CDF distribution of CQI efficiency with RI = 6
+
+[FIG:096676e8d62325f9522f]
+
+Figure 10 CDF distribution of CQI efficiency with dynamic rank adaptation
+
+3.2 Link Throughput Comparisonwith Fixed and Dynamic Layer Mapping
+
+Figure 11 shows the spectral efficiency as a function of SNR for fixed layer mapping vs dynamic layer mapping for rank 8 transmission. Note that in this case, the spectral efficiency is computed by
+
+Spectrum efficiency = TBS*(1-BLER)/(T*BW)
+
+Where, TBS is the transport block size in bits, BLER is the block error rate, T is the time duration of one subframe, and BW is the actual bandwidth. The link level simulation assumptions are shown in Table 2.
+
+[FIG:19c06fe5507f3c8e6a59]
+
+Figure 11 Spectral efficiency comparison with dynamic layer mapping and fixed layer mapping
+
+We consider 8 port MIMO configurations with 2 codewords are considered with link adaptation with fixed rate and precoding information. However the modulation and coding rate/transport block size are dynamically updated for each TTI. In our simulations we assume perfect channel estimation. The feedback is assumed to have 4 TTI delays and is assumed to be error free. Simulations are run for a UE with different SNRs and the wireless channel assumed is TDL-A channel. The velocity of the mobile is assumed to be 3 Kmph. The main simulation parameters are tabulated in Table 1.
+
+Table 2 Detailed link level simulation assumptions
+
+Assumptions | Value
+Carrier frequency | 4.0 GHz
+Duplex | FDD
+System Bandwidth | 10 MHz
+TTI length | 1 ms
+Subcarrier spacing | 15KHz
+Guard time interval | 4.7us (interval of LTE normal CP) as baseline
+FFT size | 1024
+Data transmission bandwidth | 48 subcarriers for 15 KHZ spacing
+Antenna configuration | (8,8,2,1,1)
+Number of codewords | 2
+Precoding codebook | LTE-Release 10
+Channel encoder | LTE turbo code
+MCS | For link adaptation: QPSK, 16-QAM and 64-QAM are considered with variable code rate
+Control Overhead | Zero
+Channel estimation | Ideal
+ACK/NACK feedback error rate | Baseline: 0%
+PMI / rank feedback error rate | Baseline: 0%
+CQI feedback error rate | Baseline: 0%
+Feedback delay | 4 TTI
+
+For analysis purposes, we used rank 8 transmission for all SNRs. It can be observed that with dynamic layer mapping, we can significant gain compared to the fixe layer mapping, The percentage of gains are around 18 % for SNR = 20 dB and 15 % at SNR = 25 dB as shown in Figure 12.
+
+[FIG:7864d0b9d9bb69479458]
+
+Figure 12 Percentage of gains of dynamic layer mapping compared to fixed layer mapping with two codewords
+
+For comparison purposes, we plotted the results with 2 codeword MIMO for rank = 4 transmission in Figures 13 and 14.
+
+[FIG:d183f5e8605280188ecd]
+
+Figure 13 Spectral efficiency comparison with dynamic layer mapping and fixed layer mapping with rank = 4 with two codewords
+
+[FIG:4987dc926e41e4661404]
+
+Figure 14 Percentage of gains compared to fixed layer mapping for two codeword MIMO
+
+Note that with dynamic layer mapping, the additional overhead is very less per each codeword compared to the case, if we use 8 codeword MIMO.
+
+Based on these observations we recommend
+
+Proposal 2: Dynamic layer mapping should be supported in NR for 5-8 layer transmission
+
+System Level Simulation Results for Dynamic Layer Mapping
+
+In this section, we analyse the benefits of dynamic layer mapping at system level. Note that we used 4x4 MIMO system with fixed rank = 4 for all the UEs with two codewords. . [FIG:3bf6384e297c3e74f155]
+
+Figure 15 System level gains compared to fixed layer mapping for two codeword MIMO
+
+The system level simulation assumptions are shown in Table 3. The gains are around 11% in average sector throughout and 10 % for the 90% throughput.
+
+Table-3 System-level simulation assumptions
+
+Parameters | FDD / 57TRPs /10 UEs
+Scenario | Dense urban
+Layout | Single layer: Macro layer: Hex. Grid
+Inter-BS distance | 500m
+Carrier frequency | 2GHz
+Simulation bandwidth | 5MHz
+Channel model | 3D UMa
+BS Tx power | 46dBm
+BS antenna height | 25m
+BS antenna number | (M,N,P,Mg,Ng) = (4,4,2,1,1)
+UE antenna number | (M,N,P,Mg,Ng) = (4,4,2,1,1)
+UE receiver | MMSE-IRC
+MIMO mode | SU-MIMO
+Traffic model | Full Buffer
+
+Layer Mapping Subset Restriction
+
+With dynamic layer mapping, the total number of combinations (L) for layers 5-8 is equal to
+
+[EQ:198131ab070f35c4874b]
+
+Hence in total 90 combinations in fixed layer mapping. For choosing the best combination, we recommend the UE can search all these combinations and chose the one which gives maximum capacity similar to the CSI computation. Since the UE is in better position to measure the SINR per each layer, we prefer UE to recommend the best layer mapping index.
+
+In addition, we don’t expect the best layer mapping index does not change, hence the best layer mapping index can be feedback less frequently similar to the rank feedback.
+
+Other option of reducing the number of combinations is to introduce layer mapping subset restriction similar to codebook subset restriction in LTE. With layer mapping subset restriction the network informs the UE which combinations it should consider in choosing the best layer mapping combination for reporting CQI of each codeword. For example, the network sends a bit map of length equal to 90 bits where the first 5 elements corresponds to the layer mapping combinations for rank 5 transmission, next 15 entries corresponds to the rank 6 transmission, next 35 entries corresponds to the rank 7 transmission and the last 35 entries corresponds to the rank 8 transmission.
+
+1 | 2 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 90
+
+Figure 16 An example of layer mapping subset restriction bit map
+
+For reducing the computations at the UE side, the network sets only few combinations in the layer mapping subset restriction bit map. Note that with layer mapping subset restriction, the network can use fixed layer mapping by setting only the first indices of each layer combination. Hence in our view this feature is very beneficial for multi codeword MIMO.
+
+Proposal 3: Layer mapping subset restriction bit map can be used to reduce the number of layer mapping combinations
+
+Conclusions
+
+In this contribution we outlined our views on the codeword to layer mapping with simulation results. Based on our observations we recommend
+
+Proposal 1: For DFT-S-OFDM, the modulated symbols are first mapped to subcarriers then OFDM symbols
+
+Proposal 2: Dynamic layer mapping should be supported in NR for 5-8 layer transmission
+
+Proposal 3: Layer mapping subset restriction bit map can be used to reduce the number of layer mapping combinations
+
+References
+
+[1]. R1-1714598, ‘‘Details on Resource Element Mapping’’, NTT DOCOMO.

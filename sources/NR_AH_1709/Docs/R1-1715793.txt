@@ -1,0 +1,85 @@
+3GPP TSG RAN WG1 Meeting NR#3 R1-1715793
+
+Nagoya, Japan, 18th – 21st, September 2017
+
+Source: CATT
+
+Title: On codeword mapping
+
+Agenda Item: 6.2.1.1
+
+Document for: Discussion and decision
+
+Introduction
+
+In 3GPP RAN1 #90 meeting, the following agreements on codeword mapping for NR have been reached [1]:
+
+Agreements: For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR: First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time) For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL No frequency and/or time interleaving is supported in Rel-15 NR FFS for DFT-s-OFDM uplink with and without frequency hopping Note that additional layer correspondence can be a separate discussion from 3 to 8 layers R1-1715161 WF on RE mapping for DFT-s-OFDM NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, QualcommAgreements: For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR: First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time) For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL No frequency and/or time interleaving is supported in Rel-15 NR FFS for DFT-s-OFDM uplink with and without frequency hopping Note that additional layer correspondence can be a separate discussion from 3 to 8 layers R1-1715161 WF on RE mapping for DFT-s-OFDM NTT DOCOMO, Huawei, HiSilicon, Intel, Mediatek, Qualcomm
+
+In this contribution, we present our consideration on remaining issues of codeword mapping in NR.
+
+Discussion on codeword mapping for NR
+
+Codeword-to-layer mapping
+
+In the previous meeting, it’s agreed to support at least the following layer split for L >4 layer transmission: the 1st [FIG:03760902aa9d7514a8e5] [FIG:f8e6aae65bf511f1b73c] layers CW0 and remaining layers CW1. In addition to that, it’s agreed that additional layer correspondence can be a separate discussion from 3 to 8 layers.
+
+Multi-TRP and multi-panel transmission might be one of the potential use cases for additional correspondence. In such scenarios, as the channels from different TRPs or panels could have quite different propagation properties, the supported number of layers from different TRPs or panels could be unbalanced. Based on that intuition, in the unbalanced split, each codeword can be mapped to one DMRS group. Alternatively, if one of the two codewords can be mapped onto more than one DMRS groups (a.k.a. multiple panels), we can still support an almost balanced layer split. The above discussed alternatives are illustrated as follows.
+
+Alt 1: unbalanced layer split
+
+Maps each codeword to one DMRS group
+
+Additional indication: codeword-to-DMRS port mapping (for each rank, more than one mappings are possible)
+
+Alt 2: almost balanced layer split
+
+One of the two codewords can be mapped onto more than one DMRS group to balance the number of layers among the two codewords
+
+Additional indication: not needed (mapping between CW and layer is rank dependent)
+
+[FIG:da3f312cd4be667548b7]
+
+Figure 1. Examples of layer split
+
+Proposal 1: In addition to almost balanced layer split, unbalanced layer split can also be considered.
+
+RE mapping for DFT-S-OFDM based PUSCH
+
+As agreed in [1], companies are encouraged to perform link-level evaluation of PUSCH CW-to-RE mapping schemes for DFT-s-OFDM with and without frequency hopping. In [2], the following examples are listed:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+[FIG:3c6b850ab819c6466463]
+
+Figure 2. Examples for 2-CB mapping
+
+For option 1, as data is spread over frequency domain with DFT, frequency domain first mapping can gain from frequency domain diversity. In addition, one more benefit with this approach is the support of fast decoding. However, if each codeblock is mapped within one hop, no more additional frequency domain diversity can be expected with frequency hopping.
+
+For option 2, time domain diversity can be achieved under fast channel variation in high mobility scenarios or with frequency hopping. However, as each codeblock is spread over all the symbols within the slot, fast decoding is impossible. Meanwhile, achievable time domain diversity within one slot would be questionable.
+
+For option 3, if each codeblock can be split into two hops, additional frequency domain diversity can be achieved, while fast decoding is still impossible.
+
+Observation 1: Both diversity gain and decoding latency should be taken into account in RE mapping scheme selection for DFT-S-OFDM based PUSCH.
+
+Proposal 2: Frequency first mapping is slightly preferred for DFT-S-OFDM based PUSCH.
+
+Conclusions
+
+In this contribution, we discussed the number of codeword(s) and codeword-to-layer mapping in NR. Based on the discussion above, we propose:
+
+Proposal 1: In addition to almost balanced layer split, unbalanced layer split can also be considered.
+
+Observation 1: Both diversity gain and decoding latency should be taken into account in RE mapping scheme selection for DFT-S-OFDM based PUSCH.
+
+Proposal 2: Frequency first mapping is slightly preferred for DFT-S-OFDM based PUSCH.
+
+References
+
+RAN1 #90 Chairman’s Notes.
+
+R1-1715161, “WF on RE mapping for DFT-s-OFDM NTT DOCOMO”, Huawei, HiSilicon, Intel, Mediatek, Qualcomm.
