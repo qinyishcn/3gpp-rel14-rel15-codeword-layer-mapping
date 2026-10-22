@@ -1,0 +1,145 @@
+3GPP TSG RAN WG1 Meeting #89 R1-1708448
+
+Hangzhou, P.R. China 15th – 19th May 2017
+
+Source: NTT DOCOMO
+
+Title: Discussion on Codeword Mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion
+
+Introduction
+
+At the last meeting, there were intensive discussions on codeword (CW) mapping including codeword-to-layer mapping for PDSCH/PUSCH, physical resource mapping and frequency interleaving. Agreements were reached as follows [1].
+
+Agreements:Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CWConclusions:RAN1 is to down select from the proposals (cf. Table 1) in R1-1706647 in RAN1#89 based on the design criteria also in R1-1706647.Conclusion:Continue discussions about layer mapping scheme and frequency interleaver until the next meeting, and RAN1 will definitely conclude it in the next meeting
+
+In this contribution, we present our views on details on codeword mapping for NR.
+
+Discussion
+
+Resource element mapping
+
+General
+
+After the modulation mapping, data symbols are to be mapped into resource elements (REs) across layer, time (OFDM symbol) and frequency (subcarrier) dimensions. Generally, there are six options listed as follows. In the LTE/LTE-A, the options 1 and 2 are supported for the downlink and uplink, respectively.
+
+Option 1: Layer Frequency Time (LTE/LTE-A DL)
+
+Option 2: Layer Time Frequency (LTE/LTE-A UL)
+
+Option 3: Frequency Layer Time
+
+Option 4: Frequency Time Layer
+
+Option 5: Time Layer Frequency
+
+Option 6: Time Frequency Layer
+
+One of the important requirements for NR design is the fast data decoding, i.e., pipe-line decoding of PDSCH/PUSCH especially for URLLC services with tight latency requirement. In this sense, it is natural that a codeblock (CB) is firstly mapped in the layer and frequency domains as in the options 1 and 3. In addition, option 1 achieves spatial diversity gain by distributing a single CB to multiple MIMO layers. Thus the option 1 is the baseline design both of the uplink and downlink.
+
+Observation 1: Option 1 (LayerFrequencyTime) is effective to achieve pipe-line decoding and spatial diversity gain.
+
+Frequency hopping for the uplink
+
+In the LTE/LTE-A, inter-slot frequency hopping can be applied for uplink PUSCH transmission. In order to exploit frequency hopping gain, it is beneficial that CW mapping in the time domain should come earlier than that for frequency domain. Considering the case that frequency hopping is used for random access message 3 transmission, it is better that the same CW mapping pattern is supported for NR, since quality of message 3 directly impacts the system coverage.
+
+Observation 2: In order to exploit frequency hopping gain, CW mapping with time domain should come earlier than that in frequency domain, i.e., Option 2, 5 or 6.
+
+Observation 3: Option 2 can achieve the similar coverage as LTE uplink with frequency hopping.
+
+Pre-emption of URLLC packet
+
+For the NR system, there is a situation that eMBB UEs and URLLC UEs co-exists. Figs. 1 show the case when eMBB REs are pre-empted by URLLC REs. Here, we’d like to discuss about CW mapping for two different NR HARQ schemes that is CB group (CBG)-level HARQ and CW-level. If CW mapping starts with frequency domain as in Fig. 1(a), received data is more likely to have busty error that has significant impact on LDPC channel coding/decoding performance. Similarly, successive CW mapping in layer-domain also results in bursty error, since URLLC packets pre-empt both of the eMBB layers. The mapping of Fig. 1(a) is more suitable for CBG-level HARQ, since the symbol errors are localized into specific CBGs and re-transmission occurs for the part of CBGs instead of re-transmission the whole TB. In order to localize the symbol errors, the order of CW mapping should be LayerFrequencyTime for CBG-level HARQ. On the other hand, for CW-level HARQ, the best order to avoid bursty error is TimeFrequencyLayer as shown in Fig. 1(b), since error symbols are more likely to be distributed to different CBGs. This order is also effective even for CBG-level HARQ with low LDPC coding rate, since unit of HARQ becomes large depending of the code rate.
+
+[FIG:36b49cc73582aa926655]
+
+(a) FrequencyTime (b) TimeFrequency
+
+Figure 1: Co-existence of eMBB and URLLC packet (eMBB REs are pre-empted by URLLC REs)
+
+Observation 4: Considering co-existence of eMBB and URLLC UEs,
+
+Option 1 (LayerFrequencyTime) is suitable for CBG-level HARQ.
+
+Option 6 (TimeFrequencyLayer) is suitable for CW-level HARQ (or CBG-level HARQ with low LDPC coding rate).
+
+Default procedure
+
+Even if several CW mapping schemes can be selected, e.g., by RRC signaling, we need to determine default procedure before RRC connection is setup. For example, it is necessary that we determine CW mapping for random access messages 2/3 and SIB1. For the signals, it is generally more important to consider signal coverage rather than fast data decoding.
+
+Proposal 1: Following CW mapping options are supported for NR.
+
+Option 1: Layer Frequency Time
+
+Option 2: Layer Time Frequency
+
+Option 6: Time Frequency Layer
+
+Flexible CW mapping
+
+Considering many different requirements for CW mapping as discussed above, it is better that gNB can dynamically control CW mapping, e.g., based on the existence of URLLC pre-emption and configured TB-based or CBG-based transmission. In order to cater for this, it is proposed that CW mapping is controlled with the number of TTI and the number of OFDM symbols per TTI that is dynamically signaled in DCI. Here, we show an example with the CW mapping with the order of of “Time (within TTI) Frequency Time (across TTI)”. By adjusting the two parameters, i.e., the number of TTI and the number of OFDM symbols per TTI, time and frequency domain mapping can be flexibly controlled as shown in Fig. 2.
+
+[FIG:4e7f23f4c3278cf295ce]
+
+(a) 1TTI (12 symbol per TTI) (b) 12TTI (1 symbol per TTI) (c) 3TTI (4 symbol per TTI)
+
+Figure 2: Flexible CW mapping
+
+Observation 5: Options 1, 2 and 6 can be achieved by following rule.
+
+CW mapping is performed in the following order: Layer Time (within TTI) Frequency Time (across TTI)
+
+Proposal 2: Support following CW mapping rule for NR.
+
+Layer Time (within TTI) Frequency Time (across TTI)
+
+Time (within TTI) Frequency Time (across TTI) Layer
+
+Frequency domain interleaving
+
+In the previous meetings, there was a discussion on necessity of frequency domain interleaving. The interleaving can achieve frequency diversity gain in frequency selective channel and interference. The gain becomes relatively large when LDPC CB-length (after modulation mapping) is sufficiently shorter than the number of scheduled subcarriers. For instance, assuming maximum CB-length of 8192 (including 24-bit CRC), 4 MIMO layers, 256QAM (R=8/9) and 100 RBs, more than 4 CBs are accommodated within single OFDM symbol. Although the gain of frequency domain interleaving is limited to high SINR region, it should not be harmful even for low to intermediate SINR at least when CW based HARQ is applied (non-CBG-based HARQ).
+
+Proposal 3: Frequency domain interleaving is supported for NR.
+
+Summary
+
+In this contribution, we presented our views on CW mapping. Observations and proposals were reached as follows.
+
+Observation 1: Option 1 (LayerFrequencyTime) is effective to achieve pipe-line decoding and spatial diversity gain.
+
+Observation 2: In order to exploit frequency hopping gain, CW mapping with time domain should come earlier than that in frequency domain, i.e., Option 2, 5 or 6.
+
+Observation 3: Option 2 can achieve the similar coverage as LTE uplink with frequency hopping.
+
+Observation 4: Considering co-existence of eMBB and URLLC UEs,
+
+Option 1 (LayerFrequencyTime) is suitable for CBG-level HARQ.
+
+Option 6 (TimeFrequencyLayer) is suitable for CW-level HARQ (or CBG-level HARQ with low LDPC coding rate).
+
+Observation 5: Options 1, 2 and 6 can be achieved by following rule.
+
+CW mapping is performed in the following order: Layer Time (within TTI) Frequency Time (across TTI)
+
+Proposal 1: Following CW mapping options are supported for NR.
+
+Option 1: Layer Frequency Time
+
+Option 2: Layer Time Frequency
+
+Option 6: Time Frequency Layer
+
+Proposal 2: Support following CW mapping rule for NR.
+
+Layer Time (within TTI) Frequency Time (across TTI)
+
+Time (within TTI) Frequency Time (across TTI) Layer
+
+Proposal 3: Frequency domain interleaving is supported for NR.
+
+References
+
+3GPP, “Draft report of 3GPP TSG RAN WG1 #88bis v0.2.0,” Apr. 2017.
