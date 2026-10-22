@@ -1,0 +1,245 @@
+3GPP TSG RAN WG1 Meeting # 88bis R1-1705073
+
+Spokane, USA, 3rd - 7th April 2017
+
+Agenda Item: 8.1.2.1.1
+
+Source: Huawei, HiSilicon
+
+Title: Codeword to layer mapping in NR
+
+Document for: Discussion and decision
+
+Introduction
+
+In RAN1 #87 Adhoc [1], the following agreements regarding to the codeword to layer mapping were made:
+
+For the DL/UL data channels, study whether/how the interleaving is performed in the codeword to layer mapping procedure (e.g., a per-OFDM-symbol subcarrier interleaver in the codeword to layer mapping procedure, etc.)
+
+This may or may not be connected with coding design
+
+For NR codeword to layer mapping, it was agreed in the RAN1#88 [2] that,
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 2-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+FFS for 3 & 4-layer transmissions
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+In RAN1#88 [2], the following working assumption is provided.
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):
+
+For 3 and 4-layer transmission: 1 CW
+
+FFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)
+
+Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+In this contribution, we provide our views and simulation results on the number of codewords pertaining to 2, 3 and 4 layers of physical data channel. The codeword to layer mapping is also discussed in this contribution. We also provide our view and some simulation results on codeword to layer mapping in NR.
+
+New requirements on codeword in NR
+
+New requirements for codeword to layer mapping design in NR include:
+
+Large bandwidth and High speed
+
+Considering the large scheduling bandwidth, one OFDM symbol can contain several code blocks. One CB may only occupies one OFDM symbol due to the large bandwidth. Therefore the CB cannot use the time diversity which will affect the performance seriously in high speed scenario especially NR need to support 500km/h.
+
+Single TRP/panel transmission and multi-TRP/panel transmission
+
+For multi-TRP/panel transmission, antenna ports from different TRPs/panels experience different large-scale properties. In this scenario, MCS from different TRPs/panels may be quite different and joint precoding among all antenna ports is not suitable.
+
+Discussion on codeword number
+
+For 2 MIMO layers in LTE, 2-to-2 layer mapping, instead of 1-to-2 layer mapping, was introduced. Such decision is mainly due to the fact that the performance gain of 2-to-2 mapping is not negligible. Furthermore, in the case of multi-TRP or multi-panel transmission, the channels from different TRP/panel will be different, especially in the case with different beamforming. If only with one CW with one CQI feedback and HARQ, only the rank-2 transmission only with the same MCS, so the performance will be very limited. As show in Figure-11 in Appendix, for up to 2 layers transmission, 1 CW shows obviously performance loss compared to 2 CWs in the two-TRP case.
+
+For 3 and 4 layers, although there is a working assumption that 3/4 layers with 1 CW. However, the working assumption will be introduce a restriction on the performance. For higher rank, such as 3/4, the channel will be with more multi-paths, so different layer will experience different channel characterises. Then, the different channel corresponds to different MCS and require separate HARQ feedback, especially for the case with multi-TRP/panel. So, in the case of 3/4 layers, the performance loss of 1 CW compared to 2 CW will be enlarged.
+
+As shown in Fig. 1, we first compare different codewords for up to 4 MIMO layers in singe-TRP transmission, where the baseline is 1 codewords. It can be found that 2 codewords outperforms 1 codeword (up to 43.2% for 50% UPT, 17.47 for mean UPT and 68.65% for 5% UPT). As a result, 2 codewords is generally a good choice for up to 4 MIMO layers considering trade-off between performance and signaling/feedback overhead.
+
+[FIG:84adf06428d5e5a8c8c7]
+
+Figure 1 Performance of different codewords for up to 4 MIMO layers in single-TRP SU-MIMO
+
+In Fig. 2, we compare different codewords mapping for up to 4 MIMO layers in NC-JT SU-MIMO with distributed scheduling. In the simulation, a UE can receive up to 4 MIMO layers transmitted by two TRPs, respectively. The total layers can come from 2 codewords or from one codeword. Compared to single TRP SU-MIMO with 2 codewords, both NC-JT SU-MIMO with 2 codewords and with 1 codeword can achieve significant performance gain. Since there is only distributed precoding on each TRP for NC-JT, interference exists between layers transmitted from two TRPs. For such UEs, 2 codewords enables CW-SIC receiver to improve performance over one codeword significantly.
+
+[FIG:98df1cee5e750f0485dd]
+
+Figure 2 Performance of different codewords for up to 4 MIMO layers NC-JT SU-MIMO
+
+In Fig.3, we compare different codeword mapping for up to 4 MIMO layers for multi-panel system. In this simulation, a UE can receive up to 4 MIMO layers transmitted from 2 antenna panels where each panel have 2 antenna ports. From the simulation results, we can find that 2CWs have significant performance gain over 1CW as inter-panel precoding is not used. What’s more, in the multi-panel case, as the power of interference from another panel is almost the same with the useful signal, parallel interference cancellation has better performance than the successive interference cancellation which requires a SINR gap between CWs.
+
+[FIG:42acf278b5a192c022d9]
+
+Figure 3 Performance of different codewords for up to 4 MIMO layers （Multi Panel）
+
+It can be easily found that the more codewords, the better link adaptation and CW interference cancellation for single-TRP, multi-TRP and multi-panel transmission. Meanwhile, compared to codeblock-level link adaptation and interference cancellation, CW-level link adaptation and interference cancellation is a more proper granularity to be supported, which would guarantee good performance but not induce too much signaling/feedback overhead. Based on the aforementioned simulation results and analysis for up to 4 MIMO layers, it can be easily derived that two codewords are the key to achieve high system-level performance. It is due to the fact that more codewords can achieve better link adaptation results with the increase of MIMO layers.
+
+Proposal 1: The working assumption of “For 3 and 4-layer transmission: 1 CW” should be dropped.
+
+Proposal 2: NR MIMO should support 2 codewords mapped to 3 and 4 MIMO layers per PDSCH/PUSCH assignment per UE.
+
+Codeword to layer mapping design
+
+Two aspects of discussion about codeword to layer mapping were agreed to be further studied in RAN1 #88 meeting. For the first aspect, the mapping scheme from a codeword to the physical resources should be studied, e.g. the mapping order of symbols/layers/subcarriers. In addition, the schemes of mapping level (symbol or code block (CB) level) and interleaver (at bit/symbol/CB level) should be considered as well. For the second aspect, one needs to clarify the reason or motivation of the proposed mapping scheme. Basically, no matter what kind of mapping scheme/order is employed, the most essential motivation is to obtain sufficient diversity gain wherever in time/frequency/spatial domain. On the other hand, some other factors should be jointly considered, such as fast decoding or scheduled bandwidth etc.
+
+Discussion about mapping patterns
+
+Relationship between mapping schemes and mapping patterns
+
+Figure 4 and Figure 5 illustrated two different mapping schemes. The common part of both schemes is symbol-level mapping. But the scheme shown in figure 4 did not use interleaving, and the mapping order in the sequence of layer--> frequency-->time. While in figure 5, the scheme uses interleaving, and the mapping order is frequency-->time-->layer. Although these two mapping schemes are quite different, but the symbol patterns, i.e. the mapping outcomes, of them are identical.
+
+Observation 1: For a particular mapping pattern, the scheme of codeword-to-layer mapping is not unique.
+
+[FIG:cd8f9e40884bb2f0b240]
+
+Figure 4. Symbol level mapping without interleaving, layer firstly
+
+[FIG:1bdf4c4d1ae8d6770066]
+
+Figure 5. Symbol level mapping with interleaving, frequency-time firstly
+
+It is obvious that the performance eventually relies on the mapping pattern rather than the mapping scheme. Therefore, it is still premature to discuss the detail of mapping schemes. Instead, the attention should be focused on the mapping patterns.
+
+Proposal 3: The investigation on a detailed codeword-to-layer mapping pattern should be prior to the discussion of the associated mapping schemes.
+
+Design consideration of mapping patterns
+
+There could be quite a few candidates for the codeword-to-layer mapping patterns. In this contribution, three typcial mapping patterns are analysed. The first pattern is the baseline pattern for the discussion, which utilise the traditional LTE mapping scheme. In LTE, there is no symbol-level interleaving when codeword is mapped to layer, and the mapping order follows the sequence of layer->frequency->time. Compared to the baseline pattern, the second pattern allows per-OFDM symbol frequency interleaving [4]. The third pattern further extends the interleaving to the time domain. In other words, it allows the joint interleaving in both frequency and time domain.
+
+To investigate the difference of three mapping patterns introduced above, an exmple is given in Figure 6. In Figure 6, the scheduled bandwidth is assumed to be large and can accomdate up to 4 CBs, and the codeword is allowed to be mapped to N OFDM symbols. For pattern 1, multiple CBs are mapped one by one in a predefined order without interleaving. In pattern 2, the time (symbol) position of all the CBs are exactly the same as in pattern 1. Each CB is divided into P segments, and interleaved in the frequency domain within the associated OFDM symbol. However, the interleaver is only among the segments from the CBs assigned to the OFDM symbol. In pattern 3, each CB is divided into Q segments, and all the segements are allowed to be interleaved over the time-frequency resource grid. In this case, the interleaver is among all the segments from all the CBs. Apparently, the number of segment candidates for interleaving in pattern 3 can be much larger than that in pattern 2. Therefore, the pattern 3 is beneficial from more sufficient diversity gain than the pattern 2.
+
+Note that N may not occupy the whole scheduling interval, which can be further study
+
+[FIG:8c576e707c8bb2b79cfc]
+
+Pattern 1 Pattern 2 Pattern 3
+
+Figure 6. An example of 3 mapping patterns
+
+Simulation results and analysis
+
+The link-level simulation is setup to demonstrate the performance difference of the mapping patterns discussed above. The carrier frequency is 4GHz and the CDL-A channel model is employed with 100ns spread delay. According to section 2, large bandwidth and high speed are two important features in NR for investigation. Therefore, we simulated system bandwidths of 30MHz and 60MHz, and velocities of 3km/h and 120km/h respectively. Other detailed simulation parameters can be referred to table-2 in the appendix.
+
+Figure 7 and Figure 8 give the BLER and Throughput of above 3 mapping patterns under low speed and high speed scenarios respectively. The system bandwidth is 60MHz. The modulation order and code rate is set to 64QAM and 5/6.
+
+In general, the pattern 3 outperforms than the other two patterns. Especially in the high speed case, the performance enhancement is significant. It can be expected that the pattern 3 can achieve a much better performance in high speed scenario due to the time-domain diversity gain. One may argue that the pattern 3 does not fit for fast-decoding. However, in the high speed scenario, the decoding latency is, anyway, constrained by the additional DMRS pattern. Therefore, the pattern 3 is quite suitable for high speed scenario.
+
+Observation 2: The codeword-to-layer mapping pattern with both time and frequency interleaving is superior in the high speed scenario.
+
+[FIG:ceef7cef842947dab3e0] [FIG:f8e858ef0f418e54ff04]
+
+Figure 7. Performance with Low speed
+
+[FIG:2832da8c608ccb8b3f85] [FIG:44de3d117a4cc4a2d029]
+
+Figure 8. Performance with FigureHigh speed
+
+Figure 9 gives the BLER and Throughput at high speed scenario when bandwidth is reduced to 30MHz, and the modulation order and code rate are set to 16QAM and 3/4.
+
+In figure 9, the performance curves of pattern 1 and pattern 2 are overlapped. While in figure 7, the pattern 2 still show some, but very limited, performance enhancement over the pattern 1. Obviously for pattern 2, the reduced frequency resources limits the number of CB in the frequency domain within an OFDM symbol, which reduced the diversity gain. Therefore, the diversity gain of pattern 2 could be very limited when the scheduled bandwidth is not sufficiently large or the frequency selectivity is severe. On the other hand, the increased complexity caused by interleaving is still the price to pay.
+
+Observation 3: The codeword-to-layer mapping pattern with solely frequency interleaving has limited diversity gain when the scheduled bandwidth is small or the frequency selectivity is severe.
+
+[FIG:871fcab8f2c1107db50e] [FIG:ab2c8fd485167cf322b5]
+
+Figure 9. Performance with 30MHz and 120km/h,16QAM(3/4)
+
+According to the simulation results and the observations, the pattern 2 have very limited application scenario as its performance is highly dependent on scheduled bandwidth and frequency selectivity. The pattern 3 shows its superiority than the rest two patterns, but may be limited in some application scenarios when fast decoding is required. The pattern 1 receives no diversity gain but has the least complexity. In this sense, the codeword-to-layer mapping patterns could be scenario dependent.
+
+Proposal 4: Different scenarios have different requirements and characteristics, therefore different mapping patterns and schemes are needed.
+
+Multi-TRP/panel transmission case
+
+For multi-TRP/panel transmission, antenna ports from different TRPs/panels couldn’t be assumed QCLed as they experience different large-scale properties. In this scenario, MCS from different TRPs/panels may be quite different and joint precoding among all antenna ports is not suitable. In this case, advanced receiver such as SIC/PIC has better performance than IRC receiver. Therefore, codeword to layer mapping design needs to take the requirement of layer group-level IC into account, especially for the multi-TRP/panel transmission case.
+
+[FIG:4450ff325cbb5d574fae]
+
+Figure 10. Symbol-level mapping for multi-TRP/panel transmission
+
+Figure 10 shows an example where symbol-level mapping for multi-TRP/panel transmission is used. In this case, CBs are divided into multiple CB groups and mapped to different layer groups with the restriction that one CB group shouldn’t map to more than one layer group. The antenna ports corresponding to different layer groups are not QCLed with each other. In one layer group, the corresponding antenna ports are QCLed. For the other mapping and interleaving scheme as mentioned in above section, the same formula can be used as well, where cross layer-group mapping is avoided to facilitate data reception that transmitted from different TRPs/panels.
+
+Proposal 5: To better support the multi-TRP/panel transmission, cross layer-group mapping and interleaving should be avoided.
+
+Conclusion
+
+In this contribution, we have the following observations and proposals:
+
+Observation 1: For a particular mapping pattern, the scheme of codeword-to-layer mapping is not unique
+
+Observation 2: The codeword-to-layer mapping pattern with both time and frequency interleaving is superior in the high speed scenario.
+
+Observation 3: The codeword-to-layer mapping pattern with solely frequency interleaving has limited diversity gain when the scheduled bandwidth is small or the frequency selectivity is severe.
+
+Proposal 1: The working assumption of “For 3 and 4-layer transmission: 1 CW” should be dropped.
+
+Proposal 2: NR MIMO should support 2 codewords mapped to 3 and 4 MIMO layers per PDSCH/PUSCH assignment per UE.
+
+Proposal 3: The investigation on a detailed codeword-to-layer mapping result should be prior to the discussion of the associated mapping schemes.
+
+Proposal 4: Different scenarios have different requirements and characteristics, therefore different mapping results and schemes are needed.
+
+Proposal 5: To better support the multi-TRP/panel transmission, cross layer-group mapping and interleaving should be avoided.
+
+References
+
+3GPP RAN1#87 Adhoc, Chairman’s note, Spokane, USA, January 16-20, 2017.
+
+3GPP RAN1#88, Chairman’s note, Athens, Greece, February 13 – 17, 2017.
+
+R1-1704225, Huawei, HiSilicon, Multi-TRP coordinated transmission, 3GPP RAN1#88bis, Spokane, USA, April 3 - 7 2017.
+
+R1-1702597, Qualcomm, Frequency domain interleaving, 3GPP RAN1#88, Athens, Greece, February 13 - 17, 2017.
+
+Appendix
+
+Table-1 System-level simulation assumptions
+
+Parameters | TDD / 57TRPs
+Scenario | Dense urban
+Layout | Single layer: Macro layer: Hex. Grid
+Inter-BS distance | 200m
+Carrier frequency | 4GHz
+Simulation bandwidth | 10MHz
+Channel model | 3D UMa
+BS Tx power | 41dBm
+BS antenna height | 25m
+BS antenna number | (M,N,P,Mg,Ng) = (2,2,2,1,1)
+UE antenna number | (M,N,P,Mg,Ng) = (1,2,2,1,1) or (2,2,2,1,1)
+UE receiver | MMSE-IRC
+MIMO mode | SU-MIMO or MU-MIMO with rank adaptation
+Traffic model | FTP model 1 with packet size = 0.5M
+
+Table-2 Link-level simulation parameters
+
+Parameter | Value
+Carrier Frequency | 4 GHz
+Channel Model | CDL-A with 100ns delay
+Velocity | 3km/h, 120km/h
+eNB Antenna Configuration | 4Tx cross polarized array with 0.5λ antenna spacing
+UE Antenna Configuration | 2 Rx with 0.5λ antenna spacing
+CP | Normal
+Waveform | CP-OFDM
+Modulation order | 64QAM 、16QAM
+Code Rate | 5/6 、3/4
+Signal Bandwidth | 60MHz、30MHz
+Channel Estimation | Non-Ideal
+Receiver | MMSE receiver
+CW number | 1
+Layer number | 1
+Rank Adaption | No
+
+[FIG:f2be23df25351861ceda]
+
+Figure 11 Performance of different codewords for up to 2 MIMO layers in NC-JT MU-MIMO
