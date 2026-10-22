@@ -1,0 +1,149 @@
+3GPP TSG RAN WG1 89 R1-1707942
+
+Hangzhou, China, 15th - 19th May 2017
+
+Agenda item: 7.1.2.1.1
+
+Source: Samsung
+
+Title: Finalizing Layer Mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#88 and 88bis, the following agreement on DL MIMO was made [1][2]:
+
+Agreements:NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 4-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CW
+
+From the above agreement and the summary contributions [3][4], it can be inferred that the only remaining issues on layer mapping are as follows:
+
+(Aspect 1 in [4]) Correspondence between 2 CWs and L layers for L>4
+
+(Aspect 2 in [4]) Mapping order: The manner in which a CW is mapped across multiple layers, sub-carriers (within the allocated PRBs), and OFDM symbols (within a slot)
+
+Support for per-symbol frequency interleaver
+
+A summary of candidate schemes for Aspect 1 and 2 of [4] is reproduced below:
+
+Table 1 Summary (note: Scheme 7 is removed due to the absence of concrete proposal)
+
+Scheme | Aspect 1 | Aspect 2
+1 | Fixed correspondence:The 1st [EQ:12fd9afec26edcb66613] layers CW0Remaining layers CW1 | Layer Frequency Time
+2 | Variable correspondence:The 1st [EQ:533ceb3f6b8fd809a282] layers CW0 or 1Remaining layers CW1 or 0 | Configurable between: Layer Frequency TimeLayer Time Frequency
+3 | Fixed correspondence:The 1st [EQ:71b050c6d73d3395f330] layers CW0Remaining layers CW1With layer shifting | Frequency Layer Time
+4 | Fixed correspondence:The 1st [EQ:f9394c1d70f2e1eb2044] layers CW0Remaining layers CW1 | Time Frequency Layer
+5 | Fixed correspondence:The 1st [EQ:30d746f1b7d1fb7f7517] layers CW0Remaining layers CW1 | Layer set 1 Frequency Time Layer set 2 Frequency Time
+6 | Variable correspondence:L0 layers CW0 (where L0 is configurable) L – L0 layers CW1 | Two schemes: Layer Frequency TimeLayer Time FrequencyEither choose one or support both (configurable)
+
+In this contribution, Samsung’s views on the open issues are presented.
+
+Correspondence between 2 CWs and L layers (L>4)
+
+A fixed correspondence between 2 CWs and L>4 layers used in LTE is the simplest alternative. A fully flexible correspondence adds onto the fixed correspondence the following features:
+
+Feature 1: For a given number of layers L (>4), each of the 2 CWs can correspond to different number of layers. Without any constraint, the second column of Table 2 outlines all possible combinations of (L0,L1) where Ln denotes the number of layers associated with CW-n. The boldfaced blue highlighted combinations are the ones used for LTE fixed correspondence. Therefore, for a given value of L, there are (L – 1) possibilities.
+
+Feature 2: For a given number of layers for CW-n Ln which can take value from {1, 2, 3, 4, 5, 6, 7}, the set of layers associated with CW-n, along with its permutations, can also vary. Therefore, for a given L and L0, there are [EQ:0ffc25de22636f7a8d9d] possibilities.
+
+Table 2 All possible number of layers for each of the 2 CWs
+
+L | All possible combinations of (L0, L1) | Reduced possible combinations of (L0, L1)
+5 | (1,4), (2,3), (3,2), (4,1) | (1,4), (2,3), (3,2), (4,1)
+6 | (1,5), (2,4), (3,3), (4,2), (5,1) | (2,4), (3,3), (4,2)
+7 | (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) | (3,4), (4,3)
+8 | (1,7), (2,6), (3,5), (4,4), (5,3), (6,2), (7,1) | (4,4)
+
+Thus, for a given value of L, the total number of possible correspondences is [EQ:03594624e9641b6fcfd3] . This results in 205, 1236, 8659, and 69280 possibilities for L=5, 6, 7, and 8, respectively. As this correspondence needs to be signaled in DCI (DL) and/or CSI repotting (UL), it requires up to 17-bit signaling field.
+
+If, indeed, flexible correspondence offers some performance gain (which needs to be verified via system-level simulation), the number of possibilities can be reduced by the following considerations:
+
+Any functionality of the features which deals with ordering across layers (as in scheme 2 and 6) can be removed since it is expected that such functionality, if beneficial, is taken care of by precoding (i.e. ordering/permutation is a special case of phase rotation). This is a reasonable assumption as long as the codebooks are designed with sufficiently high spatial resolution.
+
+To ensure that no new layer mapping scheme (mapping of one CW to ≥1 layers) is introduced, possibilities that require Ln>4 should be removed. If this condition is observed, flexible correspondence can be further assessed without affecting the completion of other NR components (such as channel coding, TBS table design, UL control design).
+
+If the above two criteria are applied to designing a scheme for flexible correspondence, the remaining possible combinations of (L0, L1) are outlined in the third column of Table 2. This leaves us with [EQ:d20f246230a69b24290c] combinations for a given value of L. In addition, feature 2 disappears, resulting in the total number of possibilities of [EQ:50a36ee6ac12983ddea6] for a given value of L (which requires at most 2 bits). This variable correspondence scheme can be described as follows:
+
+The 1st [EQ:b5e8521e96773b649e6b] layers CW0, where [EQ:46e58a70d66dcb443063]
+
+Remaining [EQ:7e0ab49ba0357806b917] layers CW1
+
+Proposal: Select one of the following two correspondence schemes where the first [EQ:b44879ed88a4d317e705] layers are mapped to CW0 while the remaining [EQ:6a1686c2ce343bd612a8] layers to CW1:
+
+Scheme 1 (fixed correspondence): [EQ:180187e83abadb4343dc]
+
+Scheme 2 (variable correspondence): [EQ:993d1fca0be977640398]
+
+Mapping order
+
+To choose among the six layer mapping order schemes, the following criteria were outlined in [4] and agreed in RAN1#88bis:
+
+Criterion 1: System-level and/or link-level performance
+
+Criterion 2: Low UE processing latency
+
+Criterion 3: URLLC puncturing
+
+Criterion 4: Limitations imposed by the agreed DMRS design (e.g. front-loaded/additional DMRS symbols)
+
+Criterion 5: UL waveform (DFT-SOFDM vs. CP-OFDM)
+
+Criterion 6: Dynamic TDD (cross-link interference)
+
+First, since multi-layer transmission is only applicable to CP-OFDM, layer mapping design is not intended for DFT-SOFDM. The mapping order (in time and frequency) for DFT-SOFDM is not addressed in this discussion (criteria 5).
+
+Second, criterion 2 is fulfilled when the symbol stream is first mapped across sub-carriers (frequency) then OFDM symbols (time). This allows data transmission to be confined as much as possible in time. In this case, either LFT or FLT ordering fulfills this criterion in the sense that UE processing latency is minimized.
+
+Third, criterion 3 and 6 may result in the loss of at least one CB as one OFDM symbol can be punctured (URLLC mini-slot) or some of the allocated RBs suffer from interference (dynamic TDD). Regardless of the layer mapping order, CB-group HARQ (which has been agreed for NR) is intended to counteract such effects. Therefore, optimizing layer mapping order for criterion 3 and 6 seems redundant in lieu of CB-group HARQ.
+
+Criterion 4 (the location of DMRS relative to each of the CBs of the same CW) impacts link level performance (hence related to criterion 1). In particular, if the symbol stream is first mapped across OFDM symbols (time) before sub-carriers (frequency), it is expected that all the CBs belonging to the same CW experience the same performance (due to the distance between DMRS symbols and data symbols from each CB). However, this issue is relevant only for high UE speed and large number of CBs wherein some of the CBs may experience more severe channel estimation impairments. Yet again, CB-group HARQ can counteract this problem if some CBs fail to be decoded due to higher channel estimation error. In addition, the utility multi-layer transmission at high UE speed is quite questionable. Therefore, optimizing layer mapping ordering for such scenarios (or supporting configurable layer mapping ordering for this reason) lacks justification considering the specification impact.
+
+Based on the above analysis, the following proposal is made.
+
+Proposal: For UL data channel with CP-OFDM waveform and DL data channel, the modulated symbol stream associated with a codeword is mapped to the allocated resource in the following manner:
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+Support for inter-CB frequency interleaver
+
+When the number of CBs per CW is sufficiently large relative to the number of allocated PRBs, a CB can occupy only a small number of PRBs. In the event of frequency selective fading, some CBs impacted by the fading can be lost. While the loss of CBs can also be reduced with CB-group HARQ, a remedy which does not impact layer mapping ordering (or layer mapping scheme in general) can be attractive. In this case, frequency-domain interleaver which operates across CBs can avoid this problem by spreading a CB across all the allocated PRBs. As long as each CB occupies a small portion of the allocated PRBs, the CB can still be contained within one OFDM symbol after interleaving.
+
+Since this frequency interleaver is beneficial only when the number of CBs is large relative to the number of allocated PRBs, this interleaver should only be used under such condition(s). In terms of specification impact, this interleaver can be incorporated in CB concatenation where this interleaving is performed across groups of QLn bits (Q is the number of bits per modulation symbol, Ln is the number of layers for the CW). A detailed proposal for this interleaver is given in the companion contribution [5].
+
+Proposal: If inter-CB frequency interleaver is supported, it is used only when the number of CBs per CW is large relative to the number of allocated PRBs.
+
+Performed in CB concatenated by interleaving across groups of QLn bits
+
+[FIG:6f8035b70096d7d2d61e]
+
+Figure 1 Layer mapping scheme assuming fixed correspondence
+
+Conclusions
+
+In this contribution, Samsung’s view on remaining issues on layer mapping is presented. Our proposal can be summarized as follows:
+
+Select one of the following two correspondence schemes where the first [EQ:8403a95f21ea2a30fa7d] layers are mapped to CW0 while the remaining [EQ:e9eae04b09ab571e773b] layers to CW1:
+
+Scheme 1 (fixed correspondence): [EQ:c50b90e3dce34db8e184]
+
+Scheme 2 (variable correspondence): [EQ:7b92481ef62c9e28c5e0]
+
+For UL data channel with CP-OFDM waveform and DL data channel, the modulated symbol stream associated with a codeword is mapped to the allocated resource in the following manner:
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+If inter-CB frequency interleaver is supported, it is used only when the number of CBs per CW is large relative to the number of allocated PRBs.
+
+Performed in CB concatenated by interleaving across groups of QLn bits
+
+References
+
+3GPP, RAN1#88, Chairman’s Notes
+
+3GPP, RAN1#88bis, Chairman’s Notes
+
+3GPP, R1-1706216, Samsung, Huawei, Summary of Issues on Codeword-to-Layer Mapping for NR
+
+3GPP, R1-1706647, Samsung, Layer Mapping Candidates
+
+3GPP, R1-1708045, Samsung, Segmentation and concatenation for data channel

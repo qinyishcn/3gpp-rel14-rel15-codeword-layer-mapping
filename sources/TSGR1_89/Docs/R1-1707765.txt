@@ -1,0 +1,115 @@
+3GPP TSG RAN WG1 Meeting #89 R1-1707765
+
+Hangzhou, P.R. China 15th – 19th May 2017
+
+Agenda Item: 7.1.2.1.1
+
+Source: Lenovo, Motorola Mobility
+
+Title: Discussion of codeblock mapping for UL and DL data channel
+
+Document for: Discussion
+
+Introduction
+
+In the January RAN1 ad hoc meeting, it was decided that study of interleaving in the codeword to layer mapping procedure is needed for 5G NR [1]. In RAN1#88 meeting, the following agreements were reached [2].
+
+Agreements:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+In the RAN1#88bis meeting, several different approaches of RE mapping have been presented. These proposals are summarized in [3]. The following factors should be considered for choosing the layer mapping scheme [4]:
+
+System-level and/or link-level performance
+
+Low UE processing latency
+
+URLLC puncturing
+
+Limitations imposed by the agreed DMRS design (e.g. front-loaded/additional DMRS symbols)
+
+UL waveform (DFT-SOFDM vs. CP-OFDM)
+
+Dynamic TDD (cross-link interference)
+
+In addition to these factors, resource mapping for code word and code blocks should be considered jointly with the HARQ scheme. Besides the traditional HARQ-ACK feedback with one bit per TB (as in LTE), code block group (CBG)-based transmission/retransmission with multiple HARQ-ACK bits feedback is supported.
+
+In RAN1#88bis meeting, the following agreements on CBG-based HARQ were reached [3].
+
+Agreements:
+
+CBG-based transmission with single/multi-bit HARQ-ACK feedback is supported in Rel-15, which shall have the following characteristics:
+
+Only allow CBG based (re)-transmission for the same TB of a HARQ process
+
+CBG can include all CB of a TB regardless of the size of the TB – In the such case, UE reports single HARQ ACK bits for the TB
+
+CBG can include one CB
+
+CBG granularity is configurable
+
+In this contribution, we continue our discussion of codeword to RE mapping [5]. In particular, we discuss RE mapping in the context of the CGB-based HARQ scheme, and with channel fading and interference in mind. We analyze how to reduce unnecessary retransmission of CBs by properly mapping their modulation symbols in the frequency, time and spatial domains. The RE mapping scheme applies to the DL/UL data channel at least for eMBB packets.
+
+Discussion
+
+When CBG-based transmission/retransmission is configured for a UE, a single ACK/NACK bit corresponding to a CBG is fed back from the receiver. The feedback is an ACK only if all the CBs in the CBG are decoded correctly, otherwise a NACK bit is sent and the CBG, including all its CBs, will be retransmitted. This makes the transmission success of a CBG dependent on the decoding of all the CBs, especially the CB with the worst receive quality. Similar to LTE, a codeword corresponds to a transport block (TB). A single MCS is applied to a CW, i.e. the modulation order corresponding to all the CBs in a CW have the same modulation order MCS, despite of the potentially different channel conditions and interferences experienced by the CBs. The modulation symbols corresponding to the CBs in a CBG (or CBGs) are mapped to their respective time/frequency/spatial resources by the codeword-to-RE mapping scheme. Because different CBGs have separate ACK/NACK feedback bits, their transmission/retransmission processes are independent. Therefore we focus on the RE mapping of the CBs belonging to the same CBG. The probability of success in decoding of a CB is determined by the code block size, modulation order, coding rate, and the SINR of the received modulation symbols. While factors such as code block size, modulation order and coding rate can be controlled by the transmitter based on the channel state information at the TB level, the received SINR of the modulation symbols, or equivalently the softbits are affected by the channel at the individual RE level, including frequency selective fading in the frequency domain and fast fading in the time domain, as well as channel inequality in the spatial domain (when the transmission rank is greater than 1). We can make the following observations:
+
+Observation 1: The same modulation order and nominal code rate applied to all CBs in a CBG (and all the CBs in a CW) leads to different decoding success probabilities for the CBs. This is due to potential differences in channel quality due to effects including frequency selective and fast fading, and different interference experienced by the different CBs.
+
+Observation 2: Whether a CBG needs retransmission depends on the probability to successfully decode all of its CBs, especially the CB received with the lowest SINR.
+
+In addition to different channel conditions, different REs are also subject to potentially different interference levels. Transmissions in NR may occupy a slot or a minislot, where a minislot may have TTI length as short as 1 OFDM symbol. A minislot is especially suitable for URLLC transmission to meet the low latency requirement. A typical URLLC transmission may be sent in one or two OFDM symbols. Different numerology, i.e. larger subcarrier spacing, may be used to further shorten the URLLC transmission. This makes URLLC transmission very bursty in the time domain, and may cause short but significant interference when multiplexed with eMBB traffic. In the frequency domain, eMBB transmission and URLLC transmission are likely to occupy different numbers of PRBs, and these PRBs can be contiguous or distributed in the frequency domain. It is very hard to predict in which PRBs they may overlap in the frequency domain. URLLC interference may come from neighbor cells or even from the same cell. In the downlink, the gNB can suspend the transmission of the eMBB codeword target for one UE while transmitting URLLC to another UE, effectively puncturing the eMBB codeword. In the UL, a grant-free URLLC transmission may occur in the middle of an eMBB slot, causing the URLLC and the eMBB transmissions to interfere to each other. Figure 1 shows an example of eMBB and URLLC multiplexed together. The URLLC transmission of UE2 occupies one symbol minislot in symbol 5 and 3PRBs, and causes interference or puncturing to the eMBB transmission of UE1 occupies an entire slot of 14 symbols and 5 PRBs.
+
+We have the following observation regarding URLLC interference:
+
+Observation 3: eMBB transmissions may suffer from interference from URLLC or other minislot transmissions from the same cell or neighbor cells. From the eMBB receiver point of view, the time and frequency locations of the interference are unpredictable.
+
+Figure 1. Multiplexing of eMBB and URLLC transmission. The eMBB transmission for UE1 occupies a slot of 14 symbols and 5 PRBs, while the URLLC transmission for UE2 occupies a mini-slot of 1 symbol and 3 PRBs.
+
+Suppose the resources for a CBG are given, the codeword to RE mapping scheme should allocate resources to the CBs such that the success probability of the CBG is maximized. This can be achieved when all the CBs are mapped in such a way that they all have similar channel conditions and interference, and have similar decoding probabilities. Due to the burstiness of URLLC interference, mapping the modulations symbols from a CB in the frequency domain only, either consecutively in subcarriers or with interleaving, will not provide similar receiver SINR for different CBs. It is best that the modulation symbols of a CB are spread more or less evenly in the allocated resource region, in frequency, time and spatial domain. Different CBs of the same CBG can be allocated similarly in the same frequency-time-space RE region spanning multiple OFDM symbols and PRBs. This will effectively balance the different interference and channel conditions in different OFDM symbols and PRBs, and balance the received SINR of all CBs. If the number of OFDM symbols spanned by a CBG is small, such as 2-4 symbols, the decoding of the CBs in the CBG can start after all the corresponding symbols are received. While this will slightly increase the decoding delay by a few symbols, it balances bursty interference and increases the success probability of the CBG transmission. It also improves the code block decoding performance in a high speed channel [6]. Therefore we propose interleaving in the frequency and time domain:
+
+Proposal 1: Introduce interleaving in the frequency and time domain to codeword to RE mapping.
+
+To facilitate frequency and time interleaving, and to start decoding as soon as possible, it is best that the resources allocated to a CBG are regular, i.e. they consist of complete PRBs in the frequency domain and OFDM symbols in the time domain. In the frequency domain it can occupy all the allocated PRBs. Effectively the resources for a CBG form a rectangle (with some REs reserved for other purposes such as control channels or RS). Having a two dimensional resource region also makes it easy to do rate matching for the CBs within a CBG. This will be difficult if the REs are allocated in the frequency domain on a symbol by symbol basis, and a CB or a CBG may span over 2 OFDM symbols. Note that defining two dimensional resources in the frequency and time domain does not preclude the use of a single OFDM symbol for a CBG. This makes the scheme more general and applicable to a minislot of a single OFDM symbol. We make the following proposal regarding the resource region allocated to a CBG:
+
+Proposal 2: Define resources allocated to the CBGs as rectangular resource regions in the frequency and time domain. These can be aligned to OFDM symbols.
+
+In the region allocated to a CBG, the CBs in the CBG are mapped to the REs by a frequency-time interleaver. The resource mapping in the spatial domain can be separate from the mapping in the frequency and time domains. As an example, the modulation symbols from a CB can be mapped to multiple layers in the same RE before moving to the next RE. We make the following proposal:
+
+Proposal 3: Interleaving in the frequency and time domain can be separate from mapping in the spatial domain.
+
+Conclusion
+
+In this contribution, we have analyzed the corresponding relationship between codeword RE mapping and CBG-based HARQ scheme. System capacity can be improved by defining rectangular resource regions for the CBGs and using interleaving in the frequency, time and spatial domains. Our observations and proposals are summarized as below:
+
+Observation 1: The same modulation order and nominal code rate applied to all CBs in a CBG (and all the CBs in a CW), leadto different decoding success probabilities for the CBs. This is due to potential differences in channel quality due to effects including frequency selective and fast fading, and different interference experienced by the different CBs.
+
+Observation 2: Whether a CBG needs retransmission depends on the probability to successfully decode all of its CBs, especially the CB received with the lowest SINR.
+
+Observation 3: eMBB transmissions may suffer from interference from URLLC or other minislot transmissions from the same cell or neighbor cells. From the eMBB receiver point of view, the time and frequency locations of the interference are unpredictable.
+
+Proposal 1: Introduce interleaving in the frequency and time domain to codeword to RE mapping.
+
+Proposal 2: Define resources allocated to the CBGs as rectangular resource regions in the frequency and time domain. These can be aligned to OFDM symbols.
+
+Proposal 3: Interleaving in the frequency and time domain can be separate from mapping in the spatial domain.
+
+References
+
+Chairman’s notes, RAN1 NR Ad hoc meeting #1.
+
+Chairman’s notes, RAN1#88.
+
+R1-1706647, “Layer mapping candidates”, Samsung, RAN1#88bis.
+
+Chairman’s notes, RAN1#88bis.
+
+R1-1705649, “Discussion of codeword mapping”, Lenovo, Motorola Mobility, RAN1#88bis.
+
+R1-1705073, “Codeword to layer mapping in NR”, Huawei, HiSilicon, RAN1#88bis.

@@ -1,0 +1,169 @@
+3GPP TSG RAN WG1 Meeting #89 R1-1707468
+
+Hangzhou, China 15th- 19th May 2017
+
+Source: CATT
+
+Title: Discussion on codeword mapping
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and decision
+
+Introduction
+
+In 3GPP RAN1#88 meetings, the following agreements on number of codeword(s) for NR have been reached [1]:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:For 1 to 2-layer transmission: 1 codewordFor 5 to 8-layer transmission: 2 codewordsFFS for 3 & 4-layer transmissions – revisit today
+
+And then the following working assumption has been agreed [1]:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE (Alt1):For 3 and 4-layer transmission: 1 CWFFS: the support of Alt2 (mapping 2-CW to 3 layers and 2-CW to 4 layers)Companies are encouraged to evaluate the case of multi-panel/multi-TRP scenarios
+
+For codeword to layer mapping of data channel, it’s also agreed that [1]:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriersConsidering latency for both eMBB and URLLCAlso other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.Companies are encouraged to perform analysis and evaluations
+
+In the last meeting, existing candidates for layer mapping schemes have been summarized in [2]. With above progresses, in 3GPP RAN1 #88bis, the following agreements have been reached [3]:
+
+Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CW
+
+In this contribution, we present our consideration on supported number of codeword(s) and layer mapping to physical resources w.r.t. symbols/layers/carriers in NR.
+
+Discussion on codeword mapping for NR
+
+General consideration on the number of codewords
+
+As discussed above, multi-codeword transmission offers the flexibility of adapting MCS to the capacity of each sub-channel, and therefore maximizing the spectral efficiency. Another important motivation of using more than one codeword in transmission is to enhance receive performance through codeword-level interference cancellation. However, from perspectives of both link adaptation and SIC receiver, the existence of multiple MCS-adjustable codewords is meaningful for performance enhancement only if the MIMO sub-channels are substantially different from each other in term of transmission qualities.
+
+However, for dual-polarization and small-spacing antenna array that have been assumed throughout MIMO discussion, the two layers in rank-2 transmission usually use the same long-term/wideband beam on different polarizations. The only difference comes from the distinct small-scale propagation properties of two different polarizations. Therefore, the long-term properties of the two codewords tend to show high similarity, and they are most likely to share similar channel qualities. For higher order transmissions, with richer near-field scattering around transmitter and receiver, and possibly distinct long-term/wideband beam for each layer, the differences in channel quality between layers are expected to be larger. Therefore, multi-codeword transmission and SIC receiver might be capable of achieving remarkable gain.
+
+On the other hand, as the number of codewords could be as many as that of layers, the overheads with MCS indication, ACK/NACK and possibly subband CQI reporting for each codeword are inevitable in multi-codeword transmission. In addition, detection delay inherent with serial interference cancellation framework also makes it unsuitable for latency-sensitive service and self-contained subframe in NR. In such case, IRC or ML-like receivers could be considered instead of SIC.
+
+Observation 1: The existence of multiple MCS-adjustable codewords is meaningful to performance enhancement only if the MIMO sub-channels have substantial difference to each other in term of transmission qualities.
+
+Observation 2: The overhead of ACK/NACK and CSI reporting as well as potential detection latency inherent with multi-CW transmission should be considered carefully.
+
+Codeword-to-layer mapping
+
+Depending on detailed transmission scheme design, codeword-to-layer mapping could be different.
+
+For single-layer transmission, such as single-stream beamforming, CDD, co-phasing cycling, etc., 1-to-1 mapping seems to be the only choice.
+
+For transmit diversity schemes with more than one layer, i.e., non-transparent DMRS based transmissions, the codeword-to-layer mapping similar to LTE could be re-used. That is, mapping from one codeword to v layers where the value v is the number of DMRS antenna ports involved in transmission.
+
+For spatial multiplexing, up to 2 codewords are supported. Examples of both single-codeword and double-codeword mappings are shown in Fig. 1.
+
+For open-loop/semi-open-loop transmission, if 2 codewords can be supported, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain. Furthermore, similar to TM3 in LTE, the qualities of equivalent channel for the 2 codewords could also be balanced. Therefore, CQI feedback for single codeword only would be possible.
+
+[FIG:d057d286705aeaca4cbb]
+
+Figure 1. Examples of layer mapping for spatial multiplexing
+
+Proposal 1: For transmit diversity schemes like SFBC or SFBC+FSTD, codeword-to-layer mapping similar to LTE could be re-used.
+
+Proposal 2: For open-loop/semi-open-loop transmission, if 2 codewords are supported, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Layer-to-DMRS port mapping
+
+It’s agreed in RAN1 AH NR meeting [4] to support DMRS ports grouping based on the QCL relationship. That is, DMRS ports within one group are QCL-ed, and DMRS ports in different groups are non-QCLed. Furthermore, as mentioned in section 1, it’s agreed in the last meeting [3] that DMRS port groups belonging to one CW can have different QCL assumptions. However, in the case when multiple panels are available at TRP side, how to mapping each layer to one or more QCL groups is still open.
+
+Regarding this issue, the following alternatives could be considered:
+
+Alt-1: mapping between each layer and one QCL group based on one transparent DMRS port
+
+Alt-2: mapping between each layer and multiple QCL groups based on non-transparent DMRS ports
+
+Alt-3: mixture of Alt-1 and 2, namely, if more than one layers are transmitted, a part of layers are mapped following Alt-1, while the remaining layers follow Alt-2
+
+[FIG:c421096ee896f559b900]
+
+Figure 2. Layer-to-DMRS port mapping
+
+To facilitate description, assume that a set of QCL-ed CSI-RS ports is transmitted from each group of panels. To be specific, as a special case, each group could include only one panel. Alt-1 constrains each layer to only one QCL group in transmission. This could be done by either joint (Alt-1-1) transmission across multiple groups of panels or independent (Alt1-2) transmissions with one group of panels.
+
+For Alt-1-1
+
+If the CSI-RS ports transmitted from a set of panel groups can be assumed to be QCL with respect to parameters such as average gain, delay spread, average delay, Doppler spread and Doppler shift, the layer can be mapped onto those panels based on one transparent DMRS port.
+
+However, if the assumption on QCL-ed CSI-RS ports doesn’t hold, joint transmission in such a way could raise problem of QCL. As a single DMRS port is used by weighting more than one groups of panels involved in joint transmission, while different set of non-QCL-ed CSI-RS ports are independently transmitted from each group of panels, it would be problematic to establish the QCL relationship between the DMRS port and a certain set of CSI-RS ports.
+
+For Alt-1-2
+
+The QCL establishment issue can be addressed by choosing one group of panels, on which CSI-RS ports are assumed to be QCL-ed with respect to parameters such as average gain, delay spread, average delay, Doppler spread, and Doppler shift.
+
+It’s noted that, as possibly only a portion of PAs can be used, one potential problem with Alt-1 is the low power utilization and its consequent impact on coverage.
+
+In Alt-2, we can use a non-transparent DMRS port for each of the above mentioned group of panels. The QCL issued is then avoided by tying each DMRS port with the QCL-ed CSI-RS ports transmitted from that group of panels. Furthermore, more PAs are generally applicable in Alt-2. However, for non-transparent DMRS based mapping, the impact of DMRS overhead and power sharing between multiple DMRS ports need to be considered.
+
+Proposal 3: Issues such as QCL, power utilization, DMRS overhead and DMRS channel estimation performance, etc., need to be considered in layer-to-DMRS port mapping scheme design.
+
+Layer/time/frequency mapping
+
+In LTE, the modulated symbols of each codeword are mapped across layers first. Subsequently, data in each layer is mapped to REs in each symbol. Finally, data is mapped symbol by symbol in each PRB. The following mappings [2] presented in previous meetings other than this vertical mapping might potentially benefit from frequency/time/spatial diversity gain. However, the complexity and decoding latency with new mapping schemes should also be considered.
+
+Alt-1: Layer Frequency Time
+
+Alt-2: Frequency Layer Time
+
+Alt-3: Time Frequency Layer
+
+Alt-4: Configurable between
+
+Layer Frequency Time
+
+Layer Time Frequency
+
+Proposal 4: Introducing new schemes of layer mapping to physical resources w.r.t. symbols/layers/carriers should be justified by clear-cut gain.
+
+In [4], frequency interleaving was proposed to obtain additional frequency diversity gain. However, as interleaving has already been done at channel encoder, the benefit of extra interleaving at resource mapping part would be questionable.
+
+Proposal 5: Further analysis and evaluations are needed to justify the frequency interleaving.
+
+DCI design
+
+As agreed in the last meeting [3], one UL- or DL-related DCI includes one MCS per CW. In such case, the following alternatives could be considered in DCI design:
+
+Alt-1: two DCI sizes for single-CW and double-CW transmissions respectively
+
+Alt-2: 2-level DCI
+
+As listed above, in Alt-1, different DCI sizes are to be used for single-CW and double-CW transmissions respectively. Consequently, DCI overhead of the disabled codeword can be reduced in single-CW case. The disadvantage is increased number of total blind decoding, if blind decoding per DCI payload is to be maintained.
+
+To keep the DCI overhead as low as possible while avoiding excessive blind detection complexity, in Alt-2, 2-level DCI could be considered as well. Wherein, the basic information is conveyed by level-1 DCI. Level-2 DCI is sent only if both codewords are enabled. It’s noted that, decision on down selection of candidates should also take into account conclusions of related agenda, i.e., control channel design.
+
+Proposal 6: Both DCI overhead and blind detection complexity should be taken into consideration in DCI design.
+
+Conclusions
+
+In this contribution, we discussed the number of codeword(s) and codeword-to-layer mapping in NR. Based on the discussion above, we propose:
+
+Observation 1: The existence of multiple MCS-adjustable codewords is meaningful to performance enhancement only if the MIMO sub-channels have substantial difference to each other in term of transmission qualities.
+
+Observation 2: The overhead of ACK/NACK and CSI reporting as well as potential detection latency inherent with multi-CW transmission should be considered carefully.
+
+Proposal 1: For transmit diversity schemes like SFBC or SFBC+FSTD, codeword-to-layer mapping similar to LTE could be re-used.
+
+Proposal 2: For open-loop/semi-open-loop transmission, if 2 codewords are supported, layer shifting at RE or symbol-level according to a predefined pattern can be considered to obtain additional spatial diversity gain.
+
+Proposal 3:Issues such as QCL, power utilization, DMRS overhead and DMRS channel estimation performance, etc., need to be considered in layer-to-DMRS port mapping scheme design.
+
+Proposal 4: Introducing new schemes of layer mapping to physical resources w.r.t. symbols/layers/carriers should be justified by clear-cut gain.
+
+In [4], frequency interleaving was proposed to obtain additional frequency diversity gain. However, as interleaving has already been done at channel encoder, the benefit of extra interleaving at resource mapping part would be questionable.
+
+Proposal 5: Further analysis and evaluations are needed to justify the frequency interleaving.
+
+Proposal 6: Both DCI overhead and blind detection complexity should be taken into consideration in DCI design.
+
+References
+
+RAN1 #88 Chairman’s Notes.
+
+R1-1706647 “Layer Mapping Candidates”, Samsung
+
+RAN1 #88bis Chairman’s Notes.
+
+RAN1 AH NR Meeting Chairman’s Notes.
+
+R1-1704098 “Frequency interleaving for NR”, Qualcomm, Ericsson, Interdigital

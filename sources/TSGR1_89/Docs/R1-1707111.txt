@@ -1,0 +1,171 @@
+3GPP TSG RAN WG1 Meeting #89 R1-1707111
+
+Hangzhou, P.R. China 15th – 19th May 2017
+
+Source: ZTE
+
+Title: CW/CB to resource mapping and interleaving
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#87 meeting, two CWs for the transmission with rank 5~8 has been agreed [1]. Additionally, in RAN1#88 meeting [1], the following agreements and working assumption have been achieved:
+
+Agreements:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+Confirm the following working assumption as an agreement:
+
+For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UE
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+Moreover, the following agreements on data mapping are also made:
+
+For the DL/UL data channels, FFS layer mapping to physical resources w.r.t. symbols/layers/carriers
+
+Considering latency for both eMBB and URLLC
+
+Also other aspects such as frequency/time/spatial diversity, UE complexity, eMBB/URLLC multiplexing, etc.
+
+Companies are encouraged to perform analysis and evaluations
+
+Considering the above progress, more details on CW to layer mapping, resource mapping and interleaving are discussed.
+
+Codeword to layer mapping for rank 5-8
+
+In this section, we discuss codeword to layer mapping for rank 5-8 MIMO transmission.
+
+In current LTE, codeword to layer mapping has been conducted in the pre-defined way without adaption to per layer channel properties, e.g., in case of 6 layer, each codeword is mapped to 3 layer equally. However, it should be noticed that for high rank transmission, channel properties will vary among layers, especially in the rich scattering scenarios at lower frequency or multiple-beams based transmission at higher frequency. More specifically, in multiple TRPs/panels case which is an important use case for high rank transmission, different channel properties can be expected between each TRP to UE, which will lead to various numbers of ranks per channel.
+
+To support such scenarios, configurable CW to layer mapping should be supported in NR for high rank transmission with agreed 2CWs. it is beneficial for link-adaption and interference cancellation per CWs. For examples, in case of propagation channel with 8 layers, according to measurement at UE side, 5 layers with similar SINR can be grouped in one layer set for supporting transmission with single MCS for associated CW. Additionally, inter-CW interference can be performed effectively if each of them is associated to the layer groups based on correlation among layers.
+
+Proposal 1: Support the configurable codeword to layer mapping in NR.
+
+Resource Mapping in a codeword
+
+In this section, we discuss resource mapping within one codeword including CB to resource mapping. Comparing with LTE, more aspects should be considered in NR for mapping schemes. A set of design criteria for mapping scheme in NR is summarized in [3]. Generally, as listed in Table 1, totally six basic schemes with corresponding sub-types can be considered in NR.
+
+Table 1 Potential schemes for CB to resource mapping
+
+Basic schemes | Sub-type
+Alt-1: Layer Frequency Time | Alt-1a: Layer set 1 FrequencyTimeLayer set2Frequency Time;
+ | Alt-1b: Layer Frequency set 1Time Frequency set 2 Time;
+Alt-2: Layer Time Frequency | Alt-2a: Layer set 1 TimeFrequency Layer set2 Time Frequency;
+ | Alt-2b: Layer Time set 1 Frequency Time set 2 Frequency;
+Alt-3: Frequency Time Layer | Alt-3a: Frequency set1 Time LayerFrequency set2 Time Layer
+ | Alt-3b:Frequency Time set1 Layer Time set2 Layer
+Alt-4: Frequency Layer Time | Alt-4a:Frequency set1 Layer Time Frequency set2 Layer Time
+ | Alt-4b:Frequency Layer set1 Time Layer set2 Time
+Alt-5: Time Frequency Layer | Alt-5a:Time set 1 Frequency Layer Time set2 Frequency Layer;
+ | Alt-5b:Time Frequency set1 Layer Frequency set2 Layer;
+Alt-6: Time Layer Frequency | Alt-6a:Time set 1 LayerFrequency Time set2 Layer Frequency;
+ | Alt-6b:Time Layer set1 Frequency Layer set2 Frequency;
+
+In order to satisfy the various use cases in NR, the following factors including performance, processing latency, URLLC puncturing, UL waveform, cross-link interference, limitations imposed by the agreed DMRS design, should be considered for choosing the resource mapping scheme:
+
+Performance
+
+As agreed in RAN1#88bis, only one MCS is supported per CW for both DL and UL transmission. In order to achieve better performance, selection of resource mapping scheme should be aimed at harvesting diversity gain in time, frequency and spatial domain as much as possible. The detailed considerations are listed below:
+
+Mapping to layers
+
+In case of transmission with multiple layers, different channel gain and interference can be experienced per layer. For obtaining diversity gain in spatial domain, data should be firstly mapped to layer. In such cases, these schemes, e.g. Alt-1b, 2b can be prioritized. Meanwhile, considering cases with limited number of slots, Alt-6 can also be used although the resource will be mapped to time domain firstly.
+
+Mapping to sub-carriers
+
+Due to frequency selectivity, observed channel gain and interference will vary, even per sub-carrier. For obtaining frequency diversity, Alt-3b and Alt-4b can be prioritized for resource mapping in frequency selective scenarios. In contrast, since channel at high frequency tends to be sparse and hybrid beamforming scheme with wideband narrow analog beam will be adopted, frequency selective phenomenon is not as significant as the cases for lower frequency. The benefits of Alt-3b and Alt-4b are expected to be diminished.
+
+Mapping OFDM symbols
+
+It is expected that resource scheduling in time domain will be flexible in NR for supporting PDSCH with configurable slots and dynamic TDD. Considering dynamic interference in time domain, for achieving better performance, the data should be mapped to in the time domain as much as possible. In these cases, Alt-5b, Alt-6 and 6b can be prioritized. Meanwhile, in the transmission with low RANK case, the Alt 2 can also be considered.
+
+Observation 1:
+
+Alt-1b, Alt-2b, Alt-6 can be adopted for achieving diversity gain in spatial domain.
+
+Alt-3b, Alt-4b can be adopted for achieving diversity gain in frequency domain.
+
+Alt-2, Alt-5b, Alt-6 and 6b, can be adopted for achieving diversity gain in time domain.
+
+Processing latency
+
+For supporting the requirements on processing latency, especially for the slot in self-contained manner, each CB in data should be conducted within fewer symbols as much as possible. Alt-1 and Alt-4 can be considered in these cases since data are mapped to slot in the last step.
+
+Observation 2: Alt-1and Alt-4 can be adopted to minimize the processing latency.
+
+URLLC puncturing
+
+Transmitted eMBB data will be punctured once URLLC traffic arrives with higher priority. Since frequency resources within several OFDM symbols will be occupied by URLLC, the decoding of CBs will be affected if one CB is only mapped to single symbol. In this case, if a lot of A/N resources can be configured to one TB, retransmission could be done per CB to alleviate this performance degradation with high efficiency. However, if limited A/N resource (e.g. only one) is configured, the whole TB with large size will be retransmitted with much lower efficiency.
+
+In this situation, the Alt-6 and 6b should be considered firstly. In addition, Alt2 and 2b can also be considered since the maximum number of layers supported for SU-MIMO in NR seems not very large.
+
+Observation 3：When limited A/N resources is configured, for eMBB data, the mapping schemes e.g., Alt-6 and 6b, Alt2 and 2b, is more robustness w.r.t to URLLC.
+
+According to the analysis above, it can be found that single resource mapping scheme cannot fully satisfy various applications in NR under different conditions. However, it should be highlighted that all these requirements may not exist in one scenario simultaneously. For example, URLLC and cross link interference will not exist in all scenarios and resource. Significant diversity gain can be achieved for lower code rate case but only limited gain are expected for high-code rate. Meanwhile, the tight requirement on processing latency is only critical in the case with self-contain case, but it can be loose for other applications. Consequently, for achieving promising performance in different cases, configurable mapping scheme should be considered for NR based on case-specific requirements.
+
+Considering fast decoding is a critical requirement in NR, we can first support Alt-1 (layer->frequency->time) and make other schemes FFS for configurability.
+
+Proposal 2：Configurability among multiple mapping schemes should be supported in NR. At least Alt 1 (layer->frequency->time) is supported in the multiple mapping schemes.
+
+Discussion on interleaving
+
+During the implementation of data to resource mapping based on proposed scheme above, if one CB cannot fully occupy the allocated resources in certain domain and various channel/interference condition/puncturing probability is observed in that domain, interleaving in that domain can provide extra diversity gain for transmission. Moreover, introduction of interleaving can be adopted to minimize the difference of BER among CBs within one CBG. Although more diversity gain could be introduced if joint interleaving in two domains is supported, a lot of standardization work is required.
+
+According to application of data to resource mapping, the non-fully occupied case will be more frequently occurs in the domain which has the lower priority in the mapping schemes, e.g., frequency and time domain in Alt-1, frequency domain in Alt-2/6. Moreover, the following factor, e.g., size of CB, code rate and MCS have also impacts on the resource occupation in certain domain. In order to achieve the interleaving gain under different mapping schemes, configurable interleaving schemes should be supported in NR.
+
+With Alt1, it makes sense to support at least interleaving in frequency domain considering the usual case that larger bandwidth will be assigned to each UE in NR. Therefore, we have the following proposal:
+
+Proposal 3： Configurability among multiple interleaving schemes should be supported in NR. At least frequency domain interleaving is supported in NR.
+
+Note that other interleaving schemes can be selected together with the mapping scheme.
+
+Conclusion
+
+In this contribution, we discuss codeword to layer mapping schemes, resource mapping and interleaving schemes. Based on the analysis, the following observations and proposals are reached:
+
+Observation 1:
+
+Alt-1b, Alt-2b, Alt-6 can be adopted for achieving diversity gain in spatial domain.
+
+Alt-3b, Alt-4b can be adopted for achieving diversity gain in frequency domain.
+
+Alt-2, Alt-5b, Alt-6 and 6b, can be adopted for achieving diversity gain in time domain.
+
+Observation 2: Alt-1and Alt-4 can be adopted to minimize the processing latency.
+
+Observation 3：When limited A/N resources is configured, for eMBB data, the mapping schemes e.g., Alt-6 and 6b, Alt2 and 2b, is more robustness w.r.t to URLLC.
+
+Proposal 1: Support the configurable codeword to layer mapping in NR.
+
+Proposal 2：Configurability among multiple mapping schemes should be supported in NR. At least Alt 1 (layer->frequency->time) is supported in the multiple mapping schemes.
+
+Proposal 3： Configurability among multiple interleaving schemes should be supported in NR. At least frequency domain interleaving is supported in NR.
+
+References
+
+RAN1#87 Chairman’s Notes
+
+RAN1#88 Chairman’s Notes
+
+RAN1#88bis Chairman’s Notes
+
+R1-1706647, “Layer Mapping Candidates”, Samsung
+
+R1-1702597, “Frequency domain interleaving” , Qualcomm Incorporated
