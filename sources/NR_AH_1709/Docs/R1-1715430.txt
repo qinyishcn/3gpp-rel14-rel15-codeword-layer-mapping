@@ -1,0 +1,167 @@
+3GPP TSG RAN WG1 Meeting NR#3 R1-1715430
+
+Nagoya, Japan, 18th – 21st , September 2017
+
+Source: ZTE, Sanechips
+
+Title: Remaining details of codeword mapping
+
+Agenda Item: 6.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In NR Ad-hoc#2 meeting, for reducing the DCI overhead and UE complexity, the agreements below are achieved [1]:
+
+NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCH
+
+FFS HARQ ID
+
+Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layers
+
+NR supports higher layer signalling for the maximum number of CQIs in UCI
+
+Unless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI report
+
+FFS subband CQI
+
+FFS Whether or not the actual number of CQIs is also RI dependent
+
+Note: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)
+
+FFS applicability on single/multi TRP
+
+In RAN1#90 meeting, regarding CW to resource mapping for both DL and UL with CP-OFDM, the following agreements have been reached [2]:
+
+For DL data channel, the modulated symbol stream associated with a codeword (CW) is only mapped to the allocated resource with the following order in Rel-15 NR:
+
+First across layers associated with the codeword (CW), then across subcarriers (frequency) and then across OFDM symbols (time)
+
+For UL data channel with CP-OFDM waveform, support the same layer mapping procedure with DL
+
+No frequency and/or time interleaving is supported in Rel-15 NR
+
+FFS for DFT-s-OFDM uplink with and without frequency hopping
+
+Note that additional layer correspondence can be a separate discussion from 3 to 8 layers
+
+Besides, for the UL transmission with DFT-S-OFDM, three CW to resource mapping schemes are proposed to be evaluated [2]:
+
+Option 1: Subcarriers then OFDM symbols
+
+Option 2: OFDM symbols then subcarriers
+
+Option 3: Subcarriers in 1st hop, then subcarriers in 2nd hop, repeat the mapping by starting from the subsequent OFDM symbol in the 1st hop.
+
+Considering the above progress, more details on CW to resource mapping for UL with DFT-S-OFDM are elaborated. Meanwhile, the design of signalling for MCS/RV/NDI and CQI is also discussed. Both system and link level simulation results are provided for analysis.
+
+Resource Mapping in a codeword
+
+In order to satisfy various use cases in NR, the factors including performance, processing latency, cross-link interference and characteristics of application scenarios, e.g., high speed train, should be considered for choosing the resource mapping scheme.
+
+More specifically, with the introduction of dynamic TDD in NR, the quality of received data will be different per symbol as the example as shown in Figure 1. In this case, the last few symbols of downlink data transmitted from TRP 1 to UE1 are interfered by uplink data from UE2 to TRP2. Since different types of frame structure are used at different time in dynamic TDD scenarios, varying interference is expected to be experienced by different symbol within PUSCH received by UE2. More specifically, due to the lack of prior information about the scheduling of dynamic TDD, the influence cannot be well alleviated by CBG-based methods, e.g., CBG-based HARQ.
+
+Moreover, in the application case with high speed, e.g., high speed train scenario, the decoding of data within one symbol (e.g., one or multiple CBs) will be affected by fast fading in time domain.
+
+In the above cases, for achieving better performance with time diversity, the data should be mapped to time domain as much as possible. Since the DFT-S-OFDM is considered only for RANK=1, the following mapping scheme can be considered:
+
+Time Frequency
+
+UE1UE2TRP1TRP2UE1UE2TRP1TRP2 [FIG:fdcf09f19a970314b40d]
+
+Figure 1 Illustration of cross link interference
+
+Besides, since large bandwidth can be configured to UE for both UL and DL transmission, potential frequency diversity gain can be harvested via frequency hopping. However, for the data located in each hopping band, the density of corresponding DM-RS in time domain will be decreased comparing the non-hopping case, which will lead to poor channel estimation, especially in high speed.
+
+In order to verify the above analysis, the corresponding link level evaluations have been conducted with CDL-D model in high speed scenario (i.e., V = 120 or 500 km/h) with six CW to resource mapping schemes shown in Figure 2. It can be observed, for the two schemes in each column (e.g., scheme 1-1/1-2), similar mapping order in time-frequency domain are considered but additional intra-slot hopping is introduced for the second one. The system bandwidth is configured to 20MHz with 100 RBs. The performance for data transmission with three allocated RBs (e.g., 10/30/50 RBs) is investigated. More detailed simulation assumption can be found in Table 2.
+
+[FIG:c8c044ce910ceb4d6af5]
+
+Figure 2 Illustration of CW to resource mapping schemes in simulation
+
+The simulation results for case with 10 RBs are shown in Figure 3, it can be found that for each mapping order, the performance of the scheme with intra-slot hopping is worse than the normal one when the speed of UE is high e.g. 120 and 500 km/h. Similar observation can also be found after increasing the allocated number of RBs. As discussed above, these observations are reasonable since the time density of DM-RS in each hop will be only half of the normal case. In high speed scenario, the performance of channel estimation via either time domain interpolation or 2D filter will dramatically degrade, especially in lower SNR region.
+
+Furthermore, the performance comparison for each mapping order is shown in Figure 4 . It can be found that in the case of 10 RB, similar performance is achieved for these three mapping orders. The reason is that in this case, only single CB is transmitted, diversity gain in both time and frequency domains can be well harvested for this CB. With increasing number of RBs, the performance order is: scheme 2-1>scheme 3-1 > scheme 1-1. More specifically, up to 41% gain can be achieved in scheme 2-1 comparing with scheme 1-1. The reason is that when the number of CBS is also increased, the occupied number of symbols for each CB decreases which results in less diversity gain in time domain.
+
+[FIG:7ad58ed5759ec6818989]
+
+Figure 3 Illustration of performance comparison when number of RB = 10
+
+[FIG:fbd569d9ca289fa187ad]
+
+Figure 4 Illustration of performance comparison when number of RB = 10/30/50
+
+Observation 1: CW to resource mapping scheme without intra-slot hopping outperforms in high speed scenario.
+
+Observation 2: CW to resource mapping scheme with time domain first outperforms in high speed scenario.
+
+Proposal 1：No intra-slot hopping should be introduced for UL transmission with DFT-S-OFDM;
+
+Proposal 2：The time domain first mapping order should be supported for UL transmission with DFT-S-OFDM;
+
+Discussion on signaling on CQI and MCS
+
+According to the previous agreement below, the number of MCS/CQI required for the UL/DL transmission is determined by the total rank supported per PDSCH/PUSCH. In this situation, the implicit configuration from higher layer can be considered to indicate the maximum number of CQIs in UCI.
+
+Confirm the following working assumption as an agreement:
+
+For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UE
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+More specifically, it can be easily indicated via the configuration of maximum rank or codebook restriction for the CSI calculation. For example, if calculation of CSI is limited with assumption that rank > 4, two CQIs will be always transmitted in UCI.
+
+For the indication of MCS/RV/NDI, some combination of MCS and RV are not useful since lower MCS requires less number of RV. Therefore, information of at least MCS and RV should be indicated jointly. In addition, number of MCS fields depends on the number of layers and hence the number of DMRS ports. In order to reduce DCI overhead, joint encoding of DM-RS information and MCS/RV can be considered. Dynamic changing in full range of number of layers and MCS is often not needed. It is beneficial to configure the necessary range of MCS and number of layers more flexibly according to the need. This can be configured under transmission setting as described in our companion contribution [3].
+
+Proposal 3: Joint indication of MCS and RV is supported.
+
+Proposal 4: Selective combination of MCS/RV and DMRS information can be configured jointly in transmission setting.
+
+Conclusion
+
+In this contribution, the details related to codeword to resource mapping for UL with DFT-S-OFDM and signaling on MCS/RV and maximum number of CQI are discussed. Based on the analysis, the following observations and proposals are reached:
+
+Observation 1: CW to resource mapping scheme without intra-slot hopping outperforms in high speed scenario.
+
+Observation 2: CW to resource mapping scheme with time domain first outperforms in high speed scenario.
+
+Proposal 1：No intra-slot hopping should be introduced for UL transmission with DFT-S-OFDM;
+
+Proposal 2：The time domain first mapping order should be supported for UL transmission with DFT-S-OFDM;
+
+Proposal 3: Joint indication of MCS and RV is supported.
+
+Proposal 4: Selective combination of MCS/RV and DMRS information can be configured jointly in transmission setting.
+
+References
+
+RAN1 NR Ad-hoc#2 Chairman’s Notes
+
+RAN1#90 Chairman’s Notes
+
+R1-1712291, “On Transmission Setting”, ZTE
+
+Appendix
+
+Table 2 Configuration for link level simulation
+
+Configurations | Value
+System bandwidth | 20MHz
+Number of PRB | 10/30/50 PRB with/without hopping
+Channel Model | CDL-D
+Waveform | DFT-S-OFDM
+Antenna configuration | 1Tx, 1Rx
+Carrier frequency | 4 GHz
+Subcarrier space | 15 kHz
+MCS | (1/2, 16QAM)
+UE velocity | 120/500km
+Number of symbol for Control | 2
+Number of Layer | 1
+DM-RS pattern | [FIG:193fad4fe291a85d15de]
