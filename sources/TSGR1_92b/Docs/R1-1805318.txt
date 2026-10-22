@@ -1,0 +1,97 @@
+3GPP TSG RAN WG1 Meeting #92bis R1-1805318
+
+Sanya, China, April 16-20, 2018
+
+CR-Form-v11.2
+CHANGE REQUEST
+
+ | 36.211 | CR | 0432 | rev | - | Current version: | 15.1.0 | 
+
+For HELP on using this form: comprehensive instructions can be found at 
+http://www.3gpp.org/Change-Requests.
+
+Proposed change affects: | UICC apps |  | ME | X | Radio Access Network | X | Core Network |
+
+Title: | Correction on layer-to-port mapping for feCoMP
+ | 
+Source to WG: | Huawei, HiSilicon
+Source to TSG: | 
+ | 
+Work item code: | feCOMP_LTE-Core |  | Date: | 2018-04-16
+ |  |  |  | 
+Category: | F |  | Release: | Rel-15
+ | Use one of the following categories:
+F (correction)
+A (mirror corresponding to a change in an earlier release)
+B (addition of feature), 
+C (functional modification of feature)
+D (editorial modification)Detailed explanations of the above categories can
+be found in 3GPP TR 21.900. | Use one of the following releases:
+Rel-8 (Release 8)
+Rel-9 (Release 9)
+Rel-10 (Release 10)
+Rel-11 (Release 11)
+Rel-12 (Release 12)
+Rel-13 (Release 13)
+Rel-14 (Release 14)
+Rel-15 (Release 15)
+Rel-16 (Release 16)
+ | 
+Reason for change: | In Table 6.3.4.4-1, the case of ‘one layer’ was mistakenly captured in the two-codeword transmission table, as the one layer case cannot support two-codeword transmission.
+ | 
+Summary of change: | Remove the ‘one layer’ case for the two codewords transmission in Table 6.3.4.4-1.
+ | 
+Consequences if not approved: | Incorrect specification.
+ | 
+Clauses affected: | 6.3.4.4
+ | 
+ | Y | N |  | 
+Other specs |  | X | Other core specifications | 
+affected: |  | X | Test specifications | 
+(show related CRs) |  | X | O&M Specifications | 
+ | 
+Other comments: |
+
+< Unchanged parts are omitted >
+
+6.3.4.4 Precoding for spatial multiplexing using antenna ports with UE-specific reference signals
+
+Precoding for spatial multiplexing using antenna ports with UE-specific reference signals is only used in combination with layer mapping for spatial multiplexing as described in clause 6.3.3.2. Spatial multiplexing using antenna ports with UE-specific reference signals supports up to eight antenna ports.
+
+If the higher-layer parameter dmrs-tableAlt is set to 1 and the set of antenna ports [FIG:35f7698fd67e168c6d42] is used for two layers transmission, the precoding operation for transmission on the two antenna ports is defined by
+
+[FIG:2d924bb4cc74d3479a08]
+
+where [FIG:294f371a972dc9265a73] , [FIG:572def8abde7927d19ae] .
+
+If the higher-layer parameter semiOpenLoop is set to 1 and the set of antenna ports [FIG:f18ece58e6e270b91e5f] is used for rank=2 transmission, the precoding operation for transmission on the two antenna ports is defined by
+
+[FIG:eb31d19d1010a52cfb25]
+
+where [FIG:d4a6999ef4f75c274628] and [FIG:c42b7cad522ae65e6463] .
+
+If the number of codewords is two and the DCI associated with the scheduled PDSCH is of Format 2D and the 'PDSCH RE Mapping and Quasi-Co-Location indicator' field in the DCI indicates a higher-layer configured PDSCH-RE-MappingQCL containing two sets of parameters, the precoding operation for transmission on [FIG:78b4309f8c3d90adc392] antenna ports is defined by
+
+[FIG:445dc1940a07a8f74f76]
+
+where [FIG:c50372ab8aa8974d8a77] , [FIG:72dfa9ec3ca08e226156] and set of antenna ports [FIG:5618101b6e0c8d9112e9] used is given by Table 6.3.4.4-1.
+
+Table 6.3.4.4-1: Layer-to-port mapping for two-codeword transmission when PDSCH-RE-MappingQCL contains two sets of parameters
+
+Number of layers [FIG:c5211a38fa87e6d7867f] | Layer-to-port mapping [FIG:926a1ef000739dd3950c]
+ | [FIG:11c0fff2f03d85291c4f]
+2 | [FIG:f5f811a75aafeb201304]
+3 | [FIG:b57a048e1b01e615d52b]
+4 | [FIG:af73b342bff99704c091]
+5 | [FIG:9c6bff43f2d4b98f2d27]
+6 | [FIG:fd9ba721f991bdda592d]
+7 | [FIG:2148b7575ab9050a90c7]
+8 | [FIG:83631b4f9f1caa2b570b]
+
+Otherwise, the set of antenna ports used is [FIG:8bba7176b6c720bbf2a8] and the precoding operation for transmission on [FIG:0d81b3fc014f751cbc8b] antenna ports is defined by
+
+[FIG:f9794909fd8d0038e52a]
+
+where [FIG:852256897ca464fa200f] , [FIG:0d70fe03af80645c6a50] .
+
+< Unchanged parts are omitted >

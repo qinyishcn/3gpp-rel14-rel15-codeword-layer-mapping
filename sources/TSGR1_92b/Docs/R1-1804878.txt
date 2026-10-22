@@ -1,0 +1,124 @@
+3GPP TSG RAN WG1 Meeting #92bis R1-1804878
+
+Sanya, China, April 16th – 20th, 2018
+
+Source: Sharp
+
+Title: Open issues on codeword mapping
+
+Agenda Item: 7.1.2.1.1; Multi-antenna scheme; Codeword mapping
+
+Document for: Discussion and Decision
+
+Introduction
+
+In the last meeting, RAN1 has discussed remaining issues for RAN1 specs and updated the RAN1 specs. In this contribution, we discuss remaining issues on a) ordering of DMRS ports and b) TB to CW mapping, respectively.
+
+Ordering of DMRS ports
+
+At RAN1#92, the following agreement was made for DMRS port ordering [1].
+
+AgreementFor NR Rel-15, DMRS port ordering is performed as follows for one-CW transmission (DL)Simple ordering with increasing index (port number)
+
+In addition to the agreement for one-CW case, we need to conclude two-CW transmission case to complete Rel-15 specification. In [2], additional complexity and/or performance loss are concerned for a certain scenario with multi-TRP/panel transmission while such issue is not induced for the scenario with single-TRP/panel. At this late stage of Rel-15 timeframe, we should be careful to make that kind of optimization for particular scenario, as long as its impact is not justified by detailed analysis. So, straight forward solution as in [3] considering above agreement is preferable.
+
+Proposal 1:
+
+For NR Rel-15, DMRS port ordering is performed as follows for two-CW transmission (DL)
+
+Simple ordering with increasing index (port number)
+
+TB to CW mapping
+
+As described in [5], so far no description captured to support one-CW transmission for the UE configured with higher layer parameter Number-MCS-HARQ-DL-DCI equals 2. That implies mapping of logical channel entity to physical channel is unclear, so corresponding text should be captured in spec. Basically resource allocation framework over spatial domain including MCS/TBS determination is same as that for LTE, therefore it is straight forward to inherit specification text from corresponding description for LTE. Taking this point into account, our proposed modification on TS38.212 and TS38.214 are indicated in appendix part.
+
+Proposal 2:
+
+To apply the text proposals as appendix part.
+
+Conclusion
+
+In this contribution we discuss the codeword mapping related open issues and preferable approaches to complete corresponding specifications.
+
+References
+
+“RAN1 Chairman’s Notes”, RAN1#92
+
+R1-1801715, Remaining issues on codeword mapping, CATT, RAN1#92
+
+R1-1801514, Remaining issues on codeword mapping, vivo, RAN1#92
+
+R1-1803472, “WF on antenna port mapping”, CATT, ZTE, Qualcomm, LGE, OPPO, CMCC, RAN1#92
+
+R1-1802736, Correction on CW mapping and data scrambling, Ericsson, RAN1#92
+
+Appendix
+
+TP for section 7.3.1.2.2 of TS38.212 (based on R1-1803553)
+
+Unaffected parts omitted…
+
+For transport block 1:
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+For transport block 2 (only present if Number-MCS-HARQ-DL-DCI equals 2):
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+- HARQ process number – 4 bits
+
+- Downlink assignment index – number of bits as defined in the following
+
+- 4 bits if more than one serving cell are configured in the DL and the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 MSB bits are the counter DAI and the 2 LSB bits are the total DAI;
+
+- 2 bits if only one serving cell is configured in the DL and the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 bits are the counter DAI;
+
+- 0 bits otherwise.
+
+- TPC command for scheduled PUCCH – 2 bits as defined in Subclause x.x of [5, TS38.213]
+
+- PUCCH resource indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS38.213]
+
+- PDSCH-to-HARQ_feedback timing indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS38.213]
+
+- Antenna port(s) – 4, 5, or 6 bits as defined by Tables 7.3.1.2.2-1/2/3/4, where the number of CDM groups without data of values 1, 2, and 3 refers to CDM groups {0}, {0,1}, and {0, 1,2} respectively.
+
+- Transmission configuration indication – 0 bit if higher layer parameter tci-PresentInDCI is not enabled; otherwise 3 bits as defined in Subclause x.x of [6, TS38.214].
+
+- SRS request – 2 bits as defined by Table 7.3.1.1.2-24 for UEs not configured with SUL in the cell; 3 bits for UEs configured SUL in the cell where the first bit is the non-SUL/SUL indicator as defined in Table 7.3.1.1.1-1 and the second and third bits are defined by Table 7.3.1.1.2-24.
+
+- CBG transmission information (CBGTI) – 0, 2, 4, 6, or 8 bits as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter maxCodeBlockGroupsPerTransportBlock for the PDSCH.
+
+- CBG flushing out information (CBGFI) – 0 or 1 bit as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter codeBlockGroupFlushIndicator.
+
+- DMRS sequence initialization – 1 bit for [FIG:d93ef6da1d5261cf35e7] selection defined in Subclause 7.4.1.1.1 of [4, TS38.211].
+
+If Number-MCS-HARQ-DL-DCI equals 2 and both transport blocks are enabled, transport block 1 is mapped to codeword 0; and transport block 2 is mapped to codeword 1. In case one of the transport blocks is disabled as specified in section 5.1.3.2 of [TS38.214], the transport blocks to codeword mapping is specified according to Table X.
+
+Table X: Transport block to codeword mapping
+(one transport block enabled)
+
+transport block 1 | transport block 2 | codeword 0
+(enabled) | codeword 1
+(disabled)
+enabled | disabled | transport block 1 | -
+disabled | enabled | transport block 2 | -
+
+Unaffected parts omitted…
+
+TP for section 5.1.3.2 of TS38.214 (based on R1-1803555)
+
+For the PDSCH assigned by a PDCCH with DCI format 1_1 with CRC scrambled by C-RNTI, if Number-MCS-HARQ-DL-DCI is set to 2, a transport block is disabled if if [FIG:783a17cf9d2633710bab] [EQ:4812eae888068d44dfd4] and if rvid = 1 otherwise the transport block is enabled.
+
+For the PDSCH assigned by a PDCCH with DCI format 1_0 or format 1_1 with CRC scrambled by C-RNTI, TC-RNTI, CS-RNTI, SI-RNTI, RA-RNTI, or P-RNTI, if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' and [FIG:b6015f6bd2bee972252d] [EQ:6c32fcd2594ee02f4ec3] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' and [FIG:82c5a9b43719a8666373] [EQ:332f44d0ec779b0cac3e] , except for the disabled transport block, the UE shall first determine the TBS as specified below:
+
+Unaffected parts omitted…

@@ -1,0 +1,182 @@
+3GPP TSG RAN WG1 Meeting #92bis R1-1804967
+
+Sanya, China, 16th-20th April, 2018
+
+Source: Ericsson
+
+Title: Remaining issues on CW mapping and data scrambling
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In this contribution, we discuss corrections related to CW mapping and data scrambling initializations.
+
+Issues related transport block to codeword mapping
+
+In TS 38.212 there is currently no description on when DCI contains a disabled transport block. Furthermore, there is also no definition on how a disabled transport block is indicated. Hence, we propose to add the same principles as in LTE. See the proposed changes in red below.
+
+Text proposal for 7.3.1.2.2 of TS38.212
+
+[…]
+
+For transport block 1:
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+For transport block 2 (only present if Number-MCS-HARQ-DL-DCI equals 2):
+
+- Modulation and coding scheme – 5 bits as defined in Subclause x.x of [6, TS38.214]
+
+- New data indicator – 1 bit
+
+- Redundancy version – 2 bits as defined in Table 7.3.1.1.1-2
+
+- HARQ process number – 4 bits
+
+- Downlink assignment index – number of bits as defined in the following
+
+- 4 bits if more than one serving cell are configured in the DL and the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 MSB bits are the counter DAI and the 2 LSB bits are the total DAI;
+
+- 2 bits if only one serving cell is configured in the DL and the higher layer parameter HARQ-ACK-codebook=dynamic, where the 2 bits are the counter DAI;
+
+- 0 bits otherwise.
+
+- TPC command for scheduled PUCCH – 2 bits as defined in Subclause x.x of [5, TS38.213]
+
+- PUCCH resource indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS38.213]
+
+- PDSCH-to-HARQ_feedback timing indicator – 3 bits as defined in Subclause 9.2.3 of [5, TS38.213]
+
+- Antenna port(s) – 4, 5, or 6 bits as defined by Tables 7.3.1.2.2-1/2/3/4, where the number of CDM groups without data of values 1, 2, and 3 refers to CDM groups {0}, {0,1}, and {0, 1,2} respectively.
+
+- Transmission configuration indication – 0 bit if higher layer parameter tci-PresentInDCI is not enabled; otherwise 3 bits as defined in Subclause x.x of [6, TS38.214].
+
+- SRS request – 2 bits as defined by Table 7.3.1.1.2-24 for UEs not configured with SUL in the cell; 3 bits for UEs configured SUL in the cell where the first bit is the non-SUL/SUL indicator as defined in Table 7.3.1.1.1-1 and the second and third bits are defined by Table 7.3.1.1.2-24.
+
+- CBG transmission information (CBGTI) – 0, 2, 4, 6, or 8 bits as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter maxCodeBlockGroupsPerTransportBlock for the PDSCH.
+
+- CBG flushing out information (CBGFI) – 0 or 1 bit as defined in Subclause x.x of [6, TS38.214], determined by higher layer parameter codeBlockGroupFlushIndicator.
+
+- DMRS sequence initialization – 1 bit for [FIG:74b15162e3db1f60dae2] selection defined in Subclause 7.4.1.1.1 of [4, TS38.211].
+
+In case the higher layer parameter Number-MCS-HARQ-DL-DCI indicates that two codeword transmission is enabled and if both transport blocks are enabled, transport block 1 is mapped to codeword 0 and transport block 2 is mapped to codeword 1. In case one of the transport blocks is disabled as specified in section 5.1.3.2 of [TS38.214], the transport block to codeword mapping is specified according to Table X1
+
+Table X1: Transport block to codeword mapping
+(one transport block enabled).
+
+transport block 1 | transport block 2 | codeword 0
+(enabled) | codeword 1
+(disabled)
+enabled | disabled | transport block 1 | -
+disabled | enabled | transport block 2 | -
+
+Text proposal for 5.1.3.2 of TS38.214
+
+In case the higher layer parameter Number-MCS-HARQ-DL-DCI indicates that two codeword transmission is enabled, then a transport block is disabled by DCI format 1_1 if [FIG:92c9d332aa16f045e2d7]  and if [EQ:8656e7a192548df74070] for the corresponding transport block, otherwise the transport block is enabled.
+
+For the PDSCH assigned by a PDCCH with DCI format 1_0 or format 1_1 with CRC scrambled by C-RNTI, , TC-RNTI, CS-RNTI, SI-RNTI, RA-RNTI, or P-RNTI, if the higher layer parameter MCS-Table-PDSCH is set to '256QAM' is configured and [FIG:7212acc172a99cfe029a] [EQ:d1527036d9c72264b2f2] , or the higher layer parameter MCS-Table-PDSCH is not set to '256QAM' configured and [FIG:d042736983f1c0b94589] [EQ:2f2cc6248d16e2c25fce] , the UE shall, except if the transport block is disabled, first determine the TBS as specified below:
+
+[…]
+
+Issues related to data scrambling
+
+The nID in the scrambling seed should equal the configured value only for some RNTIs (the C-RNTI and other RNTIs unique to a UE like the CS-RNTI. Moreover, the configured value should only apply for DCI format 1_1, to ensure that the UE can be reached using DCI format 1_0 without risk of ambiguity during scrambling seed reconfiguration. Hence, the proposal can be summarized as
+
+Configured PDSCH/PUSCH data scrambling applies only to DCI formats 1_1 and 0_1, otherwise the default is used
+
+Configured PDSCH/PUSCH data scrambling applies for C-RNTI and CS-RNTI for DL, otherwise the default is used
+
+Configured PDSCH/PUSCH data scrambling applies for C-RNTI,CS-RNTI and SPS-CSI-RNTI for UL, otherwise the default is used
+
+Text proposal for DL (Section 7.3.1.1)
+
+>>>>>>>>>>>> Start text proposal >>>>>>>>>>>>
+
+Up to two codewords can be transmitted, [FIG:5e714519bc25b2fd208a] . In case of single-codeword transmission, [FIG:1b250371e37a33d836be] .
+
+For each codeword [FIG:485902bacaec2a72e983] , the UE shall assume the block of bits [FIG:0774744df257cf651d93] , where [FIG:df28b23311250984c35a] is the number of bits in codeword [FIG:91e0fba6d9efcb9035c0] transmitted on the physical channel, are scrambled prior to modulation, resulting in a block of scrambled bits [FIG:7b3a8dc055d9ea32a6cb] according to
+
+[FIG:de402d93a30131e8455d]
+
+where the scrambling sequence [FIG:69b1bc250026eaf561b6] is given by clause 5.2.1. The scrambling sequence generator shall be initialized with
+
+[FIG:04e494350a5617c584e6]
+
+where
+
+- [FIG:6ab0e0d9dc1923b89c0c] equals the higher-layer parameter Data-scrambling-Identity if configured and the DCI format is 1_1 and the RNTI equals the C-RNTI or CS-RNTI.
+
+- [FIG:e99c059baf1bf1251dcb] otherwise
+
+and where [FIG:0a5c043b75fe3c7e14e7]  corresponds to the RNTI associated with the PDSCH transmission as described in clause 5.1 of [6,TS 38.214].
+
+>>>>>>>>>>>> End text proposal >>>>>>>>>>>>
+
+Text proposal for UL (Section 6.3.1.1)
+
+The nID in the scrambling seed should equal the configured value only when the UE identity is known to the network . Hence, it should not be used for Temporary C-RNTI as when this is used, the network does not know whether the UE has been configured a scrambling seed (e.g by using LTE in non-standalone access). Moreover, the configured value should only apply for DCI format 0_1, to ensure that the UE can be reached using DCI format 0_0 without risk of ambiguity during scrambling seed reconfiguration.
+
+Hence, we suggest the following amendment:
+
+>>>>>>>>>>>> Start text proposal for Section 6.3.1.1 >>>>>>>>>>>>
+
+[…]
+
+where x and y are tags defined in [4, TS38.212] and where the scrambling sequence [FIG:1889f7adb9eeee590e86] is given by clause 5.2.1. The scrambling sequence generator shall be initialized with
+
+[FIG:a76d60c38c6bcfa83855]
+
+where
+
+- [FIG:aa6411d1e5d5e0e3ec5a] equals the higher-layer parameter Data-scrambling-Identity if configured and the DCI format is 0_1 and the RNTI equals the C-RNTI, SP-CSI-RNTI or CS-RNTI
+
+- [FIG:23289b0aac63c17cb7f2] otherwise
+
+and where [FIG:8b9955c42d8b205f5212]  corresponds to the RNTI associated with the PUSCH transmission as described in clause 6.1 of [TS 38.214,6].
+
+>>>>>>>>>>>> End text proposal >>>>>>>>>>>>
+
+On the term “rate matching”
+
+The term “rate matched” is not defined, hence we suggest replacing it with “not available for PDSCH” to align with section 5.1.4 terminology of TS 38.214
+
+>>>>>>>>>>>> Text proposal for TS 38.214 >>>>>>>>>>>>
+
+5.1 UE procedure for receiving the physical downlink shared channel
+
+For downlink, a maximum of 16 HARQ processes per cell is supported by the UE. The number of processes the UE may assume will at most be used for the downlink is configured to the UE for each cell separately by higher layer parameter nrofHARQ-processesForPDSCH, and when no configuration is provided the UE may assume a default number of 8 processes.
+
+A UE shall upon detection of a PDCCH with a configured DCI format 1_0 or 1_1 decode the corresponding PDSCHs as indicated by that DCI. The UE is not expected to receive another PDSCH for a given HARQ process until after the end of the expected transmission of HARQ-ACK for that HARQ process, where the timing is given by Subclause 9.2.3 of [6]. The UE is not expected to receive a PDSCH in slot i, with the corresponding HARQ-ACK assigned to be transmitted in slot j, and another PDSCH in slot after slot i with its corresponding HARQ-ACK assigned to be transmitted in a slot before slot j.
+
+If the UE has received no SSB-transmitted through higher layer signalling about SS/PBCH block transmissions in the serving cell, the UE assumes SS/PBCH block transmission according to SSB-transmitted-SIB1, and if the PDSCH resource allocation overlaps with PRBs containing SS/PBCH block transmission resources the UE shall assume that PDSCH is rate matched around these PRBs are not available for PDSCH in the OFDM symbols where SS/PBCH block is transmitted. The UE assumes the periodicity of the SS/PBCH block transmission resources based on SSB-periodicity-serving-cell.
+
+If the UE has received a SSB-transmitted through higher layer signalling about SS/PBCH block transmissions in the serving cell, the UE assumes SS/PBCH block transmission according to the SSB-transmitted, and if the PDSCH resource allocation overlaps with PRBs containing SS/PBCH block transmission resources the UE shall assume that PDSCH is rate matched around these PRBs are not available for PDSCH in the OFDM symbols where SS/PBCH block is transmitted. The UE assumes the periodicity of the SS/PBCH block transmission resources based on SSB-periodicity-serving-cell.
+
+When receiving the PDSCH conveying [SystemInformationBlockType1], a UE shall assume that no SS/PBCH block is transmitted in REs used by the UE for a reception of the PDSCH.
+
+When receiving the PDSCH conveying [RAR, OSI, Paging, Msg4], the UE assumes SS/PBCH block transmission according to SSB-transmitted-SIB1, and if the PDSCH resource allocation overlaps with PRBs containing SS/PBCH block transmission resources the UE shall assume that PDSCH is rate matched around these PRBs are not available for PDSCH in the OFDM symbols where SS/PBCH block is transmitted.
+
+When receiving PDSCH for SIB1 or broadcasted Other System Info or paging the UE may assume that the DM-RS port of PDSCH is quasi co-located with the associated SS/PBCH block with respect to Doppler shift, Doppler spread, average delay, delay spread, spatial RX parameters when applicable.
+
+When receiving PDSCH for Random Access Response (RAR) the UE may assume that the DM-RS port of PDSCH is quasi co-located with the SS/PBCH block or the CSI-RS resource the UE selected for RACH association and transmission with respect to Doppler shift, Doppler spread, average delay, delay spread, spatial RX parameters when applicable. When receiving a RAR triggered by a PDCCH order, the UE may assume that the DM-RS port of the received PDCCH order and the PDCCH of the corresponding RAR are quasi co-located with the same SS/PBCH block or CSI-RS with respect to [spatial RX parameters] Doppler shift, Doppler spread, average delay, delay spread, spatial RX parameters when applicable.
+
+When receiving PDSCH conveying Msg4 of Random Access Procedure the UE may assume that the DM-RS port of PDSCH is quasi co-located with the SS/PBCH block the UE selected for RACH association and transmission with respect to Doppler shift, Doppler spread, average delay, delay spread, spatial RX parameters when applicable.
+
+If the UE is not configured for PUSCH/PUCCH transmission for at least one serving cell configured with slot formats comprised of DL and UL symbols, and if the UE is not capable of simultaneous reception and transmission on serving cell c1 and serving cell c2, the UE is not expected to receive PDSCH on serving cell c1 if the PDSCH overlaps in time with SRS transmission (including any interruption due to uplink or downlink RF retuning time [10]) on serving cell c2 not configured for PUSCH/PUCCH transmission.
+
+The UE is not expected to decode a PDSCH scheduled in the primary cell with C-RNTI and another PDSCH scheduled in the primary cell with CS-RNTI if the PDSCHs partially or fully overlap in time.
+
+The UE is not expected to decode a PDSCH scheduled with C-RNTI or CS-RNTI if another PDSCH in the same cell scheduled with RA-RNTI partially or fully overlap in time.
+
+On a frequency range 1 cell, the UE is not expected to decode a PDSCH scheduled with C-RNTI or CS-RNTI if in the same cell, during a process of P-RNTI triggered SI acquisition, another PDSCH with a TBS > 2216 bits scheduled with SI-RNTI partially or fully overlap in time.
+
+On a frequency range 2 cell, the UE is not expected to decode a PDSCH scheduled with C-RNTI or CS-RNTI if in the same cell, during a process of P-RNTI triggered SI acquisition, another PDSCH scheduled with SI-RNTI partially or fully overlap in time.
+
+The UE is expected to decode a PDSCH scheduled with C-RNTI or CS-RNTI during a process of autonomous SI acquisition.
