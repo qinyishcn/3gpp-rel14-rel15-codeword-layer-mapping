@@ -1,0 +1,5 @@
+3GPP TSG-RAN WG1 #89						R1- 1709360 Hangzhou, China, 15 th – 19 th May 2017 Agenda: 7.1.2.1.1 WF on CW to layer mapping scheme for data channels Qualcomm, Samsung, Panasonic, Intel, Sharp, Ericsson, CATT, KDDI, Interdigital, ATT, Nokia, ASB 1
+
+2 Codeword to layer mapping scheme: Due to early-decoding-constraints layer mapping over frequency should be prioritized over time. Mapping across layers of each codeblock provides spatial diversity UL transmission with DFT-SOFDM waveform is only applicable to single-layer/stream transmission Background
+
+3 For UL data channel with CP-OFDM waveform and DL data channel, the modulated symbol stream associated with a codeword is mapped to the allocated resource in the following manner: first across layers associated with the codeword , then across subcarriers (frequency) and then across OFDM symbols (time). Proposals

@@ -1,0 +1,65 @@
+3GPP TSG-RAN WG1 #89 R1-1708667
+
+Hangzhou, China, 15th-19th May, 2017
+
+Source: Ericsson
+
+Title: Codeword to layer mapping for DL and UL
+
+Agenda Item: 7.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#88bis, the following agreements were made:
+
+Agreements:Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CWConclusions:RAN1 is to down select from the proposals (cf. Table 1) in R1-1706647 in RAN1#89 based on the design criteria also in R1-1706647.Agreements:Confirm the following working assumption as an agreement:For 3 and 4-layer transmission, NR supports 1 codeword (CW) per PDSCH/PUSCH assignment per UEFFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layersDMRS port groups belonging to one CW can have different QCL assumptionsOne UL- or DL-related DCI includes one MCS per CWOne CQI is calculated per CWConclusions:RAN1 is to down select from the proposals (cf. Table 1) in R1-1706647 in RAN1#89 based on the design criteria also in R1-1706647.
+
+We will in this contribution provide out view regarding the mapping of data to RE for PDSCH and PDCCH.
+
+On PDSCH and PUSCH to RE Mapping
+
+In LTE uplink and downlink the mapping of P*SCH to resource elements [FIG:958b3e70671cb43cb8e4] on antenna port [FIG:3d046cf60a0ff45b9e25] not reserved for other purposes shall be in increasing order of first the index [FIG:a7a54352551bbf142df9] over the assigned physical resource blocks and then the index [FIG:2819bf8feff7cfb20264] , starting with the first slot in a subframe.
+
+This mapping allows, in principle, for early start of the decoding of a code word, if a channel estimate is available. In NR, this early start will be possible due to the design using front-loaded DMRS symbols and the same mapping principle should be adopted in NR as well.
+
+PDSCH and PUSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols in the slot in order to support early start of decoding at the receiver.
+
+Furthermore, it has been discussed to support multiple mapping alternatives to enable optimizations for multiple use cases. For instance, if intra slot hopping is introduced then a different mapping order may be beneficial. On the other hand, this is typically used for small resource allocation bandwidths and the single code block will then anyway be mapped to the whole slot. Hence, the benefits are not clear.
+
+In our mind introducing extra configuration possibilities will also create a more difficult standard to implement, operate and maintain. It also involves additional RAN4 test cases which already is expected to be long due to a configurable DMRS. Therefore, unless these use cases are highly important, and introduced configurability is highly beneficial, we do not think it is motivated to introduce support of additional mappings. Based on this we currently see no need for introducing additional mappings.
+
+CW to layer correspondence
+
+In the case of L-layer transmission with L>4 there will be a need to map the L layers to 2 CWs. This is also done in LTE where the principle to map layers to CWs by mapping the 1st [EQ:7482424ffbdf264ad3c5] layers to the first CW and the remaining layers to the other codeword. We think this is a sound and sensible design principle and see no reason to design NR in any other way.
+
+In the case of L>4 layer, map the 1st [EQ:11c7ea529a46759cf22b] layers to the first CW and the remaining layers to the second CW.
+
+Frequency interleaving
+
+Assuming 30kHz SCS (3.5GHz) and a scheduling bandwidth 100 MHz (corresponding to 275 resource blocks), and up to four MIMO layers using up to 256 QAM modulation, each OFDM symbol will contain up to 105600 modulated symbols, or up to about 12 LDPC code blocks (CB).  Hence, each LDPC CB is spread out at a bandwidth of roughly 8MHz without frequency interleaving. Based on this we make the following observation:
+
+There will be scheduling cases where multiple LDPC code blocks will be mapped to a single OFDM symbol.
+
+Therefore, a single CB may in some cases be vulnerable to the channel fading as it is mapped to only a localized time frequency resource.
+
+To mitigate this without sacrificing the early decoding principle, we suggest to introduce a frequency domain interleaving and one way to achieve this is in the mapping of modulated symbols to subcarriers within each OFDM symbol as discussed in [1]. Another approach is to introduce a bit level interleaver after the encoding to interleave the code blocks. However, this approach seems more complex, as only code blocks that maps to a single OFDM symbol should be interleaved to maintain the early decoding principle. Performing the interleaving in the tone domain seems more straightforward.
+
+Support a per OFDM symbol subcarrier interleaver when mapping the codewords symbols to resource elements to achieve frequency domain diversity per CB.
+
+For example, the CW can be mapped to every N:th subcarrier in a wraparound fashion, or subcarrier bundles of adjacent subcarriers can be introduced and the subcarrier interleaver can operate with these bundles as the granularity.
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 PDSCH and PUSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols in the slot in order to support early start of decoding at the receiver.
+
+Proposal 2 In the case of L>4 layer, map the 1st [EQ:dbc7f8b961d184a9f2e9] layers to the first CW and the remaining layers to the second CW.
+
+Proposal 3 Support a per OFDM symbol subcarrier interleaver when mapping the codewords symbols to resource elements to achieve frequency domain diversity per CB.
+
+References
+
+[1] R1-1704098 – “WF on symbol interleaver for NR“, Qualcomm, Ericsson , Interdigital

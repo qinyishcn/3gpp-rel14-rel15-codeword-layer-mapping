@@ -1,0 +1,27 @@
+Ericsson, Huawei, HiSi , [Intel],[Samsung] … WF on DMRS port to layer mapping for NC-JT 3GPP TSG RAN WG1 Meeting #89 Hangzhou, China, 15 th – 19 th May 2017 Agenda item 6.2.4.1 R1-1709316
+
+DMRS port groups 7 /8/11/13 and 9/10/12/14 occupy orthogonal frequency resources while CDM is used within the port groups Channel estimation with CDMed ports can become problematic if ports have different power level , e.g . by being transmitted from different TPs Consecutive DMRS port numbers are assigned to layers according to current Antenna port(s), scrambling identity and number of layers indication in DCI The first 𝑅 /2 layers are mapped to the first codeword while the remaining 𝑅 − 𝑅 2 layers are mapped to the second codeword The second CW always has more than or equally many layers as the first CW Background Two Codewords: Codeword 0 enabled, Codeword 1 enabled Value Message 0 2 layers, ports 7-8, n SCID =0 1 2 layers, ports 7-8, n SCID =1 2 3 layers, ports 7-9 3 4 layers, ports 7-10 4 5 layers, ports 7-11 5 6 layers, ports 7-12 6 7 layers, ports 7-13 7 8 layers, ports 7-14
+
+Two Codewords: Codeword 0 enabled, Codeword 1 enabled | 
+Value | Message
+0 | 2 layers, ports 7-8, n SCID =0
+1 | 2 layers, ports 7-8, n SCID =1
+2 | 3 layers, ports 7-9
+3 | 4 layers, ports 7-10
+4 | 5 layers, ports 7-11
+5 | 6 layers, ports 7-12
+6 | 7 layers, ports 7-13
+7 | 8 layers, ports 7-14
+
+When NC-JT transmission is indicated in PQI, the following DMRS port to layer mapping is used Note: This implies that layers corresponding to different CWs are mapped to FDMed DMRS ports for rank 3-8. Rank-2 port mapping is the same as legacy to maintain DMRS overhead. Proposal Rank DMRS-to- layer mapping DMRS group 1 ( CW1 ) DMRS group 2 (CW2) 1 N/A 2 7 8 3 7 9,10 4 7,8 9,10 5 7,8 9,10,12 6 7,8,11 9,10,12 7 7,8,11 9,10,12,14 8 7,8,11,13 9,10,12,14
+
+Rank | DMRS-to- layer mapping | 
+ | DMRS group 1 ( CW1 ) | DMRS group 2 (CW2)
+1 | N/A | 
+2 | 7 | 8
+3 | 7 | 9,10
+4 | 7,8 | 9,10
+5 | 7,8 | 9,10,12
+6 | 7,8,11 | 9,10,12
+7 | 7,8,11 | 9,10,12,14
+8 | 7,8,11,13 | 9,10,12,14
