@@ -1,0 +1,241 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1712829
+
+Prague, P.R. Czech, 21th– 25th August 2017
+
+Source: vivo
+
+Title: On Remaining Details of Codeword Mapping
+
+Agenda Item: 6.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In the 3GPP RAN1 #89 and NR Adhoc #2 meetings, codeword mapping are discussed and the following agreements were achieved [1][2].
+
+Regarding codeword correspondence:
+
+Agreements:
+
+For >4-layer transmission, each of the two CWs is mapped to at most 4 layers
+
+Agreements:
+
+At least support the following layer split for L >4 layer transmission: the 1st [FIG:0bd9cc860d1bdd0f6d8f] [FIG:a82285d9831d0020ed83] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS  whether the UE report the preferred layer mapping
+
+Regarding mapping order:
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Regarding frequency interleaving
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+Agreements:
+
+Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenarios
+
+Practical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.
+
+For both CP-OFDM and DFT-S waveforms
+
+Evaluation should be done considering both slot and mini-slot.
+
+Regarding DCI signalling
+
+Agreements:
+
+NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UE
+
+FFS details
+
+Agreements:
+
+NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCH
+
+FFS HARQ ID
+
+Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layers
+
+NR supports higher layer signalling for the maximum number of CQIs in UCI
+
+Unless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI report
+
+FFS subband CQI
+
+FFS Whether or not the actual number of CQIs is also RI dependent
+
+Note: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)
+
+FFS applicability on single/multi TRP
+
+In this contribution, remaining details of codeword mapping are discussed.
+
+Discussion
+
+Codeword Correspondence
+
+Currently, it has already been supported that UE would support the following codeword correspondence:
+
+The 1st L/2 [FIG:7d4def19cbf501c137be] layers CW0 and remaining layers CW1
+
+The major concerns raised from above mapping is that for multi-TRP scenarios, if joint transmission is scheduled, then the network would have to map data of one codeword to multiple TRPs. As shown in above figure, the link between TRP1 and UE is rank 4 would be while in the link between TRP2 and UE, the rank is 2. If the network only follows the agreed codeword correspondence manner, for the link between TRP1 and UE, there would be 3 layers corresponding to the first codeword. The remaining one layer and the two layers between TRP2 and UE would bear the second codeword.
+
+[FIG:9fc6410da0c55a03389a]
+
+This would introduce the following issues:
+
+Performance degradation: UE would typically experience different interference and channel variations on different panels. Although scattering modulated symbols for one codeword across multiple TRPs may bring benefits of diversity, it may also incur severe interference on every transmit block. Retransmission per codeword would bring benefits for the scenario that codewords are mapped per TRP, due to the reason that the low SINR symobls or unreliable bits are concentrated in one codeword. Furthermore, AMC is conducted per TRP. From system performance perspective, it is beneficial to map one codeword to one TRP.
+
+Higher backhaul requirement: scattering one codeword across TRPs may also bring some extra requirements on backhaul. If only one transmit block is limited within one TRP, then the communication between the TRPs would be MAC level. But if one codeword is scattered in multiple TRPs, then the TRPs would have to exchange information about the corresponding detailed codeword mapping information at PHY layer. This does not seem very clean and may bring extra amount of backhaul requirement.
+
+The reasons that do not support extra correspondence mainly include:
+
+The listed jointed multiple TRP scenarios could be supported by multiple PDSCH transmission. But according to current agreement, at most two PDSCH would be simultaneously scheduled. It means such solution would be suitable for at most two TRPs. For TRPs greater than 2, UE would still have to divide one codeword to multiple TRPs.
+
+It would bring some extra signaling and implementation complexity. But with multiple TRPs, especially for NC-JT, QCL group information of DMRS would any way have to be signaled to UE. Such information could be leveraged to implicitly indicate the corresponding codeword mapping. From the perspective of implementation complexity, UE would anyway have to implement the receiver of any number of layers. Codeword correspondence would not bring extra processing and latency.
+
+From above analysis, it could be seen that mapping one codeword to only one TRP is a reasonable choice. From specification perspective, one codeword should only be mapped within one DMRS QCL group.
+
+Proposal 1:
+
+For L>4, one codeword should only be mapped within one DMRS QCL group.
+
+Mapping order
+
+Currently, there are mainly three different kinds of mapping orders shown in the following table. Latency, performance, UE complexity and eMBB/URLLC multiplexing related aspects could be compared for the above alternatives.
+
+Table 1[1]
+
+Proposal
+Confirm working assumption of Layer Frequency Time (LFT) order without any additional mapping order
+In addition to LFT, support (at least) LT F
+In addition to LFT, support Layer group 1 Frequency Time Layer group 2 Frequency Time, where each layer set corresponds to a CB group
+
+Latency:
+
+For latency aspect, if modulated symbols are firstly mapped to layers then codeblocks could be received fully earlier. This is the biggest advantage of proposal I. But there are also a lot of scenarios that do not need such tight latency.
+
+Performance:
+
+From diversity perspective, different layers would see different signal to noise ratios. If data symbols could be mapped to layers first, then it is possible to gain full spatial diversity. Proposal I could achieve such diversity gain. However, it is also possible for proposal II and III to achieve diversity gains. For example, modulated symbols are mapped to RE resources first, but for adjacent REs, layers are mapped alternatively.
+
+From system-level performance perspective, the interference UE experiences would have some spatial patterns. Mapping to frequency or time first could alleviate such problem by concentrating interference in one CB or several CBG, rather than spread the interference, blockage and fading across all CB. Proposal II and III could achieve such gains.
+
+Another gain is from successive interference cancellation. If data symbols are mapped to frequency/time domain first, or to part of the spatial layers first, then SIC receivers could be facilitated to achieve such gains. Proposal II and III could achieve such gains.
+
+UE complexity
+
+There is no large difference between the two schemes if the same receivers are used.
+
+Signalling
+
+Although it seems that signaling would be a little complicated for configurability, some implicit ways may be leveraged to reduce signaling.
+
+eMBB/URLLC multiplexing
+
+URLLC may occupy scheduled resources of eMBB. Typically, the two data streams would be multiplexed in time domain. Under such conditions, proposal I and proposal III may have higher probability of eMBB demodulation due to more complete code-blocks.
+
+From above analysis, proposal III should also be supported through implicit signaling. Thus we have the following proposal.
+
+Proposal 2:
+
+For L<4, support the following mapping order with implicit indication of layer group 1 and layer group 2:
+
+Support Layer group 1 Frequency Time Layer group 2 Frequency Time .
+
+Layer group1 and layer group 2 is determined by DMRS QCL groups.
+
+L Frequency Time is limited to the case with only one DMRS QCL group.
+
+Frequency Interleaving
+
+It has been argued that frequency interleaving is needed for large RB allocation, while for high speed scenarios like 350km/h high speed train, further interleaving at time domain is needed.
+
+This would of course bring some extra processing and delay. Balance need to be stroke with performance. We conduct some evaluations considering different kinds of scenarios. It could be seen that with frequency time interleaving, performance gains are observed. Thus we have the following proposal.
+
+Proposal 3:
+
+Downselect from the following
+
+No interleaving.
+
+Frequency tmie interleaving.
+
+Simulation Results
+
+The corresponding simulation assumptions are as following:
+
+Parameters | Values
+Carrier Frequency | 4GHz
+Subcarrier Spacing for data | 15kHz
+Channel Model | TDL-A modeldelay spread =100nsUE speed=30km/h.or 120km
+BS antenna configurations | For 4 GHz: BS antenna number =2.
+UE antenna configurations | For 4 GHz: UE antenna number =2
+DMRS pattern | FDM+OCC2, 30km: 1 front-loaded DMRS+2 additional DMRS120km: 1 front-loaded DMRS+3 additional DMRS
+parameters | Modulation:6QAMNoise reduction: noIdeal channel estimation: yes or noInterleave type: no interleave , frequency interleave, frequency-time interleavePRB bundling size: 1DMRS boost: 0dB
+
+[FIG:02213a1cba97ce813258]
+
+[FIG:daec7e48e606e7341da5]
+
+Conclusion
+
+In this contribution, remaining details of codeword mapping are discussed and the following proposals are given:
+
+Proposal 1:
+
+For L>4, one codeword should only be mapped within one DMRS QCL group.
+
+Proposal 2:
+
+For L<4, support the following mapping order with implicit indication of layer group 1 and layer group 2:
+
+Support Layer group 1 Frequency Time Layer group 2 Frequency Time .
+
+Layer group1 and layer group 2 is determined by DMRS QCL groups.
+
+L Frequency Time is limited to the case with only one DMRS QCL group.
+
+Proposal 3:
+
+Downselect from the following
+
+No interleaving.
+
+Frequency tmie interleaving.
+
+References
+
+Chairman’s notes for 3GPP TSG RAN WG1 Meeting #89.
+
+Chairman’s notes for 3GPP TSG RAN WG1 NR Ad hoc #2.
+
+R1-1711935, Summary of CW2L Mapping, Samsung, RAN1 NR Ad-Hoc #2, Qingdao, P. R. China, 27th-30th June 2017.

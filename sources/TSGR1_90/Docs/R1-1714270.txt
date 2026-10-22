@@ -1,0 +1,85 @@
+3GPP TSG-RAN WG1 #90 R1-1714270
+
+Prague, Czech Republic, 21st – 25th August 2017
+
+Source: Ericsson
+
+Title: Remaining details for Codeword to layer mapping for DL and UL
+
+Agenda Item: 6.1.2.1.1
+
+Document for: Discussion and Decision
+
+Introduction
+
+In RAN1#89AH, the following agreements were made:
+
+Agreements:Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenariosPractical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.For both CP-OFDM and DFT-S waveformsEvaluation should be done considering both slot and mini-slot.Agreements:NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCHFFS HARQ ID Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layersNR supports higher layer signalling for the maximum number of CQIs in UCIUnless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI reportFFS subband CQIFFS Whether or not the actual number of CQIs is also RI dependentNote: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)FFS applicability on single/multi TRPAgreements:Companies are encouraged to provide evaluation results especially for URLLC, intra-slot frequency hopping, dynamic TDD and high speed train scenariosPractical simulation assumptions e.g. CBG based HARQ, pre-emption indication, DMRS, interleaver should be considered.For both CP-OFDM and DFT-S waveformsEvaluation should be done considering both slot and mini-slot.Agreements:NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCHFFS HARQ ID Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layersNR supports higher layer signalling for the maximum number of CQIs in UCIUnless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI reportFFS subband CQIFFS Whether or not the actual number of CQIs is also RI dependentNote: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)FFS applicability on single/multi TRP
+
+We will in this contribution provide our view regarding the mapping of data to RE for PDSCH and PUSCH.
+
+On PDSCH and PUSCH to RE Mapping
+
+At RAN1#89 there was a working assumption that PDSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols in the slot in order to support early start of decoding at the UE. This mapping allows for early start of the decoding of a code word, if also an early channel estimate is available from the front loaded DMRS.
+
+Confirm the part of the working assumption that PDSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols.
+
+Furthermore, to keep the symmetry between UL and DL, and to allow early decoding start of UL data transmission in order to maintain overall latency at a minimum, we propose
+
+At least the following mapping order for modulated symbol stream to the allocated resource for UL data channel is supported: First across layers, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+Furthermore, it has been discussed to support multiple mapping alternatives to enable optimizations for multiple use cases. For instance, if intra slot hopping is introduced then a different mapping order may be beneficial, e.g. time first, as one code word would then be mapped to multiple hops (frequency bands). On the other hand, slot hopping is typically used for small resource allocation bandwidths and the single code block will then anyway be mapped to all the hops/the whole slot. Hence, the benefits of an additional mapping order are not clear.
+
+In our view, introducing extra configuration possibilities will also create a more difficult standard to implement, operate and maintain. It also involves additional RAN4 test cases which already is expected to be long due to a configurable DMRS.
+
+Alternative mapping orders would increase implementation complexity, additional test cases and network operation complexity to decide switching criteria when to select the alternative mapping order
+
+Therefore, unless these use cases that may provide benefits are highly important and common so that introduced configurability is highly beneficial, we do not think it is motivated to introduce support of additional mappings. Based on this we currently see no need for introducing additional mappings.
+
+CW to layer correspondence
+
+At RAN1#89 it was agreed to support that in in the case of L>4 layer, map the 1st [EQ:87d4080bfe68c4efe7eb] layers to the first CW and the remaining layers to the second CW. We see not need in supporting additional configurations than this.
+
+Frequency interleaving
+
+Assuming 30kHz SCS (3.5GHz) and a scheduling bandwidth 100 MHz (corresponding to 275 resource blocks), and up to four MIMO layers using up to 256 QAM modulation, each OFDM symbol will contain up to 105600 modulated bits, or up to about 12 LDPC code blocks (CB).  Hence, each LDPC CB is spread out at a bandwidth of roughly 8MHz without frequency interleaving. Based on this we make the following observation:
+
+There will be scheduling cases where multiple LDPC code blocks will be mapped to a single OFDM symbol.
+
+Therefore, a single CB may in some cases be vulnerable to the channel fading as it is mapped to only a localized time frequency resource.
+
+To mitigate this without sacrificing the early decoding principle, we suggest to introduce a frequency domain interleaving and one way to achieve this is to map resource blocks, containing modulated symbols, to other resource blocks within the OFDM symbol. Alternatively, one may instead map individual symbols to subcarriers but we find it sufficient, to obtain frequency diversity, to work at a resource block level, just as done in LTE.
+
+Yet another approach is to introduce a bit level interleaver after the encoding to interleave the code blocks. However, in the channel coding session, the following agreement was made in RAN1#89:
+
+Agreement:
+
+If bit-level interleaving is applied, it should be limited to each code block individually
+
+Performing the interleaving mapping in the resource block domain thus seems to be the most appropriate.
+
+A resource block interleaver is used for PDSCH and PUSCH, to achieve frequency domain diversity per CB.
+
+The interleaver is a mapping process and should hence be part of the 211 spec.
+
+Furthermore, in our previous contribution [1] we had a discussion on different potential approaches for interleaving and based on this we concluded that
+
+Perform interleaving only within the scheduled resources for a given UE.
+
+Conclusions
+
+Based on the discussion and observations in this contribution we propose the following:
+
+Proposal 1 Confirm the part of the working assumption that PDSCH code words are mapped to resource elements across layer first, then across subcarriers and then across OFDM symbols.
+
+Proposal 2 At least the following mapping order for modulated symbol stream to the allocated resource for UL data channel is supported: First across layers, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+Proposal 3 A resource block interleaver is used for PDSCH and PUSCH, to achieve frequency domain diversity per CB.
+
+Proposal 4 The interleaver is a mapping process and should hence be part of the 211 spec.
+
+Proposal 5 Perform interleaving only within the scheduled resources for a given UE.
+
+References
+
+[1] R1-1711007 “Codeword to layer mapping for DL and UL”, Ericsson, 3GPP TSG-RAN WG1 NR Ad-Hoc#2, Qingdao, China, 27th-30th June, 2017

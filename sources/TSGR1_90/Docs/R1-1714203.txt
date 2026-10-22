@@ -1,0 +1,99 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1714203
+
+Prague, Czech Republic, 21th - 25th August 2017
+
+Agenda item: 6.1.2.1.1
+
+Source: Potevio
+
+Title: Discussion on Codeword Mapping
+
+Document for: Discussion
+
+Introduction
+
+In RAN1 #89 [1], the following agreements regarding the codeword to layer mapping were made:
+
+Agreements:
+
+For >4-layer transmission, each of the two CWs is mapped to at most 4 layers
+
+Agreements:
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:8b780cf1d3d325d9f21c] layers CW0 and remaining layers CW1
+
+For >4 layer transmission, investigate further whether or not to support additional correspondence with limited number of possibilities
+
+The mapping is configured by gNB to the UE
+
+FFS whether by RRC signaling or DCI or both
+
+FFS possible mapping configured by gNB
+
+FFS  whether the UE report the preferred layer mapping
+
+Working assumption:
+
+In NR, support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes (e.g., Layer Time Frequency, Time Frequency Layer, Frequency Layer Time)
+
+If so, details of configuration signalling, e.g. RRC, DCI
+
+Companies are strongly encouraged to perform evaluations especially for high-speed scenarios, and interference limited/varying scenarios
+
+Agreements:
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme (e.g. as summarized in R1-1709261, per-OFDM-symbol interleaver, either used all the time or conditionally multi-OFDM-symbol interleaver, configurable interleaver, etc.)
+
+Aim to make a decision in the next RAN1 meeting
+
+In this contribution, we discuss our consideration on the remaining issues of codeword mapping in NR.
+
+Discussion on codeword mapping
+
+Mapping order
+
+In LTE, the modulated symbols of each codeword are mapped across layers firstly. Then, the data in each layer is mapped to REs in the frequency domain. Finally, the data is mapped across symbols in the time domain. Moreover, other mapping orders were also discussed in the previous meetings, such as Layer Time Frequency, Frequency Layer Time, Time Frequency Layer, and so on.
+
+Compared with the conventional mapping order of Layer Frequency Time, the mapping order of Layer Time Frequency seeks the time domain diversity due to the reason that after the modulated symbols are mapped across layers, the data in each layer is mapped in the time domain firstly, then in the frequency domain. Simulation results were provided by the companies for performance evaluation of this mapping order. For example, in [3] in the high speed scenario, the mapping order of LayerTimeFrequency is better than the mapping order of Layer FrequencyTime in terms of BLER performance. Meanwhile, in [4], the link level simulation of the mapping order of LayerTimeFrequency also was conducted with CDL-A model in high speed and interference-varying scenarios. And it was shown that such mapping order outperforms the mapping order of Layer Frequency Time in both cases.
+
+According to the above discussion, the time domain diversity can be obtained apparently with the mapping order of layertimefrequency in the high speed scenario. Such mapping order can provide robustness and reliability, when UE experiences high Doppler spread. The mapping order of LayerTimeFrequency should be supported in the high speed scenario in NR. In addition, the switching between this mapping order and conventional mapping order could be configured by the RRC.
+
+Proposal 1: The mapping order of “layertime frequency” should be supported in high speed scenario in NR.
+
+Frequency interleaving
+
+In the previous meetings, two different interleaving designs, per-OFDM symbol interleaving and multi-OFDM symbol interleaving, were proposed.
+
+On one hand, per-OFDM symbol interleaving aims to obtain the frequency diversity gain only [5]. Further performance can be gained especially for large bandwidth scenarios, where multiple coded blocks can be allocated within one OFDM symbol.
+
+On the other hand, time domain diversity would be gained by multi-OFDM symbol interleaving especially in the high Doppler scenarios [5]. However, in such scenarios, imperfect channel estimation would be a negative factor to reduce the performance gains.
+
+In our opinions, whether the per-OFDM symbol interleaving or multi-OFDM symbol interleaving is adopted, a lot of standardization work is needed. For example, the value of K should be selected properly for the K-subcarrier per-OFDM symbol interleaving [5]. Meanwhile, for multi-OFDM symbol interleaving, a suitable number of OFDM symbol should be decided not only for considering the relationship between the diversity gains and the coherent time, but also for the decoding latency [3].
+
+Proposal 2: Per-OFDM symbol interleaving should be supported for NR.
+
+Conclusions
+
+In this contribution, we have the following proposals:
+
+Proposal 1: The mapping order of “layertime frequency” should be supported in high speed scenario in NR.
+
+Proposal 2: Per-OFDM symbol interleaving should be supported for NR.
+
+Reference
+
+3GPP RAN1#89 Chairman’s notes.
+
+3GPP RAN1 NR AH#2 Chairman’s Notes,
+
+R1-1710446, Codeword to layer mapping in NR, Huawei, HiSilicon
+
+R1-1711606, Codeword to resource mapping and interleaving, ZTE,
+
+R1-1711152, CW to layer mapping and frequency domain interleaving, Qualcomm Incorporated

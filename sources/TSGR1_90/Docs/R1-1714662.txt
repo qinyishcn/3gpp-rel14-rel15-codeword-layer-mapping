@@ -1,0 +1,187 @@
+3GPP TSG RAN WG1 Meeting #90 R1-1714662
+
+Prague, P.R. Czechia 21th – 25th August 2017
+
+Agenda item: 6.1.2.1.1
+
+Source: Samsung
+
+Title: Summary of Open Issues on Layer Mapping
+
+Document for: Discussion
+
+Introduction
+
+The current agreement on layer mapping can be summarized as follows:
+
+NR supports the following number of codewords per PDSCH/PUSCH assignment per UE:
+
+For 1 to 4-layer transmission: 1 codeword
+
+For 5 to 8-layer transmission: 2 codewords
+
+At least support the following layer split for L >4 layer transmission: the 1st [EQ:aa5deb1d48fb4d041f9e] layers CW0 and remaining layers CW1
+
+FFS: other correspondence schemes
+
+FFS: the support of mapping 2-CW to 3 layers and 2-CW to 4 layers
+
+DMRS port groups belonging to one CW can have different QCL assumptions
+
+Signaling (DCI and UCI) design related issues:
+
+One UL- or DL-related DCI includes one MCS per CW
+
+One CQI is calculated per CW
+
+NR supports in one DCI containing one MCS (for the case of one CW) and two MCSs (for the case of two CWs) for a given UE
+
+FFS details
+
+NR supports higher layer signalling for the maximum number of MCS/RV/NDI in DCI for PDSCH
+
+FFS HARQ ID
+
+Unless indicated otherwise, UE assumes single MCS/RV/NDI in DCI, i.e. up to four MIMO layers
+
+NR supports higher layer signalling for the maximum number of CQIs in UCI
+
+Unless indicated otherwise, UE assumes single CQI in UCI, i.e. up to four MIMO layers in RI report
+
+FFS subband CQI
+
+FFS Whether or not the actual number of CQIs is also RI dependent
+
+Note: This higher layer signalling can be the other signalling related to RI/PMI reporting (e.g. RI restriction)
+
+FFS applicability on single/multi TRP
+
+Companies are encouraged to perform further evaluations on whether or not to support frequency interleaving, and if supported, the detailed interleaving scheme
+
+In addition, the following working assumption was made:
+
+Support at least the following mapping order for modulated symbol stream to the allocated resource for DL data channel
+
+First across layers associated with the codeword, then across subcarriers (frequency) and then across OFDM symbols (time)
+
+FFS whether the resource is associated with a CW or with a CB group
+
+FFS other schemes
+
+This contribution summarizes the views of different companies (inferred from the submitted contributions) on the following open issues. Overall, the situation has not changed from that in the previous meeting (RA1 NR-AH2).
+
+CW-layer correspondence
+
+Mapping order
+
+Support for frequency interleaving
+
+CW-layer correspondence
+
+Based on the available proposals (in [1] –[15]), AT&T, Intel, CATT, and LG propose to support at least one additional CW-layer correspondence. The current status can be summarized as follows:
+
+Some companies argue that the main reason for introducing at least one additional CW-layer correspondence is to address multi-TRP scenarios. In addition, AT&T argues that allowing some flexibility in configuring CW-layer correspondence based on some UE feedback increases system throughput.
+
+Among companies that propose such, there is not yet a single unified proposal. For instance, some propose a limited number of supported schemes while others propose a fully flexible correspondence wherein a UE can be configured with a restricted subset of possible correspondence schemes.
+
+A main concern on full flexibility is the associated signalling overhead for dynamic mapping (e.g. DCI field)
+
+Only Qualcomm expresses some concern against introducing additional CW-layer correspondence
+
+Based on the above summary, the following proposal may be feasible:
+
+A limited number of additional CW-layer correspondence scheme(s) are supported
+
+Details are to be finalized by the next RAN1 meeting (RAN1 NR-AH3)
+
+Mapping order
+
+Based on the available proposals (in [1] –[15]), three main proposals can be identified and summarized in Table 1.
+
+Table 1
+
+Proposal | Proponents
+Confirm working assumption of Layer Frequency Time (LFT) order without any additional mapping order | AT&T, Ericsson, Qualcomm, Samsung
+In addition to LFT, support (at least) LT F | Huawei, HiSi, NTT DOCOMO, ETRI, ZTE, LGE, Potevio
+In addition to LFT, support Layer group 1 Frequency Time Layer group 2 Frequency Time, where each layer set corresponds to a CB group | MediaTek, Motorola/Lenovo, vivo
+
+Observation:
+
+All companies seem to agree on confirming the working assumption of LFT mapping order
+
+No consensus on adding another mapping order (some companies are against)
+
+Layer mapping for DFT-SOFDM has not been sufficiently discussed (note: a proposal is made in [13])
+
+Based on the above summary, the following proposal may be feasible:
+
+Confirm the working assumption of LFT for DL data transmission as an agreement
+
+Extend this to UL CP-OFDM transmission
+
+Note: a related WF on this proposal can be found in [16]
+
+Continue discussion whether an additional mapping order is supported and conclude in RAN1#90
+
+Start discussion on layer mapping ordering for DFT-SOFDM and finalize this by the next RAN1 meeting (RAN1 NR-AH3)
+
+Frequency interleaving
+
+Based on the available proposals (in [1] –[15]), a summary is given in Table 2.
+
+Table 2
+
+Scheme | Proponents
+No frequency interleaver | AT&T, CATT
+Per-OFDM-symbol interleaver only for special cases (conditional, e.g. small CB size with large allocation) | Samsung
+Per-OFDM-symbol interleaver, either used all the time or conditionally | Ericsson, NTT DOCOMO, Qualcomm, Potevio
+Multi-OFDM-symbol interleaver | Huawei, HiSi, ETRI
+Configurable interleaver (to match configurable layer mapping) | ZTE
+Time-frequency interleaver | Motorola, Lenovo
+PRB-bundle based frequency interleaver | MediaTek
+
+Observation:
+
+Company positions haven’t changed much from the last meeting
+
+No clear majority among different positions
+
+Among those that propose the support of frequency interleaver, there is no consensus
+
+Based on the above summary and the impact of frequency or time-frequency interleaver on RAN1 specification and timeline, the following proposal may be feasible:
+
+No interleaver is supported for layer mapping
+
+References
+
+R1-1712829, On remaining details of codeword mapping, vivo.
+
+R1-1712363, On codeword mapping, CATT
+
+R1-1712284, Codeword mapping and interleaving, ZTE
+
+R1-1713135, Discussion on codeword mapping, LG Electronics
+
+R1-1712703, Remaining details of codeword mapping for NR MIMO, AT&T
+
+R1-1712228, Codeword to layer mapping in NR, Huawei, HiSilicon
+
+R1-1712536, Remaining details on CW to MIMO layer mapping, Intel Corporation
+
+R1-1712670, On codeword to RE mapping scheme, Lenovo, Motorola Mobility
+
+R1-1713808, Discussion on codeword to mapping, ETRI
+
+R1-1713573, Finalizing Layer Mapping, Samsung
+
+R1-1713688, Codeword mapping in NR, MediaTek Inc.
+
+R1-1714270, CW to layer mapping for DL and UL, Ericsson
+
+R1-1713909, Discussion on codeword mapping, NTT DOCOMO, INC.
+
+R1-1713386, CW-to-layer mapping and frequency domain interleaving, Qualcomm Incorporated
+
+R1-1714203, Discussion on codeword mapping, Potevio
+
+R1-1714664, WF on CW to layer mapping scheme for CP-OFDM data channels, Qualcomm, Nokia, NSB, Intel, ATT, Ericsson, Samsung, KDDI, Panasonic, Verizon, CHTTL , Sharp, NEC, CATT, Interdigital
